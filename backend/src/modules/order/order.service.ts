@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
-import { OrderStatus } from "../../common/enums/order-status.enum";
+import { OrderStatus } from "@prisma/client";
 
 @Injectable()
 export class OrderService {

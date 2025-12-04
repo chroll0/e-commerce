@@ -9,7 +9,7 @@ import {
   ParseIntPipe,
 } from "@nestjs/common";
 import { OrderService } from "./order.service";
-import { OrderStatus } from "../../common/enums/order-status.enum";
+import { OrderStatus } from "@prisma/client";
 
 @Controller("orders")
 export class OrderController {
