@@ -12,6 +12,7 @@ model User {
   email      String     @unique
   password   String
   name       String
+  phone      String?    @unique
   role       UserRole   @default(USER)
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -29,6 +30,7 @@ model Category {
   id        Int        @id @default(autoincrement())
   name      String     @unique
   slug      String     @unique
+  image     String?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 
@@ -41,8 +43,12 @@ model Product {
   slug        String       @unique
   description String
   price       Float
+  oldPrice    Float?
+  discount    Int?
+  isFeatured  Boolean      @default(false)
   stock       Int          @default(0)
-  images      String[]     // array of image URLs
+  images      String[]
+
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
@@ -60,6 +66,12 @@ model Order {
 
   total       Float
   status      OrderStatus @default(PENDING)
+
+  address     String
+  city        String
+  zip         String?
+  phone       String
+
   createdAt   DateTime    @default(now())
 
   items       OrderItem[]
@@ -78,7 +90,8 @@ model OrderItem {
   productId Int
   quantity  Int
   price     Float
-  
+  variant   String?
+
   order     Order    @relation(fields: [orderId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
 }
