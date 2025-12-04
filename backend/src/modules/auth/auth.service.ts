@@ -3,7 +3,7 @@ import {
   UnauthorizedException,
   ConflictException,
 } from "@nestjs/common";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
 import { UserService } from "../user/user.service";
 import { RegisterDto } from "./dto/register.dto";
