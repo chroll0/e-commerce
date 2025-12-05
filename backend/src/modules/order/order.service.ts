@@ -40,7 +40,7 @@ export class OrderService {
           create: cartItems.map((item) => ({
             productId: item.productId,
             quantity: item.quantity,
-            price: item.product.price, // price snapshot
+            price: item.product.price,
           })),
         },
       },
