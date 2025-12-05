@@ -10,6 +10,7 @@ import {
 } from "@nestjs/common";
 import { OrderService } from "./order.service";
 import { OrderStatus } from "@prisma/client";
+import { CreateOrderDto } from "./dto/create-order.dto";
 
 @Controller("orders")
 export class OrderController {
@@ -17,9 +18,9 @@ export class OrderController {
 
   // Create Order from Cart
   @Post()
-  createOrder(@Req() req: any) {
+  createOrder(@Req() req: any, @Body() dto: CreateOrderDto) {
     const userId = req.user.id;
-    return this.orderService.createOrder(userId);
+    return this.orderService.createOrder(userId, dto);
   }
 
   // My orders

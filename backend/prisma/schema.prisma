@@ -59,6 +59,13 @@ model Product {
   cartItems   CartItem[]
 }
 
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  CANCELLED
+}
+
 model Order {
   id          Int         @id @default(autoincrement())
   userId      Int
@@ -75,13 +82,6 @@ model Order {
   createdAt   DateTime    @default(now())
 
   items       OrderItem[]
-}
-
-enum OrderStatus {
-  PENDING
-  PAID
-  SHIPPED
-  CANCELLED
 }
 
 model OrderItem {

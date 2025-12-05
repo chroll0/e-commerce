@@ -3,6 +3,7 @@ import {
   BadRequestException,
   NotFoundException,
 } from "@nestjs/common";
+import { CreateOrderDto } from "./dto/create-order.dto";
 import { PrismaService } from "../../prisma/prisma.service";
 import { OrderStatus } from "@prisma/client";
 
@@ -10,7 +11,7 @@ import { OrderStatus } from "@prisma/client";
 export class OrderService {
   constructor(private prisma: PrismaService) {}
 
-  async createOrder(userId: number) {
+  async createOrder(userId: number, dto: CreateOrderDto) {
     // 1. Take cart items
     const cartItems = await this.prisma.cartItem.findMany({
       where: { userId },
@@ -31,6 +32,10 @@ export class OrderService {
       data: {
         userId,
         total,
+        address: dto.address,
+        city: dto.city,
+        phone: dto.phone,
+        zip: dto.zip,
         items: {
           create: cartItems.map((item) => ({
             productId: item.productId,
