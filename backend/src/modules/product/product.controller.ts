@@ -9,6 +9,11 @@ import {
   Query,
   ParseIntPipe,
 } from "@nestjs/common";
+import { UseGuards } from "@nestjs/common";
+import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
+import { RolesGuard } from "../../common/guards/roles.guard";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { UserRole } from "../../common/enums/user-role.enum";
 import { ProductService } from "./product.service";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
@@ -18,6 +23,8 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   create(@Body() createProductDto: CreateProductDto) {
     return this.productService.create(createProductDto);
   }
@@ -33,6 +40,8 @@ export class ProductController {
   }
 
   @Patch(":id")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   update(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductDto
@@ -41,6 +50,8 @@ export class ProductController {
   }
 
   @Delete(":id")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   remove(@Param("id", ParseIntPipe) id: number) {
     return this.productService.remove(id);
   }
