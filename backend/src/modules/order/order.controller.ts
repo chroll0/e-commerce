@@ -7,12 +7,18 @@ import {
   Body,
   Req,
   ParseIntPipe,
+  UseGuards,
 } from "@nestjs/common";
 import { OrderService } from "./order.service";
 import { OrderStatus } from "@prisma/client";
 import { CreateOrderDto } from "./dto/create-order.dto";
+import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
+import { RolesGuard } from "../../common/guards/roles.guard";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { UserRole } from "../../common/enums/user-role.enum";
 
 @Controller("orders")
+@UseGuards(JwtAuthGuard)
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
@@ -39,6 +45,8 @@ export class OrderController {
 
   // (admin only)
   @Patch(":id/status")
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
   updateStatus(
     @Param("id", ParseIntPipe) id: number,
     @Body("status") status: OrderStatus
