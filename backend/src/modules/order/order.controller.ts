@@ -36,6 +36,14 @@ export class OrderController {
     return this.orderService.getMyOrders(userId);
   }
 
+  // Admin: get all orders
+  @Get("admin")
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  getAllOrders() {
+    return this.orderService.getAllOrders();
+  }
+
   // Single order details
   @Get(":id")
   getOrder(@Req() req: any, @Param("id", ParseIntPipe) orderId: number) {
