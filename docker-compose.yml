@@ -3,11 +3,11 @@ version: "3.9"
 services:
   db:
     image: postgres:16
-    restart: always
     container_name: ecommerce_db
+    restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: ecommerce
     ports:
       - "5432:5432"
@@ -17,18 +17,27 @@ services:
       - ecommerce_net
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: ecommerce_backend
     restart: always
     env_file:
       - ./backend/.env
     ports:
-      - "3001:3001"
+      - "3001:3001" # API
+      - "5556:5556" # Prisma Studio
     depends_on:
       - db
     networks:
       - ecommerce_net
-    command: sh -c "npx prisma migrate deploy && npm run start:prod"
+    working_dir: /app
+    volumes:
+      - ./backend:/app:cached
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
+    command: sh -c "npx prisma generate && npm run start:dev"
 
 networks:
   ecommerce_net:
