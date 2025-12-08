@@ -86,4 +86,14 @@ export class OrderService {
       data: { status },
     });
   }
+
+  // Admin: get all orders
+  async getAllOrders() {
+    return this.prisma.order.findMany({
+      include: {
+        items: { include: { product: true } },
+        user: true,
+      },
+    });
+  }
 }
