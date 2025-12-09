@@ -16,6 +16,7 @@ import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
 import { RolesGuard } from "../../common/guards/roles.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { UserRole } from "../../common/enums/user-role.enum";
+import { AuthRequest } from "../../common/types/auth.types";
 
 @Controller("orders")
 @UseGuards(JwtAuthGuard)
@@ -24,14 +25,14 @@ export class OrderController {
 
   // Create Order from Cart
   @Post()
-  createOrder(@Req() req: any, @Body() dto: CreateOrderDto) {
+  createOrder(@Req() req: AuthRequest, @Body() dto: CreateOrderDto) {
     const userId = req.user.id;
     return this.orderService.createOrder(userId, dto);
   }
 
   // My orders
   @Get()
-  getMyOrders(@Req() req: any) {
+  getMyOrders(@Req() req: AuthRequest) {
     const userId = req.user.id;
     return this.orderService.getMyOrders(userId);
   }
@@ -46,7 +47,10 @@ export class OrderController {
 
   // Single order details
   @Get(":id")
-  getOrder(@Req() req: any, @Param("id", ParseIntPipe) orderId: number) {
+  getOrder(
+    @Req() req: AuthRequest,
+    @Param("id", ParseIntPipe) orderId: number
+  ) {
     const userId = req.user.id;
     return this.orderService.getOrderById(userId, orderId);
   }
