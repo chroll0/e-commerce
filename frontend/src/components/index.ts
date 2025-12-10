@@ -11,3 +11,13 @@ export { default as Dropdown } from "./ui/Dropdown";
 // export { default as CategoryDropdown } from "./navbar/CategoryDropdown";
 // export { default as SearchBar } from "./navbar/SearchBar";
 // export { default as NavIcons } from "./navbar/NavIcons";
+
+// Home page components
+export { default as Hero } from "./home/Hero";
+export { default as CategoryScroller } from "./home/CategoryScroller";
+export { default as FlashSale } from "./home/FlashSale";
+export { default as FeaturedProducts } from "./home/FeaturedProducts";
+export { default as BestStores } from "./home/BestStores";
+
+// Product components
+export { default as ProductCard } from "./product/ProductCard";
