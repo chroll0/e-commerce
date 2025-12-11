@@ -51,6 +51,7 @@ export default function LoginPage() {
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            passwordToggle
             fullWidth
             required
           />

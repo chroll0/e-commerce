@@ -18,23 +18,14 @@ export class AuthService {
     private jwt: JwtService
   ) {}
 
-  // REGISTER
   async register(dto: RegisterDto) {
     const existing = await this.userService.findByEmail(dto.email);
     if (existing) throw new ConflictException("Email already in use");
 
-    const hashed = await bcrypt.hash(dto.password, 10);
-
-    const user = await this.userService.create({
-      email: dto.email,
-      password: hashed,
-      name: dto.name,
-    });
-
+    const user = await this.userService.create(dto);
     return this.generateToken(user);
   }
 
-  // LOGIN
   async login(email: string, password: string) {
     const user = await this.userService.findByEmail(email);
     if (!user) throw new UnauthorizedException("Invalid credentials");
@@ -45,15 +36,13 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-  generateToken(user: User) {
+  private generateToken(user: User) {
     const payload: JwtPayload = {
       id: user.id,
       email: user.email,
-      role: user.role as unknown as UserRole,
+      role: user.role as UserRole,
     };
 
-    return {
-      access_token: this.jwt.sign(payload),
-    };
+    return this.jwt.sign(payload);
   }
 }

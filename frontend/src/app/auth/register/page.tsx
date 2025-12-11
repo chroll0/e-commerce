@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Button, Input } from "@/components";
 import { api } from "@/lib/axios";
 import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +22,7 @@ export default function RegisterPage() {
         email,
         password,
       });
-
+      router.push("/auth/login");
       setMessage("Registered successfully!");
     } catch (err) {
       const error = err as AxiosError<any>;
@@ -63,6 +65,7 @@ export default function RegisterPage() {
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            passwordToggle
             fullWidth
             required
           />
