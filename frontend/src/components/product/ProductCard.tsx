@@ -2,33 +2,40 @@ import Image from "next/image";
 
 export default function ProductCard({ productId }: { productId: number }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-4 hover:shadow-md transition cursor-pointer">
-      <div className="relative w-full h-40 bg-gray-100 rounded-lg">
+    <div className="bg-card rounded-xl shadow-[0_2px_12px_var(--color-shadow)] p-4 border border-border hover:shadow-[0_4px_18px_var(--color-shadow)] transition cursor-pointer">
+      {/* Product Image */}
+      <div className="relative w-full h-40 bg-card-soft rounded-lg overflow-hidden border border-border">
         <Image
           src="/placeholder-product.jpg"
-          alt=""
+          alt="Product"
           fill
           className="object-cover rounded-lg"
         />
 
-        {/* heart icon */}
-        <div className="absolute top-2 right-2 bg-white rounded-full p-1 shadow">
+        {/* Favorite Heart Icon */}
+        <div className="absolute top-2 right-2 bg-card rounded-full p-1 shadow-[0_2px_6px_var(--color-shadow)] border border-border">
           ❤️
         </div>
       </div>
 
-      <p className="mt-3 text-sm text-gray-700">Sample Product {productId}</p>
+      {/* Product Title */}
+      <p className="mt-3 text-sm text-primary font-medium">
+        Sample Product {productId}
+      </p>
 
+      {/* Price + Old Price */}
       <div className="flex gap-2 items-center mt-1">
-        <span className="text-black font-bold">$99.00</span>
-        <span className="line-through text-gray-400 text-sm">$150.00</span>
+        <span className="text-primary font-semibold">$99.00</span>
+        <span className="line-through text-secondary text-sm">$150.00</span>
       </div>
 
-      <div className="w-full bg-gray-200 h-2 rounded-full mt-2">
-        <div className="bg-black h-2 rounded-full w-3/5"></div>
+      {/* Progress Bar */}
+      <div className="w-full bg-border h-2 rounded-full mt-2 overflow-hidden">
+        <div className="bg-primary h-2 rounded-full w-3/5"></div>
       </div>
 
-      <p className="text-xs text-gray-500 mt-1">6/10 Sold</p>
+      {/* Sold Info */}
+      <p className="text-xs text-muted mt-1">6/10 Sold</p>
     </div>
   );
 }

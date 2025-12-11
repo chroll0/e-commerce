@@ -25,3 +25,6 @@ export { default as ProductCard } from "./product/ProductCard";
 // Layout components
 export { default as Navigation } from "./layout/Navigation";
 export { default as Footer } from "./layout/Footer";
+
+// Other components
+export { default as ThemeToggle } from "./navbar/ThemeToggle";

@@ -4,7 +4,7 @@ import { ButtonHTMLAttributes, FC, ReactNode } from "react";
 import classNames from "classnames";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary" | "outline" | "text";
+  variant?: "primary" | "secondary" | "outline" | "text" | "icon";
   size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   leftIcon?: ReactNode;
@@ -31,6 +31,7 @@ const Button: FC<ButtonProps> = ({
     secondary: "bg-gray-200 text-black hover:bg-gray-300",
     outline: "border border-black text-black hover:bg-black hover:text-white",
     text: "bg-transparent text-black hover:underline",
+    icon: "bg-transparent border border-border rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-black dark:text-white p-2",
   };
 
   const sizeStyles = {

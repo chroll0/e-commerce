@@ -1,7 +1,11 @@
-import React from "react";
+import { ThemeToggle } from "@/components";
 
 const Navigation = () => {
-  return <div></div>;
+  return (
+    <div>
+      <ThemeToggle />
+    </div>
+  );
 };
 
 export default Navigation;
