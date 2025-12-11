@@ -24,14 +24,14 @@ const Button: FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    "font-medium rounded transition-all duration-200 flex items-center justify-center gap-2";
+    "font-medium rounded transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer focus:outline-none";
 
   const variantStyles = {
     primary: "bg-black text-white hover:bg-gray-800",
     secondary: "bg-gray-200 text-black hover:bg-gray-300",
     outline: "border border-black text-black hover:bg-black hover:text-white",
     text: "bg-transparent text-black hover:underline",
-    icon: "bg-transparent border border-border rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-black dark:text-white p-2",
+    icon: "bg-transparent border border-border rounded-full hover:bg-gray-400 p-2",
   };
 
   const sizeStyles = {

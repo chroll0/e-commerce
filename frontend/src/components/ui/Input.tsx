@@ -2,6 +2,7 @@ import { InputHTMLAttributes, FC, ReactNode } from "react";
 import classNames from "classnames";
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+  label?: string;
   size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   leftIcon?: ReactNode;
@@ -10,6 +11,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 const Input: FC<InputProps> = ({
+  label,
   size = "md",
   fullWidth = false,
   leftIcon,
@@ -19,9 +21,9 @@ const Input: FC<InputProps> = ({
   ...props
 }) => {
   const baseStyles =
-    "border rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center";
+    "border rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-highlight flex items-center bg-card-soft text-primary";
 
-  const sizeStyles: Record<"sm" | "md" | "lg", string> = {
+  const sizeStyles = {
     sm: "px-2 py-1 text-sm",
     md: "px-3 py-2 text-base",
     lg: "px-4 py-3 text-lg",
@@ -30,21 +32,29 @@ const Input: FC<InputProps> = ({
   const widthStyles = fullWidth ? "w-full" : "";
 
   return (
-    <div className={classNames("flex flex-col", widthStyles)}>
+    <div className={classNames("flex flex-col gap-1", widthStyles)}>
+      {label && (
+        <label className="text-sm font-medium text-secondary">{label}</label>
+      )}
+
       <div
         className={classNames(
           baseStyles,
           sizeStyles[size as "sm" | "md" | "lg"],
-          "gap-2",
-          error ? "border-red-500" : "border-gray-300",
+          "gap-2 border-border-strong",
+          error && "border-accent!",
           className
         )}
       >
-        {leftIcon && <span className="flex items-center">{leftIcon}</span>}
-        <input className="flex-1 bg-transparent outline-none" {...props} />
-        {rightIcon && <span className="flex items-center">{rightIcon}</span>}
+        {leftIcon && <span>{leftIcon}</span>}
+        <input
+          className="flex-1 bg-transparent outline-none text-primary placeholder:text-muted"
+          {...props}
+        />
+        {rightIcon && <span>{rightIcon}</span>}
       </div>
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+
+      {error && <p className="text-accent text-sm mt-1">{error}</p>}
     </div>
   );
 };
