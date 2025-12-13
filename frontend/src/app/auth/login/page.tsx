@@ -2,27 +2,25 @@
 
 import { useState } from "react";
 import { Button, Input } from "@/components";
-import { api } from "@/lib/axios";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const { login } = useAuthStore();
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      await api.post("/auth/login", { email, password });
+      await login(email, password);
       router.push("/");
-
-      setMessage("Login successful!");
     } catch (err) {
       const error = err as AxiosError<any>;
-
       setMessage(error.response?.data?.message || "Login failed.");
     }
   };

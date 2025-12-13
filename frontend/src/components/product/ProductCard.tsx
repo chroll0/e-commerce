@@ -1,16 +1,14 @@
-import Image from "next/image";
-
 export default function ProductCard({ productId }: { productId: number }) {
   return (
     <div className="bg-card rounded-xl shadow-[0_2px_12px_var(--color-shadow)] p-4 border border-border hover:shadow-[0_4px_18px_var(--color-shadow)] transition cursor-pointer">
       {/* Product Image */}
       <div className="relative w-full h-40 bg-card-soft rounded-lg overflow-hidden border border-border">
-        <Image
+        {/* <Image
           src="/placeholder-product.jpg"
           alt="Product"
           fill
           className="object-cover rounded-lg"
-        />
+        /> */}
 
         {/* Favorite Heart Icon */}
         <div className="absolute top-2 right-2 bg-card rounded-full p-1 shadow-[0_2px_6px_var(--color-shadow)] border border-border">

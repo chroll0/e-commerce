@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export default function Hero() {
   return (
     <section className="w-full max-w-7xl px-4 mt-6 mx-auto">
@@ -24,13 +22,13 @@ export default function Hero() {
 
         {/* Right Banner Image */}
         <div className="absolute right-0 bottom-0">
-          <Image
+          {/* <Image
             src="/hero-clothes.png"
             alt="Clothes"
             width={420}
             height={350}
             className="object-contain drop-shadow-xl"
-          />
+          /> */}
         </div>
       </div>
     </section>
