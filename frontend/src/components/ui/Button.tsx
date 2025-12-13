@@ -4,7 +4,7 @@ import { ButtonHTMLAttributes, FC, ReactNode } from "react";
 import classNames from "classnames";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary" | "outline" | "text" | "icon";
+  variant?: "primary" | "secondary" | "outline" | "text";
   size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   leftIcon?: ReactNode;
@@ -27,11 +27,10 @@ const Button: FC<ButtonProps> = ({
     "font-medium rounded transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer focus:outline-none";
 
   const variantStyles = {
-    primary: "bg-black text-white hover:bg-gray-800",
-    secondary: "bg-gray-200 text-black hover:bg-gray-300",
-    outline: "border border-black text-black hover:bg-black hover:text-white",
-    text: "bg-transparent text-black hover:underline",
-    icon: "bg-transparent border border-border rounded-full hover:bg-gray-400 p-2",
+    primary: "bg-primary text-background hover:opacity-90",
+    secondary: "bg-card-soft text-foreground hover:bg-muted",
+    outline: "border border-border text-foreground hover:bg-card-soft",
+    text: "bg-transparent text-foreground hover:underline",
   };
 
   const sizeStyles = {
@@ -40,26 +39,20 @@ const Button: FC<ButtonProps> = ({
     lg: iconOnly ? "p-4 text-lg" : "px-6 py-3 text-lg",
   };
 
-  const widthStyles = fullWidth ? "w-full" : "";
-
   return (
     <button
       className={classNames(
         baseStyles,
         variantStyles[variant],
         sizeStyles[size],
-        widthStyles,
+        fullWidth && "w-full",
         className
       )}
       {...props}
     >
-      {leftIcon && !iconOnly && (
-        <span className="flex items-center">{leftIcon}</span>
-      )}
+      {leftIcon && !iconOnly && <span>{leftIcon}</span>}
       {!iconOnly && children}
-      {rightIcon && !iconOnly && (
-        <span className="flex items-center">{rightIcon}</span>
-      )}
+      {rightIcon && !iconOnly && <span>{rightIcon}</span>}
       {iconOnly && (leftIcon || rightIcon)}
     </button>
   );

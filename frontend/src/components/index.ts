@@ -5,6 +5,7 @@ export { default as Modal } from "./ui/Modal";
 export { default as Input } from "./ui/Input";
 export { default as PageWrapper } from "./ui/PageWrapper";
 export { default as Dropdown } from "./ui/Dropdown";
+export { default as Logo } from "./ui/Logo";
 
 // Navbar components
 // export { default as NavBar } from "./navbar/NavBar";
@@ -27,4 +28,8 @@ export { default as Navigation } from "./layout/Navigation";
 export { default as Footer } from "./layout/Footer";
 
 // Other components
-export { default as ThemeToggle } from "./navbar/ThemeToggle";
+export { default as CategoryDropdown } from "./navigation/CategoryDropdown";
+export { default as ThemeToggle } from "./navigation/ThemeToggle";
+export { default as AuthActions } from "./navigation/AuthActions";
+export { default as SearchBar } from "./navigation/SearchBar";
+export { default as NavBar } from "./navigation/NavBar";

@@ -15,9 +15,7 @@ export default function CategoryScroller() {
             key={cat.id}
             className="flex flex-col items-center min-w-20 cursor-pointer hover:opacity-80 transition"
           >
-            <div className="w-14 h-14 rounded-full bg-card flex items-center justify-center border border-border">
-              <img src={cat.icon} alt={cat.name} className="w-8 h-8" />
-            </div>
+            <div className="w-14 h-14 rounded-full bg-card flex items-center justify-center border border-border"></div>
             <p className="text-sm mt-2 text-primary">{cat.name}</p>
           </div>
         ))}
