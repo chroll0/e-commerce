@@ -24,7 +24,7 @@ export class AuthController {
 
     res.cookie("access_token", token, {
       httpOnly: true,
-      secure: false, // true IN PRODUCTION (HTTPS)
+      secure: false,
       sameSite: "lax",
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -39,7 +39,7 @@ export class AuthController {
 
     res.cookie("access_token", token, {
       httpOnly: true,
-      secure: false, // true IN PRODUCTION
+      secure: false,
       sameSite: "lax",
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -58,5 +58,11 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"))
   me(@Req() req: Request) {
     return req.user;
+  }
+
+  @Get("verify")
+  @UseGuards(AuthGuard("jwt"))
+  verify(@Req() req: Request) {
+    return { valid: true };
   }
 }
