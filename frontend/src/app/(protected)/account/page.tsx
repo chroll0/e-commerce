@@ -73,8 +73,7 @@ export default function AccountPage() {
             Logout
           </Button>
         </div>
-
-        {/* Content */}
+        ც{/* Content */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Profile card */}
           <div className="md:col-span-1 p-6 rounded-2xl border border-border bg-card shadow-[0_4px_18px_var(--color-shadow)]">
@@ -168,7 +167,6 @@ export default function AccountPage() {
             </div>
           </div>
         </div>
-
         {/* Footer note */}
         <p className="mt-10 text-center text-xs text-secondary">
           Tip: If you delete a user from the database, the session will be

@@ -22,10 +22,11 @@ export class AuthController {
   async register(@Body() dto: RegisterDto, @Res() res: Response) {
     const token = await this.authService.register(dto);
 
-    res.cookie("token", token, {
+    res.cookie("access_token", token, {
       httpOnly: true,
-      secure: false, // true IN PRODUCTION (HTTPS)
+      secure: false,
       sameSite: "lax",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -36,10 +37,11 @@ export class AuthController {
   async login(@Body() dto: LoginDto, @Res() res: Response) {
     const token = await this.authService.login(dto.email, dto.password);
 
-    res.cookie("token", token, {
+    res.cookie("access_token", token, {
       httpOnly: true,
-      secure: false, // true IN PRODUCTION
+      secure: false,
       sameSite: "lax",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -48,7 +50,7 @@ export class AuthController {
 
   @Post("logout")
   logout(@Res() res: Response) {
-    res.clearCookie("token");
+    res.clearCookie("access_token", { path: "/" });
     return res.send({ success: true });
   }
 
@@ -56,5 +58,11 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"))
   me(@Req() req: Request) {
     return req.user;
+  }
+
+  @Get("verify")
+  @UseGuards(AuthGuard("jwt"))
+  verify(@Req() req: Request) {
+    return { valid: true };
   }
 }
