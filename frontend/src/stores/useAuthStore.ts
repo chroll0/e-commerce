@@ -21,6 +21,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   loading: true,
 
   fetchMe: async () => {
+    set({ loading: true });
+
     try {
       const { data } = await api.get("/auth/me");
       set({ user: data, loading: false });
@@ -30,12 +32,18 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   login: async (email, password) => {
+    set({ loading: true });
+
     await api.post("/auth/login", { email, password });
+
     await useAuthStore.getState().fetchMe();
   },
 
   logout: async () => {
-    await api.post("/auth/logout");
-    set({ user: null });
+    try {
+      await api.post("/auth/logout");
+    } finally {
+      set({ user: null, loading: false });
+    }
   },
 }));

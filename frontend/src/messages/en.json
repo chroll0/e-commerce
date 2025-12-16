@@ -1,0 +1,15 @@
+{
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "categories": "Categories",
+    "deals": "Deals",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "auth": {
+    "login": "Login",
+    "registration": "Registration",
+    "logout": "Logout"
+  }
+}

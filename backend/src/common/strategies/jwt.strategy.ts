@@ -9,13 +9,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
       jwtFromRequest: (req: Request) => {
-        return req?.cookies?.token || null;
+        return req?.cookies?.access_token || null;
       },
       secretOrKey: process.env.JWT_SECRET,
+      ignoreExpiration: false,
     });
   }
 
   async validate(payload: JwtPayload) {
-    return payload;
+    return {
+      id: payload.id,
+      email: payload.email,
+      role: payload.role,
+    };
   }
 }
