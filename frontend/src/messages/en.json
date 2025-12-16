@@ -9,6 +9,7 @@
   },
   "auth": {
     "login": "Login",
+    "registration": "Registration",
     "logout": "Logout"
   }
 }
