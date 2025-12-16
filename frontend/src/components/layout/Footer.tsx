@@ -1,9 +1,8 @@
-import React from "react";
 import { LanguageSwitcher } from "../footer/LanguageSwitcher";
 
 const Footer = () => {
   return (
-    <div>
+    <div className="px-5 py-2">
       Footer
       <LanguageSwitcher />
     </div>
