@@ -1,45 +1,60 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const PUBLIC_ROUTES = ["/", "/about"];
+const locales = ["en", "ka"];
+const defaultLocale = "en";
+const protectedPrefixes = ["/account", "/checkout", "/settings"];
 
 export async function middleware(req: NextRequest) {
-  const pathname = req.nextUrl.pathname;
+  const { pathname } = req.nextUrl;
 
-  // 1️⃣ Allow public & auth routes
-  if (pathname.startsWith("/auth") || PUBLIC_ROUTES.includes(pathname)) {
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL(`/${defaultLocale}`, req.url));
+  }
+
+  const segments = pathname.split("/");
+  const locale = locales.includes(segments[1]) ? segments[1] : null;
+
+  if (!locale) {
+    return NextResponse.redirect(
+      new URL(`/${defaultLocale}${pathname}`, req.url)
+    );
+  }
+
+  const pathAfterLocale = `/${segments.slice(2).join("/")}`;
+
+  const isProtected = protectedPrefixes.some(
+    (prefix) =>
+      pathAfterLocale === prefix || pathAfterLocale.startsWith(`${prefix}/`)
+  );
+
+  if (!isProtected) {
     return NextResponse.next();
   }
 
-  // 2️⃣ Read token from cookie
   const token = req.cookies.get("access_token")?.value;
 
   if (!token) {
-    return NextResponse.redirect(new URL("/auth/login", req.url));
+    return NextResponse.redirect(new URL(`/${locale}/auth/login`, req.url));
   }
 
-  // 3️⃣ Verify token via backend
   try {
     const verifyRes = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/verify`,
       {
-        method: "GET",
         headers: {
           cookie: `access_token=${token}`,
         },
       }
     );
 
-    // 4️⃣ Invalid / expired token
     if (!verifyRes.ok) {
-      return NextResponse.redirect(new URL("/auth/login", req.url));
+      return NextResponse.redirect(new URL(`/${locale}/auth/login`, req.url));
     }
 
-    // 5️⃣ Token is valid → allow
     return NextResponse.next();
-  } catch (error) {
-    // backend unreachable / network error
-    return NextResponse.redirect(new URL("/auth/login", req.url));
+  } catch {
+    return NextResponse.redirect(new URL(`/${locale}/auth/login`, req.url));
   }
 }
 
