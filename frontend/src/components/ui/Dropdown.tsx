@@ -1,38 +1,39 @@
 "use client";
 
-import { FC, useState, ReactNode, useRef, useEffect } from "react";
+import { useState, ReactNode, useRef, useEffect } from "react";
 import classNames from "classnames";
 import Button from "./Button";
+import { ChevronDown } from "lucide-react";
 
-type DropdownItem = {
+type DropdownItem<T = unknown> = {
   label: string;
   value: string | number;
+  data?: T;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   disabled?: boolean;
 };
 
-type DropdownProps = {
-  items: DropdownItem[];
-  onSelect?: (item: DropdownItem) => void;
+type DropdownProps<T = unknown> = {
+  items: DropdownItem<T>[];
+  onSelect?: (item: DropdownItem<T>) => void;
   buttonLabel: string | ReactNode;
   size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   className?: string;
 };
 
-const Dropdown: FC<DropdownProps> = ({
+const Dropdown = <T,>({
   items,
   onSelect,
   buttonLabel,
   size = "md",
   fullWidth = false,
   className,
-}) => {
+}: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -51,20 +52,21 @@ const Dropdown: FC<DropdownProps> = ({
       <Button
         onClick={() => setIsOpen((prev) => !prev)}
         size={size}
+        variant="outline"
         fullWidth={fullWidth}
-        rightIcon={<span className="ml-2">&#9662;</span>} // down arrow
-        className={className}
+        rightIcon={<ChevronDown className="w-4 h-4 ml-1" />}
+        className={classNames("text-secondary", className)}
       >
         {buttonLabel}
       </Button>
 
       {isOpen && (
-        <ul className="absolute left-0 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg z-50 max-h-60 overflow-auto">
+        <ul className="absolute left-0 mt-1 w-full bg-background border border-border rounded-md shadow-lg z-50 max-h-60 overflow-auto">
           {items.map((item) => (
             <li
               key={item.value}
               className={classNames(
-                "flex items-center justify-between px-3 py-2 hover:bg-gray-100 cursor-pointer",
+                "flex items-center justify-between px-3 py-2 hover:bg-foreground text-secondary hover:text-card cursor-pointer text-sm rounded",
                 item.disabled && "opacity-50 cursor-not-allowed"
               )}
               onClick={() => {

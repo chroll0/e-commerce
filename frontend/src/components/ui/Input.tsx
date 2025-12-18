@@ -34,7 +34,7 @@ const Input: FC<InputProps> = ({
   const [showPassword, setShowPassword] = useState(false);
 
   const baseStyles =
-    "border rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center";
+    "border rounded-md border-border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center";
 
   const sizeStyles = {
     sm: "px-2 py-1 text-sm",
@@ -54,14 +54,14 @@ const Input: FC<InputProps> = ({
           baseStyles,
           sizeStyles[size as "sm" | "md" | "lg"],
           "gap-2",
-          error ? "border-red-500" : "border-gray-300",
+          error ? "border-red-500" : "border-border",
           className
         )}
       >
         {leftIcon && <span>{leftIcon}</span>}
 
         <input
-          className="flex-1 bg-transparent outline-none"
+          className="flex-1 bg-transparent outline-none placeholder:text-secondary"
           type={passwordToggle ? (showPassword ? "text" : "password") : type}
           {...props}
         />
