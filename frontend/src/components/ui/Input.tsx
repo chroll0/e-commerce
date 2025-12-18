@@ -4,7 +4,10 @@ import { InputHTMLAttributes, FC, ReactNode, useState } from "react";
 import { EyeClosed, EyeIcon } from "lucide-react";
 import classNames from "classnames";
 
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+type InputProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "value" | "onChange" | "size"
+> & {
   label?: string;
   size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
@@ -12,6 +15,8 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   rightIcon?: ReactNode;
   error?: string;
   passwordToggle?: boolean;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const Input: FC<InputProps> = ({

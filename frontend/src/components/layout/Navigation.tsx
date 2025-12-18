@@ -18,8 +18,8 @@ const Navigation = () => {
           <AuthActions />
         </div>
       </div>
-      <div className="flex items-center justify-between px-5 py-1 border-b border-border">
-        <div className="flex items-center gap-6">
+      <div className="flex items-center justify-between px-5 py-1 border-b border-border gap-6">
+        <div className="flex items-center gap-6 w-full">
           <Logo />
           <CategoryDropdown />
           <SearchBar />
