@@ -30,8 +30,11 @@ export class ProductController {
   }
 
   @Get()
-  findAll(@Query("search") search?: string) {
-    return this.productService.findAll(search);
+  findAll(
+    @Query("search") search?: string,
+    @Query("category") categorySlug?: string
+  ) {
+    return this.productService.findAll(search, categorySlug);
   }
 
   @Get(":id")

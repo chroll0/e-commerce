@@ -19,17 +19,57 @@ export class ProductService {
     });
   }
 
-  async findAll(search?: string) {
+  async findAll(search?: string, categorySlug?: string) {
     return this.prisma.product.findMany({
-      where: search
-        ? {
-            OR: [
-              { title: { contains: search, mode: "insensitive" } },
-              { description: { contains: search, mode: "insensitive" } },
-            ],
-          }
-        : {},
-      include: { category: true },
+      where: {
+        AND: [
+          search
+            ? {
+                OR: [
+                  {
+                    title: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    description: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    slug: {
+                      contains: search,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    category: {
+                      name: {
+                        contains: search,
+                        mode: "insensitive",
+                      },
+                    },
+                  },
+                ],
+              }
+            : {},
+          categorySlug
+            ? {
+                category: {
+                  slug: categorySlug,
+                },
+              }
+            : {},
+        ],
+      },
+      include: {
+        category: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
   }
 
@@ -44,7 +84,7 @@ export class ProductService {
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
-    await this.findOne(id); // check existence
+    await this.findOne(id);
 
     const slug =
       updateProductDto.slug ??
@@ -60,7 +100,7 @@ export class ProductService {
   }
 
   async remove(id: number) {
-    await this.findOne(id); // check existence
+    await this.findOne(id);
     return this.prisma.product.delete({ where: { id } });
   }
 
