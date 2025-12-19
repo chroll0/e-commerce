@@ -11,5 +11,19 @@
     "login": "Login",
     "registration": "Registration",
     "logout": "Logout"
+  },
+  "admin": {
+    "brand": {
+      "name": "Satori",
+      "admin": "Admin"
+    },
+    "header": {
+      "title": "Admin Panel"
+    },
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "categories": "Categories"
+    }
   }
 }

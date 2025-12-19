@@ -33,3 +33,6 @@ export { default as ThemeToggle } from "./navigation/ThemeToggle";
 export { default as AuthActions } from "./navigation/AuthActions";
 export { default as SearchBar } from "./navigation/SearchBar";
 export { default as NavBar } from "./navigation/NavBar";
+
+export { default as SidebarLink } from "./admin/SidebarLink";
+export { AdminSidebar } from "./admin/AdminSidebar";

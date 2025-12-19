@@ -3,6 +3,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { hash } from "bcrypt";
 import { PrismaService } from "../../prisma/prisma.service";
+import { UserRole } from "../../common/enums/user-role.enum";
 
 @Injectable()
 export class UserService {
@@ -37,6 +38,15 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: updateUserDto,
+    });
+  }
+  async updateRole(id: number, role: UserRole) {
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        role,
+        tokenVersion: { increment: 1 },
+      },
     });
   }
 

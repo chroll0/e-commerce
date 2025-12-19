@@ -5,10 +5,12 @@ import { UserModule } from "../user/user.module";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 import { JwtStrategy } from "../../common/strategies/jwt.strategy";
+import { PrismaModule } from "../../prisma/prisma.module";
 
 @Module({
   imports: [
     UserModule,
+    PrismaModule,
     PassportModule,
     JwtModule.register({
       global: true,
