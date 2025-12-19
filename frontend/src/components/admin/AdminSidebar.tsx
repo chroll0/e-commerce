@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { SidebarLink } from "./SidebarLink";
 import { getTranslations } from "next-intl/server";
+import { SidebarLink } from "@/components";
 
 type AdminSidebarProps = {
   locale: string;
@@ -23,7 +23,7 @@ export const AdminSidebar = async ({ locale }: AdminSidebarProps) => {
           className="text-lg font-semibold tracking-tight"
         >
           {t("brand.name")}{" "}
-          <span className="text-muted-foreground text-sm">
+          <span className="text-muted-foreground text-sm tracking-wider">
             {t("brand.admin")}
           </span>
         </Link>

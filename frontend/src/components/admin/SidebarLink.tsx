@@ -2,28 +2,33 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 type SidebarLinkProps = {
   href: string;
   label: string;
 };
 
-export const SidebarLink = ({ href, label }: SidebarLinkProps) => {
+const SidebarLink = ({ href, label }: SidebarLinkProps) => {
   const pathname = usePathname();
-
-  const isActive = pathname === href || pathname.startsWith(`${href}/`);
+  const normalize = (path: string) => path.replace(/^\/(en|ka)/, "");
+  const isActive =
+    normalize(pathname) === normalize(href) ||
+    normalize(pathname).startsWith(normalize(href) + "/");
 
   return (
     <Link
       href={href}
-      className={[
-        "block rounded-md px-3 py-2 text-sm font-medium transition",
+      className={clsx(
+        "flex items-center rounded-md px-3 py-2 text-sm transition",
         isActive
-          ? "bg-muted text-foreground"
-          : "text-muted-foreground hover:bg-muted hover:text-foreground",
-      ].join(" ")}
+          ? "bg-card text-primary-foreground font-medium"
+          : "text-muted-foreground hover:bg-card"
+      )}
     >
       {label}
     </Link>
   );
 };
+
+export default SidebarLink;
