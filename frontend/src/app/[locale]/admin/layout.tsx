@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 type AdminLayoutProps = {
   children: ReactNode;
@@ -8,6 +9,7 @@ type AdminLayoutProps = {
 
 const AdminLayout = async ({ children, params }: AdminLayoutProps) => {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "admin" });
 
   return (
     <div className="flex min-h-screen bg-muted/30">
@@ -18,21 +20,27 @@ const AdminLayout = async ({ children, params }: AdminLayoutProps) => {
             href={`/${locale}`}
             className="text-lg font-semibold tracking-tight"
           >
-            Satori <span className="text-muted-foreground text-sm">Admin</span>
+            {t("brand.name")}{" "}
+            <span className="text-muted-foreground text-sm">
+              {t("brand.admin")}
+            </span>
           </Link>
         </div>
 
         <nav className="p-4 space-y-1">
-          <SidebarLink href={`//admin`} label="Dashboard" />
-          <SidebarLink href={`//admin/product`} label="Product" />
-          <SidebarLink href={`/admin/categories`} label="Categories" />
+          <SidebarLink href={`/${locale}/admin/dashboard`} label="Dashboard" />
+          <SidebarLink href={`/${locale}/admin/product`} label="Product" />
+          <SidebarLink
+            href={`/${locale}/admin/categories`}
+            label="Categories"
+          />
         </nav>
       </aside>
 
       {/* Content */}
       <main className="flex-1">
         <header className="h-16 border-b bg-background flex items-center px-6">
-          <h1 className="text-lg font-medium">Admin Panel</h1>
+          <h1 className="text-lg font-medium">{t("header.title")}</h1>
         </header>
 
         <section className="p-6">{children}</section>

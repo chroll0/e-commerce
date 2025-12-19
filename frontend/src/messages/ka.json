@@ -11,5 +11,19 @@
     "login": "შესვლა",
     "registration": "რეგისტრაცია",
     "logout": "გამოსვლა"
+  },
+  "admin": {
+    "brand": {
+      "name": "Satori",
+      "admin": "ადმინი"
+    },
+    "header": {
+      "title": "ადმინისტრატორის პანელი"
+    },
+    "sidebar": {
+      "dashboard": "დაფა",
+      "products": "პროდუქტები",
+      "categories": "კატეგორიები"
+    }
   }
 }
