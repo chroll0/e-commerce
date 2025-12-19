@@ -8,52 +8,57 @@ import {
   Req,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { Response } from "express";
+import { Response, Request } from "express";
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { AuthGuard } from "@nestjs/passport";
-import { Request } from "express";
 
 @Controller("auth")
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post("register")
-  async register(@Body() dto: RegisterDto, @Res() res: Response) {
+  async register(
+    @Body() dto: RegisterDto,
+    @Res({ passthrough: true }) res: Response
+  ) {
     const token = await this.authService.register(dto);
 
     res.cookie("access_token", token, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.send({ success: true });
+    return { success: true };
   }
 
   @Post("login")
-  async login(@Body() dto: LoginDto, @Res() res: Response) {
+  async login(
+    @Body() dto: LoginDto,
+    @Res({ passthrough: true }) res: Response
+  ) {
     const token = await this.authService.login(dto.email, dto.password);
 
     res.cookie("access_token", token, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.send({ success: true });
+    return { success: true };
   }
 
   @Post("logout")
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie("access_token", {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      secure: false,
       path: "/",
     });
 
@@ -63,12 +68,18 @@ export class AuthController {
   @Get("me")
   @UseGuards(AuthGuard("jwt"))
   me(@Req() req: Request) {
-    return req.user;
+    const user = req.user as any;
+
+    return {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    };
   }
 
   @Get("verify")
   @UseGuards(AuthGuard("jwt"))
-  verify(@Req() req: Request) {
+  verify() {
     return { valid: true };
   }
 }
