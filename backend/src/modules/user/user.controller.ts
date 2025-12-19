@@ -72,4 +72,15 @@ export class UserController {
   updateProfile(@Req() req: AuthRequest, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(req.user.id, updateUserDto);
   }
+
+  // Update user role (ADMIN only)
+  @Patch(":id/role")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  updateRole(
+    @Param("id", ParseIntPipe) id: number,
+    @Body("role") role: UserRole
+  ) {
+    return this.userService.updateRole(id, role);
+  }
 }

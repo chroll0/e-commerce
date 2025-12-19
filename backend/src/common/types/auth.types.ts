@@ -5,6 +5,7 @@ export type JwtPayload = {
   id: number;
   email: string;
   role: UserRole;
+  tokenVersion: number;
 };
 
 export type AuthRequest = Request & { user: JwtPayload };

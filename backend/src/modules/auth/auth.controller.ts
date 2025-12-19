@@ -69,11 +69,11 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"))
   me(@Req() req: Request) {
     const user = req.user as any;
-
     return {
       id: user.id,
       email: user.email,
       role: user.role,
+      tokenVersion: user.tokenVersion,
     };
   }
 
