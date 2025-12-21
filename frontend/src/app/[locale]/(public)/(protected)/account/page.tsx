@@ -15,17 +15,7 @@ function Avatar({ name }: { name: string }) {
 }
 
 export default function AccountPage() {
-  const { user, loading, logout } = useAuthStore();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background px-4 flex items-center justify-center">
-        <div className="w-full max-w-md p-6 rounded-2xl border border-border shadow-[0_4px_18px_var(--color-shadow)]">
-          <p className="text-center text-secondary">Loading account...</p>
-        </div>
-      </div>
-    );
-  }
+  const { user, logout } = useAuthStore();
 
   if (!user) {
     return (

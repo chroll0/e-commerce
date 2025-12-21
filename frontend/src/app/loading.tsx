@@ -1,102 +1,96 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 type Props = {
-  loading: boolean;
-  height?: number;
-  colorClass?: string;
+  size?: number;
 };
 
-export default function GlobalLoadingBar({
-  loading,
-  height = 4,
-  colorClass = "bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500",
-}: Props) {
-  const [progress, setProgress] = useState(0);
-  const [visible, setVisible] = useState(false);
-  const timerRef = useRef<number | null>(null);
-
-  // When loading starts we show the bar and slowly increase progress until 90%
-  useEffect(() => {
-    if (loading) {
-      setVisible(true);
-      setProgress((p) => Math.max(p, 8)); // give a quick initial bump
-
-      // increase progress gradually while loading
-      if (timerRef.current) window.clearInterval(timerRef.current);
-      timerRef.current = window.setInterval(() => {
-        setProgress((p) => {
-          // slow down as we approach 90
-          const delta =
-            p < 60 ? Math.random() * 6 + 2 : Math.random() * 3 + 0.5;
-          const next = Math.min(90, p + delta);
-          return next;
-        });
-      }, 300) as unknown as number;
-    } else {
-      // finish the bar
-      if (timerRef.current) {
-        window.clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-      setProgress(100);
-      // hide shortly after finished so user sees the completion
-      const hide = window.setTimeout(() => {
-        setVisible(false);
-        setProgress(0);
-      }, 360);
-      return () => window.clearTimeout(hide);
-    }
-
-    return () => {
-      if (timerRef.current) {
-        window.clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-    };
-  }, [loading]);
-
-  if (!visible) return null;
+export default function GlobalCircularLoader({ size = 64 }: Props) {
+  const reduceMotion = useReducedMotion();
 
   return (
-    <div
-      aria-hidden
-      className="fixed left-0 top-0 w-full z-9999 pointer-events-none"
-      style={{ height }}
-    >
-      <div className="relative w-full h-full overflow-hidden">
-        {/* Main progress bar */}
-        <motion.div
-          layout
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ ease: "easeOut", duration: 0.28 }}
-          className={`${colorClass} h-full rounded-r-md drop-shadow-lg`}
-          style={{ willChange: "width" }}
-        />
+    <div className="fixed inset-0 z-9999 flex items-center justify-center pointer-events-none">
+      {/* subtle backdrop */}
+      <div className="absolute inset-0 bg-background/60 backdrop-blur-[1.5px]" />
 
-        {/* subtle glossy shimmer that moves across the bar */}
+      <div
+        className="relative flex items-center justify-center"
+        style={{ width: size, height: size }}
+      >
+        {/* OUTER RING — slow */}
         <motion.div
-          initial={{ left: "-30%" }}
-          animate={{ left: "120%" }}
+          className="absolute rounded-full border border-border"
+          style={{ width: size, height: size }}
+          animate={reduceMotion ? {} : { rotate: 360 }}
           transition={{
             repeat: Infinity,
-            ease: "linear",
-            duration: 1.6,
-            delay: 0.1,
-          }}
-          className="absolute top-0 h-full w-1/4 opacity-30 blur-sm"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.55), rgba(255,255,255,0))",
-            pointerEvents: "none",
+            duration: 7,
+            ease: "easeInOut",
           }}
         />
 
-        {/* small subtle shadow below */}
-        <div className="absolute left-0 top-full w-full h-0.5 bg-black/5" />
+        {/* MIDDLE RING — medium */}
+        <motion.div
+          className="absolute rounded-full border-2 border-foreground/60 border-t-transparent"
+          style={{ width: size * 0.72, height: size * 0.72 }}
+          animate={reduceMotion ? {} : { rotate: -360 }}
+          transition={{
+            repeat: Infinity,
+            duration: 2.8,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* INNER RING — fast */}
+        <motion.div
+          className="absolute rounded-full border-2 border-foreground border-b-transparent"
+          style={{ width: size * 0.45, height: size * 0.45 }}
+          animate={reduceMotion ? {} : { rotate: 360 }}
+          transition={{
+            repeat: Infinity,
+            duration: 1.2,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* CENTER DOT */}
+        <motion.div
+          className="absolute rounded-full bg-foreground"
+          style={{ width: 6, height: 6 }}
+          animate={reduceMotion ? {} : { scale: [0.8, 1.15, 0.8] }}
+          transition={{
+            repeat: Infinity,
+            duration: 1.4,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* ORBIT DOTS */}
+        {!reduceMotion && (
+          <motion.div
+            className="absolute"
+            style={{ width: size * 1.15, height: size * 1.15 }}
+            animate={{ rotate: 360 }}
+            transition={{
+              repeat: Infinity,
+              duration: 4,
+              ease: "linear",
+            }}
+          >
+            {["top", "right", "bottom", "left"].map((pos, i) => (
+              <div
+                key={pos}
+                className="absolute w-1.5 h-1.5 rounded-full bg-foreground/50"
+                style={{
+                  top: pos === "top" ? 0 : pos === "bottom" ? "100%" : "50%",
+                  left: pos === "left" ? 0 : pos === "right" ? "100%" : "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            ))}
+          </motion.div>
+        )}
       </div>
     </div>
   );
