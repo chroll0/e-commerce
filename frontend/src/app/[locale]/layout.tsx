@@ -1,7 +1,6 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { Navigation, PageWrapper, Footer } from "@/components";
-import Providers from "../providers";
+import { Providers, LoadingProvider } from "@/components";
 
 type Locale = "en" | "ka";
 
@@ -18,11 +17,11 @@ export default async function LocaleLayout({
 
   return (
     <Providers>
-      <NextIntlClientProvider locale={safeLocale} messages={messages}>
-        <Navigation />
-        <PageWrapper>{children}</PageWrapper>
-        <Footer />
-      </NextIntlClientProvider>
+      <LoadingProvider>
+        <NextIntlClientProvider locale={safeLocale} messages={messages}>
+          <>{children}</>
+        </NextIntlClientProvider>
+      </LoadingProvider>
     </Providers>
   );
 }

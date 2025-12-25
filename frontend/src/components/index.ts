@@ -1,3 +1,7 @@
+// Central exports for provider components
+export { default as Providers } from "./providers/providers";
+export { default as LoadingProvider } from "./providers/LoadingProvider";
+
 // Central exports for shared components
 export { default as Button } from "./ui/Button";
 export { default as Card } from "./ui/Card";
@@ -34,5 +38,14 @@ export { default as AuthActions } from "./navigation/AuthActions";
 export { default as SearchBar } from "./navigation/SearchBar";
 export { default as NavBar } from "./navigation/NavBar";
 
+// Admin components
 export { default as SidebarLink } from "./admin/SidebarLink";
 export { AdminSidebar } from "./admin/AdminSidebar";
+
+// Account components
+export { default as AccountNav } from "./account/AccountNav";
+export { default as Avatar } from "./account/Avatar";
+export { default as AccountProfileCard } from "./account/AccountProfileCard";
+export { default as AccountHeader } from "./account/AccountHeader";
+export { default as AccountQuickActions } from "./account/AccountQuickActions";
+export { default as AccountEmptyState } from "./account/AccountEmptyState";

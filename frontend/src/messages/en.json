@@ -7,11 +7,100 @@
     "about": "About",
     "contact": "Contact"
   },
+
   "auth": {
     "login": "Login",
     "registration": "Registration",
-    "logout": "Logout"
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don’t have an account?",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
   },
+
+  "account": {
+    "title": "My Account",
+    "welcome": "Welcome back!",
+    "description": "Manage your profile, orders and personal settings.",
+
+    "nav": {
+      "overview": "Overview",
+      "orders": "Orders",
+      "wishlist": "Wishlist",
+      "addresses": "Addresses",
+      "settings": "Settings"
+    },
+
+    "overview": {
+      "recentOrders": "Recent Orders",
+      "noOrders": "You haven’t placed any orders yet.",
+      "viewOrders": "View orders"
+    },
+
+    "profile": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role"
+    },
+
+    "orders": {
+      "title": "My Orders",
+      "empty": "You don’t have any orders yet.",
+      "orderId": "Order ID",
+      "status": "Status",
+      "total": "Total",
+      "date": "Date",
+      "viewDetails": "View details"
+    },
+
+    "wishlist": {
+      "title": "Wishlist",
+      "empty": "You haven’t added any products to your wishlist yet.",
+      "browse": "Browse products"
+    },
+
+    "addresses": {
+      "title": "Addresses",
+      "empty": "You haven’t added any delivery addresses yet.",
+      "add": "Add address",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+
+    "settings": {
+      "title": "Account Settings",
+      "profile": "Profile information",
+      "security": "Security",
+      "changePassword": "Change password",
+      "save": "Save changes"
+    }
+  },
+
+  "orders": {
+    "details": {
+      "title": "Order Details",
+      "items": "Items",
+      "shipping": "Shipping",
+      "payment": "Payment",
+      "summary": "Order Summary"
+    }
+  },
+
+  "wishlist": {
+    "add": "Add to wishlist",
+    "remove": "Remove from wishlist"
+  },
+
+  "support": {
+    "title": "Support",
+    "contact": "Contact Support",
+    "description": "Need help? Our support team is here for you."
+  },
+
   "admin": {
     "brand": {
       "name": "Satori",
@@ -23,7 +112,20 @@
     "sidebar": {
       "dashboard": "Dashboard",
       "products": "Products",
-      "categories": "Categories"
+      "categories": "Categories",
+      "orders": "Orders",
+      "users": "Users"
     }
+  },
+
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "confirm": "Confirm",
+    "back": "Back",
+    "continue": "Continue"
   }
 }
