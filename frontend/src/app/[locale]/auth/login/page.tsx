@@ -5,6 +5,7 @@ import { Button, Input } from "@/components";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -65,9 +66,12 @@ export default function LoginPage() {
 
         <p className="text-sm text-secondary mt-6 text-center">
           Don&apos;t have an account?{" "}
-          <a href="/auth/register" className="text-highlight hover:underline">
+          <Link
+            href="/auth/register"
+            className="text-highlight hover:underline"
+          >
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </div>

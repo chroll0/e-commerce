@@ -17,7 +17,7 @@ export default function AccountNav() {
   const t = useTranslations("account.nav");
 
   return (
-    <nav className="flex md:flex-col gap-2">
+    <nav className="flex items-center md:justify-end flex-wrap gap-2 mb-4 justify-center">
       {ITEMS.map((item) => {
         const active =
           pathname === item.href || pathname.startsWith(item.href + "/");
@@ -27,7 +27,7 @@ export default function AccountNav() {
             key={item.key}
             href={item.href}
             className={clsx(
-              "rounded-xl px-4 py-2 text-sm font-medium transition",
+              "rounded-md px-2 md:px-4 py-2 text-sm font-medium transition",
               active
                 ? "bg-primary text-white"
                 : "text-secondary hover:bg-card-soft"
