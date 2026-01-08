@@ -5,6 +5,7 @@ import { Button, Input } from "@/components";
 import { api } from "@/lib/axios";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -42,7 +43,7 @@ export default function RegisterPage() {
           <Input
             label="Full Name"
             type="text"
-            placeholder="John Doe"
+            placeholder="Your Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             fullWidth
@@ -81,9 +82,12 @@ export default function RegisterPage() {
 
         <p className="text-sm text-secondary mt-6 text-center">
           Already have an account?
-          <a href="/auth/login" className="text-highlight hover:underline ml-1">
-            Login
-          </a>
+          <Link
+            href="/auth/login"
+            className="text-highlight hover:underline ml-1"
+          >
+            Sign in
+          </Link>
         </p>
       </div>
     </div>
