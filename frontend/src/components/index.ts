@@ -48,4 +48,3 @@ export { default as Avatar } from "./account/Avatar";
 export { default as AccountProfileCard } from "./account/AccountProfileCard";
 export { default as AccountHeader } from "./account/AccountHeader";
 export { default as AccountQuickActions } from "./account/AccountQuickActions";
-export { default as AccountEmptyState } from "./account/AccountEmptyState";
