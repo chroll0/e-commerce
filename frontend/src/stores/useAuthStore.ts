@@ -2,10 +2,12 @@ import { api } from "@/lib/axios";
 import { create } from "zustand";
 
 export type User = {
-  name: string;
   id: number;
+  name: string;
   email: string;
   role: string;
+  phone?: string | null;
+  createdAt: Date;
 };
 
 type AuthState = {
@@ -25,7 +27,14 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     try {
       const { data } = await api.get("/auth/me");
-      set({ user: data, loading: false });
+
+      set({
+        user: {
+          ...data,
+          createdAt: new Date(data.createdAt),
+        },
+        loading: false,
+      });
     } catch {
       set({ user: null, loading: false });
     }
@@ -40,6 +49,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: async () => {
+    set({ loading: true });
+
     try {
       await api.post("/auth/logout");
     } finally {
