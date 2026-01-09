@@ -5,7 +5,7 @@ export default function LocaleLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <Navigation />
-      <div className="min-h-screen">{children}</div>
+      <div>{children}</div>
       <Footer />
     </>
   );

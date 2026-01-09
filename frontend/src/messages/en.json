@@ -23,10 +23,6 @@
   },
 
   "account": {
-    "title": "My Account",
-    "welcome": "Welcome back!",
-    "description": "Manage your profile, orders and personal settings.",
-
     "nav": {
       "overview": "Overview",
       "orders": "Orders",
@@ -34,49 +30,68 @@
       "addresses": "Addresses",
       "settings": "Settings"
     },
-
     "overview": {
+      "title": "My Account",
+      "description": "Manage your profile, orders and personal settings.",
       "recentOrders": "Recent Orders",
       "noOrders": "You haven’t placed any orders yet.",
       "viewOrders": "View orders"
     },
-
     "profile": {
       "name": "Name",
       "email": "Email",
       "role": "Role"
     },
-
     "orders": {
       "title": "My Orders",
+      "description": "View and manage your orders.",
       "empty": "You don’t have any orders yet.",
       "orderId": "Order ID",
       "status": "Status",
       "total": "Total",
       "date": "Date",
-      "viewDetails": "View details"
+      "viewDetails": "View details",
+      "export": "Export as PDF",
+      "statuses": {
+        "pending": "Pending",
+        "paid": "Paid",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      }
     },
-
     "wishlist": {
       "title": "Wishlist",
       "empty": "You haven’t added any products to your wishlist yet.",
-      "browse": "Browse products"
+      "browse": "Browse products",
+      "addToCart": "Add to cart",
+      "remove": "Remove",
+      "outOfStock": "Out of stock"
     },
-
     "addresses": {
       "title": "Addresses",
       "empty": "You haven’t added any delivery addresses yet.",
       "add": "Add address",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "form": {
+        "fullName": "Full name",
+        "phone": "Phone",
+        "city": "City",
+        "address": "Address",
+        "zip": "ZIP / Postal code",
+        "save": "Save address"
+      }
     },
-
     "settings": {
       "title": "Account Settings",
+      "description": "Manage your profile and security settings.",
       "profile": "Profile information",
       "security": "Security",
       "changePassword": "Change password",
-      "save": "Save changes"
+      "save": "Save changes",
+      "success": "Changes saved successfully.",
+      "error": "Something went wrong. Please try again."
     }
   },
 
