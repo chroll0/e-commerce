@@ -1,6 +1,6 @@
 export default function BestStores() {
   return (
-    <section className="w-full max-w-7xl px-4 mt-12 mb-16 mx-auto">
+    <section>
       <h2 className="text-xl font-semibold mb-4 text-primary">
         Best Selling Store
       </h2>

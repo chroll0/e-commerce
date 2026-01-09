@@ -35,12 +35,36 @@
       "description": "Manage your profile, orders and personal settings.",
       "recentOrders": "Recent Orders",
       "noOrders": "You haven’t placed any orders yet.",
-      "viewOrders": "View orders"
+      "viewOrders": "View orders",
+      "quickActions": {
+        "orders": {
+          "title": "Recent Orders",
+          "desc": "Track your latest purchases and delivery status.",
+          "action": "View orders"
+        },
+        "wishlist": {
+          "title": "Wishlist",
+          "desc": "Save items you love and buy them later.",
+          "action": "Open wishlist"
+        },
+        "addresses": {
+          "title": "Addresses",
+          "desc": "Manage delivery addresses for faster checkout.",
+          "action": "Manage addresses"
+        },
+        "support": {
+          "title": "Support",
+          "desc": "Need help? Contact our support team.",
+          "action": "Contact support"
+        }
+      }
     },
     "profile": {
       "name": "Name",
       "email": "Email",
-      "role": "Role"
+      "role": "Role",
+      "phone": "Phone",
+      "joined": "Joined"
     },
     "orders": {
       "title": "My Orders",

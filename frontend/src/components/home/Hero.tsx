@@ -1,6 +1,6 @@
 export default function Hero() {
   return (
-    <section className="w-full max-w-7xl px-4 mt-6 mx-auto">
+    <section>
       <div className="relative w-full h-[380px] rounded-2xl shadow-[0_4px_20px_var(--color-shadow)] overflow-hidden flex items-center bg-card">
         {/* Left Content */}
         <div className="pl-10 flex flex-col gap-3 z-10">

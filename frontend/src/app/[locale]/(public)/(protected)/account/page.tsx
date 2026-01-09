@@ -7,6 +7,7 @@ import {
   AccountHeader,
   AccountProfileCard,
   AccountQuickActions,
+  Advertisement,
   Button,
 } from "@/components";
 
@@ -40,6 +41,17 @@ export default function AccountPage() {
             <AccountQuickActions />
           </div>
         </div>
+        <Advertisement
+          badge="Tip"
+          title="Complete your profile"
+          description="Add phone and address to checkout faster."
+          href="/account/settings"
+          ctaLabel="Update settings"
+          variant="default"
+          dismissible
+          storageKey="profile_tip_dismissed"
+          className="mt-8"
+        />
       </div>
     );
 }

@@ -2,7 +2,7 @@ import ProductCard from "../product/ProductCard";
 
 export default function FlashSale() {
   return (
-    <section className="w-full max-w-7xl px-4 mt-10 mx-auto">
+    <section>
       {/* HEADER */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-primary">Flash Sale</h2>

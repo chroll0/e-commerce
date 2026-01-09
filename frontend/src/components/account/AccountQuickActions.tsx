@@ -1,37 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const ITEMS = [
-  {
-    key: "orders",
-    title: "Recent Orders",
-    desc: "Track your latest purchases and delivery status.",
-    href: "/account/orders",
-    action: "View orders",
-  },
-  {
-    key: "wishlist",
-    title: "Wishlist",
-    desc: "Save items you love and buy them later.",
-    href: "/account/wishlist",
-    action: "Open wishlist",
-  },
-  {
-    key: "addresses",
-    title: "Addresses",
-    desc: "Manage delivery addresses for faster checkout.",
-    href: "/account/addresses",
-    action: "Manage addresses",
-  },
-  {
-    key: "support",
-    title: "Support",
-    desc: "Need help? Contact our support team.",
-    href: "/support",
-    action: "Contact support",
-  },
-];
+  { key: "orders", href: "/account/orders" },
+  { key: "wishlist", href: "/account/wishlist" },
+  { key: "addresses", href: "/account/addresses" },
+  { key: "support", href: "/support" },
+] as const;
 
 export default function AccountQuickActions() {
+  const t = useTranslations("account.overview.quickActions");
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
       {ITEMS.map((item) => (
@@ -41,17 +22,20 @@ export default function AccountQuickActions() {
         >
           <div>
             <h2 className="text-lg font-semibold text-foreground">
-              {item.title}
+              {t(`${item.key}.title`)}
             </h2>
 
-            <p className="text-sm text-muted-foreground mt-2">{item.desc}</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              {t(`${item.key}.desc`)}
+            </p>
           </div>
+
           <div className="mt-4">
             <Link
               href={item.href}
               className="w-full inline-flex items-center justify-end text-sm font-medium text-primary hover:underline"
             >
-              {item.action}
+              {t(`${item.key}.action`)}
             </Link>
           </div>
         </div>

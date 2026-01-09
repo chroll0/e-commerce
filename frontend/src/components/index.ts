@@ -10,6 +10,7 @@ export { default as Input } from "./ui/Input";
 export { default as PageWrapper } from "./ui/PageWrapper";
 export { default as Dropdown } from "./ui/Dropdown";
 export { default as Logo } from "./ui/Logo";
+export { default as Advertisement } from "./ui/Advertisement";
 
 // Navbar components
 // export { default as NavBar } from "./navbar/NavBar";
@@ -48,3 +49,6 @@ export { default as Avatar } from "./account/Avatar";
 export { default as AccountProfileCard } from "./account/AccountProfileCard";
 export { default as AccountHeader } from "./account/AccountHeader";
 export { default as AccountQuickActions } from "./account/AccountQuickActions";
+
+// Footer components
+export { default as LanguageSwitcher } from "./footer/LanguageSwitcher";
