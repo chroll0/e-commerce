@@ -2,7 +2,7 @@ import ProductCard from "../product/ProductCard";
 
 export default function FeaturedProducts() {
   return (
-    <section className="w-full max-w-7xl px-4 mt-10 mx-auto">
+    <section>
       {/* TAB BUTTONS */}
       <div className="flex gap-4 border-b border-border pb-3">
         <button className="font-semibold text-primary">Best Seller</button>

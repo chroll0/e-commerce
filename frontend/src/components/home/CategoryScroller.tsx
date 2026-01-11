@@ -5,7 +5,7 @@ export default function CategoryScroller() {
   ];
 
   return (
-    <section className="w-full max-w-7xl px-4 mt-8 mx-auto">
+    <section>
       <div
         className="flex gap-8 overflow-x-auto no-scrollbar py-4 
                       bg-card-soft rounded-xl shadow-[0_2px_8px_var(--color-shadow)] border border-border"

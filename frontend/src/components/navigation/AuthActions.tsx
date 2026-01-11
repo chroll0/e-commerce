@@ -24,26 +24,24 @@ const AuthIcons = () => {
     <div className="flex items-center gap-4">
       {!user && (
         <div className="flex items-center gap-2">
-          <Link href={`/${locale}/auth/login`}>
-            <Button variant="secondary" size="sm">
-              {t("auth.login")}
-            </Button>
-          </Link>
+          <Button asChild variant="secondary" size="sm">
+            <Link href={`/${locale}/auth/login`}>{t("auth.login")}</Link>
+          </Button>
 
-          <Link href={`/${locale}/auth/register`}>
-            <Button variant="primary" size="sm">
+          <Button asChild variant="primary" size="sm">
+            <Link href={`/${locale}/auth/register`}>
               {t("auth.registration")}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       )}
 
       {user && (
         <div className="flex items-center gap-2">
           <Link href={`/${locale}/account`}>
-            <button className="p-2 hover:bg-muted rounded-full transition">
+            <div className="p-2 hover:bg-muted rounded-full transition">
               <User className="w-5 h-5 text-primary" />
-            </button>
+            </div>
           </Link>
 
           <Button variant="secondary" size="sm" onClick={handleLogout}>

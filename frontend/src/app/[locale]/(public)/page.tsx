@@ -6,7 +6,7 @@ import BestStores from "@/components/home/BestStores";
 
 export default function Home() {
   return (
-    <main>
+    <main className="w-full max-w-7xl px-4 mt-6 mx-auto">
       {/* HERO SECTION */}
       <Hero />
 

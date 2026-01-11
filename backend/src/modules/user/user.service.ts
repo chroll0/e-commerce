@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { hash } from "bcrypt";
@@ -40,6 +40,7 @@ export class UserService {
       data: updateUserDto,
     });
   }
+
   async updateRole(id: number, role: UserRole) {
     return this.prisma.user.update({
       where: { id },
@@ -48,6 +49,23 @@ export class UserService {
         tokenVersion: { increment: 1 },
       },
     });
+  }
+
+  async findSafeById(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        role: true,
+        createdAt: true,
+      },
+    });
+
+    if (!user) throw new NotFoundException("User not found");
+    return user;
   }
 
   async remove(id: number) {

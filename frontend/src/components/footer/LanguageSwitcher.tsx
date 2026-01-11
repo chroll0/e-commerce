@@ -8,7 +8,7 @@ const locales = [
   { code: "ka", label: "KA", flag: "/flags/ge.svg" },
 ];
 
-export function LanguageSwitcher() {
+export default function LanguageSwitcher() {
   const pathname = usePathname();
   const router = useRouter();
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components";
 import { api } from "@/lib/axios";
 
 const AdminDashboard = () => {
@@ -28,12 +29,12 @@ const AdminDashboard = () => {
     <div style={{ padding: 24 }}>
       <h1>Admin Dashboard</h1>
 
-      <button
+      <Button
         className="cursor-pointer border-2"
         onClick={changeRoleAndRefresh}
       >
         Change my role (admin → user) & Refresh Auth
-      </button>
+      </Button>
     </div>
   );
 };

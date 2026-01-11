@@ -12,10 +12,14 @@ import { Response, Request } from "express";
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { AuthGuard } from "@nestjs/passport";
+import { UserService } from "../user/user.service";
 
 @Controller("auth")
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService
+  ) {}
 
   @Post("register")
   async register(
@@ -69,12 +73,7 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"))
   me(@Req() req: Request) {
     const user = req.user as any;
-    return {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      tokenVersion: user.tokenVersion,
-    };
+    return this.userService.findSafeById(user.id);
   }
 
   @Get("verify")
