@@ -28,7 +28,8 @@
       "orders": "შეკვეთები",
       "wishlist": "რჩეულები",
       "addresses": "მისამართები",
-      "settings": "პარამეტრები"
+      "settings": "პარამეტრები",
+      "admin": "ადმინ პანელი"
     },
     "overview": {
       "title": "ჩემი ანგარიში",
@@ -149,11 +150,19 @@
       "title": "ადმინისტრაციის პანელი"
     },
     "sidebar": {
-      "dashboard": "დეშბორდი",
+      "dashboard": "მთავარი",
       "products": "პროდუქტები",
+      "productsAll": "ყველას მართვა",
+      "productsAdd": "ახლის დამატება",
       "categories": "კატეგორიები",
+      "categoriesAll": "ყველას მართვა",
+      "categoriesAdd": "ახლის დამატება",
       "orders": "შეკვეთები",
-      "users": "მომხმარებლები"
+      "users": "მომხმარებლები",
+      "inventory": "მარაგი",
+      "payments": "გადახდები",
+      "paymentsList": "გადახდების ჩანაწერები",
+      "failedPayments": "პრობლემური გადახდები"
     }
   },
 

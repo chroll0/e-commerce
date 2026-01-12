@@ -6,11 +6,14 @@ import { useLocale, useTranslations } from "next-intl";
 export default function AccountProfileCard({ user }: { user: User }) {
   const t = useTranslations("account");
   const locale = useLocale();
+
   const joinedDate = new Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "long",
     day: "numeric",
   }).format(user.createdAt);
+
+  const isAdmin = String(user.role).toLowerCase() === "admin";
 
   return (
     <div className="flex flex-col gap-4 p-6 rounded-2xl border border-border bg-card shadow-[0_4px_18px_var(--color-shadow)]">
@@ -31,9 +34,15 @@ export default function AccountProfileCard({ user }: { user: User }) {
       </div>
 
       {/* Action */}
-      <div className="mt-6">
+      <div className="mt-6 flex flex-col gap-4">
+        {isAdmin && (
+          <Button asChild variant="primary" fullWidth>
+            <Link href={`/${locale}/admin/dashboard`}>{t("nav.admin")}</Link>
+          </Button>
+        )}
+
         <Button asChild variant="outline" fullWidth>
-          <Link href="/account/settings">{t("nav.settings")}</Link>
+          <Link href={`/${locale}/account/settings`}>{t("nav.settings")}</Link>
         </Button>
       </div>
     </div>

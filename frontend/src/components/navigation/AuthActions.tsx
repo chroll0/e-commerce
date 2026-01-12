@@ -2,16 +2,23 @@
 
 import { Button } from "@/components";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { User } from "lucide-react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import { User } from "lucide-react";
+import Link from "next/link";
 
 const AuthIcons = () => {
   const { user, loading, logout } = useAuthStore();
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations();
+  const pathname = usePathname();
+
+  const accountHref = `/${locale}/account`;
+  const normalizedPath =
+    pathname.replace(new RegExp(`^/${locale}(?=/|$)`), "") || "/";
+  const accountActive =
+    normalizedPath === "/account" || normalizedPath.startsWith("/account/");
 
   const handleLogout = async () => {
     await logout();
@@ -38,9 +45,17 @@ const AuthIcons = () => {
 
       {user && (
         <div className="flex items-center gap-2">
-          <Link href={`/${locale}/account`}>
-            <div className="p-2 hover:bg-muted rounded-full transition">
-              <User className="w-5 h-5 text-primary" />
+          <Link href={accountHref}>
+            <div
+              className={
+                "rounded-full p-1.5 transition-colors select-none border " +
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 " +
+                (accountActive
+                  ? "bg-primary/10 text-primary border-primary/20"
+                  : "border-transparent text-muted-foreground hover:bg-muted")
+              }
+            >
+              <User className="w-4.5 h-4.5" />
             </div>
           </Link>
 

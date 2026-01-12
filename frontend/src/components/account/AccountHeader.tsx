@@ -8,7 +8,7 @@ type Props = {
 
 export default function AccountHeader({ title, description, action }: Props) {
   return (
-    <div className="flex items-center justify-between gap-4">
+    <div className="flex flex-col md:flex-row md:items-center items-start justify-between gap-4">
       <div>
         <h1 className="text-3xl font-bold text-primary">{title}</h1>
         {description ? (
@@ -16,7 +16,7 @@ export default function AccountHeader({ title, description, action }: Props) {
         ) : null}
       </div>
 
-      {action ? <div>{action}</div> : null}
+      {action ? <div className="min-w-[120px]">{action}</div> : null}
     </div>
   );
 }
