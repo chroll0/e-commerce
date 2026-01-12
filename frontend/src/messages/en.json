@@ -152,9 +152,17 @@
     "sidebar": {
       "dashboard": "Dashboard",
       "products": "Products",
+      "productsAll": "Manage All",
+      "productsAdd": "Add new",
       "categories": "Categories",
+      "categoriesAll": "Manage All",
+      "categoriesAdd": "Add new",
       "orders": "Orders",
-      "users": "Users"
+      "users": "Users",
+      "inventory": "Inventory",
+      "payments": "Payments",
+      "paymentsList": "Payment Records",
+      "failedPayments": "Failed Payments"
     }
   },
 
