@@ -3,10 +3,19 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { Input, Button } from "@/components";
+import { Input, Button, Tooltip } from "@/components";
 import { api } from "@/lib/axios";
+import { Info } from "lucide-react";
 
-type Category = { id: number; name: string };
+type Locale = "en" | "ka";
+
+type CategoryApi = {
+  id: number;
+  slug: string;
+  translations: { locale: string; name: string }[];
+};
+
+type CategoryOption = { id: number; name: string };
 
 function slugify(input: string) {
   return input
@@ -19,16 +28,23 @@ function slugify(input: string) {
 
 export default function AdminCreateProductPage() {
   const router = useRouter();
-  const locale = useLocale();
+  const locale = useLocale() as Locale;
   const t = useTranslations("admin.products");
 
-  // form state
-  const [title, setTitle] = useState("");
+  // language tab
+  const [activeLang, setActiveLang] = useState<Locale>("en");
+
+  // translations state (EN/KA)
+  const [titleEn, setTitleEn] = useState("");
+  const [descEn, setDescEn] = useState("");
+  const [titleKa, setTitleKa] = useState("");
+  const [descKa, setDescKa] = useState("");
+
+  // slug (generated from EN title by default)
   const [slug, setSlug] = useState("");
   const [slugTouched, setSlugTouched] = useState(false);
 
-  const [description, setDescription] = useState("");
-
+  // other fields
   const [price, setPrice] = useState<string>("");
   const [oldPrice, setOldPrice] = useState<string>("");
   const [discount, setDiscount] = useState<string>("");
@@ -40,28 +56,34 @@ export default function AdminCreateProductPage() {
   const [images, setImages] = useState<string[]>([""]);
 
   // UI state
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<CategoryOption[]>([]);
   const [loadingCats, setLoadingCats] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // auto-slug from EN title
   useEffect(() => {
-    if (!slugTouched) setSlug(slugify(title));
-  }, [title, slugTouched]);
+    if (!slugTouched) setSlug(slugify(titleEn));
+  }, [titleEn, slugTouched]);
 
-  // fetch categories (თუ ჯერ endpoint არ გაქვს, უბრალოდ mock-ით დატოვე)
+  // fetch categories localized
   useEffect(() => {
     let mounted = true;
     (async () => {
       try {
         setLoadingCats(true);
-        // ვარიანტი A: თუ public categories გაქვს
-        const res = await api.get("/categories");
+        const res = await api.get(`/categories?locale=${locale}`);
         if (!mounted) return;
-        setCategories(res.data ?? []);
+
+        // service returns translations filtered to locale -> translations[0]?.name
+        const data = (res.data ?? []) as CategoryApi[];
+        const opts: CategoryOption[] = data.map((c) => ({
+          id: c.id,
+          name: c.translations?.[0]?.name ?? c.slug,
+        }));
+        setCategories(opts);
       } catch {
-        // fallback: empty list (მერე დაამატებ backend-ს)
         if (!mounted) return;
         setCategories([]);
       } finally {
@@ -72,7 +94,7 @@ export default function AdminCreateProductPage() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [locale]);
 
   const cleanImages = useMemo(
     () => images.map((x) => x.trim()).filter(Boolean),
@@ -82,9 +104,13 @@ export default function AdminCreateProductPage() {
   const validate = () => {
     const next: Record<string, string> = {};
 
-    if (!title.trim()) next.title = "Title is required";
+    // i18n required
+    if (!titleEn.trim()) next.titleEn = "English title is required";
+    if (!descEn.trim()) next.descEn = "English description is required";
+    if (!titleKa.trim()) next.titleKa = "Georgian title is required";
+    if (!descKa.trim()) next.descKa = "Georgian description is required";
+
     if (!slug.trim()) next.slug = "Slug is required";
-    if (!description.trim()) next.description = "Description is required";
 
     const p = Number(price);
     if (!price || Number.isNaN(p) || p <= 0) next.price = "Price must be > 0";
@@ -98,11 +124,11 @@ export default function AdminCreateProductPage() {
     if (cleanImages.length < 1)
       next.images = "At least 1 image URL is required";
 
-    // optional numeric fields
     if (oldPrice) {
       const op = Number(oldPrice);
       if (Number.isNaN(op) || op <= 0) next.oldPrice = "Old price must be > 0";
     }
+
     if (discount) {
       const d = Number(discount);
       if (Number.isNaN(d) || d < 0 || d > 100)
@@ -129,19 +155,20 @@ export default function AdminCreateProductPage() {
     try {
       setSubmitting(true);
 
-      const payload: any = {
-        title: title.trim(),
+      const payload = {
         slug: slug.trim() || undefined,
-        description: description.trim(),
         price: Number(price),
         stock: Number(stock),
         categoryId: Number(categoryId),
         isFeatured,
         images: cleanImages,
+        ...(oldPrice ? { oldPrice: Number(oldPrice) } : {}),
+        ...(discount ? { discount: Number(discount) } : {}),
+        translations: [
+          { locale: "en", title: titleEn.trim(), description: descEn.trim() },
+          { locale: "ka", title: titleKa.trim(), description: descKa.trim() },
+        ],
       };
-
-      if (oldPrice) payload.oldPrice = Number(oldPrice);
-      if (discount) payload.discount = Number(discount);
 
       await api.post("/products", payload);
 
@@ -156,6 +183,36 @@ export default function AdminCreateProductPage() {
     }
   };
 
+  const LangTabs = (
+    <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={() => setActiveLang("en")}
+        className={[
+          "inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium border transition-colors",
+          activeLang === "en"
+            ? "bg-primary/10 text-primary border-primary/20"
+            : "bg-transparent text-muted-foreground border-transparent hover:bg-muted hover:text-foreground",
+        ].join(" ")}
+      >
+        EN
+      </button>
+
+      <button
+        type="button"
+        onClick={() => setActiveLang("ka")}
+        className={[
+          "inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium border transition-colors",
+          activeLang === "ka"
+            ? "bg-primary/10 text-primary border-primary/20"
+            : "bg-transparent text-muted-foreground border-transparent hover:bg-muted hover:text-foreground",
+        ].join(" ")}
+      >
+        KA
+      </button>
+    </div>
+  );
+
   return (
     <div className="max-w-3xl mx-auto p-6">
       <div className="flex items-center justify-between gap-4 mb-6">
@@ -164,13 +221,7 @@ export default function AdminCreateProductPage() {
           <p className="text-sm text-muted-foreground">{t("description")}</p>
         </div>
 
-        <Button
-          variant="text"
-          onClick={() => router.push(`/${locale}/admin`)}
-          className="text-muted"
-        >
-          Back
-        </Button>
+        <div className="flex items-center gap-2">{LangTabs}</div>
       </div>
 
       {errors.form && (
@@ -180,20 +231,82 @@ export default function AdminCreateProductPage() {
       )}
 
       <form onSubmit={onSubmit} className="space-y-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input
-            label="Title"
-            type="text"
-            placeholder="Product title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            fullWidth
-            required
-          />
-          {errors.title && (
-            <p className="-mt-2 text-sm text-destructive">{errors.title}</p>
-          )}
+        {/* i18n fields */}
+        <div className="rounded-2xl border border-border p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base font-semibold">Content</h2>
+            {LangTabs}
+          </div>
 
+          {activeLang === "en" ? (
+            <>
+              <Input
+                label="Title (EN)"
+                type="text"
+                placeholder="English product title"
+                value={titleEn}
+                onChange={(e) => setTitleEn(e.target.value)}
+                fullWidth
+                required
+              />
+              {errors.titleEn && (
+                <p className="-mt-2 text-sm text-destructive">
+                  {errors.titleEn}
+                </p>
+              )}
+
+              <div>
+                <label className="text-sm font-medium">Description (EN)</label>
+                <textarea
+                  className="mt-2 w-full min-h-[140px] rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                  placeholder="English description..."
+                  value={descEn}
+                  onChange={(e) => setDescEn(e.target.value)}
+                />
+                {errors.descEn && (
+                  <p className="mt-2 text-sm text-destructive">
+                    {errors.descEn}
+                  </p>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <Input
+                label="Title (KA)"
+                type="text"
+                placeholder="ქართული სათაური"
+                value={titleKa}
+                onChange={(e) => setTitleKa(e.target.value)}
+                fullWidth
+                required
+              />
+              {errors.titleKa && (
+                <p className="-mt-2 text-sm text-destructive">
+                  {errors.titleKa}
+                </p>
+              )}
+
+              <div>
+                <label className="text-sm font-medium">Description (KA)</label>
+                <textarea
+                  className="mt-2 w-full min-h-[140px] rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                  placeholder="ქართული აღწერა..."
+                  value={descKa}
+                  onChange={(e) => setDescKa(e.target.value)}
+                />
+                {errors.descKa && (
+                  <p className="mt-2 text-sm text-destructive">
+                    {errors.descKa}
+                  </p>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* slug */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
             label="Slug"
             type="text"
@@ -211,21 +324,7 @@ export default function AdminCreateProductPage() {
           )}
         </div>
 
-        <div>
-          <label className="text-sm font-medium">Description</label>
-          <textarea
-            className="mt-2 w-full min-h-[140px] rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-            placeholder="Product description..."
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          {errors.description && (
-            <p className="mt-2 text-sm text-destructive">
-              {errors.description}
-            </p>
-          )}
-        </div>
-
+        {/* numbers */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Input
             label="Price"
@@ -267,6 +366,7 @@ export default function AdminCreateProductPage() {
           )}
         </div>
 
+        {/* stock/category/featured */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
           <Input
             label="Stock"
@@ -310,6 +410,13 @@ export default function AdminCreateProductPage() {
               onChange={(e) => setIsFeatured(e.target.checked)}
             />
             <span className="text-sm">Featured</span>
+            <Tooltip
+              side="top"
+              className="w-60 max-w-none"
+              content="Show this product in Featured sections."
+            >
+              <Info className="h-4 w-4 hover:text-foreground" />
+            </Tooltip>
           </label>
 
           {errors.stock && (
@@ -319,6 +426,7 @@ export default function AdminCreateProductPage() {
           )}
         </div>
 
+        {/* images */}
         <div className="rounded-2xl border border-border p-4">
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-base font-semibold">Images (URLs)</h2>
@@ -366,6 +474,7 @@ export default function AdminCreateProductPage() {
           </div>
         </div>
 
+        {/* actions */}
         <div className="flex items-center justify-end gap-2 pt-2">
           <Button
             type="button"
@@ -378,11 +487,6 @@ export default function AdminCreateProductPage() {
           <Button type="submit" variant="primary" disabled={submitting}>
             {submitting ? "Saving..." : "Create product"}
           </Button>
-        </div>
-
-        <div className="text-xs text-muted-foreground">
-          Tip: backend endpoint can be <code>/admin/products</code> (POST)
-          returning created product.
         </div>
       </form>
     </div>
