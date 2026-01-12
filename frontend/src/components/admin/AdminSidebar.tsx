@@ -40,6 +40,10 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
   { key: "inventory", href: "/admin/inventory" },
 ];
 
+function getParentPrefix(children: { href: string }[]) {
+  return children.map((c) => c.href).sort((a, b) => a.length - b.length)[0];
+}
+
 export const AdminSidebar = async ({ locale }: AdminSidebarProps) => {
   const t = await getTranslations({ locale, namespace: "admin" });
 
@@ -57,6 +61,7 @@ export const AdminSidebar = async ({ locale }: AdminSidebarProps) => {
       <nav className="p-4 space-y-1">
         {SIDEBAR_ITEMS.map((item) => {
           if (item.children?.length) {
+            const parentPrefix = getParentPrefix(item.children);
             return (
               <div key={item.key}>
                 <div className="px-3 py-2 text-sm">
@@ -70,7 +75,7 @@ export const AdminSidebar = async ({ locale }: AdminSidebarProps) => {
                       href={`/${locale}${child.href}`}
                       label={t(`sidebar.${child.key}`)}
                       variant="child"
-                      exact={child.key === "productsAll"}
+                      exact={child.href === parentPrefix}
                     />
                   ))}
                 </div>
