@@ -10,6 +10,7 @@ export { default as Input } from "./ui/Input";
 export { default as PageWrapper } from "./ui/PageWrapper";
 export { default as Dropdown } from "./ui/Dropdown";
 export { default as Logo } from "./ui/Logo";
+export { default as Tooltip } from "./ui/Tooltip";
 export { default as Advertisement } from "./ui/Advertisement";
 
 // Navbar components

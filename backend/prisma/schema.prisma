@@ -8,18 +8,18 @@ datasource db {
 }
 
 model User {
-  id         Int        @id @default(autoincrement())
-  email      String     @unique
-  password   String
-  name       String
-  phone      String?    @unique
-  role       UserRole   @default(USER)
-  tokenVersion Int      @default(0)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  password     String
+  name         String
+  phone        String?   @unique
+  role         UserRole  @default(USER)
+  tokenVersion Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
-  orders     Order[]
-  cartItems  CartItem[]
+  orders       Order[]
+  cartItems    CartItem[]
 }
 
 enum UserRole {
@@ -28,36 +28,64 @@ enum UserRole {
 }
 
 model Category {
-  id        Int        @id @default(autoincrement())
-  name      String     @unique
-  slug      String     @unique
-  image     String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id           Int        @id @default(autoincrement())
+  slug         String     @unique
+  image        String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
-  products  Product[]
+  translations CategoryTranslation[]
+  products     Product[]
+}
+
+model CategoryTranslation {
+  id         Int      @id @default(autoincrement())
+  categoryId Int
+  locale     String   // "en" | "ka"
+  name       String
+
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([categoryId, locale])
+  @@index([locale])
 }
 
 model Product {
-  id          Int         @id @default(autoincrement())
-  title       String
-  slug        String       @unique
-  description String
+  id          Int        @id @default(autoincrement())
+  slug        String     @unique
+
   price       Float
   oldPrice    Float?
   discount    Int?
-  isFeatured  Boolean      @default(false)
-  stock       Int          @default(0)
+  isFeatured  Boolean    @default(false)
+  stock       Int        @default(0)
   images      String[]
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
   categoryId  Int
-  category    Category     @relation(fields: [categoryId], references: [id])
+  category    Category   @relation(fields: [categoryId], references: [id])
+
+  translations ProductTranslation[]
 
   orderItems  OrderItem[]
   cartItems   CartItem[]
+
+  @@index([categoryId])
+}
+
+model ProductTranslation {
+  id          Int      @id @default(autoincrement())
+  productId   Int
+  locale      String   // "en" | "ka"
+  title       String
+  description String
+
+  product     Product  @relation(fields: [productId], references: [id])
+
+  @@unique([productId, locale])
+  @@index([locale])
 }
 
 enum OrderStatus {
@@ -68,21 +96,24 @@ enum OrderStatus {
 }
 
 model Order {
-  id          Int         @id @default(autoincrement())
-  userId      Int
-  user        User        @relation(fields: [userId], references: [id])
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  user      User        @relation(fields: [userId], references: [id])
 
-  total       Float
-  status      OrderStatus @default(PENDING)
+  total     Float
+  status    OrderStatus @default(PENDING)
 
-  address     String
-  city        String
-  zip         String?
-  phone       String
+  address   String
+  city      String
+  zip       String?
+  phone     String
 
-  createdAt   DateTime    @default(now())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
-  items       OrderItem[]
+  items     OrderItem[]
+
+  @@index([userId])
 }
 
 model OrderItem {
@@ -95,6 +126,9 @@ model OrderItem {
 
   order     Order    @relation(fields: [orderId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
 }
 
 model CartItem {
@@ -105,4 +139,8 @@ model CartItem {
 
   user      User    @relation(fields: [userId], references: [id])
   product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
 }

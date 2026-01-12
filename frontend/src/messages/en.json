@@ -144,10 +144,10 @@
   "admin": {
     "brand": {
       "name": "Satori",
-      "admin": "Admin"
+      "admin": "Manage"
     },
     "header": {
-      "title": "Admin Panel"
+      "title": "Administrator Panel"
     },
     "sidebar": {
       "dashboard": "Dashboard",
@@ -163,6 +163,29 @@
       "payments": "Payments",
       "paymentsList": "Payment Records",
       "failedPayments": "Failed Payments"
+    },
+    "products": {
+      "title": "Products Management",
+      "description": "Add, edit, and manage your product listings.",
+      "addNew": "Add New Product",
+      "editProduct": "Edit Product",
+      "fields": {
+        "title": "Product Title",
+        "description": "Product Description",
+        "price": "Price",
+        "category": "Category",
+        "stock": "Stock Quantity",
+        "images": "Product Images"
+      },
+      "actions": {
+        "save": "Save Product",
+        "delete": "Delete Product"
+      },
+      "messages": {
+        "created": "Product created successfully.",
+        "updated": "Product updated successfully.",
+        "deleted": "Product deleted successfully."
+      }
     }
   },
 

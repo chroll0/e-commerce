@@ -1,4 +1,33 @@
-import { PartialType } from "@nestjs/mapped-types";
-import { CreateCategoryDto } from "./create-category.dto";
+import {
+  IsArray,
+  IsIn,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from "class-validator";
+import { Type } from "class-transformer";
 
-export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {}
+export class CategoryTranslationUpdateDto {
+  @IsIn(["en", "ka"])
+  locale: "en" | "ka";
+
+  @IsOptional()
+  @IsString()
+  name?: string;
+}
+
+export class UpdateCategoryDto {
+  @IsOptional()
+  @IsString()
+  slug?: string;
+
+  @IsOptional()
+  @IsString()
+  image?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CategoryTranslationUpdateDto)
+  translations?: CategoryTranslationUpdateDto[];
+}
