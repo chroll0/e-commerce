@@ -48,14 +48,14 @@ const AuthIcons = () => {
           <Link href={accountHref}>
             <div
               className={
-                "rounded-full p-2 transition-colors select-none border " +
+                "rounded-full p-1.5 transition-colors select-none border " +
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 " +
                 (accountActive
                   ? "bg-primary/10 text-primary border-primary/20"
                   : "border-transparent text-muted-foreground hover:bg-muted")
               }
             >
-              <User className="w-5 h-5" />
+              <User className="w-4.5 h-4.5" />
             </div>
           </Link>
 

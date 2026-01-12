@@ -30,7 +30,11 @@ export default function AccountPage() {
           title={t("title")}
           description={t("description")}
           action={
-            <Button variant="secondary" onClick={handleLogout}>
+            <Button
+              variant="secondary"
+              onClick={handleLogout}
+              className="w-full"
+            >
               {tAuth("logout")}
             </Button>
           }

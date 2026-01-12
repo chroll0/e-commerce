@@ -28,7 +28,8 @@
       "orders": "Orders",
       "wishlist": "Wishlist",
       "addresses": "Addresses",
-      "settings": "Settings"
+      "settings": "Settings",
+      "admin": "Admin Panel"
     },
     "overview": {
       "title": "My Account",
