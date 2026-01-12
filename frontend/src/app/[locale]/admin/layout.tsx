@@ -25,8 +25,8 @@ const AdminLayout = async ({ children, params }: AdminLayoutProps) => {
       {/* Sidebar */}
       <AdminSidebar locale={locale} />
       {/* Content */}
-      <main className="flex-1">
-        <header className="h-16 border-b bg-background flex items-center px-6">
+      <main className="flex-1 min-w-0">
+        <header className="sticky top-0 z-30 h-16 border-b bg-background/90 backdrop-blur flex items-center px-6">
           <h1 className="text-lg font-medium">{t("title")}</h1>
         </header>
 

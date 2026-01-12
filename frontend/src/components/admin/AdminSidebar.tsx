@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { SidebarLink } from "@/components";
+import { Logo, SidebarLink } from "@/components";
 
 type AdminSidebarProps = {
   locale: string;
@@ -28,7 +28,6 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
       { key: "categoriesAdd", href: "/admin/categories/new" },
     ],
   },
-
   { key: "orders", href: "/admin/orders" },
   {
     key: "payments",
@@ -45,17 +44,14 @@ export const AdminSidebar = async ({ locale }: AdminSidebarProps) => {
   const t = await getTranslations({ locale, namespace: "admin" });
 
   return (
-    <aside className="w-64 border-r bg-background">
+    <aside className="w-64 border-r bg-background sticky top-0 h-screen overflow-y-auto">
       <div className="h-16 flex items-center px-6 border-b">
-        <Link
-          href={`/${locale}`}
-          className="text-lg font-semibold tracking-tight"
-        >
-          {t("brand.name")}{" "}
-          <span className="text-muted-foreground text-sm tracking-wider">
+        <div className="flex items-end gap-2 text-xl font-semibold tracking-tight">
+          <Logo />
+          <span className="text-muted-foreground text-xs tracking-wider mb-1">
             {t("brand.admin")}
           </span>
-        </Link>
+        </div>
       </div>
 
       <nav className="p-4 space-y-1">
