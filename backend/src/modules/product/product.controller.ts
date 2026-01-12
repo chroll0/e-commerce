@@ -1,15 +1,16 @@
 import {
-  Controller,
-  Get,
-  Post,
+  BadRequestException,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  Query,
+  Get,
+  Param,
   ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
 } from "@nestjs/common";
-import { UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
 import { RolesGuard } from "../../common/guards/roles.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
@@ -17,6 +18,14 @@ import { UserRole } from "../../common/enums/user-role.enum";
 import { ProductService } from "./product.service";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
+
+type Locale = "en" | "ka";
+
+function parseLocale(locale?: string): Locale | undefined {
+  if (!locale) return undefined;
+  if (locale === "en" || locale === "ka") return locale;
+  throw new BadRequestException('locale must be "en" or "ka"');
+}
 
 @Controller("products")
 export class ProductController {
@@ -32,14 +41,22 @@ export class ProductController {
   @Get()
   findAll(
     @Query("search") search?: string,
-    @Query("category") categorySlug?: string
+    @Query("category") categorySlug?: string,
+    @Query("locale") locale?: string
   ) {
-    return this.productService.findAll(search, categorySlug);
+    return this.productService.findAll(
+      search,
+      categorySlug,
+      parseLocale(locale) ?? "en"
+    );
   }
 
   @Get(":id")
-  findOne(@Param("id", ParseIntPipe) id: number) {
-    return this.productService.findOne(id);
+  findOne(
+    @Param("id", ParseIntPipe) id: number,
+    @Query("locale") locale?: string
+  ) {
+    return this.productService.findOne(id, parseLocale(locale) ?? "en");
   }
 
   @Patch(":id")

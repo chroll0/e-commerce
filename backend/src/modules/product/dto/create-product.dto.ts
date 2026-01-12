@@ -1,24 +1,33 @@
 import {
+  IsArray,
+  ArrayMinSize,
+  IsBoolean,
+  IsIn,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
-  IsBoolean,
-  IsArray,
+  ValidateNested,
 } from "class-validator";
+import { Type } from "class-transformer";
 
-export class CreateProductDto {
+class ProductTranslationDto {
+  @IsIn(["en", "ka"])
+  locale: "en" | "ka";
+
   @IsNotEmpty()
   @IsString()
   title: string;
 
-  @IsOptional()
-  @IsString()
-  slug?: string;
-
   @IsNotEmpty()
   @IsString()
   description: string;
+}
+
+export class CreateProductDto {
+  @IsOptional()
+  @IsString()
+  slug?: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -41,10 +50,17 @@ export class CreateProductDto {
   stock?: number;
 
   @IsArray()
+  @ArrayMinSize(1)
   @IsString({ each: true })
   images: string[];
 
   @IsNotEmpty()
   @IsNumber()
   categoryId: number;
+
+  @IsArray()
+  @ArrayMinSize(2)
+  @ValidateNested({ each: true })
+  @Type(() => ProductTranslationDto)
+  translations: ProductTranslationDto[];
 }
