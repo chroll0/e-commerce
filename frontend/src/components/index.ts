@@ -51,5 +51,14 @@ export { default as AccountProfileCard } from "./account/AccountProfileCard";
 export { default as AccountHeader } from "./account/AccountHeader";
 export { default as AccountQuickActions } from "./account/AccountQuickActions";
 
+// Category management components
+export { default as CategoriesHeader } from "./admin/categories/CategoriesHeader";
+export { default as CategoriesTable } from "./admin/categories/CategoriesTable";
+export { default as DeleteCategoryModal } from "./admin/categories/DeleteCategoryModal";
+export { type CategoryApi } from "./admin/categories/categoryTree";
+export { type CategoryNode } from "./admin/categories/categoryTree";
+export { buildTree } from "./admin/categories/categoryTree";
+export { flattenTree } from "./admin/categories/categoryTree";
+
 // Footer components
 export { default as LanguageSwitcher } from "./footer/LanguageSwitcher";
