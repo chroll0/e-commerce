@@ -36,6 +36,11 @@ export class CategoryController {
     return this.categoryService.findAll(parseLocale(locale));
   }
 
+  @Get("slug/:slug")
+  findBySlug(@Param("slug") slug: string, @Query("locale") locale?: string) {
+    return this.categoryService.findBySlug(slug, parseLocale(locale));
+  }
+
   @Get(":id")
   findOne(
     @Param("id", ParseIntPipe) id: number,

@@ -45,6 +45,21 @@ export class CategoryService {
     });
   }
 
+  async findBySlug(slug: string, locale?: Locale) {
+    const category = await this.prisma.category.findUnique({
+      where: { slug },
+      include: {
+        translations: locale ? { where: { locale } } : true,
+      },
+    });
+
+    if (!category) {
+      throw new NotFoundException(`Category with slug "${slug}" not found`);
+    }
+
+    return category;
+  }
+
   async findOne(id: number, locale?: Locale) {
     const category = await this.prisma.category.findUnique({
       where: { id },
@@ -121,6 +136,27 @@ export class CategoryService {
 
   async remove(id: number) {
     await this.ensureExists(id);
+
+    const [childrenCount, productsCount] = await Promise.all([
+      this.prisma.category.count({ where: { parentId: id } }),
+      this.prisma.product.count({ where: { categoryId: id } }),
+    ]);
+
+    if (childrenCount > 0) {
+      throw new BadRequestException(
+        "Cannot delete category: it has subcategories. Delete/move them first."
+      );
+    }
+
+    if (productsCount > 0) {
+      throw new BadRequestException(
+        "Cannot delete category: it has products. Move products first."
+      );
+    }
+    await this.prisma.categoryTranslation.deleteMany({
+      where: { categoryId: id },
+    });
+
     return this.prisma.category.delete({ where: { id } });
   }
 
