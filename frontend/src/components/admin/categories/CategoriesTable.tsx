@@ -1,13 +1,21 @@
-// components/categories/CategoriesTable.tsx
-"use client";
-
+import { FC } from "react";
 import Link from "next/link";
 import { Button } from "@/components";
-import { ChevronDown, ChevronRight, Plus, Pencil, Trash2 } from "lucide-react";
-import { FC } from "react";
 import type { CategoryNode } from "./categoryTree";
+import { ChevronDown, ChevronRight, Plus, Pencil, Trash2 } from "lucide-react";
 
 type Row = { node: CategoryNode; depth: number; hasChildren: boolean };
+
+type Labels = {
+  name: string;
+  slug: string;
+  actions: string;
+  loading: string;
+  empty: string;
+  addSub: string;
+  edit: string;
+  delete: string;
+};
 
 type Props = {
   locale: "en" | "ka";
@@ -16,6 +24,7 @@ type Props = {
   expanded: Set<number>;
   onToggle: (id: number) => void;
   onRequestDelete: (payload: { id: number; name: string }) => void;
+  labels: Labels;
 };
 
 const CategoriesTable: FC<Props> = ({
@@ -25,22 +34,23 @@ const CategoriesTable: FC<Props> = ({
   expanded,
   onToggle,
   onRequestDelete,
+  labels,
 }) => {
   return (
     <div className="mt-6 rounded-2xl border border-border bg-card overflow-hidden">
       <div className="grid grid-cols-12 gap-2 px-4 py-3 border-b border-border text-xs font-medium text-muted-foreground">
-        <div className="col-span-6">Name</div>
-        <div className="col-span-3">Slug</div>
-        <div className="col-span-3 text-right">Actions</div>
+        <div className="col-span-6">{labels.name}</div>
+        <div className="col-span-3">{labels.slug}</div>
+        <div className="col-span-3 text-right">{labels.actions}</div>
       </div>
 
       {loading ? (
         <div className="px-4 py-6 text-sm text-muted-foreground">
-          Loading...
+          {labels.loading}
         </div>
       ) : rows.length === 0 ? (
         <div className="px-4 py-8 text-sm text-muted-foreground">
-          No categories yet. Create your first category.
+          {labels.empty}
         </div>
       ) : (
         <div className="divide-y divide-border">
@@ -72,7 +82,7 @@ const CategoriesTable: FC<Props> = ({
                     <div className="h-8 w-8" />
                   )}
 
-                  <span className="truncate font-medium text-foreground">
+                  <span className="text-sm truncate font-medium text-foreground">
                     {node.name}
                   </span>
 
@@ -88,34 +98,34 @@ const CategoriesTable: FC<Props> = ({
                 </div>
 
                 <div className="col-span-3 flex items-center justify-end gap-2">
-                  <Button asChild variant="secondary" size="sm">
+                  <Button asChild variant="secondary" size="xs">
                     <Link
                       href={`/${locale}/admin/categories/new?parentId=${node.id}`}
                     >
                       <Plus className="h-4 w-4 mr-1" />
-                      Sub
+                      {labels.addSub}
                     </Link>
                   </Button>
 
-                  <Button asChild variant="secondary" size="sm">
+                  <Button asChild variant="secondary" size="xs">
                     <Link
                       href={`/${locale}/admin/categories/${node.slug}/edit`}
                     >
                       <Pencil className="h-4 w-4 mr-1" />
-                      Edit
+                      {labels.edit}
                     </Link>
                   </Button>
 
                   <Button
-                    variant="text"
-                    size="sm"
+                    variant="tertiary"
+                    size="xs"
                     className="text-destructive"
                     onClick={() =>
                       onRequestDelete({ id: node.id, name: node.name })
                     }
                   >
                     <Trash2 className="h-4 w-4 mr-1" />
-                    Delete
+                    {labels.delete}
                   </Button>
                 </div>
               </div>

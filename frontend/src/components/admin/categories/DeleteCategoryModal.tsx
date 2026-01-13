@@ -1,6 +1,3 @@
-// components/categories/DeleteCategoryModal.tsx
-"use client";
-
 import { Button, Modal } from "@/components";
 import { FC } from "react";
 
@@ -10,6 +7,11 @@ type Props = {
   categoryName?: string;
   onClose: () => void;
   onConfirm: () => void;
+
+  title: string;
+  description: string;
+  cancelLabel: string;
+  confirmLabel: string;
 };
 
 const DeleteCategoryModal: FC<Props> = ({
@@ -18,30 +20,34 @@ const DeleteCategoryModal: FC<Props> = ({
   categoryName,
   onClose,
   onConfirm,
+  title,
+  description,
+  cancelLabel,
+  confirmLabel,
 }) => {
   return (
     <Modal
       isOpen={isOpen}
       onClose={loading ? undefined : onClose}
-      title="Delete category"
+      title={title}
       size="sm"
       footer={
         <div className="flex items-center justify-end gap-2">
           <Button variant="secondary" onClick={onClose} disabled={loading}>
-            Cancel
+            {cancelLabel}
           </Button>
+
           <Button variant="primary" onClick={onConfirm} disabled={loading}>
-            {loading ? "Deleting..." : "Delete"}
+            {confirmLabel}
           </Button>
         </div>
       }
     >
       <p className="text-sm text-muted-foreground">
-        Are you sure you want to delete{" "}
-        <span className="font-medium text-foreground">
-          {categoryName || "this category"}
-        </span>
-        ? This action cannot be undone.
+        {description}{" "}
+        {categoryName ? (
+          <span className="font-medium text-foreground">{categoryName}</span>
+        ) : null}
       </p>
     </Modal>
   );

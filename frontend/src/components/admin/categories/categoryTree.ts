@@ -1,4 +1,3 @@
-// components/categories/categoryTree.ts
 export type CategoryApi = {
   id: number;
   slug: string;

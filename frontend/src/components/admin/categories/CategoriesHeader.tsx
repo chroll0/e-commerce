@@ -1,6 +1,3 @@
-// components/categories/CategoriesHeader.tsx
-"use client";
-
 import Link from "next/link";
 import { Button } from "@/components";
 import { Plus } from "lucide-react";
@@ -10,34 +7,42 @@ type Props = {
   locale: "en" | "ka";
   onExpandAll: () => void;
   onCollapseAll: () => void;
+  title: string;
+  description: string;
+  expandAllLabel: string;
+  collapseAllLabel: string;
+  addLabel: string;
 };
 
 const CategoriesHeader: FC<Props> = ({
   locale,
   onExpandAll,
   onCollapseAll,
+  title,
+  description,
+  expandAllLabel,
+  collapseAllLabel,
+  addLabel,
 }) => {
   return (
     <div className="flex items-start justify-between gap-4">
-      <div>
-        <h1 className="text-2xl font-semibold">Categories</h1>
-        <p className="text-sm text-muted-foreground">
-          Manage category tree (parents, children, nested).
-        </p>
+      <div className="space-y-2">
+        <h1 className="text-2xl font-semibold">{title}</h1>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="secondary" onClick={onExpandAll}>
-          Expand all
+        <Button variant="outline" size="sm" onClick={onExpandAll}>
+          {expandAllLabel}
         </Button>
-        <Button variant="secondary" onClick={onCollapseAll}>
-          Collapse all
+        <Button variant="outline" size="sm" onClick={onCollapseAll}>
+          {collapseAllLabel}
         </Button>
 
-        <Button asChild variant="primary">
+        <Button asChild variant="tertiary" size="sm">
           <Link href={`/${locale}/admin/categories/new`}>
             <Plus className="h-4 w-4 mr-2" />
-            Add category
+            {addLabel}
           </Link>
         </Button>
       </div>
