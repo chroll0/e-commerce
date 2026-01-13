@@ -31,12 +31,19 @@ model Category {
   id           Int        @id @default(autoincrement())
   slug         String     @unique
   image        String?
+  parentId     Int?
+  parent       Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: Restrict)
+  children     Category[] @relation("CategoryTree")
+
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
   translations CategoryTranslation[]
   products     Product[]
+
+  @@index([parentId])
 }
+
 
 model CategoryTranslation {
   id         Int      @id @default(autoincrement())

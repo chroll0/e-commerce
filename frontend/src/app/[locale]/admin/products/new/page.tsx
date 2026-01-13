@@ -59,15 +59,12 @@ export default function AdminCreateProductPage() {
   const [categories, setCategories] = useState<CategoryOption[]>([]);
   const [loadingCats, setLoadingCats] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // auto-slug from EN title
   useEffect(() => {
     if (!slugTouched) setSlug(slugify(titleEn));
   }, [titleEn, slugTouched]);
 
-  // fetch categories localized
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -76,7 +73,6 @@ export default function AdminCreateProductPage() {
         const res = await api.get(`/categories?locale=${locale}`);
         if (!mounted) return;
 
-        // service returns translations filtered to locale -> translations[0]?.name
         const data = (res.data ?? []) as CategoryApi[];
         const opts: CategoryOption[] = data.map((c) => ({
           id: c.id,
@@ -104,12 +100,10 @@ export default function AdminCreateProductPage() {
   const validate = () => {
     const next: Record<string, string> = {};
 
-    // i18n required
     if (!titleEn.trim()) next.titleEn = "English title is required";
     if (!descEn.trim()) next.descEn = "English description is required";
     if (!titleKa.trim()) next.titleKa = "Georgian title is required";
     if (!descKa.trim()) next.descKa = "Georgian description is required";
-
     if (!slug.trim()) next.slug = "Slug is required";
 
     const p = Number(price);

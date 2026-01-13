@@ -3,6 +3,7 @@ import {
   IsArray,
   IsIn,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   ValidateNested,
@@ -26,6 +27,10 @@ export class CreateCategoryDto {
   @IsOptional()
   @IsString()
   image?: string;
+
+  @IsOptional()
+  @IsNumber()
+  parentId?: number;
 
   @IsArray()
   @ArrayMinSize(2)

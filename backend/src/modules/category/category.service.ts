@@ -25,6 +25,7 @@ export class CategoryService {
       data: {
         slug,
         image: dto.image,
+        parentId: dto.parentId ?? null,
         translations: { create: dto.translations },
       },
       include: {
@@ -109,6 +110,7 @@ export class CategoryService {
       data: {
         ...(dto.slug !== undefined ? { slug: dto.slug } : {}),
         ...(dto.image !== undefined ? { image: dto.image } : {}),
+        ...(dto.parentId !== undefined ? { parentId: dto.parentId } : {}),
         ...(translationOps ? { translations: translationOps } : {}),
       },
       include: {
