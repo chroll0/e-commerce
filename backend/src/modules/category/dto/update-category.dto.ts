@@ -1,6 +1,7 @@
 import {
   IsArray,
   IsIn,
+  IsNumber,
   IsOptional,
   IsString,
   ValidateNested,
@@ -24,6 +25,10 @@ export class UpdateCategoryDto {
   @IsOptional()
   @IsString()
   image?: string;
+
+  @IsOptional()
+  @IsNumber()
+  parentId?: number | null;
 
   @IsOptional()
   @IsArray()
