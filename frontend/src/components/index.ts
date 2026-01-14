@@ -59,6 +59,14 @@ export { type CategoryApi } from "./admin/categories/categoryTree";
 export { type CategoryNode } from "./admin/categories/categoryTree";
 export { buildTree } from "./admin/categories/categoryTree";
 export { flattenTree } from "./admin/categories/categoryTree";
+export { default as LanguageTabs } from "./admin/categories/LanguageTabs";
+export { default as CategoryForm } from "./admin/categories/CategoryForm";
+export {
+  buildIndentedOptions,
+  slugify,
+  type CategoryFormValues,
+  type CategoryOption,
+} from "./admin/categories/formOptions";
 
 // Footer components
 export { default as LanguageSwitcher } from "./footer/LanguageSwitcher";
