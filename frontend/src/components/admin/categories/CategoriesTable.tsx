@@ -14,11 +14,11 @@ const CategoriesTable: FC<TableProps> = ({
   labels,
 }) => {
   return (
-    <div className="mt-6 rounded-2xl border border-border bg-card overflow-hidden">
+    <div className="mt-6 rounded-xl border border-border bg-card overflow-hidden">
       <div className="grid grid-cols-12 gap-2 px-4 py-3 border-b border-border text-xs font-medium text-muted-foreground">
         <div className="col-span-5">{labels.name}</div>
-        <div className="col-span-4">{labels.slug}</div>
-        <div className="col-span-3">{labels.actions}</div>
+        <div className="col-span-3">{labels.slug}</div>
+        <div className="col-span-4 text-right">{labels.actions}</div>
       </div>
 
       {loading ? (
@@ -30,7 +30,7 @@ const CategoriesTable: FC<TableProps> = ({
           {labels.empty}
         </div>
       ) : (
-        <div>
+        <div className="pb-1">
           {rows.map(
             ({ node, depth, hasChildren, isLast, ancestorLast }, idx) => {
               const isOpen = expanded.has(node.id);
@@ -42,7 +42,7 @@ const CategoriesTable: FC<TableProps> = ({
                     <div className="h-px bg-border-strong/70 mx-4" />
                   )}
 
-                  <div className="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-muted/40 transition">
+                  <div className="grid grid-cols-12 gap-2 px-4 py-1 hover:bg-muted/40 transition">
                     <div className="col-span-5 flex items-center gap-2 min-w-0">
                       {/* ✅ tree connectors */}
                       <TreeLines
@@ -80,11 +80,11 @@ const CategoriesTable: FC<TableProps> = ({
                       )}
                     </div>
 
-                    <div className="col-span-4 flex items-center text-sm text-muted-foreground truncate">
+                    <div className="col-span-3 flex items-center text-sm text-muted-foreground truncate">
                       {node.slug}
                     </div>
 
-                    <div className="col-span-3 flex items-center justify-end gap-2">
+                    <div className="col-span-4 flex items-center justify-end gap-2">
                       <Button asChild variant="secondary" size="xs">
                         <Link
                           href={`/${locale}/admin/categories/new?parentId=${node.id}`}

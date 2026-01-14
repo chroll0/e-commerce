@@ -12,7 +12,7 @@ const TreeLines: FC<Props> = ({
   depth,
   isLast,
   colWidth = 18,
-  extendRight = 10,
+  extendRight = 8,
 }) => {
   if (depth === 0) return null;
 
@@ -24,7 +24,6 @@ const TreeLines: FC<Props> = ({
       style={{ width: depth * colWidth }}
       aria-hidden="true"
     >
-      {/* ✅ corner stub only */}
       <span
         className="absolute w-px bg-border"
         style={{
@@ -33,8 +32,6 @@ const TreeLines: FC<Props> = ({
           bottom: isLast ? "50%" : 0,
         }}
       />
-
-      {/* ✅ horizontal connector */}
       <span
         className="absolute h-px bg-border"
         style={{

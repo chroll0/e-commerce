@@ -199,8 +199,8 @@
         "collapseAll": "Collapse all",
         "cancel": "Cancel",
         "back": "Back",
-        "save": "Save changes",
-        "create": "Create category",
+        "save": "Save",
+        "create": "Create",
         "confirmDelete": "Delete"
       },
       "table": {

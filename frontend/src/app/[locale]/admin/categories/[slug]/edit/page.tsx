@@ -129,7 +129,6 @@ export default function AdminEditCategoryPage() {
     }
   };
 
-  const openDelete = () => setDeleteOpen(true);
   const closeDelete = () => {
     if (deleting) return;
     setDeleteOpen(false);
@@ -196,17 +195,6 @@ export default function AdminEditCategoryPage() {
         imageLabel={t("fields.image")}
         parentHint={t("tips.parentChange")}
       />
-
-      <div className="max-w-3xl mx-auto px-6 pb-6 flex justify-end">
-        <button
-          type="button"
-          onClick={openDelete}
-          className="text-sm text-destructive hover:opacity-80"
-          disabled={deleting}
-        >
-          {deleting ? t("modal.deleting") : t("actions.delete")}
-        </button>
-      </div>
 
       <DeleteCategoryModal
         isOpen={deleteOpen}

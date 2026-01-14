@@ -57,10 +57,9 @@ export { default as CategoriesTable } from "./admin/categories/CategoriesTable";
 export { default as DeleteCategoryModal } from "./admin/categories/DeleteCategoryModal";
 export { buildTree } from "./admin/categories/categoryTree";
 export { flattenTree } from "./admin/categories/categoryTree";
-export { default as LanguageTabs } from "./admin/categories/LanguageTabs";
+export { buildIndentedOptions, slugify } from "./admin/categories/formOptions";
 export { default as CategoryForm } from "./admin/categories/CategoryForm";
 export { default as TreeLines } from "./admin/categories/TreeLines";
-export { buildIndentedOptions, slugify } from "./admin/categories/formOptions";
 
 // Footer components
 export { default as LanguageSwitcher } from "./footer/LanguageSwitcher";

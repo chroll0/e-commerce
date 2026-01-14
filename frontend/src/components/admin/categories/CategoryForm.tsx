@@ -2,9 +2,8 @@
 
 import { FC, useEffect, useMemo, useState } from "react";
 import { Input, Button } from "@/components";
-import LanguageTabs from "./LanguageTabs";
+import { FormProps } from "@/types";
 import { buildIndentedOptions, slugify } from "./formOptions";
-import { Locale, FormProps } from "@/types";
 
 const CategoryForm: FC<FormProps> = ({
   mode,
@@ -29,11 +28,8 @@ const CategoryForm: FC<FormProps> = ({
   slugLabel,
   imageLabel,
   parentHint,
-
   errors = {},
 }) => {
-  const [activeLang, setActiveLang] = useState<Locale>("en");
-
   const [nameEn, setNameEn] = useState(initialValues.nameEn);
   const [nameKa, setNameKa] = useState(initialValues.nameKa);
 
@@ -49,7 +45,6 @@ const CategoryForm: FC<FormProps> = ({
     setSlug(initialValues.slug);
     setImage(initialValues.image);
     setParentId(initialValues.parentId);
-
     setSlugTouched(mode === "edit");
   }, [initialValues, mode]);
 
@@ -85,13 +80,6 @@ const CategoryForm: FC<FormProps> = ({
           <h1 className="text-2xl font-semibold">{title}</h1>
           <p className="text-sm text-muted-foreground">{description}</p>
         </div>
-
-        <div className="flex items-center gap-2">
-          <LanguageTabs value={activeLang} onChange={setActiveLang} />
-          <Button variant="text" onClick={onCancel} className="text-muted">
-            {cancelLabel}
-          </Button>
-        </div>
       </div>
 
       {errors.form && (
@@ -103,13 +91,10 @@ const CategoryForm: FC<FormProps> = ({
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* name translations */}
         <div className="rounded-2xl border border-border p-4 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-semibold">{nameCardTitle}</h2>
-            <LanguageTabs value={activeLang} onChange={setActiveLang} />
-          </div>
+          <h2 className="text-base font-semibold">{nameCardTitle}</h2>
 
-          {activeLang === "en" ? (
-            <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
               <Input
                 label={nameEnLabel}
                 type="text"
@@ -119,13 +104,11 @@ const CategoryForm: FC<FormProps> = ({
                 required
               />
               {errors.nameEn && (
-                <p className="-mt-2 text-sm text-destructive">
-                  {errors.nameEn}
-                </p>
+                <p className="mt-2 text-sm text-destructive">{errors.nameEn}</p>
               )}
-            </>
-          ) : (
-            <>
+            </div>
+
+            <div>
               <Input
                 label={nameKaLabel}
                 type="text"
@@ -135,12 +118,10 @@ const CategoryForm: FC<FormProps> = ({
                 required
               />
               {errors.nameKa && (
-                <p className="-mt-2 text-sm text-destructive">
-                  {errors.nameKa}
-                </p>
+                <p className="mt-2 text-sm text-destructive">{errors.nameKa}</p>
               )}
-            </>
-          )}
+            </div>
+          </div>
         </div>
 
         {/* slug + parent */}
