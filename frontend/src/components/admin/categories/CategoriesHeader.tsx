@@ -2,19 +2,9 @@ import Link from "next/link";
 import { Button } from "@/components";
 import { Plus } from "lucide-react";
 import { FC } from "react";
+import { HeaderProps } from "@/types";
 
-type Props = {
-  locale: "en" | "ka";
-  onExpandAll: () => void;
-  onCollapseAll: () => void;
-  title: string;
-  description: string;
-  expandAllLabel: string;
-  collapseAllLabel: string;
-  addLabel: string;
-};
-
-const CategoriesHeader: FC<Props> = ({
+const CategoriesHeader: FC<HeaderProps> = ({
   locale,
   onExpandAll,
   onCollapseAll,

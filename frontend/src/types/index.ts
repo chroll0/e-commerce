@@ -1,8 +1,11 @@
 export type {
   Locale,
-  Props,
+  FormProps,
   CategoryOption,
   CategoryFormValues,
   CategoryApi,
   CategoryNode,
+  HeaderProps,
+  TableProps,
+  CategoryRow,
 } from "@/types/category";

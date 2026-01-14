@@ -4,9 +4,9 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { Input, Button } from "@/components";
 import LanguageTabs from "./LanguageTabs";
 import { buildIndentedOptions, slugify } from "./formOptions";
-import { Locale, Props } from "@/types";
+import { Locale, FormProps } from "@/types";
 
-const CategoryForm: FC<Props> = ({
+const CategoryForm: FC<FormProps> = ({
   mode,
   loadingParents = false,
   parentOptions,

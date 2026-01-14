@@ -14,7 +14,7 @@ export type CategoryFormValues = {
   parentId: string;
 };
 
-export type Props = {
+export type FormProps = {
   mode: "create" | "edit";
   locale: Locale;
   loadingParents?: boolean;
@@ -59,4 +59,46 @@ export type CategoryNode = {
   parentId: number | null;
   name: string;
   children: CategoryNode[];
+};
+
+export type HeaderProps = {
+  locale: "en" | "ka";
+  onExpandAll: () => void;
+  onCollapseAll: () => void;
+  title: string;
+  description: string;
+  expandAllLabel: string;
+  collapseAllLabel: string;
+  addLabel: string;
+};
+
+export type CategoryRow = {
+  node: CategoryNode;
+  depth: number;
+  hasChildren: boolean;
+  isLast: boolean;
+  ancestorLast: boolean[];
+};
+
+type Row = { node: CategoryNode; depth: number; hasChildren: boolean };
+
+type Labels = {
+  name: string;
+  slug: string;
+  actions: string;
+  loading: string;
+  empty: string;
+  addSub: string;
+  edit: string;
+  delete: string;
+};
+
+export type TableProps = {
+  locale: "en" | "ka";
+  loading: boolean;
+  rows: CategoryRow[];
+  expanded: Set<number>;
+  onToggle: (id: number) => void;
+  onRequestDelete: (payload: { id: number; name: string }) => void;
+  labels: Labels;
 };
