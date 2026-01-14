@@ -212,7 +212,7 @@
       },
       "modal": {
         "deleteTitle": "Delete category",
-        "deleteDescription": "Are you sure you want to delete {name}? This action cannot be undone.",
+        "deleteDescription": "Are you sure you want to delete {name} category? This action cannot be undone.",
         "deleting": "Deleting..."
       },
       "messages": {

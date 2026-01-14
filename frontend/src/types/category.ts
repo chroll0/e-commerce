@@ -61,17 +61,6 @@ export type CategoryNode = {
   children: CategoryNode[];
 };
 
-export type HeaderProps = {
-  locale: "en" | "ka";
-  onExpandAll: () => void;
-  onCollapseAll: () => void;
-  title: string;
-  description: string;
-  expandAllLabel: string;
-  collapseAllLabel: string;
-  addLabel: string;
-};
-
 export type CategoryRow = {
   node: CategoryNode;
   depth: number;
@@ -91,6 +80,8 @@ type Labels = {
   addSub: string;
   edit: string;
   delete: string;
+  expandAll?: string;
+  collapseAll?: string;
 };
 
 export type TableProps = {
@@ -101,4 +92,7 @@ export type TableProps = {
   onToggle: (id: number) => void;
   onRequestDelete: (payload: { id: number; name: string }) => void;
   labels: Labels;
+  onExpandAll: () => void;
+  onCollapseAll: () => void;
+  isExpandedAll: boolean;
 };

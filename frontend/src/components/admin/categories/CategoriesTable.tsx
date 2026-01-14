@@ -1,7 +1,15 @@
 import { FC } from "react";
 import Link from "next/link";
 import { Button, TreeLines } from "@/components";
-import { ChevronDown, ChevronRight, Plus, Pencil, Trash2 } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Plus,
+  Pencil,
+  Trash2,
+  ChevronsDown,
+  ChevronsRight,
+} from "lucide-react";
 import { TableProps } from "@/types";
 
 const CategoriesTable: FC<TableProps> = ({
@@ -12,11 +20,32 @@ const CategoriesTable: FC<TableProps> = ({
   onToggle,
   onRequestDelete,
   labels,
+  onExpandAll,
+  onCollapseAll,
+  isExpandedAll,
 }) => {
   return (
     <div className="mt-6 rounded-xl border border-border bg-card overflow-hidden">
-      <div className="grid grid-cols-12 gap-2 px-4 py-3 border-b border-border text-xs font-medium text-muted-foreground">
-        <div className="col-span-5">{labels.name}</div>
+      <div className="grid grid-cols-12 items-center gap-2 px-4 py-3 border-b border-border text-xs font-medium text-muted-foreground">
+        <div className="col-span-5 flex items-center">
+          <Button
+            type="button"
+            variant="outline"
+            size="xs"
+            iconOnly
+            className="mr-2"
+            onClick={isExpandedAll ? onCollapseAll : onExpandAll}
+            aria-label={isExpandedAll ? labels.collapseAll : labels.expandAll}
+            title={isExpandedAll ? labels.collapseAll : labels.expandAll}
+          >
+            {isExpandedAll ? (
+              <ChevronsDown className="h-4 w-4" />
+            ) : (
+              <ChevronsRight className="h-4 w-4" />
+            )}
+          </Button>
+          <span>{labels.name}</span>
+        </div>
         <div className="col-span-3">{labels.slug}</div>
         <div className="col-span-4 text-right">{labels.actions}</div>
       </div>
@@ -44,19 +73,19 @@ const CategoriesTable: FC<TableProps> = ({
 
                   <div className="grid grid-cols-12 gap-2 px-4 py-1 hover:bg-muted/40 transition">
                     <div className="col-span-5 flex items-center gap-2 min-w-0">
-                      {/* ✅ tree connectors */}
                       <TreeLines
                         depth={depth}
                         isLast={isLast}
                         ancestorLast={ancestorLast}
                       />
 
-                      {/* expand/collapse */}
                       {hasChildren ? (
-                        <button
+                        <Button
+                          variant="text"
                           type="button"
+                          size="xs"
+                          iconOnly
                           onClick={() => onToggle(node.id)}
-                          className="h-8 w-8 inline-flex items-center justify-center rounded-md hover:bg-muted"
                           aria-label={isOpen ? "Collapse" : "Expand"}
                         >
                           {isOpen ? (
@@ -64,7 +93,7 @@ const CategoriesTable: FC<TableProps> = ({
                           ) : (
                             <ChevronRight className="h-4 w-4" />
                           )}
-                        </button>
+                        </Button>
                       ) : (
                         <div className="h-8 w-8" />
                       )}

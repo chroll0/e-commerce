@@ -26,6 +26,7 @@ export default function AdminCategoriesPage() {
   const [target, setTarget] = useState<{ id: number; name: string } | null>(
     null
   );
+  const allExpanded = items.length > 0 && expanded.size >= items.length;
 
   const load = async () => {
     try {
@@ -88,12 +89,8 @@ export default function AdminCategoriesPage() {
     <div className="max-w-7xl mx-auto p-6">
       <CategoriesHeader
         locale={locale}
-        onExpandAll={expandAll}
-        onCollapseAll={collapseAll}
         title={t("title")}
         description={t("description")}
-        expandAllLabel={t("actions.expandAll")}
-        collapseAllLabel={t("actions.collapseAll")}
         addLabel={t("actions.add")}
       />
 
@@ -110,6 +107,9 @@ export default function AdminCategoriesPage() {
         expanded={expanded}
         onToggle={toggle}
         onRequestDelete={onRequestDelete}
+        onExpandAll={expandAll}
+        onCollapseAll={collapseAll}
+        isExpandedAll={allExpanded}
         labels={{
           name: t("table.name"),
           slug: t("table.slug"),

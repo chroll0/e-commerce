@@ -44,9 +44,9 @@ const DeleteCategoryModal: FC<Props> = ({
     >
       <p className="text-sm text-muted-foreground">
         {description}{" "}
-        {categoryName ? (
+        {/* {categoryName ? (
           <span className="font-medium text-foreground">{categoryName}</span>
-        ) : null}
+        ) : null} */}
       </p>
     </Modal>
   );

@@ -5,7 +5,6 @@ export type {
   CategoryFormValues,
   CategoryApi,
   CategoryNode,
-  HeaderProps,
   TableProps,
   CategoryRow,
 } from "@/types/category";
