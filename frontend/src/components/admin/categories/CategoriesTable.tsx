@@ -39,9 +39,9 @@ const CategoriesTable: FC<Props> = ({
   return (
     <div className="mt-6 rounded-2xl border border-border bg-card overflow-hidden">
       <div className="grid grid-cols-12 gap-2 px-4 py-3 border-b border-border text-xs font-medium text-muted-foreground">
-        <div className="col-span-6">{labels.name}</div>
-        <div className="col-span-3">{labels.slug}</div>
-        <div className="col-span-3 text-right">{labels.actions}</div>
+        <div className="col-span-5">{labels.name}</div>
+        <div className="col-span-4">{labels.slug}</div>
+        <div className="col-span-3">{labels.actions}</div>
       </div>
 
       {loading ? (
@@ -62,7 +62,7 @@ const CategoriesTable: FC<Props> = ({
                 key={node.id}
                 className="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-muted/40 transition"
               >
-                <div className="col-span-6 flex items-center gap-2 min-w-0">
+                <div className="col-span-5 flex items-center gap-2 min-w-0">
                   <div style={{ width: depth * 18 }} />
 
                   {hasChildren ? (
@@ -93,7 +93,7 @@ const CategoriesTable: FC<Props> = ({
                   )}
                 </div>
 
-                <div className="col-span-3 flex items-center text-sm text-muted-foreground truncate">
+                <div className="col-span-4 flex items-center text-sm text-muted-foreground truncate">
                   {node.slug}
                 </div>
 

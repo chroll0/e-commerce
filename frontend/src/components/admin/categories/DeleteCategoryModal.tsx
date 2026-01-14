@@ -7,7 +7,6 @@ type Props = {
   categoryName?: string;
   onClose: () => void;
   onConfirm: () => void;
-
   title: string;
   description: string;
   cancelLabel: string;

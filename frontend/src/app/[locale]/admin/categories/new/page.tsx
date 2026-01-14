@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Input, Button } from "@/components";
 import { api } from "@/lib/axios";
 
@@ -65,13 +65,16 @@ export default function AdminCreateCategoryPage() {
 
   const [activeLang, setActiveLang] = useState<Locale>("en");
 
+  const searchParams = useSearchParams();
+  const parentIdParam = searchParams.get("parentId");
+  const [parentId, setParentId] = useState<string>("");
+
   const [nameEn, setNameEn] = useState("");
   const [nameKa, setNameKa] = useState("");
 
   const [slug, setSlug] = useState("");
   const [slugTouched, setSlugTouched] = useState(false);
 
-  const [parentId, setParentId] = useState<string>(""); // "" => root
   const [image, setImage] = useState("");
 
   const [cats, setCats] = useState<CategoryOption[]>([]);
@@ -80,12 +83,18 @@ export default function AdminCreateCategoryPage() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // auto slug from EN name
+  useEffect(() => {
+    if (!parentIdParam) return;
+    const parsed = Number(parentIdParam);
+    if (!Number.isFinite(parsed)) return;
+
+    setParentId(String(parsed));
+  }, [parentIdParam]);
+
   useEffect(() => {
     if (!slugTouched) setSlug(slugify(nameEn));
   }, [nameEn, slugTouched]);
 
-  // load categories for parent select
   useEffect(() => {
     let mounted = true;
     (async () => {
