@@ -55,10 +55,11 @@ export { default as AccountQuickActions } from "./account/AccountQuickActions";
 export { default as CategoriesHeader } from "./admin/categories/CategoriesHeader";
 export { default as CategoriesTable } from "./admin/categories/CategoriesTable";
 export { default as DeleteCategoryModal } from "./admin/categories/DeleteCategoryModal";
-export { type CategoryApi } from "./admin/categories/categoryTree";
-export { type CategoryNode } from "./admin/categories/categoryTree";
 export { buildTree } from "./admin/categories/categoryTree";
 export { flattenTree } from "./admin/categories/categoryTree";
+export { buildIndentedOptions, slugify } from "./admin/categories/formOptions";
+export { default as CategoryForm } from "./admin/categories/CategoryForm";
+export { default as TreeLines } from "./admin/categories/TreeLines";
 
 // Footer components
 export { default as LanguageSwitcher } from "./footer/LanguageSwitcher";

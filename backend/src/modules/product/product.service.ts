@@ -6,8 +6,7 @@ import {
 import { PrismaService } from "../../prisma/prisma.service";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
-
-type Locale = "en" | "ka";
+import { Locale } from "../../common/types/locale.types";
 
 @Injectable()
 export class ProductService {

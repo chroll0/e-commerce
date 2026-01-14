@@ -12,6 +12,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   rightIcon?: ReactNode;
   iconOnly?: boolean;
   asChild?: boolean;
+  children: React.ReactNode;
 };
 
 const Button: FC<ButtonProps> = ({
@@ -74,10 +75,9 @@ const Button: FC<ButtonProps> = ({
       )}
       {...props}
     >
-      {leftIcon && !iconOnly && <span>{leftIcon}</span>}
-      {!iconOnly && children}
-      {rightIcon && !iconOnly && <span>{rightIcon}</span>}
-      {iconOnly && (leftIcon || rightIcon)}
+      {leftIcon && !iconOnly && <span className="shrink-0">{leftIcon}</span>}
+      {children}
+      {rightIcon && !iconOnly && <span className="shrink-0">{rightIcon}</span>}
     </button>
   );
 };

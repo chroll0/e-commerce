@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { Locale, useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Input, Button, Tooltip } from "@/components";
 import { api } from "@/lib/axios";
 import { Info } from "lucide-react";
-
-type Locale = "en" | "ka";
 
 type CategoryApi = {
   id: number;

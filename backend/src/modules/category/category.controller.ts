@@ -13,10 +13,9 @@ import {
 import { CategoryService } from "./category.service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
+import { Locale } from "../../common/types/locale.types";
 
-type Locale = "en" | "ka";
-
-function parseLocale(locale?: string): Locale | undefined {
+function parseLocale(locale?: string): Locale {
   if (!locale) return undefined;
   if (locale === "en" || locale === "ka") return locale;
   throw new BadRequestException('locale must be "en" or "ka"');

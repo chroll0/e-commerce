@@ -1,18 +1,4 @@
-export type CategoryApi = {
-  id: number;
-  slug: string;
-  parentId: number | null;
-  translations: { locale: string; name: string }[];
-  createdAt?: string;
-};
-
-export type CategoryNode = {
-  id: number;
-  slug: string;
-  parentId: number | null;
-  name: string;
-  children: CategoryNode[];
-};
+import { CategoryApi, CategoryNode, CategoryRow } from "@/types";
 
 export function buildTree(categories: CategoryApi[]) {
   const nodes = new Map<number, CategoryNode>();
@@ -49,19 +35,32 @@ export function buildTree(categories: CategoryApi[]) {
 export function flattenTree(
   roots: CategoryNode[],
   expanded: Set<number>,
-  depth = 0
-) {
-  const rows: { node: CategoryNode; depth: number; hasChildren: boolean }[] =
-    [];
+  depth = 0,
+  ancestorLast: boolean[] = []
+): CategoryRow[] {
+  const rows: CategoryRow[] = [];
 
-  for (const node of roots) {
+  roots.forEach((node, index) => {
     const hasChildren = node.children.length > 0;
-    rows.push({ node, depth, hasChildren });
+    const isLast = index === roots.length - 1;
+
+    rows.push({
+      node,
+      depth,
+      hasChildren,
+      isLast,
+      ancestorLast,
+    });
 
     if (hasChildren && expanded.has(node.id)) {
-      rows.push(...flattenTree(node.children, expanded, depth + 1));
+      rows.push(
+        ...flattenTree(node.children, expanded, depth + 1, [
+          ...ancestorLast,
+          isLast,
+        ])
+      );
     }
-  }
+  });
 
   return rows;
 }

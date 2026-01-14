@@ -192,24 +192,27 @@
       "description": "Manage category tree (parents, children, nested).",
       "actions": {
         "add": "Add category",
-        "addSub": "subcategory",
+        "addSub": "Subcategory",
         "edit": "Edit",
         "delete": "Delete",
         "expandAll": "Expand all",
         "collapseAll": "Collapse all",
         "cancel": "Cancel",
+        "back": "Back",
+        "save": "Save",
+        "create": "Create",
         "confirmDelete": "Delete"
       },
       "table": {
         "name": "Name",
-        "slug": "Slug",
+        "slug": "Slug (URL)",
         "actions": "Actions",
         "empty": "No categories yet. Create your first category.",
         "loading": "Loading..."
       },
       "modal": {
         "deleteTitle": "Delete category",
-        "deleteDescription": "Are you sure you want to delete {name}? This action cannot be undone.",
+        "deleteDescription": "Are you sure you want to delete {name} category? This action cannot be undone.",
         "deleting": "Deleting..."
       },
       "messages": {
@@ -217,14 +220,43 @@
         "deleteError": "Delete failed",
         "created": "Category created successfully.",
         "updated": "Category updated successfully.",
-        "deleted": "Category deleted successfully."
+        "deleted": "Category deleted successfully.",
+        "createError": "Failed to create category. Please try again.",
+        "updateError": "Failed to save. Try again.",
+        "loadOneError": "Failed to load category."
       },
       "tips": {
-        "hierarchy": "Tip: Create a parent category first (e.g. Electronics), then add subcategories under it."
+        "hierarchy": "Tip: Create a parent category first (e.g. Electronics), then add subcategories under it.",
+        "parentExample": "Example: Electronics → Computer Parts → GPUs",
+        "parentChange": "Changing parent will move this category in the tree."
       },
       "fields": {
-        "name": "Category name",
-        "parent": "Parent category"
+        "name": "Name",
+        "nameEn": "Name (EN)",
+        "nameKa": "Name (KA)",
+        "slug": "Slug (URL)",
+        "parent": "Parent category (optional)",
+        "noParent": "— No parent (root) —",
+        "image": "Image URL (optional)"
+      },
+      "placeholders": {
+        "nameEn": "Electronics",
+        "nameKa": "ტექნიკა",
+        "slug": "electronics",
+        "image": "https://..."
+      },
+      "form": {
+        "createTitle": "Create Category",
+        "createDescription": "Add a category and optionally place it under a parent.",
+        "editTitle": "Edit Category",
+        "editDescription": "Update translations, parent, slug and image.",
+        "saving": "Saving..."
+      },
+      "validation": {
+        "nameEnRequired": "English name is required",
+        "nameKaRequired": "Georgian name is required",
+        "slugRequired": "Slug is required",
+        "invalidParent": "Invalid parent"
       }
     }
   },
