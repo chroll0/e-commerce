@@ -7,12 +7,10 @@ import {
   buildTree,
   CategoriesHeader,
   CategoriesTable,
-  type CategoryApi,
   DeleteCategoryModal,
   flattenTree,
 } from "@/components";
-
-type Locale = "en" | "ka";
+import { CategoryApi, Locale } from "@/types";
 
 export default function AdminCategoriesPage() {
   const locale = useLocale() as Locale;

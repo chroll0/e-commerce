@@ -1,18 +1,4 @@
-export type CategoryApi = {
-  id: number;
-  slug: string;
-  parentId: number | null;
-  translations: { locale: string; name: string }[];
-  createdAt?: string;
-};
-
-export type CategoryNode = {
-  id: number;
-  slug: string;
-  parentId: number | null;
-  name: string;
-  children: CategoryNode[];
-};
+import { CategoryApi, CategoryNode } from "@/types";
 
 export function buildTree(categories: CategoryApi[]) {
   const nodes = new Map<number, CategoryNode>();

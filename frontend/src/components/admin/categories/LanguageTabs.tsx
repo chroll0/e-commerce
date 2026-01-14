@@ -1,8 +1,7 @@
 "use client";
 
+import { Locale } from "@/types";
 import { FC } from "react";
-
-type Locale = "en" | "ka";
 
 type Props = {
   value: Locale;

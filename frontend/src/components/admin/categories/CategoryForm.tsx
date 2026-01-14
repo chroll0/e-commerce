@@ -3,49 +3,11 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { Input, Button } from "@/components";
 import LanguageTabs from "./LanguageTabs";
-import {
-  buildIndentedOptions,
-  CategoryFormValues,
-  slugify,
-  type CategoryOption,
-} from "./formOptions";
-
-type Locale = "en" | "ka";
-
-type Props = {
-  mode: "create" | "edit";
-  locale: Locale;
-  loadingParents?: boolean;
-  parentOptions: CategoryOption[];
-  excludeParentId?: number | null;
-  initialValues: CategoryFormValues;
-  submitting?: boolean;
-  onCancel: () => void;
-  onSubmit: (values: CategoryFormValues) => void;
-
-  title: string;
-  description: string;
-  backLabel?: string;
-  cancelLabel: string;
-  submitLabel: string;
-  submittingLabel: string;
-  parentLabel: string;
-  noParentLabel: string;
-  loadingLabel: string;
-  nameCardTitle: string;
-  nameEnLabel: string;
-  nameKaLabel: string;
-  slugLabel: string;
-  imageLabel: string;
-  parentHint?: string;
-  errors?: Partial<
-    Record<keyof CategoryFormValues | "form" | "nameEn" | "nameKa", string>
-  >;
-};
+import { buildIndentedOptions, slugify } from "./formOptions";
+import { Locale, Props } from "@/types";
 
 const CategoryForm: FC<Props> = ({
   mode,
-  locale,
   loadingParents = false,
   parentOptions,
   excludeParentId = null,

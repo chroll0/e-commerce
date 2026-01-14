@@ -6,8 +6,7 @@ import {
 import { PrismaService } from "../../prisma/prisma.service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
-
-type Locale = "en" | "ka";
+import { Locale } from "../../common/types/locale.types";
 
 @Injectable()
 export class CategoryService {
@@ -38,7 +37,6 @@ export class CategoryService {
     return this.prisma.category.findMany({
       include: {
         translations: locale ? { where: { locale } } : true,
-        // პროდუქტები თუ გინდა აქვე:
         // products: true,
       },
       orderBy: { createdAt: "desc" },

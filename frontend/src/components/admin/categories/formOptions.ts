@@ -1,16 +1,4 @@
-export type CategoryOption = {
-  id: number;
-  parentId: number | null;
-  name: string;
-};
-
-export type CategoryFormValues = {
-  nameEn: string;
-  nameKa: string;
-  slug: string;
-  image: string;
-  parentId: string;
-};
+import { CategoryOption } from "@/types";
 
 export function slugify(input: string) {
   return input

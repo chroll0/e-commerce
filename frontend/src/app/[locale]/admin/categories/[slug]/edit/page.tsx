@@ -1,25 +1,16 @@
 "use client";
 
+import { api } from "@/lib/axios";
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useParams, useRouter } from "next/navigation";
-import { api } from "@/lib/axios";
+import { CategoryForm, DeleteCategoryModal } from "@/components";
 import {
-  CategoryForm,
-  type CategoryFormValues,
-  type CategoryOption,
-  DeleteCategoryModal,
-} from "@/components";
-
-type Locale = "en" | "ka";
-
-type CategoryApi = {
-  id: number;
-  slug: string;
-  image: string | null;
-  parentId: number | null;
-  translations: { locale: string; name: string }[];
-};
+  CategoryApi,
+  CategoryFormValues,
+  CategoryOption,
+  Locale,
+} from "@/types";
 
 export default function AdminEditCategoryPage() {
   const router = useRouter();
