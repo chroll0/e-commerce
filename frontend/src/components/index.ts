@@ -61,5 +61,17 @@ export { buildIndentedOptions, slugify } from "./admin/categories/formOptions";
 export { default as CategoryForm } from "./admin/categories/CategoryForm";
 export { default as TreeLines } from "./admin/categories/TreeLines";
 
+// Product management components
+export { default as ProductContentFields } from "./admin/products/ProductContentFields";
+export { default as ProductForm } from "./admin/products/ProductForm";
+export { default as ProductImagesFields } from "./admin/products/ProductImagesFields";
+export { default as ProductMetaFields } from "./admin/products/ProductMetaFields";
+export { default as ProductPricingFields } from "./admin/products/ProductPricingFields";
+export { default as DeleteProductModal } from "./admin/products/DeleteProductModal";
+export { default as ProductRow } from "./admin/products/ProductRow";
+export { default as ProductsHeader } from "./admin/products/ProductsHeader";
+export { default as ProductsTable } from "./admin/products/ProductsTable";
+export { default as ProductsFilters } from "./admin/products/ProductsFilters";
+
 // Footer components
 export { default as LanguageSwitcher } from "./footer/LanguageSwitcher";

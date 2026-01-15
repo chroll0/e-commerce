@@ -1,6 +1,6 @@
 export type {
   Locale,
-  FormProps,
+  CategoryProps,
   CategoryOption,
   CategoryFormValues,
   CategoryApi,
@@ -8,3 +8,11 @@ export type {
   TableProps,
   CategoryRow,
 } from "@/types/category";
+
+export type {
+  ProductFormValues,
+  ProductApi,
+  ProductProps,
+} from "@/types/product";
+
+export type { SelectOption } from "@/types/common";

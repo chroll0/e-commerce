@@ -1,11 +1,11 @@
 "use client";
 
 import { FC, useEffect, useMemo, useState } from "react";
-import { Input, Button } from "@/components";
-import { FormProps } from "@/types";
 import { buildIndentedOptions, slugify } from "./formOptions";
+import { Input, Button } from "@/components";
+import { CategoryProps } from "@/types";
 
-const CategoryForm: FC<FormProps> = ({
+const CategoryForm: FC<CategoryProps> = ({
   mode,
   loadingParents = false,
   parentOptions,

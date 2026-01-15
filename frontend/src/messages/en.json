@@ -146,9 +146,11 @@
       "name": "Satori",
       "admin": "Manage"
     },
+
     "header": {
       "title": "Administrator Panel"
     },
+
     "sidebar": {
       "dashboard": "Dashboard",
       "products": "Products",
@@ -164,22 +166,80 @@
       "paymentsList": "Payment Records",
       "failedPayments": "Failed Payments"
     },
+
     "products": {
       "title": "Products Management",
       "description": "Add, edit, and manage your product listings.",
-      "addNew": "Add New Product",
-      "editProduct": "Edit Product",
-      "fields": {
-        "title": "Product Title",
-        "description": "Product Description",
-        "price": "Price",
-        "category": "Category",
-        "stock": "Stock Quantity",
-        "images": "Product Images"
-      },
       "actions": {
-        "save": "Save Product",
-        "delete": "Delete Product"
+        "add": "Add product",
+        "edit": "Edit",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "confirmDelete": "Delete"
+      },
+      "table": {
+        "title": "Title",
+        "slug": "Slug",
+        "price": "Price",
+        "stock": "Stock",
+        "category": "Category",
+        "actions": "Actions",
+        "empty": "No products yet. Create your first product.",
+        "loading": "Loading..."
+      },
+      "form": {
+        "createTitle": "Create Product",
+        "createDescription": "Add a new product with translations, pricing, and images.",
+        "editTitle": "Edit Product",
+        "editDescription": "Update translations, pricing, and images.",
+        "contentTitle": "Content",
+        "fields": {
+          "titleEn": "Title (EN)",
+          "descEn": "Description (EN)",
+          "titleKa": "Title (KA)",
+          "descKa": "Description (KA)",
+          "slug": "Slug",
+          "price": "Price",
+          "oldPrice": "Old price (optional)",
+          "discount": "Discount % (optional)",
+          "stock": "Stock",
+          "category": "Category",
+          "selectCategory": "Select category",
+          "featured": "Featured",
+          "featuredHint": "Show this product in Featured sections.",
+          "imagesTitle": "Images (URLs)",
+          "addImage": "Add image",
+          "imageUrl": "Image URL",
+          "remove": "Remove"
+        },
+        "buttons": {
+          "submitCreate": "Create product",
+          "submitEdit": "Save changes",
+          "submitting": "Saving..."
+        }
+      },
+      "modal": {
+        "deleteTitle": "Delete product",
+        "deleteDescription": "Are you sure you want to delete {name}? This action cannot be undone.",
+        "deleting": "Deleting..."
+      },
+      "errors": {
+        "loadList": "Failed to load products. Try again.",
+        "loadEdit": "Failed to load product.",
+        "saveCreate": "Failed to create product. Please try again.",
+        "saveEdit": "Failed to save. Try again.",
+        "delete": "Delete failed.",
+        "titleEn": "English title is required",
+        "descEn": "English description is required",
+        "titleKa": "Georgian title is required",
+        "descKa": "Georgian description is required",
+        "slug": "Slug is required",
+        "price": "Price must be > 0",
+        "oldPrice": "Old price must be > 0",
+        "discount": "Discount must be 0–100",
+        "stock": "Stock must be ≥ 0",
+        "category": "Category is required",
+        "images": "At least 1 image URL is required"
       },
       "messages": {
         "created": "Product created successfully.",
@@ -187,6 +247,7 @@
         "deleted": "Product deleted successfully."
       }
     },
+
     "categories": {
       "title": "Product Categories",
       "description": "Manage category tree (parents, children, nested).",
