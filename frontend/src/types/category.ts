@@ -14,7 +14,7 @@ export type CategoryFormValues = {
   parentId: string;
 };
 
-export type FormProps = {
+export type CategoryProps = {
   mode: "create" | "edit";
   locale: Locale;
   loadingParents?: boolean;
