@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   AuthActions,
   Logo,
@@ -9,6 +12,9 @@ import {
 import { Bell, ShoppingCart } from "lucide-react";
 
 const Navigation = () => {
+  const [search, setSearch] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between py-1 px-5 border-b border-border">
@@ -22,11 +28,12 @@ const Navigation = () => {
       <div className="flex items-center justify-between px-5 py-1 border-b border-border gap-6">
         <div className="flex items-center gap-6 w-full">
           <Logo />
-          <CategoryDropdown />
-          <SearchBar />
+          {/* <CategoryDropdown value={categoryId} onChange={setCategoryId} /> */}
+          <SearchBar value={search} onChange={setSearch} />
         </div>
+
         <div className="flex items-center gap-2.5 text-foreground hover:text-primary cursor-pointer transition">
-          <ShoppingCart className="w-5 h-5 " />
+          <ShoppingCart className="w-5 h-5" />
           <div>|</div>
           <Bell className="w-5 h-5" />
         </div>

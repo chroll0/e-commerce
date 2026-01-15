@@ -5,13 +5,17 @@ import { Search } from "lucide-react";
 import { Input } from "@/components";
 import { api } from "@/lib/axios";
 
-const SearchBar = () => {
-  const [query, setQuery] = useState("");
+type Props = {
+  value: string;
+  onChange: (next: string) => void;
+};
+
+const SearchBar = ({ value, onChange }: Props) => {
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!query.trim()) {
+    if (!value.trim()) {
       setResults([]);
       return;
     }
@@ -20,29 +24,29 @@ const SearchBar = () => {
       try {
         setLoading(true);
         const { data } = await api.get("/products", {
-          params: { search: query },
+          params: { search: value },
         });
-        setResults(data);
+        setResults(data ?? []);
       } finally {
         setLoading(false);
       }
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [query]);
+  }, [value]);
 
   return (
     <div className="w-full relative">
       <Input
         placeholder="Search products..."
         size="sm"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         fullWidth
         leftIcon={<Search className="w-4 h-4 text-muted" />}
       />
 
-      {query && (
+      {value && (
         <div className="absolute top-full left-0 right-0 bg-white border rounded-md mt-1 z-50">
           {loading && <p className="p-2 text-sm">Searching...</p>}
 
