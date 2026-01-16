@@ -2,7 +2,7 @@
 
 import { FC, useEffect, useMemo, useState } from "react";
 import { buildIndentedOptions, slugify } from "./formOptions";
-import { Input, Button } from "@/components";
+import { Input, Button, AdminPageHeader } from "@/components";
 import { CategoryProps } from "@/types";
 
 const CategoryForm: FC<CategoryProps> = ({
@@ -75,13 +75,9 @@ const CategoryForm: FC<CategoryProps> = ({
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <div className="flex items-start justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-2xl font-semibold">{title}</h1>
-          <p className="text-sm text-muted-foreground">{description}</p>
-        </div>
+      <div className="mb-6">
+        <AdminPageHeader title={title} description={description} />
       </div>
-
       {errors.form && (
         <div className="mb-4 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
           {errors.form}
