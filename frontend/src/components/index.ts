@@ -50,10 +50,10 @@ export { default as AccountQuickActions } from "./account/AccountQuickActions";
 export { default as SidebarLink } from "./admin/common/SidebarLink";
 export { AdminSidebar } from "./admin/common/AdminSidebar";
 export { default as AdminPageHeader } from "./admin/common/AdminPageHeader";
+export { default as ConfirmModal } from "./admin/common/ConfirmModal";
 
 // Category management components
 export { default as CategoriesTable } from "./admin/categories/CategoriesTable";
-export { default as DeleteCategoryModal } from "./admin/categories/DeleteCategoryModal";
 export { default as CategoryForm } from "./admin/categories/CategoryForm";
 export { default as TreeLines } from "./admin/categories/TreeLines";
 export { buildTree } from "./admin/categories/categoryTree";
@@ -66,7 +66,6 @@ export { default as ProductForm } from "./admin/products/ProductForm";
 export { default as ProductImagesFields } from "./admin/products/ProductImagesFields";
 export { default as ProductMetaFields } from "./admin/products/ProductMetaFields";
 export { default as ProductPricingFields } from "./admin/products/ProductPricingFields";
-export { default as DeleteProductModal } from "./admin/products/DeleteProductModal";
 export { default as ProductRow } from "./admin/products/ProductRow";
 export { default as ProductsTable } from "./admin/products/ProductsTable";
 export { default as ProductsFilters } from "./admin/products/ProductsFilters";

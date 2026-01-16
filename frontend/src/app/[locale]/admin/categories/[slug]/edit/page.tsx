@@ -4,7 +4,7 @@ import { api } from "@/lib/axios";
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useParams, useRouter } from "next/navigation";
-import { CategoryForm, DeleteCategoryModal } from "@/components";
+import { CategoryForm, ConfirmModal } from "@/components";
 import {
   CategoryApi,
   CategoryFormValues,
@@ -196,7 +196,7 @@ export default function AdminEditCategoryPage() {
         parentHint={t("tips.parentChange")}
       />
 
-      <DeleteCategoryModal
+      <ConfirmModal
         isOpen={deleteOpen}
         loading={deleting}
         onClose={closeDelete}

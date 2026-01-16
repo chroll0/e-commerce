@@ -7,7 +7,7 @@ import type { ProductApi } from "@/types";
 import {
   ProductsFilters,
   ProductsTable,
-  DeleteProductModal,
+  ConfirmModal,
   AdminPageHeader,
 } from "@/components";
 
@@ -62,7 +62,7 @@ const AdminProductsPage = () => {
         onDelete={setDeleteTarget}
       />
 
-      <DeleteProductModal
+      <ConfirmModal
         isOpen={!!deleteTarget}
         loading={deleting}
         onClose={() => setDeleteTarget(null)}

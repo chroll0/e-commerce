@@ -7,7 +7,7 @@ import {
   AdminPageHeader,
   buildTree,
   CategoriesTable,
-  DeleteCategoryModal,
+  ConfirmModal,
   flattenTree,
 } from "@/components";
 import { CategoryApi, Locale } from "@/types";
@@ -126,10 +126,9 @@ export default function AdminCategoriesPage() {
         {t("tips.hierarchy")}
       </div>
 
-      <DeleteCategoryModal
+      <ConfirmModal
         isOpen={deleteOpen}
         loading={deleteLoading}
-        categoryName={target?.name}
         onClose={closeDelete}
         onConfirm={confirmDelete}
         title={t("modal.deleteTitle")}

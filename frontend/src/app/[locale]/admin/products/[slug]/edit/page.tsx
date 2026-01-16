@@ -10,7 +10,7 @@ import type {
   ProductApi,
   ProductFormValues,
 } from "@/types";
-import { ProductForm, DeleteProductModal } from "@/components";
+import { ProductForm, ConfirmModal } from "@/components";
 
 type CategoryApi = {
   id: number;
@@ -276,7 +276,7 @@ export default function AdminEditProductPage() {
         </button>
       </div>
 
-      <DeleteProductModal
+      <ConfirmModal
         isOpen={deleteOpen}
         loading={deleting}
         onClose={closeDelete}
