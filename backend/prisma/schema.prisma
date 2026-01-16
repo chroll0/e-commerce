@@ -51,7 +51,7 @@ model CategoryTranslation {
   locale     String   // "en" | "ka"
   name       String
 
-  category   Category @relation(fields: [categoryId], references: [id])
+category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@unique([categoryId, locale])
   @@index([locale])
@@ -89,7 +89,7 @@ model ProductTranslation {
   title       String
   description String
 
-  product     Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([productId, locale])
   @@index([locale])

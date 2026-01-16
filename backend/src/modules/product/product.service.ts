@@ -104,23 +104,35 @@ export class ProductService {
     });
   }
 
-  async findOne(id: number, locale: Locale = "en") {
+  async findBySlug(slug: string, locale?: Locale) {
+    return this.prisma.product.findUnique({
+      where: { slug },
+      include: {
+        translations: locale ? { where: { locale } } : true,
+        category: {
+          include: {
+            translations: locale ? { where: { locale } } : true,
+          },
+        },
+      },
+    });
+  }
+
+  async findOne(id: number, locale?: Locale) {
     const product = await this.prisma.product.findUnique({
       where: { id },
       include: {
+        translations: locale ? { where: { locale } } : true,
         category: {
           include: {
-            translations: { where: { locale } },
+            translations: locale ? { where: { locale } } : true,
           },
         },
-        translations: { where: { locale } },
       },
     });
 
-    if (!product) {
+    if (!product)
       throw new NotFoundException(`Product with id ${id} not found`);
-    }
-
     return product;
   }
 
@@ -131,8 +143,6 @@ export class ProductService {
     const enTitle = dto.translations?.find((t) => t.locale === "en")?.title;
     const slug = dto.slug ?? (enTitle ? this.slugify(enTitle) : undefined);
 
-    // translations: upsert with safety
-    // rule: if translation row doesn't exist yet, create requires BOTH title + description
     let translationOps:
       | {
           upsert: {
@@ -144,7 +154,6 @@ export class ProductService {
       | undefined;
 
     if (dto.translations?.length) {
-      // find existing locales for this product
       const existing = await this.prisma.productTranslation.findMany({
         where: { productId: id },
         select: { locale: true },

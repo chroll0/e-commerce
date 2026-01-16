@@ -4,10 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { api } from "@/lib/axios";
 import {
+  AdminPageHeader,
   buildTree,
-  CategoriesHeader,
   CategoriesTable,
-  DeleteCategoryModal,
+  ConfirmModal,
   flattenTree,
 } from "@/components";
 import { CategoryApi, Locale } from "@/types";
@@ -86,11 +86,11 @@ export default function AdminCategoriesPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <CategoriesHeader
-        locale={locale}
+    <>
+      <AdminPageHeader
         title={t("title")}
         description={t("description")}
+        addHref={`/${locale}/admin/categories/new`}
         addLabel={t("actions.add")}
       />
 
@@ -126,10 +126,9 @@ export default function AdminCategoriesPage() {
         {t("tips.hierarchy")}
       </div>
 
-      <DeleteCategoryModal
+      <ConfirmModal
         isOpen={deleteOpen}
         loading={deleteLoading}
-        categoryName={target?.name}
         onClose={closeDelete}
         onConfirm={confirmDelete}
         title={t("modal.deleteTitle")}
@@ -139,6 +138,6 @@ export default function AdminCategoriesPage() {
           deleteLoading ? t("modal.deleting") : t("actions.confirmDelete")
         }
       />
-    </div>
+    </>
   );
 }

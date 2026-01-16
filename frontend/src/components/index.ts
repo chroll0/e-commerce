@@ -13,11 +13,12 @@ export { default as Logo } from "./ui/Logo";
 export { default as Tooltip } from "./ui/Tooltip";
 export { default as Advertisement } from "./ui/Advertisement";
 
-// Navbar components
-// export { default as NavBar } from "./navbar/NavBar";
-// export { default as CategoryDropdown } from "./navbar/CategoryDropdown";
-// export { default as SearchBar } from "./navbar/SearchBar";
-// export { default as NavIcons } from "./navbar/NavIcons";
+// Navigation components
+export { default as NavBar } from "./navigation/NavBar";
+export { default as AuthActions } from "./navigation/AuthActions";
+export { default as CategoryDropdown } from "./navigation/CategoryDropdown";
+export { default as ThemeToggle } from "./navigation/ThemeToggle";
+export { default as SearchBar } from "./navigation/SearchBar";
 
 // Home page components
 export { default as Hero } from "./home/Hero";
@@ -34,15 +35,9 @@ export { default as Navigation } from "./layout/Navigation";
 export { default as Footer } from "./layout/Footer";
 
 // Other components
-export { default as CategoryDropdown } from "./navigation/CategoryDropdown";
-export { default as ThemeToggle } from "./navigation/ThemeToggle";
-export { default as AuthActions } from "./navigation/AuthActions";
-export { default as SearchBar } from "./navigation/SearchBar";
-export { default as NavBar } from "./navigation/NavBar";
 
-// Admin components
-export { default as SidebarLink } from "./admin/SidebarLink";
-export { AdminSidebar } from "./admin/AdminSidebar";
+// Footer components
+export { default as LanguageSwitcher } from "./footer/LanguageSwitcher";
 
 // Account components
 export { default as AccountNav } from "./account/AccountNav";
@@ -51,15 +46,19 @@ export { default as AccountProfileCard } from "./account/AccountProfileCard";
 export { default as AccountHeader } from "./account/AccountHeader";
 export { default as AccountQuickActions } from "./account/AccountQuickActions";
 
+// Admin common components
+export { default as SidebarLink } from "./admin/common/SidebarLink";
+export { AdminSidebar } from "./admin/common/AdminSidebar";
+export { default as AdminPageHeader } from "./admin/common/AdminPageHeader";
+export { default as ConfirmModal } from "./admin/common/ConfirmModal";
+
 // Category management components
-export { default as CategoriesHeader } from "./admin/categories/CategoriesHeader";
 export { default as CategoriesTable } from "./admin/categories/CategoriesTable";
-export { default as DeleteCategoryModal } from "./admin/categories/DeleteCategoryModal";
+export { default as CategoryForm } from "./admin/categories/CategoryForm";
+export { default as TreeLines } from "./admin/categories/TreeLines";
 export { buildTree } from "./admin/categories/categoryTree";
 export { flattenTree } from "./admin/categories/categoryTree";
 export { buildIndentedOptions, slugify } from "./admin/categories/formOptions";
-export { default as CategoryForm } from "./admin/categories/CategoryForm";
-export { default as TreeLines } from "./admin/categories/TreeLines";
 
 // Product management components
 export { default as ProductContentFields } from "./admin/products/ProductContentFields";
@@ -67,11 +66,6 @@ export { default as ProductForm } from "./admin/products/ProductForm";
 export { default as ProductImagesFields } from "./admin/products/ProductImagesFields";
 export { default as ProductMetaFields } from "./admin/products/ProductMetaFields";
 export { default as ProductPricingFields } from "./admin/products/ProductPricingFields";
-export { default as DeleteProductModal } from "./admin/products/DeleteProductModal";
 export { default as ProductRow } from "./admin/products/ProductRow";
-export { default as ProductsHeader } from "./admin/products/ProductsHeader";
 export { default as ProductsTable } from "./admin/products/ProductsTable";
 export { default as ProductsFilters } from "./admin/products/ProductsFilters";
-
-// Footer components
-export { default as LanguageSwitcher } from "./footer/LanguageSwitcher";

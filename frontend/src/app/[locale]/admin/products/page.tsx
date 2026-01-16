@@ -5,10 +5,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { api } from "@/lib/axios";
 import type { ProductApi } from "@/types";
 import {
-  ProductsHeader,
   ProductsFilters,
   ProductsTable,
-  DeleteProductModal,
+  ConfirmModal,
+  AdminPageHeader,
 } from "@/components";
 
 const AdminProductsPage = () => {
@@ -42,10 +42,10 @@ const AdminProductsPage = () => {
 
   return (
     <div className="space-y-6">
-      <ProductsHeader
-        locale={locale}
+      <AdminPageHeader
         title={t("title")}
         description={t("description")}
+        addHref={`/${locale}/admin/products/new`}
         addLabel={t("actions.add")}
       />
 
@@ -62,7 +62,7 @@ const AdminProductsPage = () => {
         onDelete={setDeleteTarget}
       />
 
-      <DeleteProductModal
+      <ConfirmModal
         isOpen={!!deleteTarget}
         loading={deleting}
         onClose={() => setDeleteTarget(null)}

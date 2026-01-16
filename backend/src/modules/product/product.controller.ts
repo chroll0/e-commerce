@@ -46,8 +46,13 @@ export class ProductController {
     return this.productService.findAll(
       search,
       categorySlug,
-      parseLocale(locale) ?? "en"
+      parseLocale(locale)
     );
+  }
+
+  @Get("slug/:slug")
+  findBySlug(@Param("slug") slug: string, @Query("locale") locale?: string) {
+    return this.productService.findBySlug(slug, parseLocale(locale));
   }
 
   @Get(":id")
@@ -55,7 +60,7 @@ export class ProductController {
     @Param("id", ParseIntPipe) id: number,
     @Query("locale") locale?: string
   ) {
-    return this.productService.findOne(id, parseLocale(locale) ?? "en");
+    return this.productService.findOne(id, parseLocale(locale));
   }
 
   @Patch(":id")
