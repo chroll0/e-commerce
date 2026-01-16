@@ -28,7 +28,6 @@ export default function AdminEditProductPage() {
 
   const [id, setId] = useState<number | null>(null);
 
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -58,7 +57,6 @@ export default function AdminEditProductPage() {
 
   const load = async () => {
     try {
-      setLoading(true);
       setError("");
       setFieldErrors({});
 
@@ -104,7 +102,6 @@ export default function AdminEditProductPage() {
       setError(e?.response?.data?.message || t("errors.loadEdit"));
     } finally {
       setLoadingCats(false);
-      setLoading(false);
     }
   };
 
@@ -197,7 +194,6 @@ export default function AdminEditProductPage() {
 
   const confirmDelete = async () => {
     if (!id) return;
-
     try {
       setDeleting(true);
       await api.delete(`/products/${id}`);
@@ -209,14 +205,6 @@ export default function AdminEditProductPage() {
       setDeleteOpen(false);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="max-w-3xl mx-auto p-6 text-sm text-muted-foreground">
-        {t("form.buttons.loading")}
-      </div>
-    );
-  }
 
   return (
     <>
