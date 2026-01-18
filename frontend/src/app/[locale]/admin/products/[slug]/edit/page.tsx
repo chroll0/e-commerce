@@ -10,7 +10,7 @@ import type {
   ProductApi,
   ProductFormValues,
 } from "@/types";
-import { ProductForm, ConfirmModal } from "@/components";
+import { ProductForm } from "@/components";
 
 type CategoryApi = {
   id: number;
@@ -50,10 +50,6 @@ export default function AdminEditProductPage() {
     isFeatured: false,
     images: [""],
   });
-
-  // delete modal state
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleting, setDeleting] = useState(false);
 
   const load = async () => {
     try {
@@ -186,26 +182,6 @@ export default function AdminEditProductPage() {
     }
   };
 
-  const openDelete = () => setDeleteOpen(true);
-  const closeDelete = () => {
-    if (deleting) return;
-    setDeleteOpen(false);
-  };
-
-  const confirmDelete = async () => {
-    if (!id) return;
-    try {
-      setDeleting(true);
-      await api.delete(`/products/${id}`);
-      router.push(`/${locale}/admin/products`);
-    } catch (e: any) {
-      setError(e?.response?.data?.message || t("errors.delete"));
-    } finally {
-      setDeleting(false);
-      setDeleteOpen(false);
-    }
-  };
-
   return (
     <>
       {error && (
@@ -246,35 +222,10 @@ export default function AdminEditProductPage() {
           addImage: t("form.fields.addImage"),
           imageUrl: t("form.fields.imageUrl"),
           remove: t("form.fields.remove"),
-          cancel: t("actions.cancel"),
-          submit: t("form.buttons.submitEdit"),
+          cancel: t("actions.back"),
+          submit: t("actions.save"),
           submitting: t("form.buttons.submitting"),
         }}
-      />
-
-      {/* delete button under form */}
-      <div className="max-w-3xl mx-auto px-6 pb-6 flex justify-end">
-        <button
-          type="button"
-          onClick={openDelete}
-          className="text-sm text-destructive hover:opacity-80"
-          disabled={deleting}
-        >
-          {deleting ? t("modal.deleting") : t("actions.delete")}
-        </button>
-      </div>
-
-      <ConfirmModal
-        isOpen={deleteOpen}
-        loading={deleting}
-        onClose={closeDelete}
-        onConfirm={confirmDelete}
-        title={t("modal.deleteTitle")}
-        description={t("modal.deleteDescription", {
-          name: initialValues.titleEn || initialValues.slug,
-        })}
-        cancelLabel={t("actions.cancel")}
-        confirmLabel={deleting ? t("modal.deleting") : t("actions.delete")}
       />
     </>
   );
