@@ -177,7 +177,7 @@
       },
       "table": {
         "title": "სათაური",
-        "slug": "Slug",
+        "slug": "მისამართი",
         "price": "ფასი",
         "stock": "მარაგი",
         "category": "კატეგორია",
@@ -204,7 +204,7 @@
           "category": "კატეგორია",
           "selectCategory": "აირჩიე კატეგორია",
           "featured": "რჩეული",
-          "featuredHint": "გამოაჩინე ეს პროდუქტი Featured სექციებში.",
+          "featuredHint": "გამოაჩინე ეს პროდუქტი რჩეულ სექციებში.",
           "imagesTitle": "სურათები (URL)",
           "addImage": "სურათის დამატება",
           "imageUrl": "სურათის URL",

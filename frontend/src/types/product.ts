@@ -1,4 +1,5 @@
 export type ProductTranslation = {
+  name?: string;
   locale: "en" | "ka";
   title: string;
   description: string;
@@ -27,11 +28,16 @@ export type CategoryOption = { id: number; name: string };
 
 export type ProductApi = {
   id: number;
+  name: string;
   slug: string;
   price: number;
   oldPrice: number | null;
   discount: number | null;
   stock: number;
+  category?: {
+    id: number;
+    translations: ProductTranslation[];
+  };
   categoryId: number;
   isFeatured: boolean;
   images: string[];
