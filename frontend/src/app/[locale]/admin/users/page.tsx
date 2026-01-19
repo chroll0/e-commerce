@@ -1,36 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { api } from "@/lib/axios";
-import { Button } from "@/components";
+import { Button, ConfirmModal } from "@/components";
 import { Trash2 } from "lucide-react";
-
-type UserRole = "USER" | "ADMIN";
-
-type UserApi = {
-  id: number;
-  name: string | null;
-  email: string;
-  phone: string | null;
-  role: UserRole;
-  createdAt?: string;
-};
+import { UserApi } from "@/types";
 
 export default function AdminUsersPage() {
-  const locale = useLocale();
   const t = useTranslations("admin.users");
+
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<UserApi[]>([]);
   const [error, setError] = useState<string>("");
-  const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  // modal state
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selected, setSelected] = useState<UserApi | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = async () => {
     try {
       setError("");
       setLoading(true);
 
-      // NOTE: დარწმუნდი რომ ეს endpoint აბრუნებს user list-ს (admin only)
       const res = await api.get<UserApi[]>("/users");
       setUsers(res.data ?? []);
     } catch (err: any) {
@@ -45,29 +38,37 @@ export default function AdminUsersPage() {
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onDelete = async (u: UserApi) => {
-    const ok = confirm(
-      `Delete user "${u.email}"? This action cannot be undone.`,
-    );
-    if (!ok) return;
+  const openDelete = (u: UserApi) => {
+    setSelected(u);
+    setDeleteOpen(true);
+  };
+
+  const closeDelete = () => {
+    if (deleting) return;
+    setDeleteOpen(false);
+    setSelected(null);
+  };
+
+  const confirmDelete = async () => {
+    if (!selected) return;
 
     try {
-      setDeletingId(u.id);
+      setDeleting(true);
       setError("");
 
-      await api.delete(`/users/${u.id}`);
+      await api.delete(`/users/${selected.id}`);
 
-      // optimistic remove
-      setUsers((prev) => prev.filter((x) => x.id !== u.id));
+      setUsers((prev) => prev.filter((x) => x.id !== selected.id));
+      setDeleteOpen(false);
+      setSelected(null);
     } catch (err: any) {
       const msg =
         err?.response?.data?.message || err?.message || "Failed to delete user";
       setError(msg);
     } finally {
-      setDeletingId(null);
+      setDeleting(false);
     }
   };
 
@@ -75,14 +76,12 @@ export default function AdminUsersPage() {
     <div className="max-w-5xl mx-auto p-6 space-y-4">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold">{t?.("title") ?? "Users"}</h1>
-          <p className="text-sm text-muted-foreground">
-            {t?.("description") ?? "Manage users of your store."}
-          </p>
+          <h1 className="text-2xl font-semibold">{t("title")}</h1>
+          <p className="text-sm text-muted-foreground">{t("description")}</p>
         </div>
 
         <Button variant="secondary" onClick={load} disabled={loading}>
-          {t?.("table.refresh") ?? "Refresh"}
+          {t("table.refresh")}
         </Button>
       </div>
 
@@ -94,21 +93,19 @@ export default function AdminUsersPage() {
 
       {loading ? (
         <div className="text-sm text-muted-foreground py-6">
-          {t?.("table.loading") ?? "Loading..."}
+          {t("table.loading")}
         </div>
       ) : users.length === 0 ? (
         <div className="text-sm text-muted-foreground py-6">
-          {t?.("table.empty") ?? "No users found."}
+          {t("table.empty")}
         </div>
       ) : (
         <div className="rounded-xl border border-border overflow-hidden">
           <div className="grid grid-cols-12 px-4 py-3 text-xs font-medium text-muted-foreground border-b">
-            <div className="col-span-4">{t?.("table.email") ?? "Email"}</div>
-            <div className="col-span-3">{t?.("table.name") ?? "Name"}</div>
-            <div className="col-span-2">{t?.("table.role") ?? "Role"}</div>
-            <div className="col-span-3 text-right">
-              {t?.("table.actions") ?? "Actions"}
-            </div>
+            <div className="col-span-4">{t("table.email")}</div>
+            <div className="col-span-3">{t("table.name")}</div>
+            <div className="col-span-2">{t("table.role")}</div>
+            <div className="col-span-3 text-right">{t("table.actions")}</div>
           </div>
 
           {users.map((u) => (
@@ -129,16 +126,17 @@ export default function AdminUsersPage() {
                 {u.name ?? "—"}
               </div>
 
-              <div className="col-span-2 text-sm">{u.role}</div>
+              <div className="col-span-2 text-sm">
+                {u.role === "ADMIN" ? t("roles.admin") : t("roles.user")}
+              </div>
 
               <div className="col-span-3 flex justify-end">
                 <Button
                   size="xs"
                   variant="tertiary"
                   className="text-destructive"
-                  onClick={() => onDelete(u)}
-                  disabled={deletingId === u.id}
-                  title={t?.("actions.delete") ?? "Delete"}
+                  onClick={() => openDelete(u)}
+                  title={t("actions.delete")}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -147,6 +145,28 @@ export default function AdminUsersPage() {
           ))}
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={deleteOpen}
+        onClose={closeDelete}
+        title={t("confirm.title")}
+        description={
+          <div className="space-y-2">
+            {selected && (
+              <div className="font-semibold text-destructive">
+                {selected.email}
+              </div>
+            )}
+            <div className="text-sm text-muted-foreground">
+              {t("confirm.description")}
+            </div>
+          </div>
+        }
+        confirmLabel={t("actions.delete")}
+        cancelLabel={t("actions.cancel")}
+        loading={deleting}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 }
