@@ -321,6 +321,28 @@
         "slugRequired": "Slug is required",
         "invalidParent": "Invalid parent"
       }
+    },
+
+    "users": {
+      "title": "User Management",
+      "description": "View and manage users of your store.",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "joined": "Joined",
+        "actions": "Actions",
+        "empty": "No users found.",
+        "loading": "Loading...",
+        "refresh": "Refresh"
+      },
+      "roles": {
+        "user": "User",
+        "admin": "Admin"
+      },
+      "errors": {
+        "load": "Failed to load users. Try again."
+      }
     }
   },
 
