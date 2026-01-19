@@ -159,12 +159,10 @@
       "categories": "Categories",
       "categoriesAll": "Manage All",
       "categoriesAdd": "Add new",
-      "orders": "Orders",
       "users": "Users",
-      "inventory": "Inventory",
-      "payments": "Payments",
-      "paymentsList": "Payment Records",
-      "failedPayments": "Failed Payments"
+      "orders": "Orders",
+      "ordersAll": "All Orders",
+      "paymentsList": "Payment records"
     },
 
     "products": {

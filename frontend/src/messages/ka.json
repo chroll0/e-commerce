@@ -157,12 +157,10 @@
       "categories": "კატეგორიები",
       "categoriesAll": "ყველას მართვა",
       "categoriesAdd": "ახლის დამატება",
-      "orders": "შეკვეთები",
       "users": "მომხმარებლები",
-      "inventory": "მარაგი",
-      "payments": "გადახდები",
-      "paymentsList": "გადახდების ჩანაწერები",
-      "failedPayments": "პრობლემური გადახდები"
+      "orders": "შეკვეთები",
+      "ordersAll": "ყველა შეკვეთა",
+      "paymentsList": "გადახდების სია"
     },
 
     "products": {
@@ -345,7 +343,7 @@
       },
       "roles": {
         "user": "მომხმარებელი",
-        "admin": "ადმინ"
+        "admin": "ადმინი"
       }
     }
   },
