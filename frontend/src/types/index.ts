@@ -16,3 +16,5 @@ export type {
 } from "@/types/product";
 
 export type { SelectOption } from "@/types/common";
+
+export type { UserApi, UserRole } from "@/types/user";

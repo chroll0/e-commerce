@@ -27,16 +27,14 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
       { key: "categoriesAdd", href: "/admin/categories/new" },
     ],
   },
-  { key: "orders", href: "/admin/orders" },
   {
-    key: "payments",
+    key: "orders",
     children: [
-      { key: "paymentsList", href: "/admin/payments" },
-      { key: "failedPayments", href: "/admin/payments/failed" },
+      { key: "ordersAll", href: "/admin/orders" },
+      { key: "paymentsList", href: "/admin/orders/payments" },
     ],
   },
   { key: "users", href: "/admin/users" },
-  { key: "inventory", href: "/admin/inventory" },
 ];
 
 function getParentPrefix(children: { href: string }[]) {
