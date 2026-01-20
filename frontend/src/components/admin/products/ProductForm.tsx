@@ -83,7 +83,7 @@ const ProductForm: FC<ProductProps> = ({
   const slugReg = register("slug");
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-6">
       <div className="mb-6">
         <AdminPageHeader title={title} description={description} />
       </div>
@@ -126,6 +126,8 @@ const ProductForm: FC<ProductProps> = ({
         <ProductPricingFields
           register={register}
           errors={rhfErrors}
+          watch={watch}
+          setValue={setValue}
           labels={{
             price: labels.price,
             oldPrice: labels.oldPrice,

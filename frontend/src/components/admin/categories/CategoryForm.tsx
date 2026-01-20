@@ -34,7 +34,6 @@ const CategoryForm: FC<CategoryProps> = ({
   parentLabel,
   noParentLabel,
   loadingLabel,
-  nameCardTitle,
   nameEnLabel,
   nameKaLabel,
   slugLabel,
@@ -103,8 +102,12 @@ const CategoryForm: FC<CategoryProps> = ({
         </div>
       )}
 
-      <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-6 rounded-2xl border border-border p-6"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <FormInput<FormValues>
             name="nameEn"
             label={nameEnLabel}
@@ -124,7 +127,7 @@ const CategoryForm: FC<CategoryProps> = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <FormInput<FormValues>
             name="slug"
             label={slugLabel}

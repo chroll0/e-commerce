@@ -1,6 +1,5 @@
 "use client";
 
-import { FC } from "react";
 import type {
   FieldErrors,
   FieldValues,
@@ -26,7 +25,6 @@ const getErrorMessage = <T extends FieldValues>(
 ) => {
   if (!errors) return undefined;
 
-  // supports dot-paths like "user.email"
   const parts = String(name).split(".");
   let current: any = errors;
 

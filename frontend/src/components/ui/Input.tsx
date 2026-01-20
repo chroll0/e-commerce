@@ -39,50 +39,68 @@ const Input: FC<InputProps> = ({
   const inputId = id ?? autoId;
   const errorId = `${inputId}-error`;
 
-  const baseStyles =
-    "flex items-center gap-2 bg-transparent border-b-2 transition-colors duration-200 focus-within:outline-none";
-
   const borderState = error
     ? "border-red-500"
     : success
       ? "border-green-500"
       : "border-border focus-within:border-blue-500";
 
-  const sizeStyles = {
-    sm: "pb-1 pt-0.5 text-sm",
-    md: "pb-2 pt-1 text-base",
-    lg: "pb-3 pt-1.5 text-lg",
-  };
-
   const widthStyles = fullWidth ? "w-full" : "";
+
+  const sizeStyles = {
+    sm: { wrap: "py-1", input: "pt-4 pb-1 text-sm", label: "text-xs" },
+    md: { wrap: "py-1.5", input: "pt-5 pb-2 text-base", label: "text-sm" },
+    lg: { wrap: "py-2", input: "pt-6 pb-3 text-lg", label: "text-md" },
+  }[size];
 
   return (
     <div className={classNames("flex flex-col gap-1", widthStyles)}>
-      {label && (
-        <label htmlFor={inputId} className="text-md font-medium text-secondary">
-          {label}
-        </label>
-      )}
-
+      {/* wrapper */}
       <div
         className={classNames(
-          baseStyles,
-          sizeStyles[size],
+          "relative flex items-center gap-2 bg-transparent border-b-2 transition-colors duration-200",
+          sizeStyles.wrap,
           borderState,
           className,
         )}
       >
         {leftIcon && <span className="text-secondary">{leftIcon}</span>}
 
+        {/* input */}
         <input
           id={inputId}
-          className="flex-1 bg-transparent outline-none placeholder:text-secondary"
+          className={classNames(
+            "peer flex-1 bg-transparent outline-none placeholder:text-transparent",
+            sizeStyles.input,
+          )}
           type={passwordToggle ? (showPassword ? "text" : "password") : type}
+          placeholder=" " // აუცილებელია floating label-სთვის
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
           {...props}
         />
 
+        {/* floating label */}
+        {label && (
+          <label
+            htmlFor={inputId}
+            className={classNames(
+              "pointer-events-none absolute left-0",
+              leftIcon ? "ml-7" : "ml-0",
+              "text-secondary transition-all duration-200",
+              // default: შიგნით, placeholder ჩანს (ცარიელია)
+              "top-1/2 -translate-y-1/2",
+              // როცა focus ან value (placeholder აღარ ჩანს) → ზემოთ ადის
+              "peer-focus:top-1 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-foreground",
+              "peer-[:not(:placeholder-shown)]:top-1 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs",
+              sizeStyles.label,
+            )}
+          >
+            {label}
+          </label>
+        )}
+
+        {/* password toggle */}
         {passwordToggle && (
           <button
             type="button"
