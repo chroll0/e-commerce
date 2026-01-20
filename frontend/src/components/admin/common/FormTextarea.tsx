@@ -59,7 +59,7 @@ const FormTextarea = <T extends FieldValues>({
       <textarea
         className={classNames(
           "mt-2 w-full min-h-[140px] rounded-lg border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
-          message ? "border-destructive" : "border-border",
+          message ? "border-red-500" : "border-border",
           className,
         )}
         {...register(name, rules)}
@@ -67,7 +67,7 @@ const FormTextarea = <T extends FieldValues>({
       />
 
       {message && (
-        <p className="text-xs text-destructive mt-1 leading-tight">{message}</p>
+        <p className="text-xs text-red-500 mt-1 leading-tight">{message}</p>
       )}
     </div>
   );

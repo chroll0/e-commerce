@@ -63,7 +63,7 @@ const ProductMetaFields: FC<Props> = ({
         </select>
 
         {errors.categoryId?.message && (
-          <p className="mt-1 text-xs text-destructive leading-tight">
+          <p className="mt-1 text-xs text-red-500 leading-tight">
             {String(errors.categoryId.message)}
           </p>
         )}

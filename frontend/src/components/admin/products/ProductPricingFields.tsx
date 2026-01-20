@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useMemo } from "react";
+import { FC, useEffect } from "react";
 import type {
   FieldErrors,
   UseFormRegister,
@@ -10,15 +10,31 @@ import type {
 import type { ProductFormValues } from "@/types";
 import { FormInput } from "@/components";
 
-type Props = {
-  register: UseFormRegister<ProductFormValues>;
-  errors: FieldErrors<ProductFormValues>;
-  watch: UseFormWatch<ProductFormValues>;
-  setValue: UseFormSetValue<ProductFormValues>;
-  labels: { price: string; oldPrice: string; discount: string };
+const sanitizeMoney = (input: string) => {
+  let v = input.replace(/[^\d.]/g, "");
+
+  const firstDot = v.indexOf(".");
+  if (firstDot !== -1) {
+    v = v.slice(0, firstDot + 1) + v.slice(firstDot + 1).replace(/\./g, "");
+  }
+
+  const [i, d] = v.split(".");
+  if (d != null) v = `${i}.${d.slice(0, 2)}`;
+
+  if (v.startsWith("0") && !v.startsWith("0.") && v.length > 1) {
+    v = v.replace(/^0+/, "");
+    if (v === "") v = "0";
+  }
+
+  return v;
 };
 
-const onlyDigits = (v: string) => v.replace(/[^\d]/g, "");
+const formatMoney = (raw: string) => {
+  if (!raw) return "";
+  const [i, d] = raw.split(".");
+  const intFormatted = i.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return d != null && d.length ? `${intFormatted}.${d}` : intFormatted;
+};
 
 const calcDiscount = (price: number, oldPrice: number) => {
   if (!price || !oldPrice) return "";
@@ -28,6 +44,14 @@ const calcDiscount = (price: number, oldPrice: number) => {
   return String(Math.max(0, Math.min(100, pct)));
 };
 
+type Props = {
+  register: UseFormRegister<ProductFormValues>;
+  errors: FieldErrors<ProductFormValues>;
+  watch: UseFormWatch<ProductFormValues>;
+  setValue: UseFormSetValue<ProductFormValues>;
+  labels: { price: string; oldPrice: string; discount: string };
+};
+
 const ProductPricingFields: FC<Props> = ({
   register,
   errors,
@@ -35,26 +59,20 @@ const ProductPricingFields: FC<Props> = ({
   setValue,
   labels,
 }) => {
-  const price = watch("price");
-  const oldPrice = watch("oldPrice");
+  const priceRaw = watch("price") ?? "";
+  const oldRaw = watch("oldPrice") ?? "";
 
   useEffect(() => {
-    const p = Number(price);
-    const op = Number(oldPrice);
-    if (!price || !oldPrice || Number.isNaN(p) || Number.isNaN(op)) {
-      setValue("discount", "", { shouldValidate: true, shouldDirty: true });
+    const p = Number(priceRaw);
+    const op = Number(oldRaw);
+
+    if (!priceRaw || !oldRaw || Number.isNaN(p) || Number.isNaN(op)) {
+      setValue("discount", "", { shouldDirty: true });
       return;
     }
 
-    setValue("discount", calcDiscount(p, op), {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-  }, [price, oldPrice, setValue]);
-
-  const priceReg = register("price");
-  const oldPriceReg = register("oldPrice");
-  const discountReg = register("discount");
+    setValue("discount", calcDiscount(p, op), { shouldDirty: true });
+  }, [priceRaw, oldRaw, setValue]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -62,28 +80,23 @@ const ProductPricingFields: FC<Props> = ({
         name="price"
         label={labels.price}
         type="text"
-        inputMode="numeric"
+        inputMode="decimal"
         fullWidth
         register={register}
         errors={errors}
-        onChange={(e) => {
-          e.target.value = onlyDigits(e.target.value);
-          priceReg.onChange(e);
-        }}
+        transform={sanitizeMoney}
+        onBlur={() => {}}
       />
 
       <FormInput<ProductFormValues>
         name="oldPrice"
         label={labels.oldPrice}
         type="text"
-        inputMode="numeric"
+        inputMode="decimal"
         fullWidth
         register={register}
         errors={errors}
-        onChange={(e) => {
-          e.target.value = onlyDigits(e.target.value);
-          oldPriceReg.onChange(e);
-        }}
+        transform={sanitizeMoney}
       />
 
       <FormInput<ProductFormValues>
@@ -95,10 +108,6 @@ const ProductPricingFields: FC<Props> = ({
         register={register}
         errors={errors}
         readOnly
-        onChange={(e) => {
-          e.target.value = onlyDigits(e.target.value);
-          discountReg.onChange(e);
-        }}
       />
     </div>
   );
