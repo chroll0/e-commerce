@@ -21,20 +21,17 @@ type CategoryApi = {
 export default function AdminEditProductPage() {
   const router = useRouter();
   const locale = useLocale() as Locale;
-  const params = useParams<{ slug: string }>();
-  const slugParam = params.slug;
-
+  const { slug } = useParams<{ slug: string }>();
   const t = useTranslations("admin.products");
 
   const [id, setId] = useState<number | null>(null);
 
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
   const [categories, setCategories] = useState<SelectOption[]>([]);
   const [loadingCats, setLoadingCats] = useState(false);
-
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const [initialValues, setInitialValues] = useState<ProductFormValues>({
     titleEn: "",
@@ -53,11 +50,11 @@ export default function AdminEditProductPage() {
 
   const load = async () => {
     try {
+      setLoading(true);
       setError("");
-      setFieldErrors({});
 
       // 1) product by slug
-      const productRes = await api.get(`/products/slug/${slugParam}`);
+      const productRes = await api.get(`/products/slug/${slug}`);
       const product = productRes.data as ProductApi;
 
       setId(product.id);
@@ -85,66 +82,32 @@ export default function AdminEditProductPage() {
 
       // 2) categories for dropdown
       setLoadingCats(true);
+
       const catRes = await api.get(`/categories?locale=${locale}`);
       const data = (catRes.data ?? []) as CategoryApi[];
 
-      const opts: SelectOption[] = data.map((c) => ({
-        id: c.id,
-        name: c.translations?.[0]?.name ?? c.slug,
-      }));
-
-      setCategories(opts);
+      setCategories(
+        data.map((c) => ({
+          id: c.id,
+          name: c.translations?.[0]?.name ?? c.slug,
+        })),
+      );
     } catch (e: any) {
       setError(e?.response?.data?.message || t("errors.loadEdit"));
     } finally {
       setLoadingCats(false);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!slugParam) return;
+    if (!slug) return;
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slugParam, locale]);
-
-  const validate = (v: ProductFormValues, cleanImages: string[]) => {
-    const next: Record<string, string> = {};
-
-    if (!v.titleEn.trim()) next.titleEn = t("errors.titleEn");
-    if (!v.descEn.trim()) next.descEn = t("errors.descEn");
-    if (!v.titleKa.trim()) next.titleKa = t("errors.titleKa");
-    if (!v.descKa.trim()) next.descKa = t("errors.descKa");
-    if (!v.slug.trim()) next.slug = t("errors.slug");
-
-    const p = Number(v.price);
-    if (!v.price || Number.isNaN(p) || p <= 0) next.price = t("errors.price");
-
-    const s = Number(v.stock);
-    if (v.stock === "" || Number.isNaN(s) || s < 0)
-      next.stock = t("errors.stock");
-
-    if (!v.categoryId) next.categoryId = t("errors.category");
-
-    if (cleanImages.length < 1) next.images = t("errors.images");
-
-    if (v.oldPrice) {
-      const op = Number(v.oldPrice);
-      if (Number.isNaN(op) || op <= 0) next.oldPrice = t("errors.oldPrice");
-    }
-
-    if (v.discount) {
-      const d = Number(v.discount);
-      if (Number.isNaN(d) || d < 0 || d > 100)
-        next.discount = t("errors.discount");
-    }
-
-    setFieldErrors(next);
-    return Object.keys(next).length === 0;
-  };
+  }, [slug, locale]);
 
   const handleSubmit = async (v: ProductFormValues, cleanImages: string[]) => {
     if (!id) return;
-    if (!validate(v, cleanImages)) return;
 
     try {
       setSaving(true);
@@ -182,8 +145,16 @@ export default function AdminEditProductPage() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="max-w-3xl mx-auto p-6 text-sm text-muted-foreground">
+        {t("table.loading")}
+      </div>
+    );
+  }
+
   return (
-    <>
+    <div className="max-w-4xl mx-auto space-y-6">
       {error && (
         <div className="max-w-3xl mx-auto mt-6 px-6">
           <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
@@ -200,7 +171,6 @@ export default function AdminEditProductPage() {
         loadingCategories={loadingCats}
         initialValues={initialValues}
         submitting={saving}
-        errors={fieldErrors}
         onCancel={() => router.push(`/${locale}/admin/products`)}
         onSubmit={handleSubmit}
         labels={{
@@ -227,6 +197,6 @@ export default function AdminEditProductPage() {
           submitting: t("form.buttons.submitting"),
         }}
       />
-    </>
+    </div>
   );
 }

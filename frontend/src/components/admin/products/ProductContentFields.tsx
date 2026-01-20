@@ -1,16 +1,13 @@
 "use client";
 
 import { FC } from "react";
-import { Input } from "@/components";
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import type { ProductFormValues } from "@/types";
+import { FormInput, FormTextarea } from "@/components";
 
 type Props = {
-  values: ProductFormValues;
-  setField: <K extends keyof ProductFormValues>(
-    key: K,
-    value: ProductFormValues[K]
-  ) => void;
-  errors: Record<string, string>;
+  register: UseFormRegister<ProductFormValues>;
+  errors: FieldErrors<ProductFormValues>;
   labels: {
     boxTitle: string;
     titleEn: string;
@@ -20,70 +17,47 @@ type Props = {
   };
 };
 
-const ProductContentFields: FC<Props> = ({
-  values,
-  setField,
-  errors,
-  labels,
-}) => {
+const ProductContentFields: FC<Props> = ({ register, errors, labels }) => {
   return (
     <div className="rounded-2xl border border-border p-4 space-y-4">
       <h2 className="text-base font-semibold">{labels.boxTitle}</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <Input
-            label={labels.titleEn}
-            type="text"
-            value={values.titleEn}
-            onChange={(e) => setField("titleEn", e.target.value)}
-            fullWidth
-            required
-          />
-          {errors.titleEn && (
-            <p className="mt-2 text-sm text-destructive">{errors.titleEn}</p>
-          )}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <FormInput<ProductFormValues>
+          name="titleEn"
+          label={labels.titleEn}
+          type="text"
+          fullWidth
+          register={register}
+          errors={errors}
+        />
 
-        <div>
-          <Input
-            label={labels.titleKa}
-            type="text"
-            value={values.titleKa}
-            onChange={(e) => setField("titleKa", e.target.value)}
-            fullWidth
-            required
-          />
-          {errors.titleKa && (
-            <p className="mt-2 text-sm text-destructive">{errors.titleKa}</p>
-          )}
-        </div>
+        <FormInput<ProductFormValues>
+          name="titleKa"
+          label={labels.titleKa}
+          type="text"
+          fullWidth
+          register={register}
+          errors={errors}
+        />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="text-sm font-medium">{labels.descEn}</label>
-          <textarea
-            className="mt-2 w-full min-h-[140px] rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-            value={values.descEn}
-            onChange={(e) => setField("descEn", e.target.value)}
-          />
-          {errors.descEn && (
-            <p className="mt-2 text-sm text-destructive">{errors.descEn}</p>
-          )}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <FormTextarea<ProductFormValues>
+          name="descEn"
+          label={labels.descEn}
+          fullWidth
+          register={register}
+          errors={errors}
+        />
 
-        <div>
-          <label className="text-sm font-medium">{labels.descKa}</label>
-          <textarea
-            className="mt-2 w-full min-h-[140px] rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-            value={values.descKa}
-            onChange={(e) => setField("descKa", e.target.value)}
-          />
-          {errors.descKa && (
-            <p className="mt-2 text-sm text-destructive">{errors.descKa}</p>
-          )}
-        </div>
+        <FormTextarea<ProductFormValues>
+          name="descKa"
+          label={labels.descKa}
+          fullWidth
+          register={register}
+          errors={errors}
+        />
       </div>
     </div>
   );

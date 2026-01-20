@@ -201,7 +201,7 @@
           "slug": "Slug",
           "price": "Price",
           "oldPrice": "Old price (optional)",
-          "discount": "Discount % (optional)",
+          "discount": "Discount (0-100%)",
           "stock": "Stock",
           "category": "Category",
           "selectCategory": "Select category",
@@ -236,7 +236,7 @@
         "slug": "Slug is required",
         "price": "Price must be > 0",
         "oldPrice": "Old price must be > 0",
-        "discount": "Discount must be 0–100",
+        "discount": "Discount must be (0–100)%",
         "stock": "Stock must be ≥ 0",
         "category": "Category is required",
         "images": "At least 1 image URL is required"
@@ -297,7 +297,7 @@
         "nameKa": "Name (KA)",
         "slug": "Slug (URL)",
         "parent": "Parent category (optional)",
-        "noParent": "— No parent (root) —",
+        "noParent": "— No parent —",
         "image": "Image URL (optional)"
       },
       "placeholders": {

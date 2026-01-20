@@ -41,7 +41,7 @@ const AdminProductsPage = () => {
   }, [search, categoryId]);
 
   return (
-    <div className="space-y-6">
+    <>
       <AdminPageHeader
         title={t("title")}
         description={t("description")}
@@ -82,7 +82,7 @@ const AdminProductsPage = () => {
         cancelLabel={t("actions.cancel")}
         confirmLabel={t("actions.delete")}
       />
-    </div>
+    </>
   );
 };
 

@@ -160,7 +160,7 @@ export default function AdminEditCategoryPage() {
   const displayName = initialValues.nameEn || initialValues.slug || "";
 
   return (
-    <>
+    <div className="max-w-4xl mx-auto space-y-6">
       {error && (
         <div className="max-w-3xl mx-auto mt-6 px-6">
           <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
@@ -208,6 +208,6 @@ export default function AdminEditCategoryPage() {
           deleting ? t("modal.deleting") : t("actions.confirmDelete")
         }
       />
-    </>
+    </div>
   );
 }

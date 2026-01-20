@@ -1,17 +1,22 @@
 "use client";
 
 import { FC, useEffect, useMemo, useState } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useTranslations } from "next-intl";
+
 import {
   AdminPageHeader,
   Button,
-  Input,
   ProductContentFields,
   ProductImagesFields,
   ProductMetaFields,
   ProductPricingFields,
 } from "@/components";
+
 import type { ProductFormValues, ProductProps } from "@/types";
 import { slugify, cleanImageUrls } from "./productUtils";
+import { makeProductSchema } from "@/hooks/validation";
 
 const ProductForm: FC<ProductProps> = ({
   mode,
@@ -21,69 +26,69 @@ const ProductForm: FC<ProductProps> = ({
   loadingCategories = false,
   initialValues,
   submitting = false,
-  errors = {},
   onCancel,
   onSubmit,
   labels,
 }) => {
-  const [v, setV] = useState<ProductFormValues>(initialValues);
+  const t = useTranslations("admin.products");
+  const schema = useMemo(() => makeProductSchema(t), [t]);
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { errors: rhfErrors },
+  } = useForm<ProductFormValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      ...initialValues,
+      images: initialValues.images?.length ? initialValues.images : [""],
+    },
+    mode: "onSubmit",
+  });
+
+  const { append, remove } = useFieldArray<ProductFormValues>({
+    control,
+    name: "images" as never,
+  });
+
   const [slugTouched, setSlugTouched] = useState(mode === "edit");
 
   useEffect(() => {
-    setV(initialValues);
+    reset({
+      ...initialValues,
+      images: initialValues.images?.length ? initialValues.images : [""],
+    });
     setSlugTouched(mode === "edit");
-  }, [initialValues, mode]);
+  }, [initialValues, mode, reset]);
 
-  // auto slug from EN title
+  const titleEn = watch("titleEn");
+  const images = watch("images");
+
+  const cleanImages = useMemo(() => cleanImageUrls(images ?? []), [images]);
+
   useEffect(() => {
     if (!slugTouched) {
-      setV((p) => ({ ...p, slug: slugify(p.titleEn) }));
+      setValue("slug", slugify(titleEn || ""), { shouldValidate: false });
     }
-  }, [v.titleEn, slugTouched]);
+  }, [titleEn, slugTouched, setValue]);
 
-  const cleanImages = useMemo(() => cleanImageUrls(v.images), [v.images]);
-
-  const setField = <K extends keyof ProductFormValues>(
-    key: K,
-    value: ProductFormValues[K]
-  ) => {
-    setV((p) => ({ ...p, [key]: value }));
+  const submit = (values: ProductFormValues) => {
+    onSubmit(values, cleanImages);
   };
 
-  const updateImage = (idx: number, value: string) => {
-    setV((p) => ({
-      ...p,
-      images: p.images.map((x, i) => (i === idx ? value : x)),
-    }));
-  };
-
-  const addImageField = () =>
-    setV((p) => ({ ...p, images: [...p.images, ""] }));
-  const removeImageField = (idx: number) =>
-    setV((p) => ({ ...p, images: p.images.filter((_, i) => i !== idx) }));
-
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(v, cleanImages);
-  };
+  const slugReg = register("slug");
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <div className="mb-6">
-        <AdminPageHeader title={title} description={description} />
-      </div>
-
-      {errors.form && (
-        <div className="mb-4 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-          {errors.form}
-        </div>
-      )}
-
-      <form onSubmit={submit} className="space-y-5">
+    <>
+      <AdminPageHeader title={title} description={description} />
+      <form noValidate onSubmit={handleSubmit(submit)} className="space-y-5">
         <ProductContentFields
-          values={v}
-          setField={setField}
-          errors={errors}
+          register={register}
+          errors={rhfErrors}
           labels={{
             boxTitle: labels.contentTitle,
             titleEn: labels.titleEn,
@@ -95,26 +100,31 @@ const ProductForm: FC<ProductProps> = ({
 
         {/* slug */}
         <div>
-          <Input
-            label={labels.slug}
-            type="text"
-            value={v.slug}
+          <label className="text-sm font-medium text-secondary">
+            {labels.slug}
+          </label>
+
+          <input
+            className="mt-2 w-full border-b-2 border-border bg-transparent py-2 outline-none focus:border-blue-500"
+            {...slugReg}
             onChange={(e) => {
               setSlugTouched(true);
-              setField("slug", e.target.value);
+              slugReg.onChange(e);
             }}
-            fullWidth
-            required
           />
-          {errors.slug && (
-            <p className="mt-2 text-sm text-destructive">{errors.slug}</p>
+
+          {rhfErrors.slug?.message && (
+            <p className="text-xs text-red-500 mt-1 leading-tight">
+              {String(rhfErrors.slug.message)}
+            </p>
           )}
         </div>
 
         <ProductPricingFields
-          values={v}
-          setField={setField}
-          errors={errors}
+          register={register}
+          errors={rhfErrors}
+          watch={watch}
+          setValue={setValue}
           labels={{
             price: labels.price,
             oldPrice: labels.oldPrice,
@@ -123,26 +133,26 @@ const ProductForm: FC<ProductProps> = ({
         />
 
         <ProductMetaFields
-          values={v}
-          setField={setField}
+          register={register}
+          errors={rhfErrors}
           categories={categories}
           loadingCategories={loadingCategories}
-          errors={errors}
           labels={{
             stock: labels.stock,
             category: labels.category,
             selectCategory: labels.selectCategory,
             featured: labels.featured,
             featuredHint: labels.featuredHint,
+            loading: t("table.loading"),
           }}
         />
 
         <ProductImagesFields
-          images={v.images}
-          onAdd={addImageField}
-          onRemove={removeImageField}
-          onChange={updateImage}
-          error={errors.images}
+          register={register}
+          errors={rhfErrors}
+          images={images ?? [""]}
+          onAdd={() => append("")}
+          onRemove={(idx) => remove(idx)}
           labels={{
             title: labels.imagesTitle,
             add: labels.addImage,
@@ -161,7 +171,7 @@ const ProductForm: FC<ProductProps> = ({
           </Button>
         </div>
       </form>
-    </div>
+    </>
   );
 };
 
