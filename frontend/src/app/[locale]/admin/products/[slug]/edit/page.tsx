@@ -154,7 +154,7 @@ export default function AdminEditProductPage() {
   }
 
   return (
-    <>
+    <div className="max-w-4xl mx-auto space-y-6">
       {error && (
         <div className="max-w-3xl mx-auto mt-6 px-6">
           <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
@@ -197,6 +197,6 @@ export default function AdminEditProductPage() {
           submitting: t("form.buttons.submitting"),
         }}
       />
-    </>
+    </div>
   );
 }

@@ -92,10 +92,8 @@ const CategoryForm: FC<CategoryProps> = ({
   }, [parentOptions, excludeParentId]);
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <div className="mb-6">
-        <AdminPageHeader title={title} description={description} />
-      </div>
+    <>
+      <AdminPageHeader title={title} description={description} />
       {errors.form && (
         <div className="mb-4 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
           {errors.form}
@@ -107,7 +105,7 @@ const CategoryForm: FC<CategoryProps> = ({
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-6 rounded-2xl border border-border p-6"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormInput<FormValues>
             name="nameEn"
             label={nameEnLabel}
@@ -127,7 +125,7 @@ const CategoryForm: FC<CategoryProps> = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormInput<FormValues>
             name="slug"
             label={slugLabel}
@@ -187,7 +185,7 @@ const CategoryForm: FC<CategoryProps> = ({
           </Button>
         </div>
       </form>
-    </div>
+    </>
   );
 };
 

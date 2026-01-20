@@ -24,7 +24,7 @@ export default function AdminCategoriesPage() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [target, setTarget] = useState<{ id: number; name: string } | null>(
-    null
+    null,
   );
   const allExpanded = items.length > 0 && expanded.size >= items.length;
 

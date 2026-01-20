@@ -83,11 +83,8 @@ const ProductForm: FC<ProductProps> = ({
   const slugReg = register("slug");
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="mb-6">
-        <AdminPageHeader title={title} description={description} />
-      </div>
-
+    <>
+      <AdminPageHeader title={title} description={description} />
       <form noValidate onSubmit={handleSubmit(submit)} className="space-y-5">
         <ProductContentFields
           register={register}
@@ -174,7 +171,7 @@ const ProductForm: FC<ProductProps> = ({
           </Button>
         </div>
       </form>
-    </div>
+    </>
   );
 };
 

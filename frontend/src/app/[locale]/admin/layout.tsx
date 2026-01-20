@@ -34,7 +34,9 @@ const AdminLayout = async ({ children, params }: AdminLayoutProps) => {
           </div>
         </header>
 
-        <section className="max-w-7xl mx-auto p-12">{children}</section>
+        <section className="max-w-6xl mx-auto p-12 space-y-6">
+          {children}
+        </section>
       </main>
     </div>
   );

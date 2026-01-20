@@ -108,30 +108,32 @@ export default function AdminCreateCategoryPage() {
   };
 
   return (
-    <CategoryForm
-      mode="create"
-      locale={locale}
-      loadingParents={loadingCats}
-      parentOptions={cats}
-      initialValues={initialValues}
-      submitting={submitting}
-      onCancel={() => router.push(`/${locale}/admin/categories`)}
-      onSubmit={handleSubmit}
-      errors={errors}
-      title={t("form.createTitle")}
-      description={t("form.createDescription")}
-      cancelLabel={t("actions.cancel")}
-      submitLabel={t("actions.create")}
-      submittingLabel={t("form.saving")}
-      parentLabel={t("fields.parent")}
-      noParentLabel={t("fields.noParent")}
-      loadingLabel={t("table.loading")}
-      nameCardTitle={t("fields.name")}
-      nameEnLabel={t("fields.nameEn")}
-      nameKaLabel={t("fields.nameKa")}
-      slugLabel={t("fields.slug")}
-      imageLabel={t("fields.image")}
-      parentHint={t("tips.parentExample")}
-    />
+    <div className="max-w-4xl mx-auto space-y-6">
+      <CategoryForm
+        mode="create"
+        locale={locale}
+        loadingParents={loadingCats}
+        parentOptions={cats}
+        initialValues={initialValues}
+        submitting={submitting}
+        onCancel={() => router.push(`/${locale}/admin/categories`)}
+        onSubmit={handleSubmit}
+        errors={errors}
+        title={t("form.createTitle")}
+        description={t("form.createDescription")}
+        cancelLabel={t("actions.cancel")}
+        submitLabel={t("actions.create")}
+        submittingLabel={t("form.saving")}
+        parentLabel={t("fields.parent")}
+        noParentLabel={t("fields.noParent")}
+        loadingLabel={t("table.loading")}
+        nameCardTitle={t("fields.name")}
+        nameEnLabel={t("fields.nameEn")}
+        nameKaLabel={t("fields.nameKa")}
+        slugLabel={t("fields.slug")}
+        imageLabel={t("fields.image")}
+        parentHint={t("tips.parentExample")}
+      />
+    </div>
   );
 }
