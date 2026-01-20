@@ -354,6 +354,7 @@
       "table": {
         "name": "Name",
         "email": "Email",
+        "youAdmin": "You (Admin)",
         "phone": "Phone",
         "role": "Role",
         "joined": "Joined",
