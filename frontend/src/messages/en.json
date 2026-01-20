@@ -325,17 +325,36 @@
       "title": "User Management",
       "description": "View and manage users of your store.",
       "actions": {
+        "edit": "Edit",
         "delete": "Delete",
         "cancel": "Cancel",
+        "save": "Save",
         "confirm": "Confirm"
       },
       "confirm": {
         "title": "Delete User",
-        "description": "Are you sure you want to delete this user? This action cannot be undone."
+        "description": "Are you sure you want to delete this user? This action cannot be undone.",
+        "deleting": "Deleting..."
+      },
+      "editModal": {
+        "title": "Edit User",
+        "description": "Update user details and role.",
+        "saving": "Saving...",
+        "fields": {
+          "name": "Name",
+          "phone": "Phone",
+          "role": "Role"
+        },
+        "placeholders": {
+          "name": "Enter name",
+          "phone": "+995...",
+          "role": "Select role"
+        }
       },
       "table": {
         "name": "Name",
         "email": "Email",
+        "phone": "Phone",
         "role": "Role",
         "joined": "Joined",
         "actions": "Actions",
@@ -348,7 +367,13 @@
         "admin": "Admin"
       },
       "errors": {
-        "load": "Failed to load users. Try again."
+        "load": "Failed to load users. Try again.",
+        "delete": "Failed to delete user. Try again.",
+        "update": "Failed to update user. Try again."
+      },
+      "messages": {
+        "updated": "User updated successfully.",
+        "deleted": "User deleted successfully."
       }
     }
   },

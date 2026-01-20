@@ -3,21 +3,34 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { api } from "@/lib/axios";
-import { Trash2 } from "lucide-react";
-import { UserApi } from "@/types";
-import { AdminPageHeader, Button, ConfirmModal } from "@/components";
+import type { UserApi } from "@/types";
+import {
+  AdminPageHeader,
+  Button,
+  ConfirmModal,
+  UserEditModal,
+  AdminUsersTable,
+} from "@/components";
+import { RefreshCw } from "lucide-react";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default function AdminUsersPage() {
   const t = useTranslations("admin.users");
+  const { user } = useAuthStore();
 
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<UserApi[]>([]);
   const [error, setError] = useState<string>("");
 
-  // modal state
+  // delete
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [selected, setSelected] = useState<UserApi | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  // edit
+  const [editOpen, setEditOpen] = useState(false);
+  const [editing, setEditing] = useState<UserApi | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const load = async () => {
     try {
@@ -32,7 +45,9 @@ export default function AdminUsersPage() {
       setError(msg);
       setUsers([]);
     } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 700);
     }
   };
 
@@ -72,14 +87,65 @@ export default function AdminUsersPage() {
     }
   };
 
+  const openEdit = (u: UserApi) => {
+    setEditing(u);
+    setEditOpen(true);
+  };
+
+  const closeEdit = () => {
+    if (saving) return;
+    setEditOpen(false);
+    setEditing(null);
+  };
+
+  const saveEdit = async (next: {
+    name?: string;
+    phone?: string;
+    role?: string;
+  }) => {
+    if (!editing) return;
+
+    try {
+      setSaving(true);
+      setError("");
+
+      const res = await api.patch<UserApi>(`/users/${editing.id}`, next);
+      const updated = res.data;
+
+      setUsers((prev) =>
+        prev.map((u) => (u.id === editing.id ? { ...u, ...updated } : u)),
+      );
+
+      setEditOpen(false);
+      setEditing(null);
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message || err?.message || "Failed to update user";
+      setError(msg);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <>
       <AdminPageHeader
         title={t("title")}
         description={t("description")}
         actions={
-          <Button variant="secondary" onClick={load} disabled={loading}>
-            {t("table.refresh")}
+          <Button
+            variant="secondary"
+            size="sm"
+            iconOnly
+            onClick={load}
+            disabled={loading}
+            title={t("table.refresh")}
+            aria-label={t("table.refresh")}
+          >
+            <RefreshCw
+              className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
+              style={loading ? { animationDuration: "1.4s" } : undefined}
+            />
           </Button>
         }
       />
@@ -90,60 +156,22 @@ export default function AdminUsersPage() {
         </div>
       )}
 
-      {loading ? (
-        <div className="text-sm text-muted-foreground py-6">
-          {t("table.loading")}
-        </div>
-      ) : users.length === 0 ? (
-        <div className="text-sm text-muted-foreground py-6">
-          {t("table.empty")}
-        </div>
-      ) : (
-        <div className="rounded-xl border border-border overflow-hidden">
-          <div className="grid grid-cols-12 px-4 py-3 text-xs font-medium text-muted-foreground border-b">
-            <div className="col-span-4">{t("table.email")}</div>
-            <div className="col-span-3">{t("table.name")}</div>
-            <div className="col-span-2">{t("table.role")}</div>
-            <div className="col-span-3 text-right">{t("table.actions")}</div>
-          </div>
+      <AdminUsersTable
+        users={users}
+        loading={loading}
+        t={t}
+        onEdit={openEdit}
+        onDelete={openDelete}
+        currentUserId={user?.id}
+      />
 
-          {users.map((u) => (
-            <div
-              key={u.id}
-              className="grid grid-cols-12 px-4 py-3 border-b last:border-b-0 items-center"
-            >
-              <div className="col-span-4 min-w-0">
-                <div className="text-sm font-medium truncate">{u.email}</div>
-                {u.phone ? (
-                  <div className="text-xs text-muted-foreground truncate">
-                    {u.phone}
-                  </div>
-                ) : null}
-              </div>
-
-              <div className="col-span-3 text-sm text-muted-foreground truncate">
-                {u.name ?? "—"}
-              </div>
-
-              <div className="col-span-2 text-sm">
-                {u.role === "ADMIN" ? t("roles.admin") : t("roles.user")}
-              </div>
-
-              <div className="col-span-3 flex justify-end">
-                <Button
-                  size="xs"
-                  variant="tertiary"
-                  className="text-destructive"
-                  onClick={() => openDelete(u)}
-                  title={t("actions.delete")}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      <UserEditModal
+        isOpen={editOpen}
+        user={editing}
+        saving={saving}
+        onClose={closeEdit}
+        onSave={saveEdit}
+      />
 
       <ConfirmModal
         isOpen={deleteOpen}
