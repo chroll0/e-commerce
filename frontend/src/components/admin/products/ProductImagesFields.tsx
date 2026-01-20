@@ -1,24 +1,30 @@
 "use client";
+
 import { FC } from "react";
 import { Button, Input } from "@/components";
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type { ProductFormValues } from "@/types";
 
 type Props = {
+  register: UseFormRegister<ProductFormValues>;
+  errors: FieldErrors<ProductFormValues>;
   images: string[];
   onAdd: () => void;
   onRemove: (idx: number) => void;
-  onChange: (idx: number, value: string) => void;
-  error?: string;
   labels: { title: string; add: string; imageUrl: string; remove: string };
 };
 
 const ProductImagesFields: FC<Props> = ({
+  register,
+  errors,
   images,
   onAdd,
   onRemove,
-  onChange,
-  error,
   labels,
 }) => {
+  const imagesError =
+    (errors.images?.message as string | undefined) ?? undefined;
+
   return (
     <div className="rounded-2xl border border-border p-4">
       <div className="flex items-center justify-between gap-4">
@@ -28,35 +34,45 @@ const ProductImagesFields: FC<Props> = ({
         </Button>
       </div>
 
-      {error && <p className="mt-2 text-sm text-destructive">{error}</p>}
+      {imagesError && (
+        <p className="mt-2 text-xs text-destructive leading-tight">
+          {imagesError}
+        </p>
+      )}
 
       <div className="mt-4 space-y-3">
-        {images.map((img, idx) => (
-          <div key={idx} className="flex items-center gap-2">
-            <div className="flex-1">
-              <Input
-                label={idx === 0 ? labels.imageUrl : (undefined as any)}
-                type="text"
-                placeholder="https://..."
-                value={img}
-                onChange={(e) => onChange(idx, e.target.value)}
-                fullWidth
-                required={idx === 0}
-              />
-            </div>
+        {images.map((_, idx) => {
+          const fieldName = `images.${idx}` as const;
+          const fieldError = (errors.images?.[idx] as any)?.message as
+            | string
+            | undefined;
 
-            {images.length > 1 && (
-              <Button
-                type="button"
-                variant="text"
-                className="text-destructive"
-                onClick={() => onRemove(idx)}
-              >
-                {labels.remove}
-              </Button>
-            )}
-          </div>
-        ))}
+          return (
+            <div key={idx} className="flex items-center gap-2">
+              <div className="flex-1">
+                <Input
+                  label={idx === 0 ? labels.imageUrl : undefined}
+                  type="text"
+                  placeholder="https://..."
+                  fullWidth
+                  {...register(fieldName)}
+                  error={fieldError}
+                />
+              </div>
+
+              {images.length > 1 && (
+                <Button
+                  type="button"
+                  variant="text"
+                  className="text-destructive"
+                  onClick={() => onRemove(idx)}
+                >
+                  {labels.remove}
+                </Button>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

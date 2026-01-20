@@ -52,6 +52,7 @@ export { AdminSidebar } from "./admin/common/AdminSidebar";
 export { default as AdminPageHeader } from "./admin/common/AdminPageHeader";
 export { default as ConfirmModal } from "./admin/common/ConfirmModal";
 export { default as FormInput } from "./admin/common/FormInput";
+export { default as FormTextarea } from "./admin/common/FormTextarea";
 
 // Category management components
 export { default as CategoriesTable } from "./admin/categories/CategoriesTable";

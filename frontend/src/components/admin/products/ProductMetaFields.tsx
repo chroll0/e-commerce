@@ -1,61 +1,60 @@
 "use client";
 
 import { FC } from "react";
-import { Input, Tooltip } from "@/components";
+import { Tooltip } from "@/components";
 import { Info } from "lucide-react";
 import type { SelectOption, ProductFormValues } from "@/types";
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FormInput } from "@/components";
 
 type Props = {
-  values: ProductFormValues;
-  setField: <K extends keyof ProductFormValues>(
-    key: K,
-    value: ProductFormValues[K]
-  ) => void;
+  register: UseFormRegister<ProductFormValues>;
+  errors: FieldErrors<ProductFormValues>;
   categories: SelectOption[];
   loadingCategories: boolean;
-  errors: Partial<Record<keyof ProductFormValues | "form", string>>;
   labels: {
     stock: string;
     category: string;
     selectCategory: string;
     featured: string;
     featuredHint: string;
+    loading?: string;
   };
 };
 
 const ProductMetaFields: FC<Props> = ({
-  values,
-  setField,
+  register,
+  errors,
   categories,
   loadingCategories,
-  errors,
   labels,
 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-      <div>
-        <Input
-          label={labels.stock}
-          type="number"
-          value={values.stock}
-          onChange={(e) => setField("stock", e.target.value)}
-          fullWidth
-          required
-        />
-      </div>
+      <FormInput<ProductFormValues>
+        name="stock"
+        label={labels.stock}
+        type="text"
+        inputMode="numeric"
+        fullWidth
+        register={register}
+        errors={errors}
+      />
 
       <div className="w-full">
         <label className="text-sm font-medium">{labels.category}</label>
+
         <select
           className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-          value={values.categoryId}
-          onChange={(e) => setField("categoryId", e.target.value)}
+          {...register("categoryId")}
           disabled={loadingCategories}
-          required
         >
           <option value="">
-            {loadingCategories ? "Loading..." : labels.selectCategory}
+            {loadingCategories
+              ? (labels.loading ?? "Loading...")
+              : labels.selectCategory}
           </option>
+
           {categories.map((c) => (
             <option key={c.id} value={String(c.id)}>
               {c.name}
@@ -63,17 +62,15 @@ const ProductMetaFields: FC<Props> = ({
           ))}
         </select>
 
-        {errors.categoryId && (
-          <p className="mt-2 text-sm text-destructive">{errors.categoryId}</p>
+        {errors.categoryId?.message && (
+          <p className="mt-1 text-xs text-destructive leading-tight">
+            {String(errors.categoryId.message)}
+          </p>
         )}
       </div>
 
       <label className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2">
-        <input
-          type="checkbox"
-          checked={values.isFeatured}
-          onChange={(e) => setField("isFeatured", e.target.checked)}
-        />
+        <input type="checkbox" {...register("isFeatured")} />
         <span className="text-sm">{labels.featured}</span>
 
         <Tooltip
@@ -84,12 +81,6 @@ const ProductMetaFields: FC<Props> = ({
           <Info className="h-4 w-4 hover:text-foreground" />
         </Tooltip>
       </label>
-
-      {errors.stock && (
-        <p className="md:col-span-3 -mt-2 text-sm text-destructive">
-          {errors.stock}
-        </p>
-      )}
     </div>
   );
 };

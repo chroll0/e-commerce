@@ -1,70 +1,48 @@
 "use client";
+
 import { FC } from "react";
-import { Input } from "@/components";
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import type { ProductFormValues } from "@/types";
+import { FormInput } from "@/components";
 
 type Props = {
-  values: ProductFormValues;
-  setField: <K extends keyof ProductFormValues>(
-    key: K,
-    value: ProductFormValues[K]
-  ) => void;
-  errors: Record<string, string>;
+  register: UseFormRegister<ProductFormValues>;
+  errors: FieldErrors<ProductFormValues>;
   labels: { price: string; oldPrice: string; discount: string };
 };
 
-const ProductPricingFields: FC<Props> = ({
-  values,
-  setField,
-  errors,
-  labels,
-}) => {
+const ProductPricingFields: FC<Props> = ({ register, errors, labels }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div>
-        <Input
-          label={labels.price}
-          type="number"
-          value={values.price}
-          onChange={(e) => setField("price", e.target.value)}
-          fullWidth
-          required
-        />
-      </div>
+      <FormInput<ProductFormValues>
+        name="price"
+        label={labels.price}
+        type="text"
+        inputMode="numeric"
+        fullWidth
+        register={register}
+        errors={errors}
+      />
 
-      <div>
-        <Input
-          label={labels.oldPrice}
-          type="number"
-          value={values.oldPrice}
-          onChange={(e) => setField("oldPrice", e.target.value)}
-          fullWidth
-        />
-      </div>
+      <FormInput<ProductFormValues>
+        name="oldPrice"
+        label={labels.oldPrice}
+        type="text"
+        inputMode="numeric"
+        fullWidth
+        register={register}
+        errors={errors}
+      />
 
-      <div>
-        <Input
-          label={labels.discount}
-          type="number"
-          value={values.discount}
-          onChange={(e) => setField("discount", e.target.value)}
-          fullWidth
-        />
-      </div>
-
-      {(errors.price || errors.oldPrice || errors.discount) && (
-        <div className="md:col-span-3 space-y-1">
-          {errors.price && (
-            <p className="text-sm text-destructive">{errors.price}</p>
-          )}
-          {errors.oldPrice && (
-            <p className="text-sm text-destructive">{errors.oldPrice}</p>
-          )}
-          {errors.discount && (
-            <p className="text-sm text-destructive">{errors.discount}</p>
-          )}
-        </div>
-      )}
+      <FormInput<ProductFormValues>
+        name="discount"
+        label={labels.discount}
+        type="text"
+        inputMode="numeric"
+        fullWidth
+        register={register}
+        errors={errors}
+      />
     </div>
   );
 };
