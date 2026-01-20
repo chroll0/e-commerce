@@ -51,6 +51,7 @@ export { default as SidebarLink } from "./admin/common/SidebarLink";
 export { AdminSidebar } from "./admin/common/AdminSidebar";
 export { default as AdminPageHeader } from "./admin/common/AdminPageHeader";
 export { default as ConfirmModal } from "./admin/common/ConfirmModal";
+export { default as FormInput } from "./admin/common/FormInput";
 
 // Category management components
 export { default as CategoriesTable } from "./admin/categories/CategoriesTable";
