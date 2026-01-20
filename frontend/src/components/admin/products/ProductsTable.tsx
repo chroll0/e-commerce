@@ -28,7 +28,7 @@ const ProductsTable: FC<Props> = ({ loading, products, onDelete }) => {
 
   return (
     <div className="rounded-xl border border-border overflow-hidden">
-      <div className="grid grid-cols-12 px-4 py-3 text-xs font-medium text-muted-foreground border-b">
+      <div className="grid grid-cols-12 px-4 py-3 text-xs font-medium text-muted-foreground border-b border-border">
         <div className="col-span-4">{t("title")}</div>
         <div className="col-span-3">{t("category")}</div>
         <div className="col-span-2">{t("price")}</div>
