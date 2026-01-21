@@ -165,6 +165,24 @@
       "paymentsList": "Payment records"
     },
 
+    "dashboard": {
+      "welcome": "Welcome to the Admin Panel",
+      "overview": "Use the sidebar to navigate through management sections.",
+      "actions": {
+        "backToSite": "exit",
+        "manageProducts": "Manage Products",
+        "manageCategories": "Manage Categories",
+        "viewUsers": "View Users",
+        "viewOrders": "View Orders"
+      },
+      "stats": {
+        "products": "Total Products",
+        "categories": "Total Categories",
+        "users": "Total Users",
+        "orders": "Total Orders"
+      }
+    },
+
     "products": {
       "title": "Products Management",
       "description": "Add, edit, and manage your product listings.",

@@ -54,6 +54,11 @@ export { default as ConfirmModal } from "./admin/common/ConfirmModal";
 export { default as FormInput } from "./admin/common/FormInput";
 export { default as FormTextarea } from "./admin/common/FormTextarea";
 
+// Admin dashboard components
+export { default as AdminStatsGrid } from "./admin/dashboard/AdminStatsGrid";
+export { default as AdminQuickActions } from "./admin/dashboard/AdminQuickActions";
+
+// User management components
 export { default as UserEditModal } from "./admin/users/UserEditModal";
 export { default as AdminUsersTable } from "./admin/users/AdminUsersTable";
 
