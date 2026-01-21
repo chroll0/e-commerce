@@ -47,7 +47,8 @@ const CategoriesTable: FC<TableProps> = ({
           <span>{labels.name}</span>
         </div>
         <div className="col-span-3">{labels.slug}</div>
-        <div className="col-span-4 text-right">{labels.actions}</div>
+        <div className="col-span-1 text-center">{labels.products}</div>
+        <div className="col-span-3 text-right">{labels.actions}</div>
       </div>
 
       {loading ? (
@@ -113,13 +114,17 @@ const CategoriesTable: FC<TableProps> = ({
                       {node.slug}
                     </div>
 
-                    <div className="col-span-4 flex items-center justify-end gap-2">
+                    <div className="col-span-1 flex items-center justify-center text-sm text-muted-foreground">
+                      {node.products ?? 0}
+                    </div>
+
+                    <div className="col-span-3 flex items-center justify-end gap-2">
                       <Button asChild variant="secondary" size="xs">
                         <Link
                           href={`/${locale}/admin/categories/new?parentId=${node.id}`}
                         >
-                          <Plus className="h-4 w-4 mr-1" />
-                          {labels.addSub}
+                          <Plus className="h-4 w-4" />
+                          {/* {labels.addSub} */}
                         </Link>
                       </Button>
 
@@ -127,8 +132,8 @@ const CategoriesTable: FC<TableProps> = ({
                         <Link
                           href={`/${locale}/admin/categories/${node.slug}/edit`}
                         >
-                          <Pencil className="h-4 w-4 mr-1" />
-                          {labels.edit}
+                          <Pencil className="h-4 w-4" />
+                          {/* {labels.edit} */}
                         </Link>
                       </Button>
 
@@ -140,14 +145,14 @@ const CategoriesTable: FC<TableProps> = ({
                           onRequestDelete({ id: node.id, name: node.name })
                         }
                       >
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        {labels.delete}
+                        <Trash2 className="h-4 w-4" />
+                        {/* {labels.delete} */}
                       </Button>
                     </div>
                   </div>
                 </div>
               );
-            }
+            },
           )}
         </div>
       )}

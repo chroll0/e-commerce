@@ -37,7 +37,7 @@ export class CategoryService {
     return this.prisma.category.findMany({
       include: {
         translations: locale ? { where: { locale } } : true,
-        // products: true,
+        _count: { select: { products: true } },
       },
       orderBy: { createdAt: "desc" },
     });
@@ -63,7 +63,7 @@ export class CategoryService {
       where: { id },
       include: {
         translations: locale ? { where: { locale } } : true,
-        // products: true,
+        _count: { select: { products: true } },
       },
     });
 
@@ -103,7 +103,7 @@ export class CategoryService {
         if (!exists) {
           if (!tr.name) {
             throw new BadRequestException(
-              `Translation for locale "${tr.locale}" requires name`
+              `Translation for locale "${tr.locale}" requires name`,
             );
           }
         }
@@ -142,13 +142,13 @@ export class CategoryService {
 
     if (childrenCount > 0) {
       throw new BadRequestException(
-        "Cannot delete category: it has subcategories. Delete/move them first."
+        "Cannot delete category: it has subcategories. Delete/move them first.",
       );
     }
 
     if (productsCount > 0) {
       throw new BadRequestException(
-        "Cannot delete category: it has products. Move products first."
+        "Cannot delete category: it has products. Move products first.",
       );
     }
     await this.prisma.categoryTranslation.deleteMany({

@@ -267,6 +267,7 @@
       "table": {
         "name": "Name",
         "slug": "Slug (URL)",
+        "products": "Products",
         "actions": "Actions",
         "empty": "No categories yet. Create your first category.",
         "loading": "Loading..."

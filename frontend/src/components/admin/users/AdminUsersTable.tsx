@@ -40,7 +40,7 @@ const AdminUsersTable: FC<Props> = ({
 
   return (
     <div className="rounded-xl border border-border overflow-hidden">
-      <div className="grid grid-cols-12 px-4 py-3 text-xs font-medium text-muted-foreground border-b border-border">
+      <div className="grid grid-cols-12 px-4 py-3 text-xs font-medium text-muted-foreground border-b border-border gap-2">
         <div className="col-span-4">{t("table.email")}</div>
         <div className="col-span-3">{t("table.name")}</div>
         <div className="col-span-2">{t("table.role")}</div>
@@ -50,13 +50,12 @@ const AdminUsersTable: FC<Props> = ({
       {users.map((u) => {
         const isAdmin = u.role === "ADMIN";
         const isMe = currentUserId != null && u.id === Number(currentUserId);
-
         const showBadge = isAdmin && isMe;
 
         return (
           <div
             key={u.id}
-            className="grid grid-cols-12 px-4 py-3 border-b last:border-b-0 items-center border-border"
+            className="grid grid-cols-12 px-4 py-3 border-b last:border-b-0 items-center border-border gap-2"
           >
             <div className="col-span-4 min-w-0">
               <div className="flex items-center gap-2 min-w-0">
@@ -91,7 +90,7 @@ const AdminUsersTable: FC<Props> = ({
             <div className="col-span-3 flex justify-end gap-2">
               <Button
                 size="xs"
-                variant="tertiary"
+                variant="secondary"
                 onClick={() => onEdit(u)}
                 title={t("actions.edit")}
               >

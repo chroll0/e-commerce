@@ -28,7 +28,7 @@ const ProductRow: FC<Props> = ({ product, onDelete }) => {
     "—";
 
   return (
-    <div className="grid grid-cols-12 px-4 py-3 border-b last:border-b-0 items-center border-border">
+    <div className="grid grid-cols-12 px-4 py-3 border-b last:border-b-0 items-center border-border gap-2">
       {/* Title */}
       <div className="col-span-4 flex items-center gap-3 min-w-0">
         {product.images?.[0] && (

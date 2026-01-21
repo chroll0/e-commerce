@@ -114,6 +114,7 @@ export default function AdminCategoriesPage() {
           name: t("table.name"),
           slug: t("table.slug"),
           actions: t("table.actions"),
+          products: t("table.products"),
           empty: t("table.empty"),
           loading: t("table.loading"),
           addSub: t("actions.addSub"),
