@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  AdminDonutStats,
   AdminPageHeader,
   AdminQuickActions,
   AdminStatsGrid,
@@ -15,6 +16,7 @@ const AdminDashboard = () => {
     <>
       <AdminPageHeader title={t("welcome")} description={t("overview")} />
       <AdminStatsGrid locale={locale} />
+      <AdminDonutStats />
       <AdminQuickActions locale={locale} />
     </>
   );

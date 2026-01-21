@@ -9,8 +9,13 @@ import { api } from "@/lib/axios";
 type Stats = {
   products: number;
   categories: number;
-  users: number;
-  orders: number;
+  users: { total: number; last7d: number; last30d: number };
+  orders: { total: number; last7d: number; last30d: number };
+  payments: {
+    totalAmount: number;
+    last7dAmount: number;
+    last30dAmount: number;
+  };
 };
 
 const AdminStatsGrid: FC<{ locale: Locale }> = ({ locale }) => {
@@ -19,10 +24,9 @@ const AdminStatsGrid: FC<{ locale: Locale }> = ({ locale }) => {
 
   useEffect(() => {
     const load = async () => {
-      const res = await api.get("/admin/stats");
+      const res = await api.get<Stats>("/admin/stats");
       setStats(res.data);
     };
-
     load();
   }, []);
 
@@ -42,16 +46,16 @@ const AdminStatsGrid: FC<{ locale: Locale }> = ({ locale }) => {
     {
       key: "users",
       title: t("stats.users"),
-      value: stats?.users ?? "—",
+      value: stats?.users?.total ?? "—",
       href: `/${locale}/admin/users`,
     },
     {
       key: "orders",
       title: t("stats.orders"),
-      value: stats?.orders ?? "—",
+      value: stats?.orders?.total ?? "—",
       href: `/${locale}/admin/orders`,
     },
-  ];
+  ] as const;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -63,6 +67,7 @@ const AdminStatsGrid: FC<{ locale: Locale }> = ({ locale }) => {
         >
           <div className="text-xs text-muted-foreground">{x.title}</div>
           <div className="mt-2 text-2xl font-semibold">{x.value}</div>
+          <div className="w-full h-1 bg-border rounded-full mt-3"></div>
           <div className="mt-3 text-xs text-muted-foreground text-end">
             {t("view")}
           </div>

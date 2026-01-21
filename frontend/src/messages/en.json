@@ -181,6 +181,15 @@
         "categories": "Total Categories",
         "users": "Total Users",
         "orders": "Total Orders"
+      },
+      "charts": {
+        "total": "Total",
+        "before": "Before period",
+        "last7d": "Last 7 days",
+        "last30d": "Last 30 days",
+        "usersLast30d": "Users: last 30 days",
+        "ordersLast30d": "Orders: last 30 days",
+        "paymentsLast30d": "Payments: last 30 days"
       }
     },
 
