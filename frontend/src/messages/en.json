@@ -168,13 +168,14 @@
     "dashboard": {
       "welcome": "Welcome to the Admin Panel",
       "overview": "Use the sidebar to navigate through management sections.",
+      "quickActions": "Quick Actions",
       "actions": {
-        "backToSite": "exit",
-        "manageProducts": "Manage Products",
-        "manageCategories": "Manage Categories",
-        "viewUsers": "View Users",
-        "viewOrders": "View Orders"
+        "backToSite": "Back to site",
+        "addProduct": "Add product",
+        "addCategory": "Add category",
+        "viewUsers": "View users"
       },
+      "view": "View details",
       "stats": {
         "products": "Total Products",
         "categories": "Total Categories",

@@ -5,7 +5,7 @@ import {
   AdminQuickActions,
   AdminStatsGrid,
 } from "@/components";
-import { Locale } from "@/i18n/request";
+import { Locale } from "@/types";
 import { useLocale, useTranslations } from "next-intl";
 
 const AdminDashboard = () => {
