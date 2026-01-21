@@ -51,6 +51,7 @@ export type CategoryApi = {
   translations: { locale: string; name: string }[];
   image?: string;
   createdAt?: string;
+  _count?: { products: number };
 };
 
 export type CategoryNode = {
@@ -59,6 +60,7 @@ export type CategoryNode = {
   parentId: number | null;
   name: string;
   children: CategoryNode[];
+  products: number;
 };
 
 export type CategoryRow = {
@@ -74,6 +76,7 @@ type Row = { node: CategoryNode; depth: number; hasChildren: boolean };
 type Labels = {
   name: string;
   slug: string;
+  products: string;
   actions: string;
   loading: string;
   empty: string;

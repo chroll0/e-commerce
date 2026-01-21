@@ -54,6 +54,9 @@ export { default as ConfirmModal } from "./admin/common/ConfirmModal";
 export { default as FormInput } from "./admin/common/FormInput";
 export { default as FormTextarea } from "./admin/common/FormTextarea";
 
+export { default as UserEditModal } from "./admin/users/UserEditModal";
+export { default as AdminUsersTable } from "./admin/users/AdminUsersTable";
+
 // Category management components
 export { default as CategoriesTable } from "./admin/categories/CategoriesTable";
 export { default as CategoryForm } from "./admin/categories/CategoryForm";

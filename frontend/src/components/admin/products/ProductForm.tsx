@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import {
   AdminPageHeader,
   Button,
+  Input,
   ProductContentFields,
   ProductImagesFields,
   ProductMetaFields,
@@ -50,7 +51,11 @@ const ProductForm: FC<ProductProps> = ({
     mode: "onSubmit",
   });
 
-  const { append, remove } = useFieldArray<ProductFormValues>({
+  const {
+    fields: imageFields,
+    append,
+    remove,
+  } = useFieldArray<ProductFormValues>({
     control,
     name: "images" as never,
   });
@@ -67,7 +72,6 @@ const ProductForm: FC<ProductProps> = ({
 
   const titleEn = watch("titleEn");
   const images = watch("images");
-
   const cleanImages = useMemo(() => cleanImageUrls(images ?? []), [images]);
 
   useEffect(() => {
@@ -85,7 +89,7 @@ const ProductForm: FC<ProductProps> = ({
   return (
     <>
       <AdminPageHeader title={title} description={description} />
-      <form noValidate onSubmit={handleSubmit(submit)} className="space-y-5">
+      <form noValidate onSubmit={handleSubmit(submit)} className="space-y-6">
         <ProductContentFields
           register={register}
           errors={rhfErrors}
@@ -99,26 +103,17 @@ const ProductForm: FC<ProductProps> = ({
         />
 
         {/* slug */}
-        <div>
-          <label className="text-sm font-medium text-secondary">
-            {labels.slug}
-          </label>
-
-          <input
-            className="mt-2 w-full border-b-2 border-border bg-transparent py-2 outline-none focus:border-blue-500"
-            {...slugReg}
-            onChange={(e) => {
-              setSlugTouched(true);
-              slugReg.onChange(e);
-            }}
-          />
-
-          {rhfErrors.slug?.message && (
-            <p className="text-xs text-red-500 mt-1 leading-tight">
-              {String(rhfErrors.slug.message)}
-            </p>
-          )}
-        </div>
+        <Input
+          label={labels.slug}
+          type="text"
+          fullWidth
+          {...slugReg}
+          onChange={(e) => {
+            setSlugTouched(true);
+            slugReg.onChange(e);
+          }}
+          error={rhfErrors.slug?.message as string | undefined}
+        />
 
         <ProductPricingFields
           register={register}
@@ -150,7 +145,8 @@ const ProductForm: FC<ProductProps> = ({
         <ProductImagesFields
           register={register}
           errors={rhfErrors}
-          images={images ?? [""]}
+          images={watch("images") ?? []}
+          imageFields={imageFields}
           onAdd={() => append("")}
           onRemove={(idx) => remove(idx)}
           labels={{

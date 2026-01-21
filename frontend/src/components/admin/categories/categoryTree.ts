@@ -10,6 +10,7 @@ export function buildTree(categories: CategoryApi[]) {
       parentId: c.parentId ?? null,
       name: c.translations?.[0]?.name ?? c.slug,
       children: [],
+      products: c._count?.products ?? 0,
     });
   }
 
@@ -36,7 +37,7 @@ export function flattenTree(
   roots: CategoryNode[],
   expanded: Set<number>,
   depth = 0,
-  ancestorLast: boolean[] = []
+  ancestorLast: boolean[] = [],
 ): CategoryRow[] {
   const rows: CategoryRow[] = [];
 
@@ -57,7 +58,7 @@ export function flattenTree(
         ...flattenTree(node.children, expanded, depth + 1, [
           ...ancestorLast,
           isLast,
-        ])
+        ]),
       );
     }
   });

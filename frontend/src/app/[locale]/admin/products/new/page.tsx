@@ -1,11 +1,11 @@
 "use client";
 
+import { api } from "@/lib/axios";
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { api } from "@/lib/axios";
-import type { Locale, SelectOption, ProductFormValues } from "@/types";
 import { ProductForm } from "@/components";
+import type { Locale, SelectOption, ProductFormValues } from "@/types";
 
 type CategoryApi = {
   id: number;
@@ -63,7 +63,7 @@ export default function AdminCreateProductPage() {
       price: "",
       oldPrice: "",
       discount: "",
-      stock: "0",
+      stock: "",
       categoryId: "",
       isFeatured: false,
       images: [""],
