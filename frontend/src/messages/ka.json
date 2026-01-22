@@ -237,7 +237,7 @@
           "discount": "ფასდაკლება (0-100%)",
           "stock": "მარაგი",
           "category": "კატეგორია",
-          "selectCategory": "აირჩიე კატეგორია",
+          "selectCategory": "",
           "featured": "რჩეული",
           "imagesTitle": "სურათები",
           "featuredHint": "აჩვენე პროდუქტი მაღაზიის მთავარ გვერდზე.",
