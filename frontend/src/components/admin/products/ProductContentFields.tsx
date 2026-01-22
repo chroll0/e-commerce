@@ -1,13 +1,12 @@
 "use client";
 
 import { FC } from "react";
-import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type { Control } from "react-hook-form";
 import type { ProductFormValues } from "@/types";
 import { FormInput, FormTextarea } from "@/components";
 
 type Props = {
-  register: UseFormRegister<ProductFormValues>;
-  errors: FieldErrors<ProductFormValues>;
+  control: Control<ProductFormValues>;
   labels: {
     boxTitle: string;
     titleEn: string;
@@ -17,7 +16,7 @@ type Props = {
   };
 };
 
-const ProductContentFields: FC<Props> = ({ register, errors, labels }) => {
+const ProductContentFields: FC<Props> = ({ control, labels }) => {
   return (
     <div className="rounded-2xl border border-border p-4 space-y-4">
       <h2 className="text-base font-semibold">{labels.boxTitle}</h2>
@@ -28,8 +27,7 @@ const ProductContentFields: FC<Props> = ({ register, errors, labels }) => {
           label={labels.titleEn}
           type="text"
           fullWidth
-          register={register}
-          errors={errors}
+          control={control}
         />
 
         <FormInput<ProductFormValues>
@@ -37,8 +35,7 @@ const ProductContentFields: FC<Props> = ({ register, errors, labels }) => {
           label={labels.titleKa}
           type="text"
           fullWidth
-          register={register}
-          errors={errors}
+          control={control}
         />
       </div>
 
@@ -47,16 +44,14 @@ const ProductContentFields: FC<Props> = ({ register, errors, labels }) => {
           name="descEn"
           label={labels.descEn}
           fullWidth
-          register={register}
-          errors={errors}
+          control={control}
         />
 
         <FormTextarea<ProductFormValues>
           name="descKa"
           label={labels.descKa}
           fullWidth
-          register={register}
-          errors={errors}
+          control={control}
         />
       </div>
     </div>

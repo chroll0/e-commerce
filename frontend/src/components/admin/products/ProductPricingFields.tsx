@@ -1,12 +1,8 @@
 "use client";
 
 import { FC, useEffect } from "react";
-import type {
-  FieldErrors,
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch,
-} from "react-hook-form";
+import type { Control, UseFormSetValue } from "react-hook-form";
+import { useWatch } from "react-hook-form";
 import type { ProductFormValues } from "@/types";
 import { FormInput } from "@/components";
 
@@ -18,22 +14,32 @@ const sanitizeMoney = (input: string) => {
     v = v.slice(0, firstDot + 1) + v.slice(firstDot + 1).replace(/\./g, "");
   }
 
+  if (v.startsWith(".")) v = `0${v}`;
   const [i, d] = v.split(".");
-  if (d != null) v = `${i}.${d.slice(0, 2)}`;
 
+  if (d != null) v = `${i}.${d.slice(0, 2)}`;
   if (v.startsWith("0") && !v.startsWith("0.") && v.length > 1) {
     v = v.replace(/^0+/, "");
     if (v === "") v = "0";
   }
-
   return v;
 };
 
 const formatMoney = (raw: string) => {
   if (!raw) return "";
-  const [i, d] = raw.split(".");
+
+  const hasDot = raw.includes(".");
+  const endsWithDot = raw.endsWith(".");
+
+  const [iRaw, dRaw = ""] = raw.split(".");
+  const i = iRaw === "" ? "0" : iRaw;
+
   const intFormatted = i.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  return d != null && d.length ? `${intFormatted}.${d}` : intFormatted;
+
+  if (endsWithDot) return `${intFormatted}.`;
+  if (hasDot) return `${intFormatted}.${dRaw}`;
+
+  return intFormatted;
 };
 
 const calcDiscount = (price: number, oldPrice: number) => {
@@ -45,34 +51,32 @@ const calcDiscount = (price: number, oldPrice: number) => {
 };
 
 type Props = {
-  register: UseFormRegister<ProductFormValues>;
-  errors: FieldErrors<ProductFormValues>;
-  watch: UseFormWatch<ProductFormValues>;
+  control: Control<ProductFormValues>;
   setValue: UseFormSetValue<ProductFormValues>;
   labels: { price: string; oldPrice: string; discount: string };
 };
 
-const ProductPricingFields: FC<Props> = ({
-  register,
-  errors,
-  watch,
-  setValue,
-  labels,
-}) => {
-  const priceRaw = watch("price") ?? "";
-  const oldRaw = watch("oldPrice") ?? "";
+const ProductPricingFields: FC<Props> = ({ control, setValue, labels }) => {
+  const priceRaw = useWatch({ control, name: "price" }) ?? "";
+  const oldRaw = useWatch({ control, name: "oldPrice" }) ?? "";
+  const currentDiscount = useWatch({ control, name: "discount" }) ?? "";
 
   useEffect(() => {
     const p = Number(priceRaw);
     const op = Number(oldRaw);
 
-    if (!priceRaw || !oldRaw || Number.isNaN(p) || Number.isNaN(op)) {
-      setValue("discount", "", { shouldDirty: true });
-      return;
-    }
+    const next =
+      !priceRaw || !oldRaw || Number.isNaN(p) || Number.isNaN(op)
+        ? ""
+        : calcDiscount(p, op);
 
-    setValue("discount", calcDiscount(p, op), { shouldDirty: true });
-  }, [priceRaw, oldRaw, setValue]);
+    if (next !== currentDiscount) {
+      setValue("discount", next, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    }
+  }, [priceRaw, oldRaw, currentDiscount, setValue]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -82,10 +86,9 @@ const ProductPricingFields: FC<Props> = ({
         type="text"
         inputMode="decimal"
         fullWidth
-        register={register}
-        errors={errors}
+        control={control}
         transform={sanitizeMoney}
-        onBlur={() => {}}
+        format={formatMoney}
       />
 
       <FormInput<ProductFormValues>
@@ -94,9 +97,9 @@ const ProductPricingFields: FC<Props> = ({
         type="text"
         inputMode="decimal"
         fullWidth
-        register={register}
-        errors={errors}
+        control={control}
         transform={sanitizeMoney}
+        format={formatMoney}
       />
 
       <FormInput<ProductFormValues>
@@ -105,8 +108,7 @@ const ProductPricingFields: FC<Props> = ({
         type="text"
         inputMode="numeric"
         fullWidth
-        register={register}
-        errors={errors}
+        control={control}
         readOnly
       />
     </div>

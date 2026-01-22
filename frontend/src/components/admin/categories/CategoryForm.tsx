@@ -1,10 +1,11 @@
 "use client";
 
-import { FC, useEffect, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslations } from "next-intl";
-import { CategoryProps } from "@/types";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+import type { CategoryProps } from "@/types";
 import { makeCategorySchema } from "@/hooks/validation";
 import { buildIndentedOptions, slugify } from "./formOptions";
 import { Button, AdminPageHeader, FormInput } from "@/components";
@@ -45,11 +46,14 @@ const CategoryForm: FC<CategoryProps> = ({
   const schema = useMemo(() => makeCategorySchema(t), [t]);
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
     watch,
     reset,
+    trigger,
+    clearErrors,
     formState: { errors: rhfErrors },
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
@@ -60,8 +64,11 @@ const CategoryForm: FC<CategoryProps> = ({
       image: initialValues.image ?? "",
       parentId: initialValues.parentId ?? "",
     },
-    mode: "onSubmit",
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
+
+  const [slugTouched, setSlugTouched] = useState(mode === "edit");
 
   useEffect(() => {
     reset({
@@ -71,16 +78,23 @@ const CategoryForm: FC<CategoryProps> = ({
       image: initialValues.image ?? "",
       parentId: initialValues.parentId ?? "",
     });
+
+    setSlugTouched(mode === "edit");
   }, [initialValues, mode, reset]);
 
-  const nameEn = watch("nameEn");
-  const slugTouched = mode === "edit";
+  const nameEn = watch("nameEn") ?? "";
 
   useEffect(() => {
     if (!slugTouched) {
-      setValue("slug", slugify(nameEn || ""), { shouldValidate: false });
+      setValue("slug", slugify(nameEn), {
+        shouldDirty: true,
+        shouldTouch: false,
+        shouldValidate: false,
+      });
+
+      clearErrors("slug");
     }
-  }, [nameEn, slugTouched, setValue]);
+  }, [nameEn, slugTouched, setValue, clearErrors]);
 
   const selectOptions = useMemo(() => {
     const filtered =
@@ -91,18 +105,26 @@ const CategoryForm: FC<CategoryProps> = ({
     return buildIndentedOptions(filtered);
   }, [parentOptions, excludeParentId]);
 
+  const submit: SubmitHandler<FormValues> = async (values) => {
+    const ok = await trigger("slug");
+    if (!ok) return;
+
+    onSubmit(values);
+  };
+
   return (
     <>
       <AdminPageHeader title={title} description={description} />
-      {errors.form && (
+
+      {errors.form ? (
         <div className="mb-4 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
           {errors.form}
         </div>
-      )}
+      ) : null}
 
       <form
         noValidate
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(submit)}
         className="space-y-6 rounded-2xl border border-border p-6"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -111,8 +133,7 @@ const CategoryForm: FC<CategoryProps> = ({
             label={nameEnLabel}
             type="text"
             fullWidth
-            register={register}
-            errors={rhfErrors}
+            control={control}
           />
 
           <FormInput<FormValues>
@@ -120,8 +141,7 @@ const CategoryForm: FC<CategoryProps> = ({
             label={nameKaLabel}
             type="text"
             fullWidth
-            register={register}
-            errors={rhfErrors}
+            control={control}
           />
         </div>
 
@@ -131,16 +151,25 @@ const CategoryForm: FC<CategoryProps> = ({
             label={slugLabel}
             type="text"
             fullWidth
-            register={register}
-            errors={rhfErrors}
+            control={control}
+            onChange={() => {
+              setSlugTouched(true);
+              if (rhfErrors.slug) clearErrors("slug");
+            }}
           />
 
           <div>
             <label className="text-sm font-medium">{parentLabel}</label>
 
             <select
-              className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-              {...register("parentId")}
+              className={[
+                "mt-2 w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none",
+                "focus-visible:ring-2 focus-visible:ring-primary/40",
+                rhfErrors.parentId ? "border-destructive" : "border-border",
+              ].join(" ")}
+              {...register("parentId", {
+                setValueAs: (v) => String(v ?? "").trim(),
+              })}
               disabled={loadingParents}
             >
               <option value="">
@@ -154,15 +183,15 @@ const CategoryForm: FC<CategoryProps> = ({
               ))}
             </select>
 
-            {rhfErrors.parentId?.message && (
+            {rhfErrors.parentId?.message ? (
               <p className="mt-2 text-xs text-destructive">
-                {rhfErrors.parentId.message as string}
+                {String(rhfErrors.parentId.message)}
               </p>
-            )}
+            ) : null}
 
-            {parentHint && (
+            {parentHint ? (
               <p className="mt-2 text-xs text-muted-foreground">{parentHint}</p>
-            )}
+            ) : null}
           </div>
         </div>
 
@@ -171,8 +200,7 @@ const CategoryForm: FC<CategoryProps> = ({
           label={imageLabel}
           type="text"
           fullWidth
-          register={register}
-          errors={rhfErrors}
+          control={control}
         />
 
         <div className="flex items-center justify-end gap-2 pt-2">

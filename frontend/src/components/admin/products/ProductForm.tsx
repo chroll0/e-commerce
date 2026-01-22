@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import {
   AdminPageHeader,
   Button,
-  Input,
+  FormInput,
   ProductContentFields,
   ProductImagesFields,
   ProductMetaFields,
@@ -35,11 +35,13 @@ const ProductForm: FC<ProductProps> = ({
   const schema = useMemo(() => makeProductSchema(t), [t]);
 
   const {
-    register,
+    control,
     handleSubmit,
     reset,
     setValue,
     watch,
+    trigger,
+    clearErrors,
     formState: { errors: rhfErrors },
   } = useForm<ProductFormValues>({
     resolver: yupResolver(schema),
@@ -47,7 +49,8 @@ const ProductForm: FC<ProductProps> = ({
       ...initialValues,
       images: initialValues.images ?? [],
     },
-    mode: "onSubmit",
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
 
   const [slugTouched, setSlugTouched] = useState(mode === "edit");
@@ -60,29 +63,35 @@ const ProductForm: FC<ProductProps> = ({
     setSlugTouched(mode === "edit");
   }, [initialValues, mode, reset]);
 
-  const titleEn = watch("titleEn");
+  const titleEn = watch("titleEn") ?? "";
   const images = watch("images") ?? [];
   const cleanImages = useMemo(() => cleanImageUrls(images), [images]);
 
   useEffect(() => {
     if (!slugTouched) {
-      setValue("slug", slugify(titleEn || ""), { shouldValidate: false });
+      setValue("slug", slugify(titleEn), {
+        shouldDirty: true,
+        shouldTouch: false,
+        shouldValidate: false,
+      });
+      clearErrors("slug");
     }
-  }, [titleEn, slugTouched, setValue]);
+  }, [titleEn, slugTouched, setValue, clearErrors]);
 
-  const submit: SubmitHandler<ProductFormValues> = (values) => {
+  const submit: SubmitHandler<ProductFormValues> = async (values) => {
+    const ok = await trigger("slug");
+    if (!ok) return;
+
     onSubmit(values, cleanImages);
   };
-
-  const slugReg = register("slug");
 
   return (
     <>
       <AdminPageHeader title={title} description={description} />
+
       <form noValidate onSubmit={handleSubmit(submit)} className="space-y-6">
         <ProductContentFields
-          register={register}
-          errors={rhfErrors}
+          control={control}
           labels={{
             boxTitle: labels.contentTitle,
             titleEn: labels.titleEn,
@@ -92,22 +101,20 @@ const ProductForm: FC<ProductProps> = ({
           }}
         />
 
-        <Input
+        <FormInput<ProductFormValues>
+          name="slug"
+          control={control}
           label={labels.slug}
           type="text"
           fullWidth
-          {...slugReg}
-          onChange={(e) => {
+          onChange={() => {
             setSlugTouched(true);
-            slugReg.onChange(e);
+            if (rhfErrors.slug) clearErrors("slug");
           }}
-          error={rhfErrors.slug?.message as string | undefined}
         />
 
         <ProductPricingFields
-          register={register}
-          errors={rhfErrors}
-          watch={watch}
+          control={control}
           setValue={setValue}
           labels={{
             price: labels.price,
@@ -117,7 +124,7 @@ const ProductForm: FC<ProductProps> = ({
         />
 
         <ProductMetaFields
-          register={register}
+          control={control}
           errors={rhfErrors}
           categories={categories}
           loadingCategories={loadingCategories}
@@ -134,9 +141,9 @@ const ProductForm: FC<ProductProps> = ({
         <ProductImagesFields
           setValue={setValue}
           errors={rhfErrors}
-          images={watch("images") ?? []}
+          images={images}
           onRemove={(idx) => {
-            const next = [...(watch("images") ?? [])];
+            const next = [...images];
             next.splice(idx, 1);
             setValue("images", next, {
               shouldDirty: true,
