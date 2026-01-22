@@ -37,8 +37,8 @@ const AdminDashboard = () => {
 
       <div className="mt-6 space-y-6">
         <AdminStatsGrid locale={locale} />
+        <AdminQuickActions locale={locale} />
         <AdminDonutStats />
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <AdminRecentOrders
             locale={locale}
@@ -47,8 +47,6 @@ const AdminDashboard = () => {
           <AdminLowStock locale={locale} items={dash?.lowStock ?? []} />
           <AdminOrdersStatusDonut data={dash?.ordersByStatus30d ?? []} />
         </div>
-
-        <AdminQuickActions locale={locale} />
       </div>
     </>
   );

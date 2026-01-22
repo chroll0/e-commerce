@@ -242,10 +242,12 @@
           "selectCategory": "Select category",
           "featured": "Featured",
           "featuredHint": "Show this product in Featured sections.",
-          "imagesTitle": "Images (URLs)",
-          "addImage": "Add image",
-          "imageUrl": "Image URL",
-          "remove": "Remove"
+          "imagesTitle": "Images",
+          "imagesHint": "Drag & drop images here, or click to select.",
+          "addImage": "Select images",
+          "remove": "Remove image",
+          "preview": "Preview",
+          "uploading": "Uploading {count}..."
         },
         "buttons": {
           "submitCreate": "Create product",
@@ -274,7 +276,7 @@
         "discount": "Discount must be (0–100)%",
         "stock": "Stock must be ≥ 0",
         "category": "Category is required",
-        "images": "At least 1 image URL is required"
+        "images": "At least 1 image is required"
       },
       "messages": {
         "created": "Product created successfully.",

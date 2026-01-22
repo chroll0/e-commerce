@@ -63,7 +63,7 @@ type Labels = {
 
   imagesTitle: string;
   addImage: string;
-  imageUrl: string;
+  imagesHint: string;
   remove: string;
 
   cancel: string;

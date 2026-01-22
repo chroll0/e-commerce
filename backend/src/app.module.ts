@@ -5,12 +5,14 @@ import { UserModule } from "./modules/user/user.module";
 import { CategoryModule } from "./modules/category/category.module";
 import { ProductModule } from "./modules/product/product.module";
 import { AdminModule } from "./modules/admin/admin.module";
+import { CloudinaryModule } from "./modules/cloudinary/cloudinary.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UserModule,
+    CloudinaryModule,
     CategoryModule,
     ProductModule,
     AdminModule,

@@ -12,15 +12,24 @@ export class CloudinaryService {
   }
 
   async uploadImage(file: Express.Multer.File, folder = "products") {
-    const result = await cloudinary.uploader.upload(file.path, {
-      folder,
-      resource_type: "image",
+    if (!file?.buffer) {
+      throw new Error("File buffer is missing");
+    }
+
+    return new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder, resource_type: "image" },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        },
+      );
+
+      stream.end(file.buffer);
     });
-    return result;
   }
 
   async deleteImage(publicId: string) {
-    const result = await cloudinary.uploader.destroy(publicId);
-    return result;
+    return cloudinary.uploader.destroy(publicId);
   }
 }

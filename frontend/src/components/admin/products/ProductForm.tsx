@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useEffect, useMemo, useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslations } from "next-intl";
 
@@ -36,7 +36,6 @@ const ProductForm: FC<ProductProps> = ({
 
   const {
     register,
-    control,
     handleSubmit,
     reset,
     setValue,
@@ -46,18 +45,9 @@ const ProductForm: FC<ProductProps> = ({
     resolver: yupResolver(schema),
     defaultValues: {
       ...initialValues,
-      images: initialValues.images?.length ? initialValues.images : [""],
+      images: initialValues.images ?? [],
     },
     mode: "onSubmit",
-  });
-
-  const {
-    fields: imageFields,
-    append,
-    remove,
-  } = useFieldArray<ProductFormValues>({
-    control,
-    name: "images" as never,
   });
 
   const [slugTouched, setSlugTouched] = useState(mode === "edit");
@@ -65,14 +55,14 @@ const ProductForm: FC<ProductProps> = ({
   useEffect(() => {
     reset({
       ...initialValues,
-      images: initialValues.images?.length ? initialValues.images : [""],
+      images: initialValues.images ?? [],
     });
     setSlugTouched(mode === "edit");
   }, [initialValues, mode, reset]);
 
   const titleEn = watch("titleEn");
-  const images = watch("images");
-  const cleanImages = useMemo(() => cleanImageUrls(images ?? []), [images]);
+  const images = watch("images") ?? [];
+  const cleanImages = useMemo(() => cleanImageUrls(images), [images]);
 
   useEffect(() => {
     if (!slugTouched) {
@@ -102,7 +92,6 @@ const ProductForm: FC<ProductProps> = ({
           }}
         />
 
-        {/* slug */}
         <Input
           label={labels.slug}
           type="text"
@@ -143,17 +132,24 @@ const ProductForm: FC<ProductProps> = ({
         />
 
         <ProductImagesFields
-          register={register}
+          setValue={setValue}
           errors={rhfErrors}
           images={watch("images") ?? []}
-          imageFields={imageFields}
-          onAdd={() => append("")}
-          onRemove={(idx) => remove(idx)}
+          onRemove={(idx) => {
+            const next = [...(watch("images") ?? [])];
+            next.splice(idx, 1);
+            setValue("images", next, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
+          }}
           labels={{
-            title: labels.imagesTitle,
-            add: labels.addImage,
-            imageUrl: labels.imageUrl,
-            remove: labels.remove,
+            title: t("form.fields.imagesTitle"),
+            imagesHint: t("form.fields.imagesHint"),
+            add: t("form.fields.addImage"),
+            remove: t("form.fields.remove"),
+            preview: t("form.fields.preview"),
+            uploading: (count) => t("form.fields.uploading", { count }),
           }}
         />
 
