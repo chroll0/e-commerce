@@ -59,13 +59,12 @@ export const makeProductSchema = (t: TFn) =>
 
     images: yup
       .array()
+      .of(yup.string().trim().default("").defined())
       .transform((value) => (Array.isArray(value) ? value : []))
-      .of(yup.string().trim().required())
       .test("images-required", t("errors.images"), (arr) => {
-        const cleaned = (arr ?? [])
-          .map((x) => (x ?? "").trim())
-          .filter(Boolean);
+        const cleaned = (arr ?? []).map((x) => x.trim()).filter(Boolean);
         return cleaned.length >= 1;
       })
-      .default([]),
+      .default([])
+      .defined(),
   });

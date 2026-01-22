@@ -1,12 +1,13 @@
 "use client";
 
+import React from "react";
 import type {
-  FieldErrors,
+  Control,
   FieldValues,
   Path,
   RegisterOptions,
-  UseFormRegister,
 } from "react-hook-form";
+import { useController } from "react-hook-form";
 import { Input } from "@/components";
 
 type InputProps = React.ComponentProps<typeof Input>;
@@ -16,59 +17,45 @@ type Props<T extends FieldValues> = Omit<
   "name" | "defaultValue"
 > & {
   name: Path<T>;
-  register: UseFormRegister<T>;
-  errors?: FieldErrors<T>;
+  control: Control<T>;
   rules?: RegisterOptions<T, Path<T>>;
-  displayValue?: string;
   transform?: (nextDisplayedValue: string) => string;
-};
-
-const getErrorMessage = <T extends FieldValues>(
-  errors: FieldErrors<T> | undefined,
-  name: Path<T>,
-) => {
-  if (!errors) return undefined;
-
-  const parts = String(name).split(".");
-  let current: any = errors;
-
-  for (const key of parts) {
-    current = current?.[key];
-    if (!current) return undefined;
-  }
-
-  return (current?.message as string | undefined) ?? undefined;
+  format?: (storedValue: string) => string;
 };
 
 const FormInput = <T extends FieldValues>({
   name,
-  register,
-  errors,
+  control,
   rules,
+  transform,
+  format,
   onChange,
   onBlur,
-  displayValue,
-  transform,
   ...rest
 }: Props<T>) => {
-  const message = getErrorMessage(errors, name);
-  const reg = register(name, rules);
+  const { field, fieldState } = useController({ name, control, rules });
+
+  const stored = field.value == null ? "" : String(field.value);
+  const displayed = format ? format(stored) : stored;
 
   return (
     <Input
       {...rest}
-      {...reg}
-      value={displayValue ?? (rest.value as any)}
+      name={field.name}
+      ref={field.ref}
+      value={displayed}
       onChange={(e) => {
+        const nextDisplayed = e.target.value;
+        const nextStored = transform ? transform(nextDisplayed) : nextDisplayed;
+
+        field.onChange(nextStored);
         onChange?.(e);
-        if (transform) e.target.value = transform(e.target.value);
-        reg.onChange(e);
       }}
       onBlur={(e) => {
+        field.onBlur();
         onBlur?.(e);
-        reg.onBlur(e);
       }}
-      error={message}
+      error={fieldState.error?.message}
     />
   );
 };

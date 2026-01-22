@@ -2,68 +2,75 @@
 
 import type React from "react";
 import type {
-  FieldErrors,
+  Control,
   FieldValues,
   Path,
   RegisterOptions,
-  UseFormRegister,
 } from "react-hook-form";
+import { useController } from "react-hook-form";
 import classNames from "classnames";
 
 type Props<T extends FieldValues> = Omit<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  "name"
+  "name" | "defaultValue"
 > & {
   name: Path<T>;
   label?: string;
-  register: UseFormRegister<T>;
-  errors?: FieldErrors<T>;
+  control: Control<T>;
   rules?: RegisterOptions<T, Path<T>>;
   fullWidth?: boolean;
-};
-
-const getErrorMessage = <T extends FieldValues>(
-  errors: FieldErrors<T> | undefined,
-  name: Path<T>,
-) => {
-  if (!errors) return undefined;
-
-  const parts = String(name).split(".");
-  let current: any = errors;
-
-  for (const key of parts) {
-    current = current?.[key];
-    if (!current) return undefined;
-  }
-
-  return (current?.message as string | undefined) ?? undefined;
+  transform?: (nextDisplayedValue: string) => string;
+  format?: (storedValue: string) => string;
 };
 
 const FormTextarea = <T extends FieldValues>({
   name,
   label,
-  register,
-  errors,
+  control,
   rules,
   className,
   fullWidth,
+  transform,
+  format,
+  onChange,
+  onBlur,
   ...rest
 }: Props<T>) => {
-  const message = getErrorMessage(errors, name);
+  const { field, fieldState } = useController({ name, control, rules });
+
   const width = fullWidth ? "w-full" : "";
+  const message = fieldState.error?.message;
+
+  const stored = field.value == null ? "" : String(field.value);
+  const displayed = format ? format(stored) : stored;
 
   return (
     <div className={classNames("flex flex-col gap-1", width)}>
       {label && <label className="text-sm font-medium">{label}</label>}
 
       <textarea
+        {...rest}
+        name={field.name}
+        ref={field.ref}
+        value={displayed}
+        onChange={(e) => {
+          const nextDisplayed = e.target.value;
+          const nextStored = transform
+            ? transform(nextDisplayed)
+            : nextDisplayed;
+
+          field.onChange(nextStored);
+          onChange?.(e);
+        }}
+        onBlur={(e) => {
+          field.onBlur();
+          onBlur?.(e);
+        }}
         className={classNames(
           "mt-2 w-full min-h-[140px] rounded-lg border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
           message ? "border-red-500" : "border-border",
           className,
         )}
-        {...register(name, rules)}
-        {...rest}
       />
 
       {message && (

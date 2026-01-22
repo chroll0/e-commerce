@@ -43,7 +43,7 @@ const SearchBar = ({ value, onChange }: Props) => {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         fullWidth
-        leftIcon={<Search className="w-4 h-4 text-muted" />}
+        leftIcon={<Search className="w-4 h-4 mt-3 text-muted" />}
       />
 
       {value && (
