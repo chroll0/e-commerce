@@ -40,6 +40,8 @@ const ProductForm: FC<ProductProps> = ({
     reset,
     setValue,
     watch,
+    trigger,
+    clearErrors,
     formState: { errors: rhfErrors },
   } = useForm<ProductFormValues>({
     resolver: yupResolver(schema),
@@ -67,11 +69,19 @@ const ProductForm: FC<ProductProps> = ({
 
   useEffect(() => {
     if (!slugTouched) {
-      setValue("slug", slugify(titleEn), { shouldValidate: false });
+      setValue("slug", slugify(titleEn), {
+        shouldDirty: true,
+        shouldTouch: false,
+        shouldValidate: false,
+      });
+      clearErrors("slug");
     }
-  }, [titleEn, slugTouched, setValue]);
+  }, [titleEn, slugTouched, setValue, clearErrors]);
 
-  const submit: SubmitHandler<ProductFormValues> = (values) => {
+  const submit: SubmitHandler<ProductFormValues> = async (values) => {
+    const ok = await trigger("slug");
+    if (!ok) return;
+
     onSubmit(values, cleanImages);
   };
 
@@ -97,7 +107,10 @@ const ProductForm: FC<ProductProps> = ({
           label={labels.slug}
           type="text"
           fullWidth
-          onChange={() => setSlugTouched(true)}
+          onChange={() => {
+            setSlugTouched(true);
+            if (rhfErrors.slug) clearErrors("slug");
+          }}
         />
 
         <ProductPricingFields

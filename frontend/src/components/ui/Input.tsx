@@ -68,7 +68,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={classNames(
-              "peer flex-1 bg-transparent outline-none placeholder:text-transparent",
+              "peer flex-1 bg-transparent outline-none placeholder:text-transparent text-foreground",
               sizeStyles.input,
             )}
             type={passwordToggle ? (showPassword ? "text" : "password") : type}
