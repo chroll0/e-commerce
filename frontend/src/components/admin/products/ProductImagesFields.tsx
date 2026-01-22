@@ -4,9 +4,10 @@ import { FC, useMemo, useRef, useState } from "react";
 import { Button } from "@/components";
 import type { FieldErrors, UseFormSetValue } from "react-hook-form";
 import type { ProductFormValues } from "@/types";
-import { X } from "lucide-react";
+import { X, UploadCloud } from "lucide-react";
 import { uploadProductImage } from "@/lib/cloudinary";
 import Image from "next/image";
+import Link from "next/link";
 
 type Props = {
   setValue: UseFormSetValue<ProductFormValues>;
@@ -21,16 +22,14 @@ type Props = {
     preview: string;
     uploading: (count: number) => string;
 
-    // optional UI texts for local validation
-    invalidFile?: string; // "Only images are allowed"
-    tooLarge?: string; // "File is too large"
-    tooMany?: string; // "Too many images"
-    uploadFailed?: string; // "Upload failed"
+    // local validation messages (i18n)
+    invalidFile: string;
+    tooLarge: (maxMb: number) => string;
+    tooMany: (maxFiles: number) => string;
+    uploadFailed: string;
   };
-
-  // optional limits
-  maxFiles?: number; // default 10
-  maxSizeMb?: number; // default 5
+  maxFiles?: number; // e.g. 5
+  maxSizeMb?: number; // e.g. 10
 };
 
 const ProductImagesFields: FC<Props> = ({
@@ -39,8 +38,8 @@ const ProductImagesFields: FC<Props> = ({
   images,
   onRemove,
   labels,
-  maxFiles = 10,
-  maxSizeMb = 5,
+  maxFiles = 5,
+  maxSizeMb = 10,
 }) => {
   const imagesError = errors.images?.message as string | undefined;
 
@@ -57,27 +56,35 @@ const ProductImagesFields: FC<Props> = ({
     [images],
   );
 
+  const disabled = uploadingCount > 0;
+
+  function openPicker() {
+    if (!disabled) inputRef.current?.click();
+  }
+
+  function showError(msg: string) {
+    setLocalError(msg);
+  }
+
   function validateFiles(files: File[]) {
-    // clear old error
     setLocalError(null);
 
-    // max count
+    // count
     const currentCount = safeImages.length;
     if (currentCount + files.length > maxFiles) {
-      setLocalError(labels.tooMany ?? `Max ${maxFiles} images allowed.`);
+      showError(labels.tooMany(maxFiles));
       return false;
     }
 
-    // only images + size
     const maxBytes = maxSizeMb * 1024 * 1024;
 
     for (const f of files) {
       if (!f.type.startsWith("image/")) {
-        setLocalError(labels.invalidFile ?? "Only image files are allowed.");
+        showError(labels.invalidFile);
         return false;
       }
       if (f.size > maxBytes) {
-        setLocalError(labels.tooLarge ?? `Max file size is ${maxSizeMb}MB.`);
+        showError(labels.tooLarge(maxSizeMb));
         return false;
       }
     }
@@ -100,10 +107,11 @@ const ProductImagesFields: FC<Props> = ({
 
       const urls = results.map((r) => r.secureUrl);
 
-      // base: keep only non-empty strings
-      const base = (images ?? []).filter(
-        (u) => typeof u === "string" && u.trim(),
-      );
+      // keep only non-empty
+      const base = (images ?? [])
+        .filter((u) => typeof u === "string")
+        .map((u) => u.trim())
+        .filter(Boolean);
 
       // avoid duplicates
       const next = [...base];
@@ -115,9 +123,9 @@ const ProductImagesFields: FC<Props> = ({
         shouldDirty: true,
         shouldValidate: true,
       });
-    } catch (e) {
-      setLocalError(labels.uploadFailed ?? "Upload failed.");
-      throw e;
+    } catch {
+      showError(labels.uploadFailed);
+      throw new Error(labels.uploadFailed);
     } finally {
       setUploadingCount((c) => Math.max(0, c - files.length));
     }
@@ -132,15 +140,13 @@ const ProductImagesFields: FC<Props> = ({
     if (files?.length) uploadFiles(files);
   }
 
-  const disabled = uploadingCount > 0;
+  const errorText = localError ?? imagesError;
 
   return (
     <div className="rounded-2xl border border-border p-4 space-y-4">
-      {(imagesError || localError) && (
-        <p className="text-xs text-red-500 leading-tight">
-          {localError ?? imagesError}
-        </p>
-      )}
+      {errorText ? (
+        <p className="text-xs text-red-500 leading-tight">{errorText}</p>
+      ) : null}
 
       {/* Dropzone */}
       <div
@@ -160,7 +166,7 @@ const ProductImagesFields: FC<Props> = ({
           setIsDragging(false);
         }}
         onDrop={onDrop}
-        onClick={() => !disabled && inputRef.current?.click()}
+        onClick={openPicker}
         className={[
           "rounded-2xl border border-dashed p-6 transition",
           "flex flex-col items-center justify-center gap-3 text-center",
@@ -168,8 +174,11 @@ const ProductImagesFields: FC<Props> = ({
           isDragging ? "border-primary bg-primary/5" : "border-border",
         ].join(" ")}
       >
+        <UploadCloud className="h-6 w-6 text-muted-foreground" />
+
         <div className="space-y-1">
           <p className="text-sm font-medium">{labels.title}</p>
+
           <p className="text-xs text-muted-foreground">{labels.imagesHint}</p>
 
           {uploadingCount > 0 ? (
@@ -185,7 +194,7 @@ const ProductImagesFields: FC<Props> = ({
           size="sm"
           onClick={(e) => {
             e.stopPropagation();
-            if (!disabled) inputRef.current?.click();
+            openPicker();
           }}
           disabled={disabled}
         >
@@ -199,7 +208,7 @@ const ProductImagesFields: FC<Props> = ({
           multiple
           className="hidden"
           onChange={(e) => {
-            const files = e.target.files;
+            const files = e.currentTarget.files;
             if (files?.length) uploadFiles(files);
             e.currentTarget.value = "";
           }}
@@ -215,39 +224,37 @@ const ProductImagesFields: FC<Props> = ({
               className="relative rounded-xl border border-border overflow-hidden bg-background"
             >
               <div className="relative aspect-square">
-                <img
+                <Image
                   src={url}
                   alt={`${labels.title} ${index + 1}`}
+                  fill
                   className="object-cover"
                   sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </div>
 
-              <a
+              <Link
                 href={url}
                 target="_blank"
                 rel="noreferrer"
                 className="absolute bottom-2 left-2 text-xs underline bg-background/80 rounded-md px-2 py-1"
               >
                 {labels.preview}
-              </a>
+              </Link>
 
-              <button
+              <Button
                 type="button"
+                variant="secondary"
+                size="sm"
+                iconOnly
                 onClick={() => onRemove(index)}
                 disabled={disabled}
                 aria-label={labels.remove}
                 title={labels.remove}
-                className={[
-                  "absolute top-2 right-2 rounded-full border border-border bg-background/90",
-                  "p-1 shadow-sm transition",
-                  disabled
-                    ? "opacity-60 cursor-not-allowed"
-                    : "hover:bg-background",
-                ].join(" ")}
+                className="absolute top-2 right-2"
               >
                 <X className="h-4 w-4" />
-              </button>
+              </Button>
             </div>
           ))}
         </div>

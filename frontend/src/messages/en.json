@@ -247,7 +247,11 @@
           "addImage": "Select images",
           "remove": "Remove image",
           "preview": "Preview",
-          "uploading": "Uploading {count}..."
+          "uploading": "Uploading {count}...",
+          "invalidFile": "Only image files are allowed.",
+          "tooLarge": "Max file size is {max}MB.",
+          "tooMany": "Max {max} images allowed.",
+          "uploadFailed": "Upload failed. Please try again."
         },
         "buttons": {
           "submitCreate": "Create product",

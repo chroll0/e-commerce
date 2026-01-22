@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslations } from "next-intl";
 
@@ -70,7 +70,7 @@ const ProductForm: FC<ProductProps> = ({
     }
   }, [titleEn, slugTouched, setValue]);
 
-  const submit = (values: ProductFormValues) => {
+  const submit: SubmitHandler<ProductFormValues> = (values) => {
     onSubmit(values, cleanImages);
   };
 
@@ -150,6 +150,10 @@ const ProductForm: FC<ProductProps> = ({
             remove: t("form.fields.remove"),
             preview: t("form.fields.preview"),
             uploading: (count) => t("form.fields.uploading", { count }),
+            invalidFile: t("form.fields.invalidFile"),
+            tooLarge: (maxMb) => t("form.fields.tooLarge", { max: maxMb }),
+            tooMany: (max) => t("form.fields.tooMany", { max }),
+            uploadFailed: t("form.fields.uploadFailed"),
           }}
         />
 
