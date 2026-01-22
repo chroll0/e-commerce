@@ -18,3 +18,5 @@ export type {
 export type { SelectOption } from "@/types/common";
 
 export type { UserApi, UserRole } from "@/types/user";
+
+export type { DashboardResponse } from "@/types/order";
