@@ -7,7 +7,6 @@ import type { ProductFormValues } from "@/types";
 import { X, UploadCloud } from "lucide-react";
 import { uploadProductImage } from "@/lib/cloudinary";
 import Image from "next/image";
-import Link from "next/link";
 
 type Props = {
   setValue: UseFormSetValue<ProductFormValues>;
@@ -21,15 +20,13 @@ type Props = {
     remove: string;
     preview: string;
     uploading: (count: number) => string;
-
-    // local validation messages (i18n)
     invalidFile: string;
     tooLarge: (maxMb: number) => string;
     tooMany: (maxFiles: number) => string;
     uploadFailed: string;
   };
-  maxFiles?: number; // e.g. 5
-  maxSizeMb?: number; // e.g. 10
+  maxFiles?: number;
+  maxSizeMb?: number;
 };
 
 const ProductImagesFields: FC<Props> = ({
@@ -68,8 +65,6 @@ const ProductImagesFields: FC<Props> = ({
 
   function validateFiles(files: File[]) {
     setLocalError(null);
-
-    // count
     const currentCount = safeImages.length;
     if (currentCount + files.length > maxFiles) {
       showError(labels.tooMany(maxFiles));
@@ -113,7 +108,6 @@ const ProductImagesFields: FC<Props> = ({
         .map((u) => u.trim())
         .filter(Boolean);
 
-      // avoid duplicates
       const next = [...base];
       for (const u of urls) {
         if (u && !next.includes(u)) next.push(u);
@@ -178,9 +172,7 @@ const ProductImagesFields: FC<Props> = ({
 
         <div className="space-y-1">
           <p className="text-sm font-medium">{labels.title}</p>
-
           <p className="text-xs text-muted-foreground">{labels.imagesHint}</p>
-
           {uploadingCount > 0 ? (
             <p className="text-xs text-muted-foreground">
               {labels.uploading(uploadingCount)}
@@ -217,7 +209,7 @@ const ProductImagesFields: FC<Props> = ({
 
       {/* Previews */}
       {safeImages.length ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
           {safeImages.map(({ url, index }) => (
             <div
               key={`${url}-${index}`}
@@ -233,14 +225,16 @@ const ProductImagesFields: FC<Props> = ({
                 />
               </div>
 
-              <Link
-                href={url}
-                target="_blank"
-                rel="noreferrer"
-                className="absolute bottom-2 left-2 text-xs underline bg-background/80 rounded-md px-2 py-1"
+              <Button
+                asChild
+                variant="primary"
+                size="xs"
+                className="absolute bottom-2 left-2"
               >
-                {labels.preview}
-              </Link>
+                <a href={url} target="_blank" rel="noreferrer">
+                  {labels.preview}
+                </a>
+              </Button>
 
               <Button
                 type="button"
