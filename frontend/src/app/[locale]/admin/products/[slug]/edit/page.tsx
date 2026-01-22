@@ -190,7 +190,7 @@ export default function AdminEditProductPage() {
           featuredHint: t("form.fields.featuredHint"),
           imagesTitle: t("form.fields.imagesTitle"),
           addImage: t("form.fields.addImage"),
-          imageUrl: t("form.fields.imageUrl"),
+          imagesHint: t("form.fields.imagesHint"),
           remove: t("form.fields.remove"),
           cancel: t("actions.back"),
           submit: t("actions.save"),

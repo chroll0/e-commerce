@@ -58,6 +58,9 @@ export { default as FormTextarea } from "./admin/common/FormTextarea";
 export { default as AdminStatsGrid } from "./admin/dashboard/AdminStatsGrid";
 export { default as AdminQuickActions } from "./admin/dashboard/AdminQuickActions";
 export { default as AdminDonutStats } from "./admin/dashboard/AdminDonutStats";
+export { default as AdminRecentOrders } from "./admin/dashboard/AdminRecentOrders";
+export { default as AdminLowStock } from "./admin/dashboard/AdminLowStock";
+export { default as AdminOrdersStatusDonut } from "./admin/dashboard/AdminOrdersStatusDonut";
 
 // User management components
 export { default as UserEditModal } from "./admin/users/UserEditModal";

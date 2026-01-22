@@ -7,6 +7,7 @@ import {
   Delete,
   Query,
   UseGuards,
+  BadRequestException,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { CloudinaryService } from "./cloudinary.service";
@@ -27,9 +28,9 @@ export class CloudinaryController {
   @UseInterceptors(FileInterceptor("file", { storage: multer.memoryStorage() }))
   async uploadImage(
     @UploadedFile() file: Express.Multer.File,
-    @Body() dto: UploadImageDto
+    @Body() dto: UploadImageDto,
   ) {
-    if (!file) throw new Error("File is required");
+    if (!file) throw new BadRequestException("File is required");
     const result = await this.cloudinaryService.uploadImage(file, dto.folder);
     return result;
   }
@@ -38,7 +39,7 @@ export class CloudinaryController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   async deleteImage(@Query("publicId") publicId: string) {
-    if (!publicId) throw new Error("publicId is required");
+    if (!publicId) throw new BadRequestException("publicId is required");
     return this.cloudinaryService.deleteImage(publicId);
   }
 }

@@ -190,6 +190,13 @@
         "usersLast30d": "Users: last 30 days",
         "ordersLast30d": "Orders: last 30 days",
         "paymentsLast30d": "Payments: last 30 days"
+      },
+      "widgets": {
+        "recentOrders": "Recent Orders",
+        "lowStock": "Low Stock",
+        "ordersByStatus30d": "Orders by status (30d)",
+        "empty": "Nothing to show",
+        "stock": "Stock"
       }
     },
 
@@ -235,10 +242,16 @@
           "selectCategory": "Select category",
           "featured": "Featured",
           "featuredHint": "Show this product in Featured sections.",
-          "imagesTitle": "Images (URLs)",
-          "addImage": "Add image",
-          "imageUrl": "Image URL",
-          "remove": "Remove"
+          "imagesTitle": "Images",
+          "imagesHint": "Drag & drop images here, or click to select.",
+          "addImage": "Select images",
+          "remove": "Remove image",
+          "preview": "Preview",
+          "uploading": "Uploading {count}...",
+          "invalidFile": "Only image files are allowed.",
+          "tooLarge": "Max file size is {max}MB.",
+          "tooMany": "Max {max} images allowed.",
+          "uploadFailed": "Upload failed. Please try again."
         },
         "buttons": {
           "submitCreate": "Create product",
@@ -267,7 +280,7 @@
         "discount": "Discount must be (0–100)%",
         "stock": "Stock must be ≥ 0",
         "category": "Category is required",
-        "images": "At least 1 image URL is required"
+        "images": "At least 1 image is required"
       },
       "messages": {
         "created": "Product created successfully.",

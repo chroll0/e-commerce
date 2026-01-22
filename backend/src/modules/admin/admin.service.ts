@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
+import { Locale } from "../../common/types/locale.types";
 
 function daysAgo(n: number) {
   return new Date(Date.now() - n * 24 * 60 * 60 * 1000);
@@ -8,6 +9,69 @@ function daysAgo(n: number) {
 @Injectable()
 export class AdminService {
   constructor(private prisma: PrismaService) {}
+
+  async getDashboard(locale: Locale = "en") {
+    const since30 = daysAgo(30);
+
+    const [recentOrders, lowStock, grouped] = await Promise.all([
+      // Recent Orders (5)
+      this.prisma.order.findMany({
+        take: 5,
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          total: true,
+          status: true,
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
+        },
+      }),
+
+      // Low Stock (10) — adjust threshold if you want
+      this.prisma.product.findMany({
+        take: 10,
+        where: { stock: { lte: 5 } },
+        orderBy: [{ stock: "asc" }, { id: "desc" }],
+        select: {
+          id: true,
+          slug: true,
+          stock: true,
+          translations: {
+            where: { locale },
+            select: { title: true },
+          },
+        },
+      }),
+
+      // Orders by status (30d) donut source
+      this.prisma.order.groupBy({
+        by: ["status"],
+        where: { createdAt: { gte: since30 } },
+        _count: { _all: true },
+      }),
+    ]);
+
+    const ordersByStatus30d = grouped.map((x) => ({
+      status: x.status,
+      count: x._count._all,
+    }));
+
+    return {
+      recentOrders,
+      lowStock: lowStock.map((p) => ({
+        id: p.id,
+        slug: p.slug,
+        stock: p.stock,
+        title: p.translations?.[0]?.title ?? p.slug,
+      })),
+      ordersByStatus30d,
+    };
+  }
 
   async getStats() {
     const since7 = daysAgo(7);
