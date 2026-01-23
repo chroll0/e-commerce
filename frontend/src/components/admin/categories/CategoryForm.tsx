@@ -45,6 +45,11 @@ const CategoryForm: FC<CategoryProps> = ({
   const t = useTranslations("admin.categories");
   const schema = useMemo(() => makeCategorySchema(t), [t]);
 
+  const safeParentId = useMemo(
+    () => String(initialValues.parentId ?? "").trim(),
+    [initialValues.parentId],
+  );
+
   const {
     control,
     register,
@@ -62,7 +67,7 @@ const CategoryForm: FC<CategoryProps> = ({
       nameKa: initialValues.nameKa ?? "",
       slug: initialValues.slug ?? "",
       image: initialValues.image ?? "",
-      parentId: initialValues.parentId ?? "",
+      parentId: safeParentId,
     },
     mode: "onChange",
     reValidateMode: "onChange",
@@ -76,11 +81,11 @@ const CategoryForm: FC<CategoryProps> = ({
       nameKa: initialValues.nameKa ?? "",
       slug: initialValues.slug ?? "",
       image: initialValues.image ?? "",
-      parentId: initialValues.parentId ?? "",
+      parentId: safeParentId,
     });
 
     setSlugTouched(mode === "edit");
-  }, [initialValues, mode, reset]);
+  }, [initialValues, mode, reset, safeParentId]);
 
   const nameEn = watch("nameEn") ?? "";
 
@@ -104,6 +109,17 @@ const CategoryForm: FC<CategoryProps> = ({
 
     return buildIndentedOptions(filtered);
   }, [parentOptions, excludeParentId]);
+
+  useEffect(() => {
+    if (!safeParentId) return;
+    const exists = selectOptions.some((opt) => String(opt.id) === safeParentId);
+    if (!exists) return;
+    setValue("parentId", safeParentId, {
+      shouldDirty: true,
+      shouldTouch: false,
+      shouldValidate: false,
+    });
+  }, [safeParentId, selectOptions, setValue]);
 
   const submit: SubmitHandler<FormValues> = async (values) => {
     const ok = await trigger("slug");
