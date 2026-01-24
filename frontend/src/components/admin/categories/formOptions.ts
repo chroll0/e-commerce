@@ -24,15 +24,24 @@ export function buildIndentedOptions(list: CategoryOption[]) {
 
   const result: { id: number; label: string }[] = [];
 
-  const dfs = (parentId: number | null, depth: number) => {
+  const INDENT = "\u00A0\u00A0\u00A0";
+
+  const dfs = (parentId: number | null, prefixParts: boolean[]) => {
     const children = byParent.get(parentId) ?? [];
-    for (const c of children) {
-      const prefix = depth === 0 ? "" : `${"— ".repeat(depth)}`;
+
+    children.forEach((c, idx) => {
+      const isLast = idx === children.length - 1;
+
+      const prefix =
+        prefixParts.map(() => INDENT).join("") +
+        (prefixParts.length ? (isLast ? "└─ " : "├─ ") : "");
+
       result.push({ id: c.id, label: `${prefix}${c.name}` });
-      dfs(c.id, depth + 1);
-    }
+
+      dfs(c.id, [...prefixParts, !isLast]);
+    });
   };
 
-  dfs(null, 0);
+  dfs(null, []);
   return result;
 }

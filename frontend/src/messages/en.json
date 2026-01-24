@@ -330,7 +330,7 @@
       },
       "tips": {
         "hierarchy": "Tip: Create a parent category first (e.g. Electronics), then add subcategories under it.",
-        "parentExample": "Example: Electronics → Computer Parts → GPUs",
+        "parentExample": "example: parent → child → grandchild → etc.",
         "parentChange": "Changing parent will move this category in the tree."
       },
       "fields": {
@@ -339,7 +339,7 @@
         "nameKa": "Name (KA)",
         "slug": "Slug (URL)",
         "parent": "Parent category (optional)",
-        "noParent": "— No parent —",
+        "noParent": "No parent",
         "image": "Image URL (optional)"
       },
       "placeholders": {

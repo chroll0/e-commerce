@@ -9,6 +9,7 @@ import type { CategoryProps } from "@/types";
 import { makeCategorySchema } from "@/hooks/validation";
 import { buildIndentedOptions, slugify } from "./formOptions";
 import { Button, AdminPageHeader, FormInput } from "@/components";
+import { ChevronDown } from "lucide-react";
 
 type FormValues = {
   nameEn: string;
@@ -174,40 +175,60 @@ const CategoryForm: FC<CategoryProps> = ({
             }}
           />
 
-          <div>
-            <label className="text-sm font-medium">{parentLabel}</label>
+          <div className="w-full relative">
+            <label className="text-sm font-medium text-secondary">
+              {parentLabel}
+            </label>
 
-            <select
-              className={[
-                "mt-2 w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none",
-                "focus-visible:ring-2 focus-visible:ring-primary/40",
-                rhfErrors.parentId ? "border-destructive" : "border-border",
-              ].join(" ")}
-              {...register("parentId", {
-                setValueAs: (v) => String(v ?? "").trim(),
-              })}
-              disabled={loadingParents}
-            >
-              <option value="">
-                {loadingParents ? loadingLabel : noParentLabel}
-              </option>
+            <div className="relative mt-2">
+              <div
+                className={[
+                  "relative flex items-center gap-2 bg-transparent border-b-2 transition-colors duration-200",
+                  rhfErrors.parentId
+                    ? "border-destructive"
+                    : "border-border focus-within:border-blue-500",
+                ].join(" ")}
+              >
+                <select
+                  className={[
+                    "w-full bg-card outline-none appearance-none pr-10",
+                    "pb-2 text-base",
+                    "text-secondary text-base",
+                    "disabled:opacity-60 disabled:cursor-not-allowed",
+                  ].join(" ")}
+                  {...register("parentId", {
+                    setValueAs: (v) => String(v ?? "").trim(),
+                  })}
+                  disabled={loadingParents}
+                >
+                  <option value="">
+                    {loadingParents ? loadingLabel : noParentLabel}
+                  </option>
 
-              {selectOptions.map((opt) => (
-                <option key={opt.id} value={String(opt.id)}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+                  {selectOptions.map((opt) => (
+                    <option key={opt.id} value={String(opt.id)}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
 
-            {rhfErrors.parentId?.message ? (
-              <p className="mt-2 text-xs text-destructive">
-                {String(rhfErrors.parentId.message)}
-              </p>
-            ) : null}
+                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+              </div>
 
-            {parentHint ? (
-              <p className="mt-2 text-xs text-muted-foreground">{parentHint}</p>
-            ) : null}
+              {/* error */}
+              {rhfErrors.parentId?.message ? (
+                <p className="mt-1 text-xs text-destructive leading-tight">
+                  {String(rhfErrors.parentId.message)}
+                </p>
+              ) : null}
+
+              {/* hint */}
+              {parentHint ? (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  {parentHint}
+                </p>
+              ) : null}
+            </div>
           </div>
         </div>
 
