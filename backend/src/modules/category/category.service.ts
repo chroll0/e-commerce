@@ -141,16 +141,17 @@ export class CategoryService {
     ]);
 
     if (childrenCount > 0) {
-      throw new BadRequestException(
-        "Cannot delete category: it has subcategories. Delete/move them first.",
-      );
+      throw new BadRequestException({
+        code: "hasChildren",
+      });
     }
 
     if (productsCount > 0) {
-      throw new BadRequestException(
-        "Cannot delete category: it has products. Move products first.",
-      );
+      throw new BadRequestException({
+        code: "hasProducts",
+      });
     }
+
     await this.prisma.categoryTranslation.deleteMany({
       where: { categoryId: id },
     });

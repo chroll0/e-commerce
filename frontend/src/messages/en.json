@@ -320,7 +320,11 @@
       },
       "messages": {
         "loadError": "Failed to load categories. Try again.",
-        "deleteError": "Delete failed",
+        "deleteError": "Failed to delete category.",
+        "errors": {
+          "hasChildren": "Cannot delete category with subcategories!",
+          "hasProducts": "Cannot delete category with assigned products!"
+        },
         "created": "Category created successfully.",
         "updated": "Category updated successfully.",
         "deleted": "Category deleted successfully.",
