@@ -11,6 +11,7 @@ import {
   flattenTree,
 } from "@/components";
 import { CategoryApi, Locale } from "@/types";
+import { AlertTriangle } from "lucide-react";
 
 export default function AdminCategoriesPage() {
   const locale = useLocale() as Locale;
@@ -23,6 +24,7 @@ export default function AdminCategoriesPage() {
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState<string>("");
   const [target, setTarget] = useState<{ id: number; name: string } | null>(
     null,
   );
@@ -61,6 +63,7 @@ export default function AdminCategoriesPage() {
 
   const onRequestDelete = (payload: { id: number; name: string }) => {
     setTarget(payload);
+    setDeleteError("");
     setDeleteOpen(true);
   };
 
@@ -68,6 +71,7 @@ export default function AdminCategoriesPage() {
     if (deleteLoading) return;
     setDeleteOpen(false);
     setTarget(null);
+    setDeleteError("");
   };
 
   const confirmDelete = async () => {
@@ -75,11 +79,15 @@ export default function AdminCategoriesPage() {
 
     try {
       setDeleteLoading(true);
+      setDeleteError("");
       await api.delete(`/categories/${target.id}`);
       closeDelete();
       await load();
     } catch (e: any) {
-      alert(e?.response?.data?.message || t("messages.deleteError"));
+      const code = e?.response?.data?.code;
+      setDeleteError(
+        code ? t(`messages.errors.${code}`) : t("messages.deleteError"),
+      );
     } finally {
       setDeleteLoading(false);
     }
@@ -133,7 +141,20 @@ export default function AdminCategoriesPage() {
         onClose={closeDelete}
         onConfirm={confirmDelete}
         title={t("modal.deleteTitle")}
-        description={t("modal.deleteDescription", { name: target?.name || "" })}
+        description={
+          <div className="space-y-3">
+            <div>
+              {t("modal.deleteDescription", { name: target?.name || "" })}
+            </div>
+
+            {deleteError ? (
+              <div className="flex items-center gap-2 text-red-500 text-xs">
+                <AlertTriangle className="h-4.5 w-4.5" />
+                <p>{deleteError}</p>
+              </div>
+            ) : null}
+          </div>
+        }
         cancelLabel={t("actions.cancel")}
         confirmLabel={
           deleteLoading ? t("modal.deleting") : t("actions.confirmDelete")

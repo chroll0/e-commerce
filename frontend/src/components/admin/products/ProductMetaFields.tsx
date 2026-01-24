@@ -189,7 +189,7 @@ const ProductMetaFields: FC<Props> = ({
             </>
           )}
         />
-        <span className="text-sm text-foreground">{labels.featured}</span>
+        <span className="text-sm text-secondary">{labels.featured}</span>
         <Tooltip
           side="top"
           className="w-60 max-w-none"
