@@ -1,5 +1,12 @@
 import { CategoryApi, CategoryNode, CategoryRow } from "@/types";
 
+function computeTotals(node: CategoryNode): number {
+  const own = node.products ?? 0;
+  const kids = node.children.reduce((sum, ch) => sum + computeTotals(ch), 0);
+  node.productsTotal = own + kids;
+  return node.productsTotal;
+}
+
 export function buildTree(categories: CategoryApi[]) {
   const nodes = new Map<number, CategoryNode>();
 
@@ -11,6 +18,7 @@ export function buildTree(categories: CategoryApi[]) {
       name: c.translations?.[0]?.name ?? c.slug,
       children: [],
       products: c._count?.products ?? 0,
+      productsTotal: 0,
     });
   }
 
@@ -29,6 +37,7 @@ export function buildTree(categories: CategoryApi[]) {
     arr.forEach((x) => sortRec(x.children));
   };
   sortRec(roots);
+  roots.forEach(computeTotals);
 
   return roots;
 }

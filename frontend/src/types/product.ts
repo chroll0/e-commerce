@@ -24,7 +24,7 @@ export type ProductFormValues = {
   images: string[];
 };
 
-export type CategoryOption = { id: number; name: string };
+export type ProductCategoryOption = { id: number; name: string };
 
 export type ProductApi = {
   id: number;
@@ -43,14 +43,17 @@ export type ProductApi = {
   images: string[];
   translations: ProductTranslation[];
 };
-type Labels = {
+
+export type ProductLabels = {
   contentTitle: string;
 
   titleEn: string;
   descEn: string;
   titleKa: string;
   descKa: string;
+
   slug: string;
+
   price: string;
   oldPrice: string;
   discount: string;
@@ -58,6 +61,7 @@ type Labels = {
   stock: string;
   category: string;
   selectCategory: string;
+
   featured: string;
   featuredHint: string;
 
@@ -65,6 +69,13 @@ type Labels = {
   addImage: string;
   imagesHint: string;
   remove: string;
+
+  preview: string;
+  uploading: (count: number) => string;
+  invalidFile: string;
+  tooLarge: (maxMb: number) => string;
+  tooMany: (maxFiles: number) => string;
+  uploadFailed: string;
 
   cancel: string;
   submit: string;
@@ -76,7 +87,7 @@ export type ProductProps = {
   title: string;
   description: string;
 
-  categories: CategoryOption[];
+  categories: ProductCategoryOption[];
   loadingCategories?: boolean;
 
   initialValues: ProductFormValues;
@@ -85,5 +96,6 @@ export type ProductProps = {
 
   onCancel: () => void;
   onSubmit: (values: ProductFormValues, cleanImages: string[]) => void;
-  labels: Labels;
+
+  labels: ProductLabels;
 };

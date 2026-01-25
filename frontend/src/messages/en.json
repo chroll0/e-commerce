@@ -344,7 +344,16 @@
         "slug": "Slug (URL)",
         "parent": "Parent category (optional)",
         "noParent": "No parent",
-        "image": "Image URL (optional)"
+        "imageTitle": "Image (optional)",
+        "imageHint": "Drag & drop images here, or click to select.",
+        "addImage": "Add image",
+        "remove": "Remove image",
+        "preview": "Preview",
+        "uploading": "Uploading {count}...",
+        "invalidFile": "Only image files are allowed.",
+        "tooLarge": "File size is limited to {max}MB.",
+        "tooMany": "Maximum {max} images allowed.",
+        "uploadFailed": "Upload failed. Try again."
       },
       "placeholders": {
         "nameEn": "Electronics",

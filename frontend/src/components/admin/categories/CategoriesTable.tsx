@@ -115,7 +115,7 @@ const CategoriesTable: FC<TableProps> = ({
                     </div>
 
                     <div className="col-span-1 flex items-center justify-center text-sm text-muted-foreground">
-                      {node.products ?? 0}
+                      {node.productsTotal ?? node.products ?? 0}
                     </div>
 
                     <div className="col-span-3 flex items-center justify-end gap-2">

@@ -1,4 +1,4 @@
-export type Locale = "en" | "ka";
+import { Locale } from "./common";
 
 export type CategoryOption = {
   id: number;
@@ -37,7 +37,6 @@ export type CategoryProps = {
   nameEnLabel: string;
   nameKaLabel: string;
   slugLabel: string;
-  imageLabel: string;
   parentHint?: string;
   errors?: Partial<
     Record<keyof CategoryFormValues | "form" | "nameEn" | "nameKa", string>
@@ -61,6 +60,7 @@ export type CategoryNode = {
   name: string;
   children: CategoryNode[];
   products: number;
+  productsTotal: number;
 };
 
 export type CategoryRow = {
@@ -88,7 +88,7 @@ type Labels = {
 };
 
 export type TableProps = {
-  locale: "en" | "ka";
+  locale: Locale;
   loading: boolean;
   rows: CategoryRow[];
   expanded: Set<number>;

@@ -1,5 +1,4 @@
 export type {
-  Locale,
   CategoryProps,
   CategoryOption,
   CategoryFormValues,
@@ -15,7 +14,7 @@ export type {
   ProductProps,
 } from "@/types/product";
 
-export type { SelectOption } from "@/types/common";
+export type { SelectOption, Locale } from "@/types/common";
 
 export type { UserApi, UserRole } from "@/types/user";
 

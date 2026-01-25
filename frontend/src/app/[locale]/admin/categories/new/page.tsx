@@ -131,7 +131,6 @@ export default function AdminCreateCategoryPage() {
         nameEnLabel={t("fields.nameEn")}
         nameKaLabel={t("fields.nameKa")}
         slugLabel={t("fields.slug")}
-        imageLabel={t("fields.image")}
         parentHint={t("tips.parentExample")}
       />
     </div>
