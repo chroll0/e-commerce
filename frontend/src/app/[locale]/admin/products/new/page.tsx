@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { ProductForm } from "@/components";
 import type { Locale, SelectOption, ProductFormValues } from "@/types";
+import { buildProductLabels } from "@/lib/productLabels";
 
 type CategoryApi = {
   id: number;
@@ -128,29 +129,7 @@ export default function AdminCreateProductPage() {
         submitting={submitting}
         onCancel={() => router.push(`/${locale}/admin/products`)}
         onSubmit={handleSubmit}
-        labels={{
-          contentTitle: t("form.contentTitle"),
-          titleEn: t("form.fields.titleEn"),
-          descEn: t("form.fields.descEn"),
-          titleKa: t("form.fields.titleKa"),
-          descKa: t("form.fields.descKa"),
-          slug: t("form.fields.slug"),
-          price: t("form.fields.price"),
-          oldPrice: t("form.fields.oldPrice"),
-          discount: t("form.fields.discount"),
-          stock: t("form.fields.stock"),
-          category: t("form.fields.category"),
-          selectCategory: t("form.fields.selectCategory"),
-          featured: t("form.fields.featured"),
-          featuredHint: t("form.fields.featuredHint"),
-          imagesTitle: t("form.fields.imagesTitle"),
-          addImage: t("form.fields.addImage"),
-          imagesHint: t("form.fields.imagesHint"),
-          remove: t("form.fields.remove"),
-          cancel: t("actions.cancel"),
-          submit: t("form.buttons.submitCreate"),
-          submitting: t("form.buttons.submitting"),
-        }}
+        labels={buildProductLabels(t)}
       />
     </div>
   );
