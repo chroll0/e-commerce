@@ -37,5 +37,5 @@ export const buildProductLabels = (
 
   cancel: t("actions.cancel"),
   submit: t("actions.save"),
-  submitting: t("form.saving"),
+  submitting: t("form.buttons.submitting"),
 });
