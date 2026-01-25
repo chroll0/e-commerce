@@ -4,12 +4,13 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslations } from "next-intl";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { ChevronDown } from "lucide-react";
 
 import type { CategoryProps } from "@/types";
 import { makeCategorySchema } from "@/hooks/validation";
 import { buildIndentedOptions, slugify } from "./formOptions";
-import { Button, AdminPageHeader, FormInput } from "@/components";
-import { ChevronDown } from "lucide-react";
+import { Button, AdminPageHeader, FormInput, ImageUpload } from "@/components";
+import { uploadImage } from "@/lib/cloudinary";
 
 type FormValues = {
   nameEn: string;
@@ -39,7 +40,6 @@ const CategoryForm: FC<CategoryProps> = ({
   nameEnLabel,
   nameKaLabel,
   slugLabel,
-  imageLabel,
   parentHint,
   errors = {},
 }) => {
@@ -89,6 +89,7 @@ const CategoryForm: FC<CategoryProps> = ({
   }, [initialValues, mode, reset, safeParentId]);
 
   const nameEn = watch("nameEn") ?? "";
+  const image = watch("image") ?? "";
 
   useEffect(() => {
     if (!slugTouched) {
@@ -97,7 +98,6 @@ const CategoryForm: FC<CategoryProps> = ({
         shouldTouch: false,
         shouldValidate: false,
       });
-
       clearErrors("slug");
     }
   }, [nameEn, slugTouched, setValue, clearErrors]);
@@ -115,6 +115,7 @@ const CategoryForm: FC<CategoryProps> = ({
     if (!safeParentId) return;
     const exists = selectOptions.some((opt) => String(opt.id) === safeParentId);
     if (!exists) return;
+
     setValue("parentId", safeParentId, {
       shouldDirty: true,
       shouldTouch: false,
@@ -125,7 +126,6 @@ const CategoryForm: FC<CategoryProps> = ({
   const submit: SubmitHandler<FormValues> = async (values) => {
     const ok = await trigger("slug");
     if (!ok) return;
-
     onSubmit(values);
   };
 
@@ -215,14 +215,12 @@ const CategoryForm: FC<CategoryProps> = ({
                 <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
               </div>
 
-              {/* error */}
               {rhfErrors.parentId?.message ? (
                 <p className="mt-1 text-xs text-destructive leading-tight">
                   {String(rhfErrors.parentId.message)}
                 </p>
               ) : null}
 
-              {/* hint */}
               {parentHint ? (
                 <p className="mt-2 text-xs text-muted-foreground">
                   {parentHint}
@@ -232,13 +230,37 @@ const CategoryForm: FC<CategoryProps> = ({
           </div>
         </div>
 
-        <FormInput<FormValues>
-          name="image"
-          label={imageLabel}
-          type="text"
-          fullWidth
-          control={control}
-        />
+        <div className="space-y-2">
+          <ImageUpload
+            value={image}
+            onChange={(next: string) =>
+              setValue("image", next, {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
+            }
+            upload={(file) => uploadImage(file, "categories")}
+            maxFiles={1}
+            maxSizeMb={10}
+            error={
+              rhfErrors.image?.message
+                ? String(rhfErrors.image.message)
+                : undefined
+            }
+            labels={{
+              title: t("fields.imageTitle"),
+              hint: t("fields.imageHint"),
+              add: t("fields.addImage"),
+              remove: t("fields.remove"),
+              preview: t("fields.preview"),
+              uploading: (count) => t("fields.uploading", { count }),
+              invalidFile: t("fields.invalidFile"),
+              tooLarge: (maxMb) => t("fields.tooLarge", { max: maxMb }),
+              tooMany: (maxFiles) => t("fields.tooMany", { max: maxFiles }),
+              uploadFailed: t("fields.uploadFailed"),
+            }}
+          />
+        </div>
 
         <div className="flex items-center justify-end gap-2 pt-2">
           <Button type="button" variant="secondary" onClick={onCancel}>

@@ -1,6 +1,9 @@
 import { api } from "@/lib/axios";
 
-export async function uploadProductImage(file: File, folder = "products") {
+export async function uploadImage(
+  file: File,
+  folder: "products" | "categories" | string,
+) {
   const form = new FormData();
   form.append("file", file);
   form.append("folder", folder);

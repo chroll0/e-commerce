@@ -1,62 +1,67 @@
 "use client";
 
-import { FC, useMemo, useRef, useState } from "react";
-import { Button } from "@/components";
-import type { FieldErrors, UseFormSetValue } from "react-hook-form";
-import type { ProductFormValues } from "@/types";
-import { X, UploadCloud } from "lucide-react";
-import { uploadProductImage } from "@/lib/cloudinary";
+import React, { useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { UploadCloud, X } from "lucide-react";
+import type { ImageUploadLabels } from "@/types/common";
 
-type Props = {
-  setValue: UseFormSetValue<ProductFormValues>;
-  errors: FieldErrors<ProductFormValues>;
-  images: string[];
-  onRemove: (idx: number) => void;
-  labels: {
-    title: string;
-    imagesHint: string;
-    add: string;
-    remove: string;
-    preview: string;
-    uploading: (count: number) => string;
-    invalidFile: string;
-    tooLarge: (maxMb: number) => string;
-    tooMany: (maxFiles: number) => string;
-    uploadFailed: string;
-  };
-  maxFiles?: number;
+type UploadResult = { secureUrl: string };
+
+type CommonProps = {
+  upload: (file: File) => Promise<UploadResult>;
+  labels: ImageUploadLabels;
   maxSizeMb?: number;
+  error?: string;
+  disabled?: boolean;
 };
 
-const ProductImagesFields: FC<Props> = ({
-  setValue,
-  errors,
-  images,
-  onRemove,
-  labels,
-  maxFiles = 5,
-  maxSizeMb = 10,
-}) => {
-  const imagesError = errors.images?.message as string | undefined;
+type SingleProps = CommonProps & {
+  maxFiles: 1;
+  value: string;
+  onChange: (next: string) => void;
+};
 
+type MultiProps = CommonProps & {
+  maxFiles?: number; // default 5
+  value: string[];
+  onChange: (next: string[]) => void;
+};
+
+type Props = SingleProps | MultiProps;
+
+function isSingle(p: Props): p is SingleProps {
+  return p.maxFiles === 1;
+}
+
+function toArray(v: string | string[]) {
+  return Array.isArray(v) ? v : v ? [v] : [];
+}
+
+function dedupe(arr: string[]) {
+  const out: string[] = [];
+  for (const x of arr) {
+    const t = (x ?? "").trim();
+    if (t && !out.includes(t)) out.push(t);
+  }
+  return out;
+}
+
+export default function ImageUpload(props: Props) {
+  const { upload, labels, maxSizeMb = 10, error, disabled = false } = props;
+
+  const maxFiles = props.maxFiles ?? 5;
   const inputRef = useRef<HTMLInputElement | null>(null);
+
   const [isDragging, setIsDragging] = useState(false);
   const [uploadingCount, setUploadingCount] = useState(0);
   const [localError, setLocalError] = useState<string | null>(null);
 
-  const safeImages = useMemo(
-    () =>
-      (images ?? [])
-        .map((url, index) => ({ url, index }))
-        .filter((x) => typeof x.url === "string" && x.url.trim().length > 0),
-    [images],
-  );
+  const isBusy = disabled || uploadingCount > 0;
 
-  const disabled = uploadingCount > 0;
+  const urls = useMemo(() => dedupe(toArray(props.value)), [props.value]);
 
   function openPicker() {
-    if (!disabled) inputRef.current?.click();
+    if (!isBusy) inputRef.current?.click();
   }
 
   function showError(msg: string) {
@@ -65,8 +70,8 @@ const ProductImagesFields: FC<Props> = ({
 
   function validateFiles(files: File[]) {
     setLocalError(null);
-    const currentCount = safeImages.length;
-    if (currentCount + files.length > maxFiles) {
+
+    if (urls.length + files.length > maxFiles) {
       showError(labels.tooMany(maxFiles));
       return false;
     }
@@ -90,33 +95,21 @@ const ProductImagesFields: FC<Props> = ({
   async function uploadFiles(filesLike: FileList | File[]) {
     const files = Array.from(filesLike);
     if (!files.length) return;
-
     if (!validateFiles(files)) return;
 
     setUploadingCount((c) => c + files.length);
 
     try {
-      const results = await Promise.all(
-        files.map((file) => uploadProductImage(file, "products")),
-      );
+      const results = await Promise.all(files.map((f) => upload(f)));
+      const newUrls = results.map((r) => r.secureUrl).filter(Boolean);
 
-      const urls = results.map((r) => r.secureUrl);
+      const next = dedupe([...dedupe(urls), ...newUrls]);
 
-      // keep only non-empty
-      const base = (images ?? [])
-        .filter((u) => typeof u === "string")
-        .map((u) => u.trim())
-        .filter(Boolean);
-
-      const next = [...base];
-      for (const u of urls) {
-        if (u && !next.includes(u)) next.push(u);
+      if (isSingle(props)) {
+        props.onChange(next[next.length - 1] ?? "");
+      } else {
+        props.onChange(next);
       }
-
-      setValue("images", next, {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
     } catch {
       showError(labels.uploadFailed);
       throw new Error(labels.uploadFailed);
@@ -125,16 +118,20 @@ const ProductImagesFields: FC<Props> = ({
     }
   }
 
-  function onDrop(e: React.DragEvent<HTMLDivElement>) {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
+  function removeAt(idx: number) {
+    if (isBusy) return;
 
-    const files = e.dataTransfer.files;
-    if (files?.length) uploadFiles(files);
+    if (isSingle(props)) {
+      props.onChange("");
+      return;
+    }
+
+    const next = [...urls];
+    next.splice(idx, 1);
+    props.onChange(next);
   }
 
-  const errorText = localError ?? imagesError;
+  const errorText = localError ?? error;
 
   return (
     <div className="rounded-2xl border border-border p-4 space-y-4">
@@ -142,7 +139,6 @@ const ProductImagesFields: FC<Props> = ({
         <p className="text-xs text-red-500 leading-tight">{errorText}</p>
       ) : null}
 
-      {/* Dropzone */}
       <div
         onDragEnter={(e) => {
           e.preventDefault();
@@ -159,12 +155,18 @@ const ProductImagesFields: FC<Props> = ({
           e.stopPropagation();
           setIsDragging(false);
         }}
-        onDrop={onDrop}
+        onDrop={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsDragging(false);
+          const files = e.dataTransfer.files;
+          if (files?.length) uploadFiles(files);
+        }}
         onClick={openPicker}
         className={[
           "rounded-2xl border border-dashed p-6 transition",
           "flex flex-col items-center justify-center gap-3 text-center",
-          disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer",
+          isBusy ? "opacity-60 cursor-not-allowed" : "cursor-pointer",
           isDragging ? "border-primary bg-primary/5" : "border-border",
         ].join(" ")}
       >
@@ -172,7 +174,7 @@ const ProductImagesFields: FC<Props> = ({
 
         <div className="space-y-1">
           <p className="text-sm font-medium">{labels.title}</p>
-          <p className="text-xs text-muted-foreground">{labels.imagesHint}</p>
+          <p className="text-xs text-muted-foreground">{labels.hint}</p>
           {uploadingCount > 0 ? (
             <p className="text-xs text-muted-foreground">
               {labels.uploading(uploadingCount)}
@@ -180,24 +182,23 @@ const ProductImagesFields: FC<Props> = ({
           ) : null}
         </div>
 
-        <Button
+        <button
           type="button"
-          variant="outline"
-          size="sm"
+          className="inline-flex items-center justify-center rounded-lg border border-border bg-background px-3 py-2 text-sm hover:bg-muted/40 transition"
           onClick={(e) => {
             e.stopPropagation();
             openPicker();
           }}
-          disabled={disabled}
+          disabled={isBusy}
         >
           {labels.add}
-        </Button>
+        </button>
 
         <input
           ref={inputRef}
           type="file"
           accept="image/*"
-          multiple
+          multiple={maxFiles !== 1}
           className="hidden"
           onChange={(e) => {
             const files = e.currentTarget.files;
@@ -207,10 +208,15 @@ const ProductImagesFields: FC<Props> = ({
         />
       </div>
 
-      {/* Previews */}
-      {safeImages.length ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-          {safeImages.map(({ url, index }) => (
+      {urls.length ? (
+        <div
+          className={
+            maxFiles === 1
+              ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"
+              : "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3"
+          }
+        >
+          {urls.map((url, index) => (
             <div
               key={`${url}-${index}`}
               className="relative rounded-xl border border-border overflow-hidden bg-background"
@@ -225,36 +231,34 @@ const ProductImagesFields: FC<Props> = ({
                 />
               </div>
 
-              <Button
-                asChild
-                variant="primary"
-                size="xs"
-                className="absolute bottom-2 left-2"
+              <a
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                className="absolute bottom-2 left-2 inline-flex items-center rounded-lg bg-primary px-2 py-1 text-xs text-background"
               >
-                <a href={url} target="_blank" rel="noreferrer">
-                  {labels.preview}
-                </a>
-              </Button>
+                {labels.preview}
+              </a>
 
-              <Button
+              <button
                 type="button"
-                variant="secondary"
-                size="sm"
-                iconOnly
-                onClick={() => onRemove(index)}
-                disabled={disabled}
+                onClick={() => removeAt(index)}
+                disabled={isBusy}
                 aria-label={labels.remove}
                 title={labels.remove}
-                className="absolute top-2 right-2"
+                className={[
+                  "absolute top-2 right-2 inline-flex items-center justify-center",
+                  "h-8 w-8 rounded-lg border border-border bg-card",
+                  "hover:bg-muted/40 transition",
+                  isBusy ? "opacity-60 cursor-not-allowed" : "",
+                ].join(" ")}
               >
                 <X className="h-4 w-4" />
-              </Button>
+              </button>
             </div>
           ))}
         </div>
       ) : null}
     </div>
   );
-};
-
-export default ProductImagesFields;
+}

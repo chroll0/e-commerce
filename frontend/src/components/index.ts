@@ -53,6 +53,7 @@ export { default as AdminPageHeader } from "./admin/common/AdminPageHeader";
 export { default as ConfirmModal } from "./admin/common/ConfirmModal";
 export { default as FormInput } from "./admin/common/FormInput";
 export { default as FormTextarea } from "./admin/common/FormTextarea";
+export { default as ImageUpload } from "./admin/common/ImageUpload";
 
 // Admin dashboard components
 export { default as AdminStatsGrid } from "./admin/dashboard/AdminStatsGrid";
@@ -77,7 +78,6 @@ export { buildIndentedOptions, slugify } from "./admin/categories/formOptions";
 // Product management components
 export { default as ProductContentFields } from "./admin/products/ProductContentFields";
 export { default as ProductForm } from "./admin/products/ProductForm";
-export { default as ProductImagesFields } from "./admin/products/ProductImagesFields";
 export { default as ProductMetaFields } from "./admin/products/ProductMetaFields";
 export { default as ProductPricingFields } from "./admin/products/ProductPricingFields";
 export { default as ProductRow } from "./admin/products/ProductRow";

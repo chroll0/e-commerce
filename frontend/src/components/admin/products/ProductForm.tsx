@@ -9,8 +9,8 @@ import {
   AdminPageHeader,
   Button,
   FormInput,
+  ImageUpload,
   ProductContentFields,
-  ProductImagesFields,
   ProductMetaFields,
   ProductPricingFields,
 } from "@/components";
@@ -18,6 +18,7 @@ import {
 import type { ProductFormValues, ProductProps } from "@/types";
 import { slugify, cleanImageUrls } from "./productUtils";
 import { makeProductSchema } from "@/hooks/validation";
+import { uploadImage } from "@/lib/cloudinary";
 
 const ProductForm: FC<ProductProps> = ({
   mode,
@@ -138,21 +139,25 @@ const ProductForm: FC<ProductProps> = ({
           }}
         />
 
-        <ProductImagesFields
-          setValue={setValue}
-          errors={rhfErrors}
-          images={images}
-          onRemove={(idx) => {
-            const next = [...images];
-            next.splice(idx, 1);
+        <ImageUpload
+          value={images}
+          onChange={(next: string[]) =>
             setValue("images", next, {
               shouldDirty: true,
               shouldValidate: true,
-            });
-          }}
+            })
+          }
+          upload={(file) => uploadImage(file, "products")}
+          maxFiles={5}
+          maxSizeMb={10}
+          error={
+            rhfErrors.images?.message
+              ? String(rhfErrors.images.message)
+              : undefined
+          }
           labels={{
             title: t("form.fields.imagesTitle"),
-            imagesHint: t("form.fields.imagesHint"),
+            hint: t("form.fields.imagesHint"),
             add: t("form.fields.addImage"),
             remove: t("form.fields.remove"),
             preview: t("form.fields.preview"),
