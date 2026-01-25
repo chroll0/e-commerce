@@ -60,6 +60,7 @@ export type CategoryNode = {
   name: string;
   children: CategoryNode[];
   products: number;
+  productsTotal: number;
 };
 
 export type CategoryRow = {
