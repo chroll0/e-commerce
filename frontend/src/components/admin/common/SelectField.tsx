@@ -1,30 +1,33 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
 export type SelectOption = {
   value: string;
   label: string;
   disabled?: boolean;
+  cleanLabel?: string;
 };
 
 type Props = {
   label: string;
-
   value: string;
   onChange: (next: string) => void;
-
   options: SelectOption[];
-
   placeholderLabel: string;
   disabled?: boolean;
-
   error?: string;
   hint?: string;
-
   name?: string;
 };
+
+function stripTreePrefix(s: string) {
+  return s
+    .replace(/^[\s\u00A0]*(?:[└├]─\s*)/g, "")
+    .replace(/^(?:—\s*)+/g, "")
+    .trim();
+}
 
 const SelectField: FC<Props> = ({
   label,
@@ -37,45 +40,104 @@ const SelectField: FC<Props> = ({
   hint,
   name,
 }) => {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  const selected = useMemo(
+    () => options.find((o) => o.value === value),
+    [options, value],
+  );
+
+  const selectedText =
+    value && selected
+      ? (selected.cleanLabel ?? stripTreePrefix(selected.label))
+      : placeholderLabel;
+
+  useEffect(() => {
+    const onDocClick = (e: MouseEvent) => {
+      if (!rootRef.current) return;
+      if (!rootRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  const handlePick = (v: string, isDisabled?: boolean) => {
+    if (disabled || isDisabled) return;
+    onChange(v);
+    setOpen(false);
+  };
+
+  const borderClass = error
+    ? "border-red-500"
+    : open
+      ? "border-blue-500"
+      : "border-border";
+
   return (
-    <div className="w-full relative">
+    <div ref={rootRef} className="w-full relative">
+      {name ? <input type="hidden" name={name} value={value} /> : null}
+
       <label className="text-xs font-medium text-secondary">{label}</label>
 
       <div className="relative mt-2">
-        <div
+        <button
+          type="button"
+          disabled={disabled}
+          onClick={() => setOpen((v) => !v)}
           className={[
-            "relative flex items-center gap-2 bg-transparent border-b-2 transition-colors duration-200",
-            error
-              ? "border-destructive"
-              : "border-border focus-within:border-blue-500",
+            "w-full text-left bg-card outline-none",
+            "pb-2 pr-10",
+            "border-b-2 transition-colors duration-200",
+            borderClass,
+            "focus-visible:outline-none",
+            disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer",
+            value ? "text-secondary" : "text-muted-foreground",
           ].join(" ")}
         >
-          <select
-            name={name}
-            value={value}
-            onChange={(e) => onChange(String(e.target.value ?? ""))}
-            disabled={disabled}
-            className={[
-              "w-full bg-card outline-none appearance-none pr-10",
-              "pb-2 text-base",
-              "text-secondary",
-              "disabled:opacity-60 disabled:cursor-not-allowed",
-            ].join(" ")}
-          >
-            <option value="">{placeholderLabel}</option>
-
-            {options.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          <span className="text-base">{selectedText}</span>
 
           <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-        </div>
+        </button>
+
+        {open && !disabled && (
+          <div
+            className={[
+              "absolute z-50 mt-2 w-full",
+              "rounded-xl border border-border bg-card shadow-lg",
+              "max-h-72 overflow-auto",
+            ].join(" ")}
+          >
+            <div
+              className="px-3 py-2 text-sm text-muted-foreground cursor-pointer hover:bg-muted/50"
+              onClick={() => handlePick("")}
+            >
+              {placeholderLabel}
+            </div>
+
+            <div className="h-px bg-border" />
+
+            {options.map((opt) => (
+              <div
+                key={opt.value}
+                onClick={() => handlePick(opt.value, opt.disabled)}
+                className={[
+                  "px-3 py-2 text-sm",
+                  opt.disabled
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer hover:bg-muted/50",
+                  opt.value === value ? "bg-muted/40" : "",
+                ].join(" ")}
+                title={opt.cleanLabel ?? stripTreePrefix(opt.label)}
+              >
+                {opt.label}
+              </div>
+            ))}
+          </div>
+        )}
 
         {error ? (
-          <p className="mt-1 text-xs text-destructive leading-tight">{error}</p>
+          <p className="mt-1 text-xs text-red-500 leading-tight">{error}</p>
         ) : null}
 
         {hint ? (

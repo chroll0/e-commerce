@@ -242,7 +242,7 @@
           "discount": "Discount (0-100%)",
           "stock": "Stock",
           "category": "Category",
-          "selectCategory": "",
+          "selectCategory": "Select",
           "featured": "Featured",
           "featuredHint": "Show this product in Featured sections.",
           "imagesTitle": "Images",
