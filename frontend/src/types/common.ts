@@ -1,8 +1,3 @@
-export type SelectOption = {
-  id: number;
-  name: string;
-};
-
 export type Locale = "en" | "ka";
 
 export type ImageUploadLabels = {

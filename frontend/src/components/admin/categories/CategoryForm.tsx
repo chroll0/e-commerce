@@ -4,12 +4,17 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslations } from "next-intl";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { ChevronDown } from "lucide-react";
 
 import type { CategoryProps } from "@/types";
 import { makeCategorySchema } from "@/hooks/validation";
 import { buildIndentedOptions, slugify } from "./formOptions";
-import { Button, AdminPageHeader, FormInput, ImageUpload } from "@/components";
+import {
+  Button,
+  AdminPageHeader,
+  FormInput,
+  ImageUpload,
+  SelectField,
+} from "@/components";
 import { uploadImage } from "@/lib/cloudinary";
 
 type FormValues = {
@@ -53,7 +58,6 @@ const CategoryForm: FC<CategoryProps> = ({
 
   const {
     control,
-    register,
     handleSubmit,
     setValue,
     watch,
@@ -90,6 +94,7 @@ const CategoryForm: FC<CategoryProps> = ({
 
   const nameEn = watch("nameEn") ?? "";
   const image = watch("image") ?? "";
+  const parentId = watch("parentId") ?? "";
 
   useEffect(() => {
     if (!slugTouched) {
@@ -110,6 +115,15 @@ const CategoryForm: FC<CategoryProps> = ({
 
     return buildIndentedOptions(filtered);
   }, [parentOptions, excludeParentId]);
+
+  const parentSelectOptions = useMemo(
+    () =>
+      selectOptions.map((opt) => ({
+        value: String(opt.id),
+        label: opt.label,
+      })),
+    [selectOptions],
+  );
 
   useEffect(() => {
     if (!safeParentId) return;
@@ -175,59 +189,28 @@ const CategoryForm: FC<CategoryProps> = ({
             }}
           />
 
-          <div className="w-full relative">
-            <label className="text-sm font-medium text-secondary">
-              {parentLabel}
-            </label>
-
-            <div className="relative mt-2">
-              <div
-                className={[
-                  "relative flex items-center gap-2 bg-transparent border-b-2 transition-colors duration-200",
-                  rhfErrors.parentId
-                    ? "border-destructive"
-                    : "border-border focus-within:border-blue-500",
-                ].join(" ")}
-              >
-                <select
-                  className={[
-                    "w-full bg-card outline-none appearance-none pr-10",
-                    "pb-2 text-base",
-                    "text-secondary text-base",
-                    "disabled:opacity-60 disabled:cursor-not-allowed",
-                  ].join(" ")}
-                  {...register("parentId", {
-                    setValueAs: (v) => String(v ?? "").trim(),
-                  })}
-                  disabled={loadingParents}
-                >
-                  <option value="">
-                    {loadingParents ? loadingLabel : noParentLabel}
-                  </option>
-
-                  {selectOptions.map((opt) => (
-                    <option key={opt.id} value={String(opt.id)}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-
-                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-              </div>
-
-              {rhfErrors.parentId?.message ? (
-                <p className="mt-1 text-xs text-destructive leading-tight">
-                  {String(rhfErrors.parentId.message)}
-                </p>
-              ) : null}
-
-              {parentHint ? (
-                <p className="mt-2 text-xs text-muted-foreground">
-                  {parentHint}
-                </p>
-              ) : null}
-            </div>
-          </div>
+          <SelectField
+            name="parentId"
+            label={parentLabel}
+            value={parentId}
+            onChange={(next) => {
+              const clean = String(next ?? "").trim();
+              setValue("parentId", clean, {
+                shouldDirty: true,
+                shouldValidate: true,
+              });
+              if (rhfErrors.parentId) clearErrors("parentId");
+            }}
+            options={parentSelectOptions}
+            placeholderLabel={loadingParents ? loadingLabel : noParentLabel}
+            disabled={loadingParents}
+            error={
+              rhfErrors.parentId?.message
+                ? String(rhfErrors.parentId.message)
+                : undefined
+            }
+            hint={parentHint}
+          />
         </div>
 
         <div className="space-y-2">

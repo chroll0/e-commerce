@@ -29,7 +29,7 @@ const Navigation = () => {
         <div className="flex items-center gap-6 w-full">
           <Logo />
           {/* <CategoryDropdown value={categoryId} onChange={setCategoryId} /> */}
-          <SearchBar value={search} onChange={setSearch} />
+          {/* <SearchBar value={search} onChange={setSearch} /> */}
         </div>
 
         <div className="flex items-center gap-2.5 text-foreground hover:text-primary cursor-pointer transition">

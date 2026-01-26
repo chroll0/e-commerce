@@ -54,6 +54,7 @@ export { default as ConfirmModal } from "./admin/common/ConfirmModal";
 export { default as FormInput } from "./admin/common/FormInput";
 export { default as FormTextarea } from "./admin/common/FormTextarea";
 export { default as ImageUpload } from "./admin/common/ImageUpload";
+export { default as SelectField } from "./admin/common/SelectField";
 
 // Admin dashboard components
 export { default as AdminStatsGrid } from "./admin/dashboard/AdminStatsGrid";

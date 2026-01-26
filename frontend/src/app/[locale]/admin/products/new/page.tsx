@@ -5,21 +5,20 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { ProductForm } from "@/components";
-import type { Locale, SelectOption, ProductFormValues } from "@/types";
+import type {
+  Locale,
+  ProductFormValues,
+  ProductCategoryOption,
+  CategoryApi,
+} from "@/types";
 import { buildProductLabels } from "@/lib/productLabels";
-
-type CategoryApi = {
-  id: number;
-  slug: string;
-  translations: { locale: string; name: string }[];
-};
 
 export default function AdminCreateProductPage() {
   const router = useRouter();
   const locale = useLocale() as Locale;
   const t = useTranslations("admin.products");
 
-  const [categories, setCategories] = useState<SelectOption[]>([]);
+  const [categories, setCategories] = useState<ProductCategoryOption[]>([]);
   const [loadingCats, setLoadingCats] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState("");
@@ -37,6 +36,12 @@ export default function AdminCreateProductPage() {
         setCategories(
           data.map((c) => ({
             id: c.id,
+            parentId: c.parentId ?? null,
+            slug: c.slug,
+            translations: (c.translations ?? []).map((t) => ({
+              locale: t.locale as "en" | "ka",
+              name: t.name,
+            })),
             name: c.translations?.[0]?.name ?? c.slug,
           })),
         );

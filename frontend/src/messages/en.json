@@ -203,6 +203,9 @@
     "products": {
       "title": "Products Management",
       "description": "Add, edit, and manage your product listings.",
+      "searchPlaceholder": "Search products...",
+      "searching": "Searching...",
+      "noResults": "No products found.",
       "actions": {
         "add": "Add product",
         "edit": "Edit",
@@ -239,7 +242,7 @@
           "discount": "Discount (0-100%)",
           "stock": "Stock",
           "category": "Category",
-          "selectCategory": "",
+          "selectCategory": "Select",
           "featured": "Featured",
           "featuredHint": "Show this product in Featured sections.",
           "imagesTitle": "Images",

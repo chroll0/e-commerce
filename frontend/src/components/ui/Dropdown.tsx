@@ -67,7 +67,7 @@ const Dropdown = <T,>({
               key={item.value}
               className={classNames(
                 "flex items-center justify-between px-3 py-2 hover:bg-foreground text-secondary hover:text-card cursor-pointer text-sm rounded",
-                item.disabled && "opacity-50 cursor-not-allowed"
+                item.disabled && "opacity-50 cursor-not-allowed",
               )}
               onClick={() => {
                 if (!item.disabled && onSelect) {

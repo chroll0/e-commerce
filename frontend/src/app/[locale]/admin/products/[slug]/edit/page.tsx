@@ -6,18 +6,13 @@ import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/axios";
 import type {
   Locale,
-  SelectOption,
   ProductApi,
   ProductFormValues,
+  ProductCategoryOption,
+  CategoryApi,
 } from "@/types";
 import { ProductForm } from "@/components";
 import { buildProductLabels } from "@/lib/productLabels";
-
-type CategoryApi = {
-  id: number;
-  slug: string;
-  translations: { locale: string; name: string }[];
-};
 
 export default function AdminEditProductPage() {
   const router = useRouter();
@@ -31,7 +26,7 @@ export default function AdminEditProductPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  const [categories, setCategories] = useState<SelectOption[]>([]);
+  const [categories, setCategories] = useState<ProductCategoryOption[]>([]);
   const [loadingCats, setLoadingCats] = useState(false);
 
   const [initialValues, setInitialValues] = useState<ProductFormValues>({
@@ -90,6 +85,12 @@ export default function AdminEditProductPage() {
       setCategories(
         data.map((c) => ({
           id: c.id,
+          parentId: c.parentId ?? null,
+          slug: c.slug,
+          translations: (c.translations ?? []).map((t) => ({
+            locale: t.locale as "en" | "ka",
+            name: t.name,
+          })),
           name: c.translations?.[0]?.name ?? c.slug,
         })),
       );

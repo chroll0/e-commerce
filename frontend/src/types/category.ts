@@ -6,6 +6,25 @@ export type CategoryOption = {
   name: string;
 };
 
+export type CategoryApi = {
+  id: number;
+  slug: string;
+  parentId: number | null;
+
+  translations: {
+    locale: string;
+    name: string;
+  }[];
+
+  image?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+
+  _count?: {
+    products: number;
+  };
+};
+
 export type CategoryFormValues = {
   nameEn: string;
   nameKa: string;
@@ -41,16 +60,6 @@ export type CategoryProps = {
   errors?: Partial<
     Record<keyof CategoryFormValues | "form" | "nameEn" | "nameKa", string>
   >;
-};
-
-export type CategoryApi = {
-  id: number;
-  slug: string;
-  parentId: number | null;
-  translations: { locale: string; name: string }[];
-  image?: string;
-  createdAt?: string;
-  _count?: { products: number };
 };
 
 export type CategoryNode = {

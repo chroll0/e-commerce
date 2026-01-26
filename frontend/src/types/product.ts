@@ -24,7 +24,14 @@ export type ProductFormValues = {
   images: string[];
 };
 
-export type ProductCategoryOption = { id: number; name: string };
+export type ProductCategoryOption = {
+  id: number;
+  parentId: number | null;
+  translations: { locale: "en" | "ka"; name: string }[];
+  name?: string;
+  slug?: string;
+  image?: string | null;
+};
 
 export type ProductApi = {
   id: number;
