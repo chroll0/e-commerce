@@ -64,16 +64,21 @@ export default function AdminEditCategoryPage() {
         parentId: cat.parentId ? String(cat.parentId) : "",
       });
 
-      setLoadingCats(true);
-      const listRes = await api.get(`/categories?locale=${locale}`);
+      const listRes = await api.get(`/categories`);
       const list = (listRes.data ?? []) as CategoryApi[];
 
-      const normalized: CategoryOption[] = list.map((c) => ({
-        id: c.id,
-        parentId: c.parentId ?? null,
-        name: c.translations?.[0]?.name ?? c.slug,
-      }));
+      const normalized: CategoryOption[] = list.map((c) => {
+        const name =
+          c.translations?.find((x) => x.locale === locale)?.name ??
+          c.translations?.[0]?.name ??
+          c.slug;
 
+        return {
+          id: c.id,
+          parentId: c.parentId ?? null,
+          name,
+        };
+      });
       setCats(normalized);
     } catch (e: any) {
       setError(e?.response?.data?.message || t("messages.loadOneError"));
