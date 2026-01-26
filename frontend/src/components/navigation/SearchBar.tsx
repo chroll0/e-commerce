@@ -1,64 +1,124 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components";
 import { api } from "@/lib/axios";
+import { Locale } from "@/types";
+import { useTranslations } from "next-intl";
+
+type Product = {
+  id: number;
+  title?: string;
+  slug?: string;
+  translations?: { locale: "en" | "ka"; title: string }[];
+};
 
 type Props = {
   value: string;
   onChange: (next: string) => void;
+  locale: Locale;
 };
 
-const SearchBar = ({ value, onChange }: Props) => {
-  const [results, setResults] = useState<any[]>([]);
+const SearchBar = ({ value, onChange, locale }: Props) => {
+  const t = useTranslations("admin.products");
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+
+  const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const getTitle = (p: Product) => {
+    if (p.title) return p.title;
+    const tr = p.translations?.find((x) => x.locale === locale)?.title;
+    return tr ?? p.slug ?? `#${p.id}`;
+  };
 
   useEffect(() => {
     if (!value.trim()) {
       setResults([]);
+      setOpen(false);
       return;
     }
 
-    const timeout = setTimeout(async () => {
+    setOpen(true);
+
+    const timeout = window.setTimeout(async () => {
       try {
         setLoading(true);
         const { data } = await api.get("/products", {
           params: { search: value },
         });
-        setResults(data ?? []);
+        setResults((data ?? []) as Product[]);
       } finally {
         setLoading(false);
       }
     }, 300);
 
-    return () => clearTimeout(timeout);
+    return () => window.clearTimeout(timeout);
   }, [value]);
 
+  useEffect(() => {
+    function onDocDown(e: MouseEvent) {
+      if (!wrapRef.current) return;
+      if (!wrapRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDocDown);
+    return () => document.removeEventListener("mousedown", onDocDown);
+  }, []);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
+  const showDropdown = open && value.trim().length > 0;
+
   return (
-    <div className="w-full relative">
+    <div ref={wrapRef} className="w-full relative">
       <Input
-        placeholder="Search products..."
+        placeholder={t("searchPlaceholder")}
         size="sm"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => {
+          if (value.trim()) setOpen(true);
+        }}
         fullWidth
-        leftIcon={<Search className="w-4 h-4 mt-3 text-muted" />}
+        leftIcon={<Search className="w-4.5 h-4.5 mt-2.5 text-foreground" />}
       />
 
-      {value && (
-        <div className="absolute top-full left-0 right-0 bg-white border rounded-md mt-1 z-50">
-          {loading && <p className="p-2 text-sm">Searching...</p>}
+      {showDropdown && (
+        <div className="absolute top-full left-0 right-0 bg-card border border-border rounded-md mt-1 z-50 text-foreground overflow-hidden">
+          {loading && <p className="p-2 text-sm">{t("searching")}</p>}
 
           {!loading && results.length === 0 && (
-            <p className="p-2 text-sm text-muted">No products found</p>
+            <p className="p-2 text-sm text-muted">{t("noResults")}</p>
           )}
 
-          {results.map((product) => (
-            <div key={product.id} className="p-2 hover:bg-muted cursor-pointer">
-              {product.title}
-            </div>
-          ))}
+          {!loading &&
+            results.map((product) => {
+              const title = getTitle(product);
+              return (
+                <button
+                  key={product.id}
+                  type="button"
+                  className="w-full text-left p-2 hover:bg-muted/40 cursor-pointer text-sm"
+                  onClick={() => {
+                    onChange(title);
+                    setOpen(false);
+                  }}
+                >
+                  {title}
+                </button>
+              );
+            })}
         </div>
       )}
     </div>

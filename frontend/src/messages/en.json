@@ -203,6 +203,9 @@
     "products": {
       "title": "Products Management",
       "description": "Add, edit, and manage your product listings.",
+      "searchPlaceholder": "Search products...",
+      "searching": "Searching...",
+      "noResults": "No products found.",
       "actions": {
         "add": "Add product",
         "edit": "Edit",

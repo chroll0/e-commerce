@@ -12,9 +12,10 @@ export type {
   ProductFormValues,
   ProductApi,
   ProductProps,
+  ProductCategoryOption,
 } from "@/types/product";
 
-export type { SelectOption, Locale } from "@/types/common";
+export type { Locale } from "@/types/common";
 
 export type { UserApi, UserRole } from "@/types/user";
 
