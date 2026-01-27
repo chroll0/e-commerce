@@ -84,9 +84,14 @@ const SearchBar = ({ value, onChange, locale }: Props) => {
 
   return (
     <div ref={wrapRef} className="w-full relative">
+      <label className="capitalize flex items-center gap-2 text-xs font-medium text-secondary">
+        {<Search className="w-4 h-4 text-foreground" />}
+        {t("search")}
+      </label>
+
       <Input
         placeholder={t("searchPlaceholder")}
-        size="sm"
+        size="md"
         value={value}
         onChange={(e) => {
           onChange(e.target.value);
@@ -96,7 +101,6 @@ const SearchBar = ({ value, onChange, locale }: Props) => {
           if (value.trim()) setOpen(true);
         }}
         fullWidth
-        leftIcon={<Search className="w-4.5 h-4.5 mt-2.5 text-foreground" />}
       />
 
       {showDropdown && (

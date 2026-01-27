@@ -4,6 +4,7 @@ import { FC } from "react";
 import { useTranslations } from "next-intl";
 import { ProductApi } from "@/types";
 import ProductRow from "./ProductRow";
+import Link from "next/link";
 
 type Props = {
   loading: boolean;
@@ -22,7 +23,15 @@ const ProductsTable: FC<Props> = ({ loading, products, onDelete }) => {
 
   if (!products.length) {
     return (
-      <div className="text-sm text-muted-foreground py-6">{t("empty")}</div>
+      <div className="flex gap-1 text-sm text-foreground/70 py-6">
+        <p>{t("empty")}</p>
+        <Link
+          href={`/admin/products/new`}
+          className="inline-flex text-sm font-medium text-foreground hover:underline"
+        >
+          {t("add")}
+        </Link>
+      </div>
     );
   }
 

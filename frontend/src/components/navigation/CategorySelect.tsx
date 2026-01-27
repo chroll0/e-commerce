@@ -5,6 +5,7 @@ import { api } from "@/lib/axios";
 import { useLocale, useTranslations } from "next-intl";
 import { buildIndentedOptions, SelectField } from "@/components";
 import type { CategoryApi, CategoryOption, SelectOption } from "@/types";
+import { Layers } from "lucide-react";
 
 type Props = {
   value: string;
@@ -81,6 +82,7 @@ const CategorySelect: FC<Props> = ({
           : (placeholderLabel ?? t("allCategory"))
       }
       disabled={loading}
+      labelIcon={<Layers />}
     />
   );
 };
