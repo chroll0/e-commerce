@@ -66,12 +66,13 @@ const ProductMetaFields: FC<Props> = ({
   }, [categories, localeStr]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {/* stock */}
       <FormInput<ProductFormValues>
         name="stock"
         label={labels.stock}
         type="text"
+        size="lg"
         inputMode="numeric"
         fullWidth
         control={control}

@@ -14,8 +14,6 @@ type Props = {
   error?: string;
   hint?: string;
   name?: string;
-
-  // ✅ label icon
   labelIcon?: ReactNode;
 };
 
@@ -76,7 +74,6 @@ const SelectField: FC<Props> = ({
     <div ref={rootRef} className="w-full relative">
       {name ? <input type="hidden" name={name} value={value} /> : null}
 
-      {/* ✅ label with icon */}
       <label className="inline-flex items-center gap-2 text-xs font-medium text-secondary">
         {labelIcon ? (
           <span className="text-muted-foreground [&>svg]:h-4 [&>svg]:w-4">

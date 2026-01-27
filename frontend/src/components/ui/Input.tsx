@@ -49,7 +49,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const sizeStyles = {
       sm: { wrap: "py-1", input: "pt-4 pb-1 text-sm", label: "text-xs" },
       md: { wrap: "py-1.5", input: "pt-2 pb-1 text-base", label: "text-sm" },
-      lg: { wrap: "py-2", input: "pt-6 pb-3 text-lg", label: "text-md" },
+      lg: { wrap: "py-1.5", input: "pt-5 pb-2 text-base", label: "text-sm" },
     }[size];
 
     return (

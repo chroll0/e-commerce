@@ -162,6 +162,7 @@ const CategoryForm: FC<CategoryProps> = ({
           <FormInput<FormValues>
             name="nameEn"
             label={nameEnLabel}
+            size="lg"
             type="text"
             fullWidth
             control={control}
@@ -170,6 +171,7 @@ const CategoryForm: FC<CategoryProps> = ({
           <FormInput<FormValues>
             name="nameKa"
             label={nameKaLabel}
+            size="lg"
             type="text"
             fullWidth
             control={control}
@@ -181,6 +183,7 @@ const CategoryForm: FC<CategoryProps> = ({
             name="slug"
             label={slugLabel}
             type="text"
+            size="lg"
             fullWidth
             control={control}
             onChange={() => {

@@ -86,6 +86,7 @@ const ProductPricingFields: FC<Props> = ({ control, setValue, labels }) => {
         type="text"
         inputMode="decimal"
         fullWidth
+        size="lg"
         control={control}
         transform={sanitizeMoney}
         format={formatMoney}
@@ -97,6 +98,7 @@ const ProductPricingFields: FC<Props> = ({ control, setValue, labels }) => {
         type="text"
         inputMode="decimal"
         fullWidth
+        size="lg"
         control={control}
         transform={sanitizeMoney}
         format={formatMoney}
@@ -106,6 +108,7 @@ const ProductPricingFields: FC<Props> = ({ control, setValue, labels }) => {
         name="discount"
         label={labels.discount}
         type="text"
+        size="lg"
         inputMode="numeric"
         fullWidth
         control={control}
