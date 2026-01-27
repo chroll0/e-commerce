@@ -48,8 +48,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const sizeStyles = {
       sm: { wrap: "py-1", input: "pt-4 pb-1 text-sm", label: "text-xs" },
-      md: { wrap: "py-1.5", input: "pt-5 pb-2 text-base", label: "text-sm" },
-      lg: { wrap: "py-2", input: "pt-6 pb-3 text-lg", label: "text-md" },
+      md: { wrap: "py-1.5", input: "pt-2 pb-1 text-base", label: "text-sm" },
+      lg: { wrap: "py-1.5", input: "pt-5 pb-2 text-base", label: "text-sm" },
     }[size];
 
     return (
@@ -68,11 +68,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={classNames(
-              "peer flex-1 bg-transparent outline-none placeholder:text-transparent text-foreground",
+              "peer flex-1 bg-transparent outline-none text-foreground",
+              label
+                ? "placeholder:text-transparent"
+                : "placeholder:text-muted-foreground",
               sizeStyles.input,
             )}
+            placeholder={label ? " " : (props.placeholder ?? "")}
             type={passwordToggle ? (showPassword ? "text" : "password") : type}
-            placeholder=" "
             aria-invalid={!!error}
             aria-describedby={error ? errorId : undefined}
             {...props}

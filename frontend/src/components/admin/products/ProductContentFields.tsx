@@ -25,6 +25,7 @@ const ProductContentFields: FC<Props> = ({ control, labels }) => {
         <FormInput<ProductFormValues>
           name="titleEn"
           label={labels.titleEn}
+          size="lg"
           type="text"
           fullWidth
           control={control}
@@ -33,6 +34,7 @@ const ProductContentFields: FC<Props> = ({ control, labels }) => {
         <FormInput<ProductFormValues>
           name="titleKa"
           label={labels.titleKa}
+          size="lg"
           type="text"
           fullWidth
           control={control}

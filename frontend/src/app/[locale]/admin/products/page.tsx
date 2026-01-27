@@ -10,6 +10,7 @@ import {
   ConfirmModal,
   AdminPageHeader,
 } from "@/components";
+import { getProducts } from "@/lib/productsApi";
 
 const AdminProductsPage = () => {
   const t = useTranslations("admin.products");
@@ -27,10 +28,12 @@ const AdminProductsPage = () => {
   const load = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/products", {
-        params: { search, categoryId },
+      const data = await getProducts({
+        search,
+        categoryId,
+        locale: String(locale),
       });
-      setProducts(res.data ?? []);
+      setProducts(data);
     } finally {
       setLoading(false);
     }

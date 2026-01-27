@@ -1,14 +1,8 @@
 "use client";
 
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState, ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
-
-export type SelectOption = {
-  value: string;
-  label: string;
-  disabled?: boolean;
-  cleanLabel?: string;
-};
+import { SelectOption } from "@/types";
 
 type Props = {
   label: string;
@@ -20,6 +14,7 @@ type Props = {
   error?: string;
   hint?: string;
   name?: string;
+  labelIcon?: ReactNode;
 };
 
 function stripTreePrefix(s: string) {
@@ -39,6 +34,7 @@ const SelectField: FC<Props> = ({
   error,
   hint,
   name,
+  labelIcon,
 }) => {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -78,7 +74,14 @@ const SelectField: FC<Props> = ({
     <div ref={rootRef} className="w-full relative">
       {name ? <input type="hidden" name={name} value={value} /> : null}
 
-      <label className="text-xs font-medium text-secondary">{label}</label>
+      <label className="inline-flex items-center gap-2 text-xs font-medium text-secondary">
+        {labelIcon ? (
+          <span className="text-muted-foreground [&>svg]:h-4 [&>svg]:w-4">
+            {labelIcon}
+          </span>
+        ) : null}
+        <span>{label}</span>
+      </label>
 
       <div className="relative mt-2">
         <button
@@ -86,7 +89,7 @@ const SelectField: FC<Props> = ({
           disabled={disabled}
           onClick={() => setOpen((v) => !v)}
           className={[
-            "w-full text-left bg-card outline-none",
+            "relative w-full text-left bg-card outline-none",
             "pb-2 pr-10",
             "border-b-2 transition-colors duration-200",
             borderClass,
@@ -122,7 +125,7 @@ const SelectField: FC<Props> = ({
                 key={opt.value}
                 onClick={() => handlePick(opt.value, opt.disabled)}
                 className={[
-                  "px-3 py-2 text-sm",
+                  "px-3 py-0.5 text-sm",
                   opt.disabled
                     ? "opacity-50 cursor-not-allowed"
                     : "cursor-pointer hover:bg-muted/50",

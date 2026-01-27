@@ -204,6 +204,7 @@
       "title": "Products Management",
       "description": "Add, edit, and manage your product listings.",
       "searchPlaceholder": "Search products...",
+      "search": "search",
       "searching": "Searching...",
       "noResults": "No products found.",
       "actions": {
@@ -222,7 +223,8 @@
         "stock": "Stock",
         "category": "Category",
         "actions": "Actions",
-        "empty": "No products yet. Create your first product.",
+        "empty": "No products yet.",
+        "add": "Create your first product.",
         "loading": "Loading..."
       },
       "form": {
@@ -313,6 +315,8 @@
         "slug": "Slug (URL)",
         "products": "Products",
         "actions": "Actions",
+        "category": "Category",
+        "allCategory": "All",
         "empty": "No categories yet. Create your first category.",
         "loading": "Loading..."
       },
@@ -357,12 +361,6 @@
         "tooLarge": "File size is limited to {max}MB.",
         "tooMany": "Maximum {max} images allowed.",
         "uploadFailed": "Upload failed. Try again."
-      },
-      "placeholders": {
-        "nameEn": "Electronics",
-        "nameKa": "ტექნიკა",
-        "slug": "electronics",
-        "image": "https://..."
       },
       "form": {
         "createTitle": "Create Category",

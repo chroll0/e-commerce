@@ -41,12 +41,19 @@ export class ProductController {
   findAll(
     @Query("search") search?: string,
     @Query("category") categorySlug?: string,
-    @Query("locale") locale?: string
+    @Query("categoryId") categoryId?: string,
+    @Query("locale") locale?: string,
   ) {
+    const parsedCategoryId =
+      categoryId != null && String(categoryId).trim() !== ""
+        ? Number(categoryId)
+        : undefined;
+
     return this.productService.findAll(
       search,
       categorySlug,
-      parseLocale(locale)
+      parsedCategoryId,
+      parseLocale(locale),
     );
   }
 
@@ -58,7 +65,7 @@ export class ProductController {
   @Get(":id")
   findOne(
     @Param("id", ParseIntPipe) id: number,
-    @Query("locale") locale?: string
+    @Query("locale") locale?: string,
   ) {
     return this.productService.findOne(id, parseLocale(locale));
   }
@@ -68,7 +75,7 @@ export class ProductController {
   @Roles(UserRole.ADMIN)
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateProductDto: UpdateProductDto
+    @Body() updateProductDto: UpdateProductDto,
   ) {
     return this.productService.update(id, updateProductDto);
   }

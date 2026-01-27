@@ -15,8 +15,7 @@ import type {
   ProductCategoryOption,
   CategoryOption,
 } from "@/types";
-import type { Control, FieldErrors } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { Controller, type Control, type FieldErrors } from "react-hook-form";
 
 type Props = {
   control: Control<ProductFormValues>;
@@ -67,12 +66,13 @@ const ProductMetaFields: FC<Props> = ({
   }, [categories, localeStr]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {/* stock */}
       <FormInput<ProductFormValues>
         name="stock"
         label={labels.stock}
         type="text"
+        size="lg"
         inputMode="numeric"
         fullWidth
         control={control}
@@ -119,64 +119,79 @@ const ProductMetaFields: FC<Props> = ({
       </div>
 
       {/* featured */}
-      <label
-        className={[
-          "relative flex items-center gap-2",
-          "border-b-2 border-border transition-colors duration-200",
-          "px-1 pb-5 cursor-pointer",
-          "focus-within:border-blue-500",
-        ].join(" ")}
-      >
+      <div className="w-full relative">
+        <span className="text-xs font-medium text-secondary">
+          {labels.featured}
+        </span>
+
         <Controller
           name="isFeatured"
           control={control}
-          render={({ field }) => (
-            <>
-              <input
-                type="checkbox"
-                checked={Boolean(field.value)}
-                onChange={(e) => field.onChange(e.target.checked)}
-                onBlur={field.onBlur}
-                name={field.name}
-                ref={field.ref}
-                className="sr-only peer"
-              />
+          render={({ field }) => {
+            const id = field.name;
 
-              <span
+            return (
+              <label
+                htmlFor={id}
                 className={[
-                  "relative inline-flex h-5 w-5 items-center justify-center",
-                  "rounded-full border border-border bg-transparent",
-                  "transition-colors duration-200",
-                  "peer-focus-visible:ring-2 peer-focus-visible:ring-blue-500/30",
-                  "peer-checked:border-blue-500 peer-checked:bg-blue-500",
-                  "peer-disabled:opacity-50 peer-disabled:cursor-not-allowed",
+                  "relative flex items-center gap-2",
+                  "mt-2 pb-2 px-1",
+                  "border-b-2 border-border transition-colors duration-200",
+                  "cursor-pointer select-none",
+                  "focus-within:border-blue-500",
                 ].join(" ")}
               >
+                <input
+                  id={id}
+                  type="checkbox"
+                  checked={Boolean(field.value)}
+                  onChange={(e) => field.onChange(e.target.checked)}
+                  onBlur={field.onBlur}
+                  name={field.name}
+                  ref={field.ref}
+                  className="sr-only peer"
+                />
+
+                {/* custom checkbox */}
                 <span
                   className={[
-                    "h-2.5 w-2.5 rounded-full bg-white",
-                    "scale-0 transition-transform duration-150",
-                    "peer-checked:scale-100",
+                    "relative inline-flex h-5 w-5 items-center justify-center",
+                    "rounded-full border border-border bg-transparent",
+                    "transition-colors duration-200",
+                    "peer-focus-visible:ring-2 peer-focus-visible:ring-blue-500/30",
+                    "peer-checked:border-blue-500 peer-checked:bg-blue-500",
                   ].join(" ")}
-                />
-              </span>
-            </>
-          )}
+                >
+                  <span
+                    className={[
+                      "h-2.5 w-2.5 rounded-full bg-white",
+                      "scale-0 transition-transform duration-150",
+                      "peer-checked:scale-100",
+                    ].join(" ")}
+                  />
+                </span>
+
+                {/* text */}
+                <span className="text-sm text-secondary">
+                  {labels.featured}
+                </span>
+
+                <span onClick={(e) => e.preventDefault()} className="ml-auto">
+                  <Tooltip
+                    side="top"
+                    className="w-60 max-w-none"
+                    content={labels.featuredHint}
+                  >
+                    <Info className="h-4 w-4 text-muted hover:text-foreground" />
+                  </Tooltip>
+                </span>
+              </label>
+            );
+          }}
         />
-
-        <span className="text-sm text-secondary">{labels.featured}</span>
-
-        <Tooltip
-          side="top"
-          className="w-60 max-w-none"
-          content={labels.featuredHint}
-        >
-          <Info className="h-4 w-4 text-muted hover:text-foreground" />
-        </Tooltip>
-      </label>
+      </div>
     </div>
   );
 };
 
 export default ProductMetaFields;
-``;
