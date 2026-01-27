@@ -15,8 +15,7 @@ import type {
   ProductCategoryOption,
   CategoryOption,
 } from "@/types";
-import type { Control, FieldErrors } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { Controller, type Control, type FieldErrors } from "react-hook-form";
 
 type Props = {
   control: Control<ProductFormValues>;

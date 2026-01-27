@@ -6,6 +6,7 @@ export type {
   CategoryNode,
   TableProps,
   CategoryRow,
+  SelectOption,
 } from "@/types/category";
 
 export type {

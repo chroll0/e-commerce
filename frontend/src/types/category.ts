@@ -108,3 +108,10 @@ export type TableProps = {
   onCollapseAll: () => void;
   isExpandedAll: boolean;
 };
+
+export type SelectOption = {
+  value: string;
+  label: string;
+  disabled?: boolean;
+  cleanLabel?: string;
+};

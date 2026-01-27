@@ -43,16 +43,24 @@ export class ProductService {
     });
   }
 
-  async findAll(search?: string, categorySlug?: string, locale: Locale = "en") {
+  async findAll(
+    search?: string,
+    categorySlug?: string,
+    categoryId?: number,
+    locale: Locale = "en",
+  ) {
+    const cleanSearch = search?.trim();
+    const cleanSlug = categorySlug?.trim();
+
     return this.prisma.product.findMany({
       where: {
         AND: [
-          search
+          cleanSearch
             ? {
                 OR: [
                   {
                     slug: {
-                      contains: search,
+                      contains: cleanSearch,
                       mode: "insensitive",
                     },
                   },
@@ -62,11 +70,14 @@ export class ProductService {
                         locale,
                         OR: [
                           {
-                            title: { contains: search, mode: "insensitive" },
+                            title: {
+                              contains: cleanSearch,
+                              mode: "insensitive",
+                            },
                           },
                           {
                             description: {
-                              contains: search,
+                              contains: cleanSearch,
                               mode: "insensitive",
                             },
                           },
@@ -79,7 +90,7 @@ export class ProductService {
                       translations: {
                         some: {
                           locale,
-                          name: { contains: search, mode: "insensitive" },
+                          name: { contains: cleanSearch, mode: "insensitive" },
                         },
                       },
                     },
@@ -87,10 +98,17 @@ export class ProductService {
                 ],
               }
             : {},
-          categorySlug
+
+          categoryId != null
+            ? {
+                categoryId: Number(categoryId),
+              }
+            : {},
+
+          cleanSlug
             ? {
                 category: {
-                  slug: categorySlug,
+                  slug: cleanSlug,
                 },
               }
             : {},
@@ -172,7 +190,7 @@ export class ProductService {
         if (!exists) {
           if (!tr.title || !tr.description) {
             throw new BadRequestException(
-              `Translation for locale "${tr.locale}" requires both title and description`
+              `Translation for locale "${tr.locale}" requires both title and description`,
             );
           }
         }

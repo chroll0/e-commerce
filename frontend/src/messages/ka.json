@@ -312,6 +312,8 @@
         "slug": "სლაგი (URL)",
         "products": "პროდუქტები",
         "actions": "ქმედებები",
+        "category": "კატეგორია",
+        "allCategory": "ყველა",
         "empty": "კატეგორიები ჯერ არ არსებობს. დაამატეთ პირველი კატეგორია.",
         "loading": "იტვირთება..."
       },
@@ -356,12 +358,6 @@
         "tooLarge": "ფაილის მაქს. ზომაა {max}MB.",
         "tooMany": "მაქსიმუმ {max} სურათი შეიძლება.",
         "uploadFailed": "ატვირთვა ვერ მოხერხდა. სცადე თავიდან."
-      },
-      "placeholders": {
-        "nameEn": "Electronics",
-        "nameKa": "ტექნიკა",
-        "slug": "electronics",
-        "image": "https://..."
       },
       "form": {
         "createTitle": "კატეგორიის შექმნა",

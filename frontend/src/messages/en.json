@@ -313,6 +313,8 @@
         "slug": "Slug (URL)",
         "products": "Products",
         "actions": "Actions",
+        "category": "Category",
+        "allCategory": "All",
         "empty": "No categories yet. Create your first category.",
         "loading": "Loading..."
       },
@@ -357,12 +359,6 @@
         "tooLarge": "File size is limited to {max}MB.",
         "tooMany": "Maximum {max} images allowed.",
         "uploadFailed": "Upload failed. Try again."
-      },
-      "placeholders": {
-        "nameEn": "Electronics",
-        "nameKa": "ტექნიკა",
-        "slug": "electronics",
-        "image": "https://..."
       },
       "form": {
         "createTitle": "Create Category",

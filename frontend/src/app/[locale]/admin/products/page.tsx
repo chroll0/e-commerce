@@ -28,7 +28,10 @@ const AdminProductsPage = () => {
     try {
       setLoading(true);
       const res = await api.get("/products", {
-        params: { search, categoryId },
+        params: {
+          search: search.trim() || undefined,
+          categoryId: categoryId ? Number(categoryId) : undefined,
+        },
       });
       setProducts(res.data ?? []);
     } finally {

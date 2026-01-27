@@ -8,7 +8,6 @@ export { default as Card } from "./ui/Card";
 export { default as Modal } from "./ui/Modal";
 export { default as Input } from "./ui/Input";
 export { default as PageWrapper } from "./ui/PageWrapper";
-export { default as Dropdown } from "./ui/Dropdown";
 export { default as Logo } from "./ui/Logo";
 export { default as Tooltip } from "./ui/Tooltip";
 export { default as Advertisement } from "./ui/Advertisement";
@@ -16,7 +15,7 @@ export { default as Advertisement } from "./ui/Advertisement";
 // Navigation components
 export { default as NavBar } from "./navigation/NavBar";
 export { default as AuthActions } from "./navigation/AuthActions";
-export { default as CategoryDropdown } from "./navigation/CategoryDropdown";
+export { default as CategorySelect } from "./navigation/CategorySelect";
 export { default as ThemeToggle } from "./navigation/ThemeToggle";
 export { default as SearchBar } from "./navigation/SearchBar";
 

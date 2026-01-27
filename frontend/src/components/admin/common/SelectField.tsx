@@ -2,13 +2,7 @@
 
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
-
-export type SelectOption = {
-  value: string;
-  label: string;
-  disabled?: boolean;
-  cleanLabel?: string;
-};
+import { SelectOption } from "@/types";
 
 type Props = {
   label: string;
@@ -122,7 +116,7 @@ const SelectField: FC<Props> = ({
                 key={opt.value}
                 onClick={() => handlePick(opt.value, opt.disabled)}
                 className={[
-                  "px-3 py-2 text-sm",
+                  "px-3 py-0.5 text-sm",
                   opt.disabled
                     ? "opacity-50 cursor-not-allowed"
                     : "cursor-pointer hover:bg-muted/50",
