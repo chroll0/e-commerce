@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components";
-import { api } from "@/lib/axios";
 import { Locale } from "@/types";
 import { useTranslations } from "next-intl";
+import { getProducts } from "@/lib/productsApi";
 
 type Product = {
   id: number;
@@ -35,7 +35,9 @@ const SearchBar = ({ value, onChange, locale }: Props) => {
   };
 
   useEffect(() => {
-    if (!value.trim()) {
+    const q = value.trim();
+
+    if (!q) {
       setResults([]);
       setOpen(false);
       return;
@@ -46,9 +48,12 @@ const SearchBar = ({ value, onChange, locale }: Props) => {
     const timeout = window.setTimeout(async () => {
       try {
         setLoading(true);
-        const { data } = await api.get("/products", {
-          params: { search: value },
+
+        const data = await getProducts({
+          search: q,
+          locale: String(locale),
         });
+
         setResults((data ?? []) as Product[]);
       } finally {
         setLoading(false);
@@ -56,7 +61,7 @@ const SearchBar = ({ value, onChange, locale }: Props) => {
     }, 300);
 
     return () => window.clearTimeout(timeout);
-  }, [value]);
+  }, [value, locale]);
 
   useEffect(() => {
     function onDocDown(e: MouseEvent) {
