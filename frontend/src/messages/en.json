@@ -9,6 +9,10 @@
   },
 
   "auth": {
+    "welcome": "Welcome back!",
+    "description": "Please sign in to your account to continue.",
+    "registerPrompt": "Create an account to get started.",
+    "loginPrompt": "Already have an account? Sign in.",
     "login": "Login",
     "registration": "Registration",
     "logout": "Logout",
@@ -16,10 +20,15 @@
     "password": "Password",
     "confirmPassword": "Confirm password",
     "forgotPassword": "Forgot password?",
-    "noAccount": "Don’t have an account?",
+    "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "signIn": "Sign in",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Your Name",
+    "registerSuccess": "Registered successfully!",
+    "registerFailed": "Registration failed.",
+    "passwordMismatch": "Passwords do not match."
   },
 
   "account": {

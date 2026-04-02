@@ -1,13 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { Button, Input } from "@/components";
 import { AxiosError } from "axios";
+import { Button, Input } from "@/components";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/useAuthStore";
-import Link from "next/link";
 
 export default function LoginPage() {
+  const t = useTranslations("auth");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -22,20 +25,24 @@ export default function LoginPage() {
       router.push("/");
     } catch (err) {
       const error = err as AxiosError<any>;
-      setMessage(error.response?.data?.message || "Login failed.");
+      setMessage(error.response?.data?.message || t("login") + " failed.");
     }
   };
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md p-8 rounded-2xl border border-border shadow-[0_4px_18px_var(--color-shadow)]">
-        <h1 className="text-2xl font-bold text-primary mb-6 text-center">
-          Welcome Back
+        <h1 className="text-2xl font-bold text-primary mb-2 text-center">
+          {t("welcome")}
         </h1>
+
+        <p className="text-sm text-secondary text-center mb-6">
+          {t("description")}
+        </p>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <Input
-            label="Email"
+            label={t("email")}
             type="email"
             placeholder="you@example.com"
             value={email}
@@ -45,7 +52,7 @@ export default function LoginPage() {
           />
 
           <Input
-            label="Password"
+            label={t("password")}
             type="password"
             placeholder="••••••••"
             value={password}
@@ -55,8 +62,17 @@ export default function LoginPage() {
             required
           />
 
+          <div className="flex justify-end">
+            <Link
+              href="/auth/forgot-password"
+              className="text-xs text-highlight hover:underline"
+            >
+              {t("forgotPassword")}
+            </Link>
+          </div>
+
           <Button type="submit" variant="primary" fullWidth size="md">
-            Login
+            {t("signIn")}
           </Button>
         </form>
 
@@ -65,12 +81,12 @@ export default function LoginPage() {
         )}
 
         <p className="text-sm text-secondary mt-6 text-center">
-          Don&apos;t have an account?{" "}
+          {t("noAccount")}{" "}
           <Link
             href="/auth/register"
             className="text-highlight hover:underline"
           >
-            Sign up
+            {t("signUp")}
           </Link>
         </p>
       </div>

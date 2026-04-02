@@ -9,17 +9,26 @@
   },
 
   "auth": {
+    "welcome": "კეთილი იყოს თქვენი დაბრუნება!",
+    "description": "გთხოვთ გაიაროთ ავტორიზაცია გასაგრძელებლად.",
+    "registerPrompt": "შექმენით ანგარიში დასაწყებად.",
+    "loginPrompt": "უკვე გაქვთ ანგარიში? შედით.",
     "login": "შესვლა",
     "registration": "რეგისტრაცია",
     "logout": "გასვლა",
-    "email": "ელ. ფოსტა",
+    "email": "ელ-ფოსტა",
     "password": "პაროლი",
-    "confirmPassword": "პაროლის დადასტურება",
-    "forgotPassword": "დაგავიწყდა პაროლი?",
-    "noAccount": "არ გაქვს ანგარიში?",
-    "haveAccount": "უკვე გაქვს ანგარიში?",
+    "confirmPassword": "გაიმეორეთ პაროლი",
+    "forgotPassword": "დაგავიწყდათ პაროლი?",
+    "noAccount": "არ გაქვთ ანგარიში?",
+    "haveAccount": "უკვე გაქვთ ანგარიში?",
     "signIn": "შესვლა",
-    "signUp": "რეგისტრაცია"
+    "signUp": "რეგისტრაცია",
+    "fullName": "სრული სახელი",
+    "fullNamePlaceholder": "თქვენი სახელი",
+    "registerSuccess": "რეგისტრაცია წარმატებით დასრულდა!",
+    "registerFailed": "რეგისტრაცია ვერ მოხერხდა.",
+    "passwordMismatch": "პაროლები არ ემთხვევა."
   },
 
   "account": {
