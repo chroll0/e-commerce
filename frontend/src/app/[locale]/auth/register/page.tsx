@@ -1,49 +1,56 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { Button, Input } from "@/components";
 import { api } from "@/lib/axios";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Button, Input } from "@/components";
 
 export default function RegisterPage() {
+  const t = useTranslations("auth");
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (password !== confirmPassword) {
+      setMessage(t("passwordMismatch"));
+      return;
+    }
+
     try {
-      await api.post("/auth/register", {
-        name,
-        email,
-        password,
-      });
+      await api.post("/auth/register", { name, email, password });
       router.push("/auth/login");
-      setMessage("Registered successfully!");
+      setMessage(t("registerSuccess"));
     } catch (err) {
       const error = err as AxiosError<any>;
-
-      setMessage(error.response?.data?.message || "Registration failed.");
+      setMessage(error.response?.data?.message || t("registerFailed"));
     }
   };
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md p-8 rounded-2xl border border-border shadow-[0_4px_18px_var(--color-shadow)]">
-        <h1 className="text-2xl font-bold text-primary mb-6 text-center">
-          Create Account
+        <h1 className="text-2xl font-bold text-primary mb-2 text-center">
+          {t("registration")}
         </h1>
+
+        <p className="text-sm text-secondary text-center mb-6">
+          {t("registerPrompt")}
+        </p>
 
         <form onSubmit={handleRegister} className="flex flex-col gap-4">
           <Input
-            label="Full Name"
+            label={t("fullName")}
             type="text"
-            placeholder="Your Name"
+            placeholder={t("fullNamePlaceholder")}
             value={name}
             onChange={(e) => setName(e.target.value)}
             fullWidth
@@ -51,7 +58,7 @@ export default function RegisterPage() {
           />
 
           <Input
-            label="Email"
+            label={t("email")}
             type="email"
             placeholder="you@example.com"
             value={email}
@@ -61,7 +68,7 @@ export default function RegisterPage() {
           />
 
           <Input
-            label="Password"
+            label={t("password")}
             type="password"
             placeholder="••••••••"
             value={password}
@@ -71,8 +78,19 @@ export default function RegisterPage() {
             required
           />
 
-          <Button type="submit" variant="primary" fullWidth>
-            Register
+          <Input
+            label={t("confirmPassword")}
+            type="password"
+            placeholder="••••••••"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            passwordToggle
+            fullWidth
+            required
+          />
+
+          <Button type="submit" variant="primary" fullWidth size="md">
+            {t("signUp")}
           </Button>
         </form>
 
@@ -81,12 +99,9 @@ export default function RegisterPage() {
         )}
 
         <p className="text-sm text-secondary mt-6 text-center">
-          Already have an account?
-          <Link
-            href="/auth/login"
-            className="text-highlight hover:underline ml-1"
-          >
-            Sign in
+          {t("haveAccount")}{" "}
+          <Link href="/auth/login" className="text-highlight hover:underline">
+            {t("signIn")}
           </Link>
         </p>
       </div>
