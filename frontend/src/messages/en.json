@@ -455,6 +455,35 @@
     "continue": "Continue"
   },
 
+  "hero": {
+    "slides": [
+      {
+        "tag": "#Big Fashion Sale",
+        "title": "Limited Time Offer!",
+        "highlight": "Up to 50% OFF!",
+        "description": "Redefine Your Everyday Style"
+      },
+      {
+        "tag": "#New Collection",
+        "title": "Fresh Arrivals",
+        "highlight": "Summer 2026",
+        "description": "Discover the latest trends"
+      },
+      {
+        "tag": "#Best Deals",
+        "title": "Exclusive Offers",
+        "highlight": "Save Big Today",
+        "description": "Handpicked deals just for you"
+      },
+      {
+        "tag": "#Trending Now",
+        "title": "Top Picks",
+        "highlight": "Most Loved Styles",
+        "description": "See what everyone is buying"
+      }
+    ]
+  },
+
   "footer": {
     "about": {
       "title": "About",
