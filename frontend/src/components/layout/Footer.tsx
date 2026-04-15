@@ -1,16 +1,90 @@
+"use client";
+
+import Link from "next/link";
 import { Advertisement, LanguageSwitcher } from "@/components";
+import { useTranslations } from "next-intl";
 
 const Footer = () => {
+  const t = useTranslations();
+
   return (
-    <div className="px-5 py-12 space-y-6">
-      <Advertisement
-        title="Free delivery over ₾150"
-        description="Applies to Tbilisi area."
-        variant="promo"
-      />
-      Footer
-      <LanguageSwitcher />
-    </div>
+    <footer className="bg-card border-t mt-10">
+      <div className="px-5 py-12 space-y-10 max-w-7xl mx-auto">
+        {/* Promo */}
+        <Advertisement
+          title="Free delivery over ₾150"
+          description="Applies to Tbilisi area."
+          variant="promo"
+        />
+
+        {/* Main grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+          {/* About */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-base">
+              {t("footer.about.title")}
+            </h3>
+            <p className="text-muted-foreground">
+              {t("footer.about.description")}
+            </p>
+          </div>
+
+          {/* Navigation */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-base">
+              {t("footer.links.title")}
+            </h3>
+            <ul className="space-y-2 text-muted-foreground">
+              <li>
+                <Link href="/">{t("nav.home")}</Link>
+              </li>
+              <li>
+                <Link href="/shop">{t("nav.shop")}</Link>
+              </li>
+              <li>
+                <Link href="/categories">{t("nav.categories")}</Link>
+              </li>
+              <li>
+                <Link href="/deals">{t("nav.deals")}</Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-base">
+              {t("footer.support.title")}
+            </h3>
+            <ul className="space-y-2 text-muted-foreground">
+              <li>
+                <Link href="/contact">{t("footer.support.contact")}</Link>
+              </li>
+              <li>
+                <Link href="/faq">{t("footer.support.faq")}</Link>
+              </li>
+              <li>
+                <Link href="/privacy">{t("footer.support.privacy")}</Link>
+              </li>
+              <li>
+                <Link href="/terms">{t("footer.support.terms")}</Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Language */}
+          <div className="space-y-3">
+            <LanguageSwitcher />
+          </div>
+        </div>
+
+        {/* Bottom */}
+        <div className="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+          <p>
+            © {new Date().getFullYear()} Satori. {t("footer.bottom.rights")}
+          </p>
+        </div>
+      </div>
+    </footer>
   );
 };
 

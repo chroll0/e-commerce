@@ -453,5 +453,25 @@
     "confirm": "Confirm",
     "back": "Back",
     "continue": "Continue"
+  },
+
+  "footer": {
+    "about": {
+      "title": "About",
+      "description": "High-quality products with fast delivery across Georgia."
+    },
+    "links": {
+      "title": "Quick Links"
+    },
+    "support": {
+      "title": "Support",
+      "contact": "Contact us",
+      "faq": "FAQ",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    },
+    "bottom": {
+      "rights": "All rights reserved."
+    }
   }
 }
