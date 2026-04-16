@@ -7,6 +7,7 @@ export type {
   TableProps,
   CategoryRow,
   SelectOption,
+  Category,
 } from "@/types/category";
 
 export type {

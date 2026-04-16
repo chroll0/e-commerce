@@ -83,3 +83,6 @@ export { default as ProductPricingFields } from "./admin/products/ProductPricing
 export { default as ProductRow } from "./admin/products/ProductRow";
 export { default as ProductsTable } from "./admin/products/ProductsTable";
 export { default as ProductsFilters } from "./admin/products/ProductsFilters";
+
+// Skeleton components
+export { default as CategoryScrollerSkeleton } from "./skeletons/CategoryScrollerSkeleton";

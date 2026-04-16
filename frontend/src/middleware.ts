@@ -21,7 +21,7 @@ export function middleware(req: NextRequest) {
   }
 
   return NextResponse.redirect(
-    new URL(`/${localeFromCookie}${pathname}`, req.url)
+    new URL(`/${localeFromCookie}${pathname}`, req.url),
   );
 }
 

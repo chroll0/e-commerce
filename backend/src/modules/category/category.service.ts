@@ -13,10 +13,13 @@ export class CategoryService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateCategoryDto) {
-    const enName = dto.translations.find((t) => t.locale === "en")?.name;
-    const baseName = enName ?? dto.translations[0]?.name;
+    const baseName =
+      dto.translations.find((t) => t.locale === "en")?.name ??
+      dto.translations[0]?.name;
 
-    if (!baseName) throw new BadRequestException("translations are required");
+    if (!baseName) {
+      throw new BadRequestException("translations are required");
+    }
 
     const slug = dto.slug ?? this.slugify(baseName);
 
@@ -25,7 +28,9 @@ export class CategoryService {
         slug,
         image: dto.image,
         parentId: dto.parentId ?? null,
-        translations: { create: dto.translations },
+        translations: {
+          create: dto.translations,
+        },
       },
       include: {
         translations: true,
@@ -34,12 +39,23 @@ export class CategoryService {
   }
 
   async findAll(locale?: Locale) {
-    return this.prisma.category.findMany({
+    const categories = await this.prisma.category.findMany({
       include: {
-        translations: locale ? { where: { locale } } : true,
+        translations: {
+          where: locale ? { locale } : undefined,
+        },
         _count: { select: { products: true } },
       },
       orderBy: { createdAt: "desc" },
+    });
+
+    return categories.map((cat) => {
+      const t =
+        cat.translations?.[0] ??
+        cat.translations.find((tr) => tr.locale === locale) ??
+        cat.translations[0];
+
+      return this.mapCategory(cat, t);
     });
   }
 
@@ -47,7 +63,9 @@ export class CategoryService {
     const category = await this.prisma.category.findUnique({
       where: { slug },
       include: {
-        translations: locale ? { where: { locale } } : true,
+        translations: {
+          where: locale ? { locale } : undefined,
+        },
       },
     });
 
@@ -55,76 +73,80 @@ export class CategoryService {
       throw new NotFoundException(`Category with slug "${slug}" not found`);
     }
 
-    return category;
+    const t =
+      category.translations?.[0] ??
+      category.translations.find((tr) => tr.locale === locale) ??
+      category.translations[0];
+
+    return this.mapCategory(category, t);
   }
 
   async findOne(id: number, locale?: Locale) {
     const category = await this.prisma.category.findUnique({
       where: { id },
       include: {
-        translations: locale ? { where: { locale } } : true,
+        translations: {
+          where: locale ? { locale } : undefined,
+        },
         _count: { select: { products: true } },
       },
     });
 
-    if (!category)
+    if (!category) {
       throw new NotFoundException(`Category with id ${id} not found`);
-    return category;
+    }
+
+    const t =
+      category.translations?.[0] ??
+      category.translations.find((tr) => tr.locale === locale) ??
+      category.translations[0];
+
+    return this.mapCategory(category, t);
   }
 
   async update(id: number, dto: UpdateCategoryDto) {
     await this.ensureExists(id);
 
-    let translationOps:
-      | {
-          upsert: {
-            where: {
-              categoryId_locale: { categoryId: number; locale: string };
-            };
-            update: Record<string, string>;
-            create: { locale: string; name: string };
-          }[];
-        }
-      | undefined;
+    let translationOps;
 
     if (dto.translations?.length) {
       const existing = await this.prisma.categoryTranslation.findMany({
         where: { categoryId: id },
         select: { locale: true },
       });
+
       const existingLocales = new Set(existing.map((x) => x.locale));
 
-      const upsert = dto.translations.map((tr) => {
-        const exists = existingLocales.has(tr.locale);
+      translationOps = {
+        upsert: dto.translations.map((tr) => {
+          const exists = existingLocales.has(tr.locale);
 
-        const update: Record<string, string> = {};
-        if (tr.name !== undefined) update.name = tr.name;
-
-        if (!exists) {
-          if (!tr.name) {
-            throw new BadRequestException(
-              `Translation for locale "${tr.locale}" requires name`,
-            );
-          }
-        }
-
-        return {
-          where: { categoryId_locale: { categoryId: id, locale: tr.locale } },
-          update,
-          create: { locale: tr.locale, name: tr.name ?? "" },
-        };
-      });
-
-      translationOps = { upsert };
+          return {
+            where: {
+              categoryId_locale: {
+                categoryId: id,
+                locale: tr.locale,
+              },
+            },
+            update: {
+              name: tr.name,
+            },
+            create: {
+              locale: tr.locale,
+              name: tr.name ?? "",
+            },
+          };
+        }),
+      };
     }
 
     return this.prisma.category.update({
       where: { id },
       data: {
-        ...(dto.slug !== undefined ? { slug: dto.slug } : {}),
-        ...(dto.image !== undefined ? { image: dto.image } : {}),
-        ...(dto.parentId !== undefined ? { parentId: dto.parentId } : {}),
-        ...(translationOps ? { translations: translationOps } : {}),
+        slug: dto.slug,
+        image: dto.image,
+        parentId: dto.parentId,
+        ...(translationOps && { translations: translationOps }),
       },
       include: {
         translations: true,
@@ -141,15 +163,11 @@ export class CategoryService {
     ]);
 
     if (childrenCount > 0) {
-      throw new BadRequestException({
-        code: "hasChildren",
-      });
+      throw new BadRequestException({ code: "hasChildren" });
     }
 
     if (productsCount > 0) {
-      throw new BadRequestException({
-        code: "hasProducts",
-      });
+      throw new BadRequestException({ code: "hasProducts" });
     }
 
     await this.prisma.categoryTranslation.deleteMany({
@@ -159,13 +177,26 @@ export class CategoryService {
     return this.prisma.category.delete({ where: { id } });
   }
 
+  private mapCategory(cat: any, t?: any) {
+    return {
+      id: cat.id,
+      slug: cat.slug,
+      image: cat.image,
+      parentId: cat.parentId,
+      productCount: cat._count?.products ?? 0,
+      name: t?.name ?? "",
+    };
+  }
+
   private async ensureExists(id: number) {
     const exists = await this.prisma.category.findUnique({
       where: { id },
       select: { id: true },
     });
-    if (!exists)
+
+    if (!exists) {
       throw new NotFoundException(`Category with id ${id} not found`);
+    }
   }
 
   private slugify(text: string) {
