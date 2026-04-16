@@ -63,7 +63,7 @@ export default function Hero() {
 
   return (
     <section>
-      <div className="relative h-[420px] rounded-3xl overflow-hidden bg-card shadow-xl group mb-10">
+      <div className="relative h-[420px] rounded-3xl overflow-hidden bg-card shadow-xl group my-10">
         {/* OVERLAY */}
         <div className="absolute inset-0 bg-linear-to-r from-black/30 to-transparent" />
 

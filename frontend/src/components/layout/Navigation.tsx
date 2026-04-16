@@ -4,7 +4,7 @@ import { Bell, ShoppingCart } from "lucide-react";
 const Navigation = () => {
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between py-1 px-5 border-b border-border">
+      <div className="flex items-center justify-between py-2 px-5 border-b border-border">
         <NavBar />
         <div className="flex items-center gap-4">
           <ThemeToggle />
