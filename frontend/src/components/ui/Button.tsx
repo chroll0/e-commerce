@@ -42,7 +42,7 @@ const Button: FC<ButtonProps> = ({
 
   const sizeStyles = {
     xs: iconOnly ? "p-1 text-xs" : "px-2 py-2 text-xs",
-    sm: iconOnly ? "p-2 text-sm" : "px-3 py-1.5 text-sm",
+    sm: iconOnly ? "p-1.5 text-sm" : "px-3 py-1.5 text-sm",
     md: iconOnly ? "p-3 text-base" : "px-4 py-2 text-base",
     lg: iconOnly ? "p-4 text-lg" : "px-6 py-3 text-lg",
   };
@@ -55,7 +55,7 @@ const Button: FC<ButtonProps> = ({
           variantStyles[variant],
           sizeStyles[size],
           fullWidth && "w-full",
-          className
+          className,
         )}
         {...props}
       >
@@ -71,7 +71,7 @@ const Button: FC<ButtonProps> = ({
         variantStyles[variant],
         sizeStyles[size],
         fullWidth && "w-full",
-        className
+        className,
       )}
       {...props}
     >
