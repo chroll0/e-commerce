@@ -72,7 +72,7 @@ export default function Hero() {
             {slides.map((slide: any, i: number) => (
               <div
                 key={i}
-                className="md:px-20 px-10 flex-[0_0_100%] relative h-full flex items-center"
+                className="md:px-20 px-10 flex-[0_0_100%] relative h-full flex items-center justify-between"
               >
                 <div
                   key={index}
@@ -86,7 +86,7 @@ export default function Hero() {
                     {slide.tag}
                   </span>
 
-                  <h1 className="md:text-6xl text-4xl font-bold text-white mt-5 leading-tight">
+                  <h1 className="text-[52px] font-bold text-white mt-5 leading-tight">
                     {slide.title}
                     <br />
                     <span className="text-primary">{slide.highlight}</span>
@@ -95,24 +95,37 @@ export default function Hero() {
                   <p className="text-white/90 mt-4">{slide.description}</p>
                 </div>
 
-                {/* IMAGE */}
                 <div
-                  key={index + "-img"}
-                  className={`absolute right-0 bottom-0 h-full w-[50%] flex items-end justify-end pr-6 ${
+                  className={`absolute inset-0 md:relative md:inset-auto h-full w-full md:w-[50%] ${
                     direction === "right"
                       ? styles.slideInImage
                       : styles.slideInImageLeft
                   }`}
                 >
-                  <div className="relative w-full h-full max-w-[600px]">
+                  {/* MOBILE BACKGROUND LAYER */}
+                  <div className="absolute inset-0 md:hidden">
                     <Image
                       src={slide.image}
                       alt={slide.title}
                       fill
-                      className="object-contain object-bottom drop-shadow-2xl"
-                      sizes="(max-width: 768px) 100vw, 50vw"
                       priority
+                      className="object-cover object-center scale-110"
                     />
+                    <div className="absolute inset-0 bg-background/20" />
+                  </div>
+
+                  {/* DESKTOP IMAGE (FIXED) */}
+                  <div className="hidden md:flex h-full w-full items-center justify-center relative">
+                    <div className="relative w-full h-[380px] max-w-[620px] flex items-center justify-center">
+                      <Image
+                        src={slide.image}
+                        alt={slide.title}
+                        fill
+                        priority
+                        className="object-contain object-center scale-[1.05] drop-shadow-2xl"
+                        sizes="50vw"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -138,7 +151,7 @@ export default function Hero() {
           onClick={scrollPrev}
           size="xs"
           variant="outline"
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 rounded-full"
         >
           <ChevronLeft />
         </Button>
@@ -147,7 +160,7 @@ export default function Hero() {
           onClick={scrollNext}
           size="xs"
           variant="outline"
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 rounded-full"
         >
           <ChevronRight />
         </Button>

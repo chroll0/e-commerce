@@ -467,7 +467,7 @@
       {
         "tag": "#New Collection",
         "title": "Fresh Arrivals",
-        "highlight": "Summer 2026",
+        "highlight": "Spring-Summer 2026",
         "description": "Discover the latest trends",
         "image": "/content/new_collection.png"
       },
@@ -476,14 +476,14 @@
         "title": "Exclusive Offers",
         "highlight": "Save Big Today",
         "description": "Handpicked deals just for you",
-        "image": "/content/best_deals.png"
+        "image": "/content/best_deal.png"
       },
       {
         "tag": "#Trending Now",
         "title": "Top Picks",
         "highlight": "Most Loved Styles",
         "description": "See what everyone is buying",
-        "image": "/content/trending.png"
+        "image": "/content/now_trending.png"
       }
     ]
   },

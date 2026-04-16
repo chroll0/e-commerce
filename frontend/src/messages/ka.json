@@ -454,6 +454,39 @@
     "continue": "გაგრძელება"
   },
 
+  "hero": {
+    "slides": [
+      {
+        "tag": "#დიდი ფასდაკლება",
+        "title": "უამრავი შეთავაზება!",
+        "highlight": "50%-მდე ფასდაკლება!",
+        "description": "გაანახლე შენი ყოველდღიური სტილი",
+        "image": "/content/fashion_sale.png"
+      },
+      {
+        "tag": "#ახალი კოლექცია",
+        "title": "ახალი კოლექციები!",
+        "highlight": "გაზაფხული-ზაფხული 2026",
+        "description": "აღმოაჩინე უახლესი ტენდენციები",
+        "image": "/content/new_collection.png"
+      },
+      {
+        "tag": "#საუკეთესო შეთავაზებები",
+        "title": "ექსკლუზიური აქციები!",
+        "highlight": "დაზოგე დღესვე!",
+        "description": "შერჩეული შეთავაზებები მხოლოდ შენთვის",
+        "image": "/content/best_deal.png"
+      },
+      {
+        "tag": "#ტრენდშია",
+        "title": "საუკეთესო არჩევანი!",
+        "highlight": "პოპულარული სტილები!",
+        "description": "ნახე რას ყიდულობენ სხვები",
+        "image": "/content/now_trending.png"
+      }
+    ]
+  },
+
   "footer": {
     "about": {
       "title": "ჩვენ შესახებ",
