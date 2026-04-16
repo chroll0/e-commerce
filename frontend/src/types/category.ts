@@ -6,6 +6,13 @@ export type CategoryOption = {
   name: string;
 };
 
+export type Category = {
+  id: number;
+  name: string;
+  slug: string;
+  image?: string | null;
+};
+
 export type CategoryApi = {
   id: number;
   slug: string;
