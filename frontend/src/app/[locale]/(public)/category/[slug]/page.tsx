@@ -1,15 +1,28 @@
-export default async function CategoryPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const category = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/categories/slug/${params.slug}`,
-  ).then((res) => res.json());
+import { getCategoryProducts } from "@/lib/productsApi";
+
+type Props = {
+  params: {
+    slug: string;
+    locale: string;
+  };
+};
+
+export default async function Page({ params }: Props) {
+  const { slug, locale } = params;
+
+  const products = await getCategoryProducts(slug, locale);
 
   return (
-    <div>
-      <h1>{category.name}</h1>
+    <div className="container mx-auto py-10">
+      <h1 className="text-2xl font-semibold mb-6">Category: {slug}</h1>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {products.map((product) => (
+          <div key={product.id} className="border p-4 rounded-lg">
+            <p>{product.name}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
