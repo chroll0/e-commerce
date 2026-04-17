@@ -43,16 +43,18 @@ export class ProductService {
     });
   }
 
-  async findAll(
-    search?: string,
-    categorySlug?: string,
-    categoryId?: number,
-    locale: Locale = "en",
-  ) {
+  async findAll(params: {
+    search?: string;
+    categorySlug?: string;
+    categoryId?: number;
+    locale?: Locale;
+  }) {
+    const { search, categorySlug, categoryId, locale = "en" } = params;
+
     const cleanSearch = search?.trim();
     const cleanSlug = categorySlug?.trim();
 
-    return this.prisma.product.findMany({
+    const products = await this.prisma.product.findMany({
       where: {
         AND: [
           cleanSearch
@@ -85,40 +87,37 @@ export class ProductService {
                       },
                     },
                   },
-                  {
-                    category: {
-                      translations: {
-                        some: {
-                          locale,
-                          name: { contains: cleanSearch, mode: "insensitive" },
-                        },
-                      },
-                    },
-                  },
                 ],
               }
             : {},
 
-          categoryId != null
-            ? {
-                categoryId: Number(categoryId),
-              }
-            : {},
+          categoryId != null ? { categoryId: Number(categoryId) } : {},
 
-          cleanSlug
-            ? {
-                category: {
-                  slug: cleanSlug,
-                },
-              }
-            : {},
+          cleanSlug ? { category: { slug: cleanSlug } } : {},
         ],
       },
       include: {
-        category: { include: { translations: true } },
         translations: true,
+        category: { include: { translations: true } },
       },
       orderBy: { createdAt: "desc" },
+    });
+
+    return products.map((p) => {
+      const t =
+        p.translations.find((tr) => tr.locale === locale) ??
+        p.translations.find((tr) => tr.locale === "en") ??
+        p.translations[0];
+
+      return {
+        id: p.id,
+        slug: p.slug,
+        price: p.price,
+        images: p.images,
+        categoryId: p.categoryId,
+        name: t?.title ?? "",
+        description: t?.description ?? "",
+      };
     });
   }
 
