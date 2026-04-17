@@ -40,21 +40,16 @@ export class ProductController {
   @Get()
   findAll(
     @Query("search") search?: string,
-    @Query("category") categorySlug?: string,
     @Query("categoryId") categoryId?: string,
+    @Query("categorySlug") categorySlug?: string,
     @Query("locale") locale?: string,
   ) {
-    const parsedCategoryId =
-      categoryId != null && String(categoryId).trim() !== ""
-        ? Number(categoryId)
-        : undefined;
-
-    return this.productService.findAll(
+    return this.productService.findAll({
       search,
+      categoryId: categoryId ? Number(categoryId) : undefined,
       categorySlug,
-      parsedCategoryId,
-      parseLocale(locale),
-    );
+      locale: parseLocale(locale),
+    });
   }
 
   @Get("slug/:slug")

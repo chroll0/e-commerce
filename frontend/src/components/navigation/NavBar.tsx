@@ -83,9 +83,9 @@ const NavBar = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="md:hidden absolute top-10.5 left-0 w-full bg-background border-t border-border shadow-lg z-50"
+            className="md:hidden absolute top-12 left-0 w-full bg-background border-t border-border shadow-lg z-50"
           >
-            <div className="flex flex-col px-2 py-1 gap-1 shadow-2xl">
+            <div className="flex flex-col px-2 py-1.5 gap-1 shadow-2xl">
               {links.map((item, i) => {
                 const active = isActive(item.href);
 

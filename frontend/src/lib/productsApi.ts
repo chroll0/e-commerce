@@ -4,6 +4,7 @@ import type { ProductApi } from "@/types";
 export type GetProductsParams = {
   search?: string;
   categoryId?: string | number;
+  categorySlug?: string;
   locale?: string;
 };
 
@@ -19,6 +20,7 @@ export async function getProducts(params: GetProductsParams) {
     params: {
       search: search || undefined,
       categoryId,
+      categorySlug: params.categorySlug || undefined,
       locale: params.locale || undefined,
     },
   });
