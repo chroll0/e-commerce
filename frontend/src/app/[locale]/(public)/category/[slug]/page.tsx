@@ -18,7 +18,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="text-2xl font-semibold mb-6"> {slug}</h1>
+      <h1 className="text-2xl font-semibold mb-6">{slug}</h1>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {products.map((product) => (
           <div key={product.id} className="border p-4 rounded-lg">

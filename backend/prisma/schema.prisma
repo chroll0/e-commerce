@@ -48,12 +48,14 @@ model Category {
 model CategoryTranslation {
   id         Int      @id @default(autoincrement())
   categoryId Int
-  locale     String   // "en" | "ka"
+  locale     String   
+  slug       String
   name       String
 
 category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@unique([categoryId, locale])
+  @@unique([slug, locale])
   @@index([locale])
 }
 
