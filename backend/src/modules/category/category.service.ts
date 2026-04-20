@@ -144,9 +144,9 @@ export class CategoryService {
     return this.prisma.category.update({
       where: { id },
       data: {
-        slug: dto.slug,
-        image: dto.image,
-        parentId: dto.parentId,
+        ...(dto.slug ? { slug: dto.slug } : {}),
+        ...(dto.image ? { image: dto.image } : {}),
+        parentId: dto.parentId ?? undefined,
         ...(translationOps && { translations: translationOps }),
       },
       include: {
