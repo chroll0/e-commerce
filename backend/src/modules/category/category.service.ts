@@ -27,13 +27,14 @@ export class CategoryService {
       data: {
         slug,
         image: dto.image,
-        parentId: dto.parentId ?? null,
+        parentId: dto.parentId ?? undefined,
         translations: {
-          create: dto.translations,
+          create: dto.translations.map((t) => ({
+            locale: t.locale,
+            name: t.name,
+            slug: this.slugify(t.name),
+          })),
         },
-      },
-      include: {
-        translations: true,
       },
     });
   }
