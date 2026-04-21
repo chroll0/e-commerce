@@ -67,8 +67,20 @@ export class CategoryService {
   }
 
   async findBySlug(slug: string, locale?: Locale) {
-    const category = await this.prisma.category.findUnique({
-      where: { slug },
+    const category = await this.prisma.category.findFirst({
+      where: {
+        OR: [
+          { slug },
+          {
+            translations: {
+              some: {
+                slug,
+                ...(locale ? { locale } : {}),
+              },
+            },
+          },
+        ],
+      },
       include: {
         translations: {
           where: locale ? { locale } : undefined,
@@ -191,7 +203,7 @@ export class CategoryService {
   private mapCategory(cat: any, t?: any) {
     return {
       id: cat.id,
-      slug: cat.slug,
+      slug: t?.slug ?? cat.slug,
       image: cat.image,
       parentId: cat.parentId,
       productCount: cat._count?.products ?? 0,
