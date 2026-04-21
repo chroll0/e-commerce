@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+import { api } from "@/lib/axios";
 
 const locales = [
   { code: "en", label: "EN", flag: "/flags/gb.svg" },
@@ -29,8 +30,32 @@ export default function LanguageSwitcher() {
     return "/" + newSegments.join("/");
   };
 
-  const handleSwitch = (locale: string, path: string) => {
+  const mapCategorySlugForLocale = async (
+    currentSlug: string,
+    targetLocale: string,
+  ) => {
+    try {
+      const res = await api.get(`/categories/slug/${encodeURIComponent(currentSlug)}`, {
+        params: { locale: targetLocale },
+      });
+
+      return res.data?.slug ? String(res.data.slug) : currentSlug;
+    } catch {
+      return currentSlug;
+    }
+  };
+
+  const handleSwitch = async (locale: string, path: string) => {
     document.cookie = `NEXT_LOCALE=${locale}; path=/`;
+    const newSegments = path.split("/").filter(Boolean);
+    const isCategoryPage = newSegments[1] === "category" && !!newSegments[2];
+
+    if (isCategoryPage) {
+      newSegments[2] = await mapCategorySlugForLocale(newSegments[2], locale);
+      router.push("/" + newSegments.join("/"));
+      return;
+    }
+
     router.push(path);
   };
 

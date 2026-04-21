@@ -27,13 +27,20 @@ export class CategoryService {
       data: {
         slug,
         image: dto.image,
-        parentId: dto.parentId ?? null,
+        parentId: dto.parentId ?? undefined,
         translations: {
-          create: dto.translations,
+          create: dto.translations.map((t) => {
+            if (!t.name) {
+              throw new BadRequestException("Translation name is required");
+            }
+
+            return {
+              locale: t.locale,
+              name: t.name,
+              slug: this.slugify(t.name),
+            };
+          }),
         },
-      },
-      include: {
-        translations: true,
       },
     });
   }
@@ -60,8 +67,20 @@ export class CategoryService {
   }
 
   async findBySlug(slug: string, locale?: Locale) {
-    const category = await this.prisma.category.findUnique({
-      where: { slug },
+    const category = await this.prisma.category.findFirst({
+      where: {
+        OR: [
+          { slug },
+          {
+            translations: {
+              some: {
+                slug,
+                ...(locale ? { locale } : {}),
+              },
+            },
+          },
+        ],
+      },
       include: {
         translations: {
           where: locale ? { locale } : undefined,
@@ -119,7 +138,9 @@ export class CategoryService {
 
       translationOps = {
         upsert: dto.translations.map((tr) => {
-          const exists = existingLocales.has(tr.locale);
+          if (!tr.name) {
+            throw new BadRequestException("Translation name is required");
+          }
 
           return {
             where: {
@@ -130,10 +151,12 @@ export class CategoryService {
             },
             update: {
               name: tr.name,
+              slug: this.slugify(tr.name),
             },
             create: {
               locale: tr.locale,
-              name: tr.name ?? "",
+              name: tr.name,
+              slug: this.slugify(tr.name),
             },
           };
         }),
@@ -143,9 +166,9 @@ export class CategoryService {
     return this.prisma.category.update({
       where: { id },
       data: {
-        slug: dto.slug,
-        image: dto.image,
-        parentId: dto.parentId,
+        ...(dto.slug ? { slug: dto.slug } : {}),
+        ...(dto.image ? { image: dto.image } : {}),
+        parent: dto.parentId ? { connect: { id: dto.parentId } } : undefined,
         ...(translationOps && { translations: translationOps }),
       },
       include: {
@@ -180,7 +203,7 @@ export class CategoryService {
   private mapCategory(cat: any, t?: any) {
     return {
       id: cat.id,
-      slug: cat.slug,
+      slug: t?.slug ?? cat.slug,
       image: cat.image,
       parentId: cat.parentId,
       productCount: cat._count?.products ?? 0,

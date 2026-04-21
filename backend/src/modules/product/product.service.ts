@@ -93,7 +93,23 @@ export class ProductService {
 
           categoryId != null ? { categoryId: Number(categoryId) } : {},
 
-          cleanSlug ? { category: { slug: cleanSlug } } : {},
+          cleanSlug
+            ? {
+                category: {
+                  OR: [
+                    { slug: cleanSlug },
+                    {
+                      translations: {
+                        some: {
+                          slug: cleanSlug,
+                          ...(locale ? { locale } : {}),
+                        },
+                      },
+                    },
+                  ],
+                },
+              }
+            : {},
         ],
       },
       include: {
