@@ -100,7 +100,10 @@ export class CategoryService {
       category.translations.find((tr) => tr.locale === locale) ??
       category.translations[0];
 
-    return this.mapCategory(category, t);
+    return {
+      ...this.mapCategory(category, t),
+      translations: category.translations,
+    };
   }
 
   async findOne(id: number, locale?: Locale) {
