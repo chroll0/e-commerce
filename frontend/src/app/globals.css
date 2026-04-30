@@ -8,7 +8,7 @@
   --secondary: #6d6d6d; /* Muted UI text */
   --muted: #9ea3b0; /* Icons, labels */
 
-  --accent: #e53935; /* Flash sale red (premium tone) */
+  --destructive: #e53935; /* Flash sale red (premium tone) */
   --highlight: #2264d1; /* Blue action color */
   --yellow: #facc15; /* Optional rating stars */
 
@@ -29,7 +29,7 @@ html.dark {
   --secondary: #c4c6ca;
   --muted: #7e8187;
 
-  --accent: #ff5757; /* Slightly neon red */
+  --destructive: #ff5757; /* Slightly neon red */
   --highlight: #5ca0ff; /* Neon-ish blue */
   --yellow: #fde047;
 
@@ -51,7 +51,7 @@ html.dark {
   --color-secondary: var(--secondary);
   --color-muted: var(--muted);
 
-  --color-accent: var(--accent);
+  --color-destructive: var(--destructive);
   --color-highlight: var(--highlight);
   --color-yellow: var(--yellow);
 
