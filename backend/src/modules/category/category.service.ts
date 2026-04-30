@@ -37,10 +37,13 @@ export class CategoryService {
             return {
               locale: t.locale,
               name: t.name,
-              slug: this.slugify(t.name),
+              slug: slug,
             };
           }),
         },
+      },
+      include: {
+        translations: true,
       },
     });
   }
@@ -129,12 +132,14 @@ export class CategoryService {
     let translationOps;
 
     if (dto.translations?.length) {
-      const existing = await this.prisma.categoryTranslation.findMany({
-        where: { categoryId: id },
-        select: { locale: true },
+      const category = await this.prisma.category.findUnique({
+        where: { id },
+        select: { slug: true },
       });
 
-      const existingLocales = new Set(existing.map((x) => x.locale));
+      if (!category) {
+        throw new NotFoundException(`Category with id ${id} not found`);
+      }
 
       translationOps = {
         upsert: dto.translations.map((tr) => {
@@ -151,12 +156,12 @@ export class CategoryService {
             },
             update: {
               name: tr.name,
-              slug: this.slugify(tr.name),
+              slug: category.slug,
             },
             create: {
               locale: tr.locale,
               name: tr.name,
-              slug: this.slugify(tr.name),
+              slug: category.slug,
             },
           };
         }),
@@ -198,6 +203,34 @@ export class CategoryService {
     });
 
     return this.prisma.category.delete({ where: { id } });
+  }
+
+  async fixAllTranslationSlugs() {
+    const categories = await this.prisma.category.findMany({
+      select: { id: true, slug: true },
+    });
+
+    let fixedCount = 0;
+
+    for (const category of categories) {
+      const result = await this.prisma.categoryTranslation.updateMany({
+        where: {
+          categoryId: category.id,
+          NOT: {
+            slug: category.slug,
+          },
+        },
+        data: { slug: category.slug },
+      });
+
+      fixedCount += result.count;
+    }
+
+    return {
+      message: "Fixed all translation slugs",
+      categoriesChecked: categories.length,
+      translationsFixed: fixedCount,
+    };
   }
 
   private mapCategory(cat: any, t?: any) {
