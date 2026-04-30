@@ -6,7 +6,9 @@ export async function getCategoriesClient(locale: string) {
     params: { locale },
   });
 
-  return res.data;
+  const categories = res.data as Category[];
+
+  return categories.filter((cat) => cat.parentId === null);
 }
 
 export async function getCategoryBySlug(slug: string, locale: string) {
