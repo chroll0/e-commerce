@@ -140,7 +140,7 @@ const SelectField: FC<Props> = ({
         )}
 
         {error ? (
-          <p className="mt-1 text-xs text-red-500 leading-tight">{error}</p>
+          <p className="mt-1 text-xs text-destructive leading-tight">{error}</p>
         ) : null}
 
         {hint ? (
