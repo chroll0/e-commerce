@@ -488,6 +488,19 @@
     ]
   },
 
+  "home": {
+    "flashSale": {
+      "title": "Flash Sale"
+    },
+    "featuredProducts": {
+      "tabs": {
+        "bestSeller": "Best Seller",
+        "keepStylish": "Keep Stylish",
+        "specialDiscount": "Special Discount"
+      }
+    }
+  },
+
   "footer": {
     "about": {
       "title": "About",

@@ -136,7 +136,7 @@ export default function ImageUpload(props: Props) {
   return (
     <div className="rounded-2xl border border-border p-4 space-y-4">
       {errorText ? (
-        <p className="text-xs text-red-500 leading-tight">{errorText}</p>
+        <p className="text-xs text-destructive leading-tight">{errorText}</p>
       ) : null}
 
       <div

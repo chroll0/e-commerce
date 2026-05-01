@@ -26,6 +26,15 @@ function parseLocale(locale?: string): Locale {
   throw new BadRequestException('locale must be "en" or "ka"');
 }
 
+function parseLimit(limit?: string): number | undefined {
+  if (!limit) return undefined;
+  const parsed = Number(limit);
+  if (!Number.isFinite(parsed) || parsed < 1) {
+    throw new BadRequestException("limit must be a positive number");
+  }
+  return Math.floor(parsed);
+}
+
 @Controller("products")
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
@@ -43,12 +52,14 @@ export class ProductController {
     @Query("categoryId") categoryId?: string,
     @Query("categorySlug") categorySlug?: string,
     @Query("locale") locale?: string,
+    @Query("limit") limit?: string,
   ) {
     return this.productService.findAll({
       search,
       categoryId: categoryId ? Number(categoryId) : undefined,
       categorySlug,
       locale: parseLocale(locale),
+      limit: parseLimit(limit),
     });
   }
 

@@ -6,6 +6,7 @@ export type GetProductsParams = {
   categoryId?: string | number;
   categorySlug?: string;
   locale?: string;
+  limit?: number;
 };
 
 export async function getProducts(params: GetProductsParams) {
@@ -22,6 +23,7 @@ export async function getProducts(params: GetProductsParams) {
       categoryId,
       categorySlug: params.categorySlug || undefined,
       locale: params.locale || undefined,
+      limit: params.limit || undefined,
     },
   });
 
