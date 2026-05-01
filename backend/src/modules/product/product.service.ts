@@ -48,8 +48,9 @@ export class ProductService {
     categorySlug?: string;
     categoryId?: number;
     locale?: Locale;
+    limit?: number;
   }) {
-    const { search, categorySlug, categoryId, locale = "en" } = params;
+    const { search, categorySlug, categoryId, locale = "en", limit } = params;
 
     const cleanSearch = search?.trim();
     const cleanSlug = categorySlug?.trim();
@@ -92,7 +93,6 @@ export class ProductService {
             : {},
 
           categoryId != null ? { categoryId: Number(categoryId) } : {},
-
           cleanSlug
             ? {
                 category: {
@@ -117,6 +117,7 @@ export class ProductService {
         category: { include: { translations: true } },
       },
       orderBy: { createdAt: "desc" },
+      ...(limit ? { take: limit } : {}),
     });
 
     return products.map((p) => {
@@ -128,8 +129,14 @@ export class ProductService {
       return {
         id: p.id,
         slug: p.slug,
+        oldPrice: p.oldPrice,
+        discount: p.discount,
+        stock: p.stock,
+        isFeatured: p.isFeatured,
         price: p.price,
         images: p.images,
+        translations: p.translations,
+        category: p.category,
         categoryId: p.categoryId,
         name: t?.title ?? "",
         description: t?.description ?? "",

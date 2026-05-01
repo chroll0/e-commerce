@@ -487,6 +487,19 @@
     ]
   },
 
+  "home": {
+    "flashSale": {
+      "title": "ფლეშ გაყიდვა"
+    },
+    "featuredProducts": {
+      "tabs": {
+        "bestSeller": "ბესტსელერი",
+        "keepStylish": "იყავი სტილური",
+        "specialDiscount": "სპეციალური ფასდაკლება"
+      }
+    }
+  },
+
   "footer": {
     "about": {
       "title": "ჩვენ შესახებ",
