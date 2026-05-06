@@ -49,10 +49,10 @@ export class CreateProductDto {
   @IsNumber()
   stock?: number;
 
+  @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
   @IsString({ each: true })
-  images: string[];
+  images?: string[];
 
   @IsNotEmpty()
   @IsNumber()
