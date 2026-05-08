@@ -489,7 +489,7 @@
 
   "home": {
     "flashSale": {
-      "title": "ფლეშ გაყიდვა"
+      "title": "ფასდაკლება"
     },
     "featuredProducts": {
       "tabs": {
@@ -498,6 +498,12 @@
         "specialDiscount": "სპეციალური ფასდაკლება"
       }
     }
+  },
+
+  "productCard": {
+    "noImage": "სურათი არ არის",
+    "lowStock": "შეზღუდული მარაგი",
+    "outOfStock": "აღარ ხელმისაწვდომი"
   },
 
   "footer": {

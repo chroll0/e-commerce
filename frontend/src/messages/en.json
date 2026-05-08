@@ -501,6 +501,12 @@
     }
   },
 
+  "productCard": {
+    "noImage": "No Image",
+    "lowStock": "Low Stock",
+    "outOfStock": "Out of Stock"
+  },
+
   "footer": {
     "about": {
       "title": "About",

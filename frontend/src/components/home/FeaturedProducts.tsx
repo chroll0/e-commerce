@@ -36,7 +36,7 @@ export default function FeaturedProducts() {
   return (
     <section>
       {/* TAB BUTTONS */}
-      <div className="flex gap-4 border-b border-border pb-3">
+      <div className="flex gap-4 border-b border-border py-6">
         <Button variant="outline" size="sm">
           {t("tabs.bestSeller")}
         </Button>

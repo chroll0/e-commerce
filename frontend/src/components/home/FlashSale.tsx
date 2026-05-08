@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ProductCard } from "@/components";
 import { getProducts } from "@/lib/productsApi";
+import { useEffect, useState } from "react";
+import { ProductCard } from "@/components";
 import type { ProductApi } from "@/types";
 
 export default function FlashSale() {
@@ -15,15 +15,29 @@ export default function FlashSale() {
   useEffect(() => {
     let cancelled = false;
 
-    setLoading(true);
-    getProducts({ locale: String(locale), limit: 5 })
-      .then((data) => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+
+        const data = await getProducts({
+          locale: String(locale),
+          limit: 100,
+        });
+
         if (cancelled) return;
-        setProducts((data ?? []).slice(0, 5));
-      })
-      .finally(() => {
+
+        const flashSaleProducts = (data ?? [])
+          .filter((p) => p.discount && p.discount > 0)
+          .sort((a, b) => (b.discount ?? 0) - (a.discount ?? 0))
+          .slice(0, 5);
+
+        setProducts(flashSaleProducts);
+      } finally {
         if (!cancelled) setLoading(false);
-      });
+      }
+    };
+
+    fetchProducts();
 
     return () => {
       cancelled = true;
@@ -35,14 +49,10 @@ export default function FlashSale() {
       {/* HEADER */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-primary">{t("title")}</h2>
-
-        <div className="flex gap-2 text-accent font-bold">
-          <span>08</span>:<span>17</span>:<span>56</span>
-        </div>
       </div>
 
-      {/* PRODUCT LIST */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4">
+      {/* PRODUCTS */}
+      <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
         {loading &&
           [1, 2, 3, 4, 5].map((id) => <ProductCard key={id} productId={id} />)}
 
