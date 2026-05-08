@@ -1,24 +1,30 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
+import { useRouter } from "next/navigation";
 import type { ProductApi } from "@/types";
-import { ProductCardSkeleton } from "@/components";
+import { Button, ProductCardSkeleton } from "@/components";
 import { useProductData } from "@/hooks/useProductData";
+import { EyeIcon } from "lucide-react";
 import Image from "next/image";
 
 type Props = {
-  productId?: number;
   product?: ProductApi;
-  showCategoryBadge?: boolean;
+  productId?: number;
 };
 
-export default function ProductCard({
-  productId,
-  product,
-  showCategoryBadge = false,
-}: Props) {
+export default function ProductCard({ product }: Props) {
   const t = useTranslations("productCard");
+  const locale = useLocale();
+  const router = useRouter();
   const data = useProductData(product);
+
+  const handleNavigation = () => {
+    const target = data?.slug ?? String(product?.id ?? "");
+    if (!target) return;
+    router.push(`/${locale}/products/${target}`);
+  };
 
   // Loading State
   if (!data) {
@@ -40,9 +46,7 @@ export default function ProductCard({
   return (
     <div
       className="group cursor-pointer overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_var(--color-shadow)]"
-      onClick={() => {
-        console.log("productId:", productId);
-      }}
+      onClick={handleNavigation}
     >
       {/* IMAGE */}
       <div className="relative aspect-square overflow-hidden bg-card-soft">
@@ -59,6 +63,21 @@ export default function ProductCard({
             <span className="text-xs text-muted">{t("noImage")}</span>
           </div>
         )}
+
+        {/* VIEW BUTTON */}
+        <div className="absolute top-2 left-2 opacity-0 translate-y-2 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <Button
+            variant="text"
+            iconOnly
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleNavigation();
+            }}
+          >
+            <EyeIcon className="h-4.5 w-4.5" />
+          </Button>
+        </div>
 
         {/* DISCOUNT */}
         {data.discount && data.discount > 0 && (

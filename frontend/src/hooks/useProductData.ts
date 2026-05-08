@@ -8,6 +8,7 @@ export interface ProductCardData {
   discount: number | null;
   stock: number;
   image: string | undefined;
+  slug?: string;
   sold: number;
   progress: number;
   isOutOfStock: boolean;
@@ -19,7 +20,7 @@ export function useProductData(product?: ProductApi): ProductCardData | null {
     if (!product) return null;
 
     const stock = product.stock;
-    const sold = Math.max(0, Math.floor(stock * 0.4)); // 40% of stock is sold
+    const sold = Math.max(0, Math.floor(stock * 0.4));
     const progress =
       stock > 0 ? Math.min(100, Math.round((sold / stock) * 100)) : 0;
     const isOutOfStock = stock === 0;
@@ -32,6 +33,7 @@ export function useProductData(product?: ProductApi): ProductCardData | null {
       discount: product.discount,
       stock,
       image: product.images?.[0],
+      slug: product.slug,
       sold,
       progress,
       isOutOfStock,
