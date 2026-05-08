@@ -35,10 +35,6 @@ export default function FlashSale() {
       {/* HEADER */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-primary">{t("title")}</h2>
-
-        <div className="flex gap-2 text-accent font-bold">
-          <span>08</span>:<span>17</span>:<span>56</span>
-        </div>
       </div>
 
       {/* PRODUCT LIST */}
