@@ -503,12 +503,8 @@
 
   "productCard": {
     "noImage": "No Image",
-    "discount": "Discount",
     "lowStock": "Low Stock",
-    "outOfStock": "Out of Stock",
-    "sold": "Sold",
-    "onlyLeft": "Only {{count}} left",
-    "discount_label": "-{{percent}}%"
+    "outOfStock": "Out of Stock"
   },
 
   "footer": {

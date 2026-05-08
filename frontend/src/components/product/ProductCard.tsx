@@ -2,8 +2,9 @@
 
 import { useTranslations } from "next-intl";
 import type { ProductApi } from "@/types";
-import { Button, ProductCardSkeleton } from "@/components";
+import { ProductCardSkeleton } from "@/components";
 import { useProductData } from "@/hooks/useProductData";
+import Image from "next/image";
 
 type Props = {
   productId?: number;
@@ -19,70 +20,72 @@ export default function ProductCard({
   const t = useTranslations("productCard");
   const data = useProductData(product);
 
-  // Loading skeleton
+  // Loading State
   if (!data) {
     return (
-      <div className="bg-card rounded-xl shadow-[0_2px_12px_var(--color-shadow)] p-4 border border-border overflow-hidden">
-        <ProductCardSkeleton className="w-full h-48 rounded-lg mb-3" />
-        <ProductCardSkeleton className="h-5 w-full mb-2 rounded" />
-        <ProductCardSkeleton className="h-4 w-2/3 mb-3 rounded" />
-        <ProductCardSkeleton className="h-5 w-1/3 mb-3 rounded" />
-        <ProductCardSkeleton className="h-2 w-full mb-2 rounded-full" />
-        <ProductCardSkeleton className="h-3 w-1/2 rounded" />
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_2px_12px_var(--color-shadow)]">
+        <ProductCardSkeleton className="h-44 w-full rounded-none sm:h-52" />
+        <div className="space-y-3 p-3">
+          <ProductCardSkeleton className="h-4 w-full rounded-md" />
+          <ProductCardSkeleton className="h-4 w-2/3 rounded-md" />
+          <div className="flex items-center gap-2">
+            <ProductCardSkeleton className="h-5 w-20 rounded-md" />
+            <ProductCardSkeleton className="h-4 w-14 rounded-md" />
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="group bg-card rounded-xl shadow-[0_2px_12px_var(--color-shadow)] border border-border hover:shadow-[0_8px_24px_var(--color-shadow)] transition-all duration-300 cursor-pointer overflow-hidden h-full flex flex-col">
-      {/* Image Container */}
-      <div className="relative w-full h-48 bg-card-soft overflow-hidden">
+    <div
+      className="group cursor-pointer overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_var(--color-shadow)]"
+      onClick={() => {
+        console.log("productId:", productId);
+      }}
+    >
+      {/* IMAGE */}
+      <div className="relative aspect-square overflow-hidden bg-card-soft">
         {data.image ? (
-          <img
+          <Image
             src={data.image}
             alt={data.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full bg-linear-to-br from-(--color-card-soft) to-(--color-border) flex items-center justify-center">
-            <span className="text-muted text-sm">{t("noImage")}</span>
+          <div className="flex h-full items-center justify-center">
+            <span className="text-xs text-muted">{t("noImage")}</span>
           </div>
         )}
 
-        {/* Discount Badge */}
+        {/* DISCOUNT */}
         {data.discount && data.discount > 0 && (
-          <div className="absolute top-3 right-3 bg-(--color-destructive) text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg">
-            {t("discount_label", { percent: data.discount })}
+          <div className="absolute top-2 right-2 rounded-md bg-(--color-destructive) px-2 py-1 text-[11px] font-semibold text-white">
+            -{data.discount}%
           </div>
         )}
       </div>
 
-      {/* Product Info */}
-      <div className="p-4 flex-1 flex flex-col">
-        {/* Title */}
-        <h3 className="text-lg font-semibold text-primary line-clamp-2 mb-2 leading-tight">
+      {/* CONTENT */}
+      <div className="p-3">
+        {/* TITLE */}
+        <h3 className="line-clamp-2 mt-1 text-sm font-medium leading-5 text-primary sm:text-base">
           {data.title}
         </h3>
 
-        {/* Price Section */}
-        <div className="flex gap-2 items-baseline mb-3">
-          <span className="text-xl font-bold text-primary">
+        {/* PRICE */}
+        <div className="mt-2 flex items-center gap-2">
+          <span className="text-base font-bold text-primary sm:text-lg">
             ${data.price.toFixed(2)}
           </span>
+
           {data.oldPrice && data.oldPrice > data.price && (
-            <span className="line-through text-destructive text-sm font-medium">
+            <span className="text-xs text-destructive line-through">
               ${data.oldPrice.toFixed(2)}
             </span>
           )}
-        </div>
-
-        <div className="flex gap-2 items-center mb-3">
-          <Button variant="outline" size="sm" className="mt-auto">
-            {t("viewDetails")}
-          </Button>
-          <Button variant="primary" size="sm" className="mt-2">
-            {t("addToCart")}
-          </Button>
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ProductCard } from "@/components";
 import { getProducts } from "@/lib/productsApi";
+import { useEffect, useState } from "react";
+import { ProductCard } from "@/components";
 import type { ProductApi } from "@/types";
 
 export default function FlashSale() {
