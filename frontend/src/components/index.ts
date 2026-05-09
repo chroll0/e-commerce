@@ -75,6 +75,10 @@ export { buildTree } from "./admin/categories/categoryTree";
 export { flattenTree } from "./admin/categories/categoryTree";
 export { buildIndentedOptions, slugify } from "./admin/categories/formOptions";
 
+// Store management components
+export { default as StoreForm } from "./admin/stores/StoreForm";
+export { default as StoresTable } from "./admin/stores/StoresTable";
+
 // Product management components
 export { default as ProductContentFields } from "./admin/products/ProductContentFields";
 export { default as ProductForm } from "./admin/products/ProductForm";

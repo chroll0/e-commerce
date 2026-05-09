@@ -11,6 +11,14 @@ export const makeCategorySchema = (t: TFn) =>
     parentId: yup.string().default(""),
   });
 
+export const makeStoreSchema = (t: TFn) =>
+  yup.object({
+    name: yup.string().trim().required(t("validation.nameRequired")),
+    slug: yup.string().trim().required(t("validation.slugRequired")),
+    logo: yup.string().trim().default(""),
+    banner: yup.string().trim().default(""),
+  });
+
 export const makeProductSchema = (t: TFn) =>
   yup.object({
     titleEn: yup.string().trim().required(t("errors.titleEn")),
@@ -54,7 +62,7 @@ export const makeProductSchema = (t: TFn) =>
       }),
 
     categoryId: yup.string().required(t("errors.category")),
-
+    storeId: yup.string().default(""),
     isFeatured: yup.boolean().default(false),
 
     images: yup

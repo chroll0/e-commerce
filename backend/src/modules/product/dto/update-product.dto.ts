@@ -57,6 +57,10 @@ export class UpdateProductDto {
   categoryId?: number;
 
   @IsOptional()
+  @IsNumber()
+  storeId?: number | null;
+
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ProductTranslationUpdateDto)

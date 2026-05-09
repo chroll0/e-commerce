@@ -10,6 +10,7 @@ import type {
   ProductFormValues,
   ProductCategoryOption,
   CategoryApi,
+  StoreOption,
 } from "@/types";
 import { buildProductLabels } from "@/lib/productLabels";
 
@@ -19,7 +20,9 @@ export default function AdminCreateProductPage() {
   const t = useTranslations("admin.products");
 
   const [categories, setCategories] = useState<ProductCategoryOption[]>([]);
+  const [stores, setStores] = useState<StoreOption[]>([]);
   const [loadingCats, setLoadingCats] = useState(false);
+  const [loadingStores, setLoadingStores] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState("");
 
@@ -29,12 +32,18 @@ export default function AdminCreateProductPage() {
     (async () => {
       try {
         setLoadingCats(true);
-        const res = await api.get(`/categories?locale=${locale}`);
+        setLoadingStores(true);
+
+        const [catRes, storeRes] = await Promise.all([
+          api.get(`/categories?locale=${locale}`),
+          api.get(`/stores`),
+        ]);
+
         if (!mounted) return;
 
-        const data = (res.data ?? []) as CategoryApi[];
+        const categoryData = (catRes.data ?? []) as CategoryApi[];
         setCategories(
-          data.map((c) => ({
+          categoryData.map((c) => ({
             id: c.id,
             parentId: c.parentId ?? null,
             slug: c.slug,
@@ -45,12 +54,17 @@ export default function AdminCreateProductPage() {
             name: c.translations?.[0]?.name ?? c.slug,
           })),
         );
+
+        const storeData = (storeRes.data ?? []) as StoreOption[];
+        setStores(storeData);
       } catch {
         if (!mounted) return;
         setCategories([]);
+        setStores([]);
       } finally {
         if (!mounted) return;
         setLoadingCats(false);
+        setLoadingStores(false);
       }
     })();
 
@@ -71,6 +85,7 @@ export default function AdminCreateProductPage() {
       discount: "",
       stock: "",
       categoryId: "",
+      storeId: "",
       isFeatured: false,
       images: [""],
     }),
@@ -87,6 +102,7 @@ export default function AdminCreateProductPage() {
         price: Number(v.price),
         stock: Number(v.stock),
         categoryId: Number(v.categoryId),
+        storeId: v.storeId ? Number(v.storeId) : undefined,
         isFeatured: v.isFeatured,
         images: cleanImages,
         ...(v.oldPrice ? { oldPrice: Number(v.oldPrice) } : {}),
@@ -129,7 +145,9 @@ export default function AdminCreateProductPage() {
         title={t("form.createTitle")}
         description={t("form.createDescription")}
         categories={categories}
+        stores={stores}
         loadingCategories={loadingCats}
+        loadingStores={loadingStores}
         initialValues={initialValues}
         submitting={submitting}
         onCancel={() => router.push(`/${locale}/admin/products`)}

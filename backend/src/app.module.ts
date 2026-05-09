@@ -6,6 +6,7 @@ import { CategoryModule } from "./modules/category/category.module";
 import { ProductModule } from "./modules/product/product.module";
 import { AdminModule } from "./modules/admin/admin.module";
 import { CloudinaryModule } from "./modules/cloudinary/cloudinary.module";
+import { StoreModule } from "./modules/store/store.module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CloudinaryModule } from "./modules/cloudinary/cloudinary.module";
     CategoryModule,
     ProductModule,
     AdminModule,
+    StoreModule,
   ],
 })
 export class AppModule {}

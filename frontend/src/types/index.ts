@@ -17,6 +17,8 @@ export type {
   ProductCategoryOption,
 } from "@/types/product";
 
+export type { StoreApi, StoreProps, StoreOption } from "@/types/store";
+
 export type { Locale } from "@/types/common";
 
 export type { UserApi, UserRole } from "@/types/user";

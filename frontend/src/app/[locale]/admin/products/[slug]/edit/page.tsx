@@ -10,6 +10,7 @@ import type {
   ProductFormValues,
   ProductCategoryOption,
   CategoryApi,
+  StoreOption,
 } from "@/types";
 import { ProductForm } from "@/components";
 import { buildProductLabels } from "@/lib/productLabels";
@@ -27,7 +28,9 @@ export default function AdminEditProductPage() {
   const [error, setError] = useState("");
 
   const [categories, setCategories] = useState<ProductCategoryOption[]>([]);
+  const [stores, setStores] = useState<StoreOption[]>([]);
   const [loadingCats, setLoadingCats] = useState(false);
+  const [loadingStores, setLoadingStores] = useState(false);
 
   const [initialValues, setInitialValues] = useState<ProductFormValues>({
     titleEn: "",
@@ -40,6 +43,7 @@ export default function AdminEditProductPage() {
     discount: "",
     stock: "0",
     categoryId: "",
+    storeId: "",
     isFeatured: false,
     images: [""],
   });
@@ -71,19 +75,23 @@ export default function AdminEditProductPage() {
 
         stock: String(product.stock ?? "0"),
         categoryId: String(product.categoryId ?? ""),
+        storeId: String(product.storeId ?? ""),
         isFeatured: !!product.isFeatured,
-
         images: product.images?.length ? product.images : [""],
       });
 
-      // 2) categories for dropdown
+      // 2) categories and stores for dropdowns
       setLoadingCats(true);
+      setLoadingStores(true);
 
-      const catRes = await api.get(`/categories?locale=${locale}`);
-      const data = (catRes.data ?? []) as CategoryApi[];
+      const [catRes, storeRes] = await Promise.all([
+        api.get(`/categories?locale=${locale}`),
+        api.get(`/stores`),
+      ]);
 
+      const categoriesData = (catRes.data ?? []) as CategoryApi[];
       setCategories(
-        data.map((c) => ({
+        categoriesData.map((c) => ({
           id: c.id,
           parentId: c.parentId ?? null,
           slug: c.slug,
@@ -94,10 +102,14 @@ export default function AdminEditProductPage() {
           name: c.translations?.[0]?.name ?? c.slug,
         })),
       );
+
+      const storeData = (storeRes.data ?? []) as StoreOption[];
+      setStores(storeData);
     } catch (e: any) {
       setError(e?.response?.data?.message || t("errors.loadEdit"));
     } finally {
       setLoadingCats(false);
+      setLoadingStores(false);
       setLoading(false);
     }
   };
@@ -120,6 +132,7 @@ export default function AdminEditProductPage() {
         price: Number(v.price),
         stock: Number(v.stock),
         categoryId: Number(v.categoryId),
+        storeId: v.storeId ? Number(v.storeId) : null,
         isFeatured: v.isFeatured,
         images: cleanImages,
         oldPrice: v.oldPrice ? Number(v.oldPrice) : null,
@@ -170,7 +183,9 @@ export default function AdminEditProductPage() {
         title={t("form.editTitle")}
         description={t("form.editDescription")}
         categories={categories}
+        stores={stores}
         loadingCategories={loadingCats}
+        loadingStores={loadingStores}
         initialValues={initialValues}
         submitting={saving}
         onCancel={() => router.push(`/${locale}/admin/products`)}
