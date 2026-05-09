@@ -1,15 +1,12 @@
 "use client";
 
+import { api } from "@/lib/axios";
+import { StoreApi, Locale } from "@/types";
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { api } from "@/lib/axios";
-import { AdminPageHeader, Button, ConfirmModal } from "@/components";
-import { StoreApi, Locale } from "@/types";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { AdminPageHeader, ConfirmModal, StoresTable } from "@/components";
 
 export default function AdminStoresPage() {
-  const router = useRouter();
   const locale = useLocale() as Locale;
   const t = useTranslations("admin.stores");
 
@@ -41,9 +38,16 @@ export default function AdminStoresPage() {
     load();
   }, []);
 
+  const onRequestDelete = (payload: { id: number; name: string }) => {
+    setTarget(payload);
+    setDeleteError("");
+    setDeleteOpen(true);
+  };
+
   const closeDelete = () => {
     if (deleteLoading) return;
     setDeleteOpen(false);
+    setTarget(null);
     setDeleteError("");
   };
 
@@ -54,129 +58,55 @@ export default function AdminStoresPage() {
       setDeleteLoading(true);
       setDeleteError("");
       await api.delete(`/stores/${target.id}`);
-      setStores((prev) => prev.filter((s) => s.id !== target.id));
       closeDelete();
+      await load();
     } catch (e: any) {
-      setDeleteError(e?.response?.data?.message || t("messages.deleteError"));
+      const code = e?.response?.data?.code;
+      setDeleteError(
+        code ? t(`messages.errors.${code}`) : t("messages.deleteError"),
+      );
     } finally {
       setDeleteLoading(false);
     }
   };
 
-  const handleDelete = (store: StoreApi) => {
-    setTarget({ id: store.id, name: store.name });
-    setDeleteOpen(true);
-  };
-
   return (
-    <div className="space-y-6">
+    <>
       <AdminPageHeader
         title={t("title")}
         description={t("description")}
-        actions={
-          <Button
-            onClick={() => router.push(`/${locale}/admin/stores/new`)}
-            className="inline-flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            {t("actions.add")}
-          </Button>
-        }
+        addHref={`/${locale}/admin/stores/new`}
+        addLabel={t("actions.add")}
       />
 
       {error && (
-        <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+        <div className="mt-4 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
           {error}
         </div>
       )}
 
-      <div className="rounded-xl border border-secondary/20 bg-card">
-        {loading ? (
-          <div className="p-6 text-sm text-muted-foreground">
-            {t("table.loading")}
-          </div>
-        ) : stores.length === 0 ? (
-          <div className="p-6">
-            <p className="text-sm text-muted-foreground">{t("table.empty")}</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="border-b border-secondary/20">
-                <tr>
-                  <th className="text-left p-4 font-medium text-sm">
-                    {t("table.name")}
-                  </th>
-                  <th className="text-left p-4 font-medium text-sm">
-                    {t("table.slug")}
-                  </th>
-                  <th className="text-left p-4 font-medium text-sm">
-                    {t("table.products")}
-                  </th>
-                  <th className="text-left p-4 font-medium text-sm">
-                    {t("table.actions")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {stores.map((store) => (
-                  <tr
-                    key={store.id}
-                    className="border-b border-secondary/10 hover:bg-secondary/5"
-                  >
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        {store.logo && (
-                          <img
-                            src={store.logo}
-                            alt={store.name}
-                            className="w-8 h-8 rounded object-cover"
-                          />
-                        )}
-                        <span className="font-medium">{store.name}</span>
-                      </div>
-                    </td>
-                    <td className="p-4 text-sm text-muted-foreground">
-                      {store.slug}
-                    </td>
-                    <td className="p-4 text-sm text-muted-foreground">
-                      {store._count.products}
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="text"
-                          size="sm"
-                          onClick={() =>
-                            router.push(
-                              `/${locale}/admin/stores/${store.slug}/edit`,
-                            )
-                          }
-                          className="h-8 w-8 p-0"
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="text"
-                          size="sm"
-                          onClick={() => handleDelete(store)}
-                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      <StoresTable
+        locale={locale}
+        loading={loading}
+        stores={stores}
+        onRequestDelete={onRequestDelete}
+        labels={{
+          name: t("table.name"),
+          slug: t("table.slug"),
+          products: t("table.products"),
+          actions: t("table.actions"),
+          loading: t("table.loading"),
+          empty: t("table.empty"),
+          edit: t("actions.edit"),
+          delete: t("actions.delete"),
+        }}
+      />
 
       <ConfirmModal
         isOpen={deleteOpen}
+        loading={deleteLoading}
         onClose={closeDelete}
+        onConfirm={confirmDelete}
         title={t("modal.deleteTitle")}
         description={
           <>
@@ -188,9 +118,7 @@ export default function AdminStoresPage() {
         }
         confirmLabel={t("modal.confirmDelete")}
         cancelLabel={t("actions.cancel")}
-        loading={deleteLoading}
-        onConfirm={confirmDelete}
       />
-    </div>
+    </>
   );
 }
