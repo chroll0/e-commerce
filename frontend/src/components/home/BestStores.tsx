@@ -38,21 +38,17 @@ export default function BestStores() {
   if (error || stores.length === 0) {
     return (
       <section>
-        <h2 className="text-xl font-semibold mb-4 text-primary">
-          Best Selling Stores
-        </h2>
-
-        <p className="text-sm text-muted">No stores available</p>
+        <div className="gap-4 border-t border-border py-6">
+          <h2 className="text-xl font-semibold mb-4 text-primary">
+            Best Selling Stores
+          </h2>
+          <p className="text-sm text-muted">No stores available</p>
+        </div>
       </section>
     );
   }
-
   return (
     <section>
-      <h2 className="text-xl font-semibold mb-4 text-primary">
-        Best Selling Stores
-      </h2>
-
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {stores.map((store) => {
           const data = useStoreData(store);
