@@ -25,7 +25,9 @@ const ProductForm: FC<ProductProps> = ({
   title,
   description,
   categories,
+  stores,
   loadingCategories = false,
+  loadingStores = false,
   initialValues,
   submitting = false,
   onCancel,
@@ -128,11 +130,15 @@ const ProductForm: FC<ProductProps> = ({
           control={control}
           errors={rhfErrors}
           categories={categories}
+          stores={stores}
           loadingCategories={loadingCategories}
+          loadingStores={loadingStores}
           labels={{
             stock: labels.stock,
             category: labels.category,
             selectCategory: labels.selectCategory,
+            selectedStore: labels.selectedStore,
+            selectStore: labels.selectStore,
             featured: labels.featured,
             featuredHint: labels.featuredHint,
             loading: t("table.loading"),

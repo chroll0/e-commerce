@@ -39,6 +39,10 @@ export class CreateProductDto {
 
   @IsOptional()
   @IsNumber()
+  storeId?: number | null;
+
+  @IsOptional()
+  @IsNumber()
   discount?: number;
 
   @IsOptional()

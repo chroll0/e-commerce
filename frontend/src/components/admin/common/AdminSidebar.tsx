@@ -28,6 +28,13 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
     ],
   },
   {
+    key: "stores",
+    children: [
+      { key: "storesAll", href: "/admin/stores" },
+      { key: "storesAdd", href: "/admin/stores/new" },
+    ],
+  },
+  {
     key: "orders",
     children: [
       { key: "ordersAll", href: "/admin/orders" },

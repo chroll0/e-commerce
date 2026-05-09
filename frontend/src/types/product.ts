@@ -1,3 +1,5 @@
+import { StoreOption } from "./store";
+
 export type ProductTranslation = {
   name?: string;
   locale: "en" | "ka";
@@ -18,7 +20,10 @@ export type ProductFormValues = {
   discount: string;
 
   stock: string;
+
   categoryId: string;
+  storeId: string;
+
   isFeatured: boolean;
 
   images: string[];
@@ -46,6 +51,7 @@ export type ProductApi = {
     translations: ProductTranslation[];
   };
   categoryId: number;
+  storeId?: number | null;
   isFeatured: boolean;
   images: string[];
   translations: ProductTranslation[];
@@ -68,6 +74,8 @@ export type ProductLabels = {
   stock: string;
   category: string;
   selectCategory: string;
+  selectedStore: string;
+  selectStore: string;
 
   featured: string;
   featuredHint: string;
@@ -96,6 +104,9 @@ export type ProductProps = {
 
   categories: ProductCategoryOption[];
   loadingCategories?: boolean;
+
+  stores: StoreOption[];
+  loadingStores?: boolean;
 
   initialValues: ProductFormValues;
   submitting?: boolean;

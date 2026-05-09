@@ -76,12 +76,16 @@ model Product {
   categoryId  Int
   category    Category   @relation(fields: [categoryId], references: [id])
 
+  storeId     Int?
+  store       Store?     @relation(fields: [storeId], references: [id])
+
   translations ProductTranslation[]
 
   orderItems  OrderItem[]
   cartItems   CartItem[]
 
   @@index([categoryId])
+  @@index([storeId])
 }
 
 model ProductTranslation {
@@ -152,4 +156,21 @@ model CartItem {
   @@unique([userId, productId])
   @@index([userId])
   @@index([productId])
+}
+
+model Store {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  logo      String?
+  banner    String?
+  rating    Float?   @default(0)
+  sales     Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products  Product[]
+
+  @@index([slug])
 }

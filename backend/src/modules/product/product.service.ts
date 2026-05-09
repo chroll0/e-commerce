@@ -32,6 +32,7 @@ export class ProductService {
         stock: dto.stock ?? 0,
         images: dto.images,
         categoryId: dto.categoryId,
+        storeId: dto.storeId ?? null,
         translations: {
           create: dto.translations,
         },
@@ -244,6 +245,7 @@ export class ProductService {
         ...(dto.stock !== undefined ? { stock: dto.stock } : {}),
         ...(dto.images !== undefined ? { images: dto.images } : {}),
         ...(dto.categoryId !== undefined ? { categoryId: dto.categoryId } : {}),
+        ...(dto.storeId !== undefined ? { storeId: dto.storeId } : {}),
         ...(translationOps ? { translations: translationOps } : {}),
       },
       include: {

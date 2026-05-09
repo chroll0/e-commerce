@@ -168,6 +168,9 @@
       "categories": "Categories",
       "categoriesAll": "Manage All",
       "categoriesAdd": "Add new",
+      "stores": "Stores",
+      "storesAll": "Manage All",
+      "storesAdd": "Add new",
       "users": "Users",
       "orders": "Orders",
       "ordersAll": "All Orders",
@@ -254,6 +257,8 @@
           "stock": "Stock",
           "category": "Category",
           "selectCategory": "Select",
+          "selectedStore": "Store",
+          "selectStore": "Select",
           "featured": "Featured",
           "featuredHint": "Show this product in Featured sections.",
           "imagesTitle": "Images",
@@ -300,6 +305,78 @@
         "created": "Product created successfully.",
         "updated": "Product updated successfully.",
         "deleted": "Product deleted successfully."
+      }
+    },
+
+    "stores": {
+      "title": "Stores Management",
+      "description": "Add, edit, and manage your store listings.",
+      "actions": {
+        "add": "Add store",
+        "edit": "Edit",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "save": "Save",
+        "saving": "Saving...",
+        "create": "Create store"
+      },
+      "table": {
+        "name": "Name",
+        "slug": "Slug",
+        "products": "Products",
+        "actions": "Actions",
+        "empty": "No stores yet. Create your first store.",
+        "add": "Create your first store.",
+        "loading": "Loading..."
+      },
+      "form": {
+        "createTitle": "Create Store",
+        "createDescription": "Add a new store to assign products to.",
+        "editTitle": "Edit Store",
+        "editDescription": "Update store information.",
+        "fields": {
+          "name": "Store name",
+          "slug": "Slug",
+          "logo": "Logo URL",
+          "banner": "Banner URL",
+          "hint": "Drag & drop an image here, or click to select."
+        },
+        "uploading": "Uploading..."
+      },
+      "validation": {
+        "nameRequired": "Store name is required",
+        "slugRequired": "Slug is required"
+      },
+      "fields": {
+        "addLogo": "Add logo",
+        "addBanner": "Add banner",
+        "bannerTitle": "Banner",
+        "bannerHint": "Drag & drop the banner here, or click to select.",
+        "remove": "Remove",
+        "preview": "Preview",
+        "uploading": "Uploading {count}...",
+        "invalidFile": "Only image files are allowed.",
+        "tooLarge": "Max {max}MB.",
+        "tooMany": "Max {max} images allowed.",
+        "uploadFailed": "Upload failed. Please try again."
+      },
+      "modal": {
+        "deleteTitle": "Delete store",
+        "deleteDescription": "Are you sure you want to delete {name}? This action cannot be undone.",
+        "confirmDelete": "Delete"
+      },
+      "errors": {
+        "nameRequired": "Store name is required",
+        "create": "Failed to create store. Please try again.",
+        "updateError": "Failed to save. Try again.",
+        "deleteError": "Failed to delete store."
+      },
+      "messages": {
+        "loadError": "Failed to load stores. Try again.",
+        "loadOneError": "Failed to load store.",
+        "created": "Store created successfully.",
+        "updated": "Store updated successfully.",
+        "deleted": "Store deleted successfully."
       }
     },
 

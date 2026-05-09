@@ -19,6 +19,8 @@ export const buildProductLabels = (
   stock: t("form.fields.stock"),
   category: t("form.fields.category"),
   selectCategory: t("form.fields.selectCategory"),
+  selectedStore: t("form.fields.selectedStore"),
+  selectStore: t("form.fields.selectStore"),
 
   featured: t("form.fields.featured"),
   featuredHint: t("form.fields.featuredHint"),

@@ -14,6 +14,7 @@ import type {
   ProductFormValues,
   ProductCategoryOption,
   CategoryOption,
+  StoreOption,
 } from "@/types";
 import { Controller, type Control, type FieldErrors } from "react-hook-form";
 
@@ -21,11 +22,15 @@ type Props = {
   control: Control<ProductFormValues>;
   errors: FieldErrors<ProductFormValues>;
   categories: ProductCategoryOption[];
+  stores: StoreOption[];
   loadingCategories: boolean;
+  loadingStores: boolean;
   labels: {
     stock: string;
     category: string;
     selectCategory: string;
+    selectedStore: string;
+    selectStore: string;
     featured: string;
     featuredHint: string;
     loading?: string;
@@ -38,9 +43,18 @@ const ProductMetaFields: FC<Props> = ({
   categories,
   loadingCategories,
   labels,
+  stores,
+  loadingStores,
 }) => {
   const locale = useLocale();
   const localeStr = String(locale) as "en" | "ka";
+
+  const storeOptions = useMemo(() => {
+    return stores.map((s) => ({
+      value: String(s.id),
+      label: s.name,
+    }));
+  }, [stores]);
 
   const categoryError = errors.categoryId?.message
     ? String(errors.categoryId.message)
@@ -118,76 +132,37 @@ const ProductMetaFields: FC<Props> = ({
         />
       </div>
 
-      {/* featured */}
+      {/* store */}
       <div className="w-full relative">
-        <span className="text-xs font-medium text-secondary">
-          {labels.featured}
-        </span>
+        <div className="absolute right-0 top-1 z-10">
+          <Link
+            href={`/${locale}/admin/stores/new`}
+            className="inline-flex items-center gap-2 text-xs font-medium text-highlight hover:underline"
+            aria-label="Add store"
+            title="Add store"
+          >
+            <Plus className="h-4 w-4" />
+          </Link>
+        </div>
 
         <Controller
-          name="isFeatured"
+          name="storeId"
           control={control}
-          render={({ field }) => {
-            const id = field.name;
-
-            return (
-              <label
-                htmlFor={id}
-                className={[
-                  "relative flex items-center gap-2",
-                  "mt-2 pb-2 px-1",
-                  "border-b-2 border-border transition-colors duration-200",
-                  "cursor-pointer select-none",
-                  "focus-within:border-blue-500",
-                ].join(" ")}
-              >
-                <input
-                  id={id}
-                  type="checkbox"
-                  checked={Boolean(field.value)}
-                  onChange={(e) => field.onChange(e.target.checked)}
-                  onBlur={field.onBlur}
-                  name={field.name}
-                  ref={field.ref}
-                  className="sr-only peer"
-                />
-
-                {/* custom checkbox */}
-                <span
-                  className={[
-                    "relative inline-flex h-5 w-5 items-center justify-center",
-                    "rounded-full border border-border bg-transparent",
-                    "transition-colors duration-200",
-                    "peer-focus-visible:ring-2 peer-focus-visible:ring-blue-500/30",
-                    "peer-checked:border-blue-500 peer-checked:bg-blue-500",
-                  ].join(" ")}
-                >
-                  <span
-                    className={[
-                      "h-2.5 w-2.5 rounded-full bg-white",
-                      "scale-0 transition-transform duration-150",
-                      "peer-checked:scale-100",
-                    ].join(" ")}
-                  />
-                </span>
-
-                {/* text */}
-                <span className="text-sm text-secondary">
-                  {labels.featured}
-                </span>
-
-                <span onClick={(e) => e.preventDefault()} className="ml-auto">
-                  <Tooltip
-                    side="top"
-                    className="w-60 max-w-none"
-                    content={labels.featuredHint}
-                  >
-                    <Info className="h-4 w-4 text-muted hover:text-foreground" />
-                  </Tooltip>
-                </span>
-              </label>
-            );
-          }}
+          render={({ field }) => (
+            <SelectField
+              name={field.name}
+              label={labels.selectedStore}
+              value={String(field.value ?? "")}
+              onChange={(next) => field.onChange(String(next ?? "").trim())}
+              options={storeOptions}
+              placeholderLabel={
+                loadingStores
+                  ? (labels.loading ?? "Loading...")
+                  : labels.selectStore
+              }
+              disabled={loadingStores}
+            />
+          )}
         />
       </div>
     </div>
