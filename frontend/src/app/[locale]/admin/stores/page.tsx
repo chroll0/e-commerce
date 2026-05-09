@@ -90,22 +90,14 @@ export default function AdminStoresPage() {
         </div>
       )}
 
-      <div className="rounded-xl border border-secondary/20 bg-background">
+      <div className="rounded-xl border border-secondary/20 bg-card">
         {loading ? (
           <div className="p-6 text-sm text-muted-foreground">
             {t("table.loading")}
           </div>
         ) : stores.length === 0 ? (
-          <div className="p-6 text-center">
-            <p className="text-sm text-muted-foreground mb-4">
-              {t("table.empty")}
-            </p>
-            <Button
-              onClick={() => router.push(`/${locale}/admin/stores/new`)}
-              variant="outline"
-            >
-              {t("table.add")}
-            </Button>
+          <div className="p-6">
+            <p className="text-sm text-muted-foreground">{t("table.empty")}</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
