@@ -2,11 +2,10 @@
 
 import { FC, useEffect, useMemo, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useTranslations } from "next-intl";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 import type { CategoryProps } from "@/types";
-import { makeCategorySchema } from "@/hooks/validation";
 import { buildIndentedOptions, slugify } from "./formOptions";
 import {
   Button,
@@ -16,6 +15,7 @@ import {
   SelectField,
 } from "@/components";
 import { uploadImage } from "@/lib/cloudinary";
+import { makeCategorySchema } from "@/hooks";
 
 type FormValues = {
   nameEn: string;

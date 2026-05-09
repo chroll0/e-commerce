@@ -1,11 +1,11 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import type { ProductApi } from "@/types";
 import { Button, ProductCardSkeleton } from "@/components";
-import { useProductData } from "@/hooks/useProductData";
+import { useProductData } from "@/hooks";
 import { EyeIcon } from "lucide-react";
 import Image from "next/image";
 
