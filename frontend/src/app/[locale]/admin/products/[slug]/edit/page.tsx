@@ -117,7 +117,6 @@ export default function AdminEditProductPage() {
   useEffect(() => {
     if (!slug) return;
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, locale]);
 
   const handleSubmit = async (v: ProductFormValues, cleanImages: string[]) => {

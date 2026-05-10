@@ -17,8 +17,8 @@ import {
 
 import type { ProductFormValues, ProductProps } from "@/types";
 import { slugify, cleanImageUrls } from "./productUtils";
-import { makeProductSchema } from "@/hooks/validation";
 import { uploadImage } from "@/lib/cloudinary";
+import { makeProductSchema } from "@/hooks";
 
 const ProductForm: FC<ProductProps> = ({
   mode,

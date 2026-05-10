@@ -1,9 +1,9 @@
 "use client";
 
 import { FC, useEffect, useMemo, useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslations } from "next-intl";
-import { useForm, SubmitHandler } from "react-hook-form";
 import { Trash2 } from "lucide-react";
 import {
   Button,
@@ -13,7 +13,7 @@ import {
   slugify,
 } from "@/components";
 import { uploadImage } from "@/lib/cloudinary";
-import { makeStoreSchema } from "@/hooks/validation";
+import { makeStoreSchema } from "@/hooks";
 
 type FormValues = {
   name: string;
