@@ -587,7 +587,15 @@
   "productCard": {
     "noImage": "სურათი არ არის",
     "lowStock": "შეზღუდული მარაგი",
-    "outOfStock": "აღარ ხელმისაწვდომი"
+    "outOfStock": "აღარ ხელმისაწვდომი",
+    "storePage": {
+      "notFound": "მაღაზია ვერ მოიძებნა",
+      "notFoundDescription": "მოთხოვნილი მაღაზია არ არსებობს.",
+      "sales": "გაყიდვა",
+      "products": "პროდუქტი",
+      "storeProducts": "{store}-ის პროდუქტები",
+      "empty": "ამ მაღაზიაში პროდუქტები ჯერ არ არის."
+    }
   },
 
   "footer": {
