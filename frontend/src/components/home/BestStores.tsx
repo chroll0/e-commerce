@@ -3,6 +3,7 @@
 import { useStores } from "@/hooks";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components";
 
 export default function BestStores() {
   const t = useTranslations("home.stores");
@@ -43,7 +44,7 @@ export default function BestStores() {
         <h2 className="text-xl font-semibold mb-4 text-primary">
           {t("title")}
         </h2>
-        <p className="text-sm text-red-500">{t("loadError")}</p>
+        <p className="text-sm text-destructive">{t("loadError")}</p>
       </section>
     );
   }
@@ -68,7 +69,7 @@ export default function BestStores() {
           <div
             key={store.id}
             onClick={() => handleStoreClick(store.slug)}
-            className="group bg-card shadow-[0_2px_12px_var(--color-shadow)] p-4 rounded-xl border border-border transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_var(--color-shadow)] cursor-pointer"
+            className="group bg-card shadow-[0_2px_12px_var(--color-shadow)] p-4 rounded-xl border border-border transition-all duration-300 hover:border-primary/30 hover:shadow-[0_8px_24px_var(--color-shadow)] cursor-pointer"
           >
             {/* LOGO */}
             <div className="w-full h-20 bg-card-soft rounded-lg border border-border flex items-center justify-center overflow-hidden">
@@ -95,9 +96,9 @@ export default function BestStores() {
             </div>
 
             {/* CTA */}
-            <button className="mt-3 w-full text-xs font-medium py-2 rounded-lg bg-card-soft border border-border hover:bg-border transition">
+            <Button className="mt-4 w-full" size="sm" variant="primary">
               {t("viewStore")}
-            </button>
+            </Button>
           </div>
         ))}
       </div>
