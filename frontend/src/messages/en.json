@@ -575,6 +575,13 @@
         "keepStylish": "Keep Stylish",
         "specialDiscount": "Special Discount"
       }
+    },
+    "stores": {
+      "title": "Best Selling Stores",
+      "viewStore": "View Store",
+      "sales": "sales",
+      "noStores": "No stores available",
+      "loadError": "Failed to load stores"
     }
   },
 
