@@ -3,16 +3,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-
 import { getStoreBySlug } from "@/lib/storesApi";
 import type { StoreApi } from "@/types";
-
 import { ProductCard } from "@/components";
 
 export default function StorePage() {
   const params = useParams();
   const slug = params.slug as string;
-
   const t = useTranslations("productCard.storePage");
 
   const [store, setStore] = useState<StoreApi | null>(null);
@@ -21,13 +18,10 @@ export default function StorePage() {
 
   useEffect(() => {
     if (!slug) return;
-
     const fetchStore = async () => {
       try {
         setLoading(true);
-
         const data = await getStoreBySlug(slug);
-
         setStore(data);
       } catch (err) {
         console.error("Failed to fetch store:", err);
@@ -36,7 +30,6 @@ export default function StorePage() {
         setLoading(false);
       }
     };
-
     fetchStore();
   }, [slug]);
 
@@ -66,7 +59,6 @@ export default function StorePage() {
         <h1 className="text-2xl font-bold text-primary mb-3">
           {t("notFound")}
         </h1>
-
         <p className="text-muted">{t("notFoundDescription")}</p>
       </div>
     );
@@ -100,15 +92,11 @@ export default function StorePage() {
 
             <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted">
               <span>⭐ {(store.rating ?? 0).toFixed(1)}</span>
-
               <span>•</span>
-
               <span>
                 {store.sales ?? 0} {t("sales")}
               </span>
-
               <span>•</span>
-
               <span>
                 {store._count?.products ?? 0} {t("products")}
               </span>

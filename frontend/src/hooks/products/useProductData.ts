@@ -1,3 +1,4 @@
+import { useLocale } from "next-intl";
 import { useMemo } from "react";
 import type { ProductApi } from "@/types";
 
@@ -16,18 +17,25 @@ export interface ProductCardData {
 }
 
 export function useProductData(product?: ProductApi): ProductCardData | null {
+  const locale = useLocale();
   return useMemo(() => {
     if (!product) return null;
+    const normalizedLocale = locale.split("-")[0];
+
+    const translation =
+      product.translations?.find((t) => t.locale === normalizedLocale) ??
+      product.translations?.[0];
 
     const stock = product.stock;
     const sold = Math.max(0, Math.floor(stock * 0.4));
     const progress =
       stock > 0 ? Math.min(100, Math.round((sold / stock) * 100)) : 0;
+
     const isOutOfStock = stock === 0;
     const isLowStock = stock > 0 && stock <= 5;
 
     return {
-      title: product.name,
+      title: translation?.title ?? "Untitled Product",
       price: product.price,
       oldPrice: product.oldPrice,
       discount: product.discount,
@@ -39,5 +47,5 @@ export function useProductData(product?: ProductApi): ProductCardData | null {
       isOutOfStock,
       isLowStock,
     };
-  }, [product]);
+  }, [product, locale]);
 }
