@@ -1,9 +1,12 @@
 "use client";
 
-import { useStoreData, useStores } from "@/hooks";
+import { useStores } from "@/hooks";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components";
 
 export default function BestStores() {
+  const t = useTranslations("home.stores");
   const router = useRouter();
   const { stores, loading, error } = useStores(4);
 
@@ -13,9 +16,9 @@ export default function BestStores() {
 
   if (loading) {
     return (
-      <section>
+      <section className="border-t border-border py-6">
         <h2 className="text-xl font-semibold mb-4 text-primary">
-          Best Selling Stores
+          {t("title")}
         </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -35,59 +38,69 @@ export default function BestStores() {
     );
   }
 
-  if (error || stores.length === 0) {
+  if (error) {
     return (
-      <section>
-        <div className="gap-4 border-t border-border py-6">
-          <h2 className="text-xl font-semibold mb-4 text-primary">
-            Best Selling Stores
-          </h2>
-          <p className="text-sm text-muted">No stores available</p>
-        </div>
+      <section className="border-t border-border py-6">
+        <h2 className="text-xl font-semibold mb-4 text-primary">
+          {t("title")}
+        </h2>
+        <p className="text-sm text-destructive">{t("loadError")}</p>
       </section>
     );
   }
+
+  if (!stores.length) {
+    return (
+      <section className="border-t border-border py-6">
+        <h2 className="text-xl font-semibold mb-4 text-primary">
+          {t("title")}
+        </h2>
+        <p className="text-sm text-muted">{t("noStores")}</p>
+      </section>
+    );
+  }
+
   return (
-    <section>
+    <section className="border-t border-border py-6">
+      <h2 className="text-xl font-semibold mb-4 text-primary">{t("title")}</h2>
+
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {stores.map((store) => {
-          const data = useStoreData(store);
-          if (!data) return null;
-
-          return (
-            <div
-              key={data.id}
-              onClick={() => handleStoreClick(data.slug)}
-              className="group bg-card shadow-[0_2px_12px_var(--color-shadow)] p-4 rounded-xl border border-border transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_var(--color-shadow)] cursor-pointer"
-            >
-              {/* LOGO */}
-              <div className="w-full h-20 bg-card-soft rounded-lg border border-border flex items-center justify-center overflow-hidden">
-                {data.logo ? (
-                  <img
-                    src={data.logo}
-                    alt={data.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-xs text-muted">{data.name}</span>
-                )}
-              </div>
-
-              {/* INFO */}
-              <p className="mt-2 font-medium text-primary">{data.name}</p>
-
-              <div className="flex items-center gap-1 text-xs text-muted">
-                ⭐ {data.rating.toFixed(1)} <span>•</span>{" "}
-                <span>{data.sales} sales</span>
-              </div>
-
-              {/* CTA */}
-              <button className="mt-3 w-full text-xs font-medium py-2 rounded-lg bg-card-soft border border-border hover:bg-border transition">
-                View Store
-              </button>
+        {stores.map((store) => (
+          <div
+            key={store.id}
+            onClick={() => handleStoreClick(store.slug)}
+            className="group bg-card shadow-[0_2px_12px_var(--color-shadow)] p-4 rounded-xl border border-border transition-all duration-300 hover:border-primary/30 hover:shadow-[0_8px_24px_var(--color-shadow)] cursor-pointer"
+          >
+            {/* LOGO */}
+            <div className="w-full h-20 bg-card-soft rounded-lg border border-border flex items-center justify-center overflow-hidden">
+              {store.logo ? (
+                <img
+                  src={store.logo}
+                  alt={store.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-xs text-muted">{store.name}</span>
+              )}
             </div>
-          );
-        })}
+
+            {/* INFO */}
+            <p className="mt-2 font-medium text-primary">{store.name}</p>
+
+            <div className="flex items-center gap-1 text-xs text-muted">
+              ⭐ {(store.rating ?? 0).toFixed(1)}
+              <span>•</span>
+              <span>
+                {store.sales ?? 0} {t("sales")}
+              </span>
+            </div>
+
+            {/* CTA */}
+            <Button className="mt-4 w-full" size="sm" variant="primary">
+              {t("viewStore")}
+            </Button>
+          </div>
+        ))}
       </div>
     </section>
   );

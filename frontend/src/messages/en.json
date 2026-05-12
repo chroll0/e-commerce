@@ -575,13 +575,28 @@
         "keepStylish": "Keep Stylish",
         "specialDiscount": "Special Discount"
       }
+    },
+    "stores": {
+      "title": "Best Selling Stores",
+      "viewStore": "View Store",
+      "sales": "sales",
+      "noStores": "No stores available",
+      "loadError": "Failed to load stores"
     }
   },
 
   "productCard": {
     "noImage": "No Image",
     "lowStock": "Low Stock",
-    "outOfStock": "Out of Stock"
+    "outOfStock": "Out of Stock",
+    "storePage": {
+      "notFound": "Store Not Found",
+      "notFoundDescription": "The store you're looking for doesn't exist.",
+      "sales": "sales",
+      "products": "products",
+      "storeProducts": "Brand Products",
+      "empty": "No products available in this store yet."
+    }
   },
 
   "footer": {
