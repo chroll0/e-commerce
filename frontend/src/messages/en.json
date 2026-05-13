@@ -566,8 +566,8 @@
   },
 
   "home": {
-    "flashSale": {
-      "title": "Flash Sale"
+    "productFilter": {
+      "title": "Product Filter"
     },
     "featuredProducts": {
       "tabs": {

@@ -17,7 +17,7 @@ export default function FeaturedProducts() {
 
     getProducts({
       locale: String(locale),
-      limit: 5,
+      limit: 10,
     })
       .then((data) => {
         if (cancelled) return;

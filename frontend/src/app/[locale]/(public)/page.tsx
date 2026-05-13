@@ -2,7 +2,7 @@ import {
   BestStores,
   CategoryScroller,
   FeaturedProducts,
-  FlashSale,
+  ProductFilter,
   Hero,
 } from "@/components";
 
@@ -15,8 +15,8 @@ export default function Home() {
       {/* CATEGORY SCROLLER */}
       <CategoryScroller />
 
-      {/* FLASH SALE */}
-      <FlashSale />
+      {/* PRODUCT FILTER */}
+      <ProductFilter />
 
       {/* FEATURES / TODAY'S PICKS */}
       <FeaturedProducts />

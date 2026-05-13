@@ -565,8 +565,8 @@
   },
 
   "home": {
-    "flashSale": {
-      "title": "ფასდაკლება"
+    "productFilter": {
+      "title": "პროდუქტების ფილტრი"
     },
     "featuredProducts": {
       "tabs": {

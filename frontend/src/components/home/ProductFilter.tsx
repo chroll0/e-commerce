@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Button, ProductCard } from "@/components";
 import { useProducts } from "@/hooks";
 
-export default function FlashSale() {
+export default function ProductFilter() {
   const t = useTranslations("home");
   const locale = useLocale();
 
@@ -18,7 +18,7 @@ export default function FlashSale() {
     <section>
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-primary">
-          {t("flashSale.title")}
+          {t("productFilter.title")}
         </h2>
       </div>
 
