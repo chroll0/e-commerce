@@ -12,8 +12,8 @@ const Footer = () => {
       <div className="px-5 py-12 space-y-10 max-w-7xl mx-auto">
         {/* Promo */}
         <Advertisement
-          title="Free delivery over ₾150"
-          description="Applies to Tbilisi area."
+          title={t("advertisements.freeDelivery.title")}
+          description={t("advertisements.freeDelivery.description")}
           variant="promo"
         />
 

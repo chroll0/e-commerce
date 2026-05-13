@@ -599,6 +599,27 @@
     }
   },
 
+  "advertisements": {
+    "profileComplete": {
+      "badge": "Tip",
+      "title": "Complete your profile",
+      "description": "Add phone and address to checkout faster.",
+      "ctaLabel": "Update settings"
+    },
+
+    "winterSale": {
+      "badge": "New",
+      "title": "Up to 30% off Winter Sale",
+      "description": "Limited time deals on best-selling products.",
+      "ctaLabel": "Shop now"
+    },
+
+    "freeDelivery": {
+      "title": "Free delivery over ₾199",
+      "description": "Applies to Tbilisi area."
+    }
+  },
+
   "footer": {
     "about": {
       "title": "About",

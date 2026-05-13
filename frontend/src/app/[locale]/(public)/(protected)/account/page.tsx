@@ -17,6 +17,7 @@ export default function AccountPage() {
   const locale = useLocale();
   const t = useTranslations("account.overview");
   const tAuth = useTranslations("auth");
+  const tAdd = useTranslations("advertisements.winterSale");
 
   const handleLogout = async () => {
     await logout();
@@ -46,11 +47,11 @@ export default function AccountPage() {
           </div>
         </div>
         <Advertisement
-          badge="Tip"
-          title="Complete your profile"
-          description="Add phone and address to checkout faster."
+          badge={tAdd("badge")}
+          title={tAdd("title")}
+          description={tAdd("description")}
           href="/account/settings"
-          ctaLabel="Update settings"
+          ctaLabel={tAdd("ctaLabel")}
           variant="default"
           dismissible
           storageKey="profile_tip_dismissed"
