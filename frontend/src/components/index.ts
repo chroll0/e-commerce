@@ -22,7 +22,7 @@ export { default as SearchBar } from "./navigation/SearchBar";
 // Home page components
 export { default as Hero } from "./home/Hero";
 export { default as CategoryScroller } from "./home/CategoryScroller";
-export { default as FlashSale } from "./home/FlashSale";
+export { default as ProductFilter } from "./home/ProductFilter";
 export { default as FeaturedProducts } from "./home/FeaturedProducts";
 export { default as BestStores } from "./home/BestStores";
 
