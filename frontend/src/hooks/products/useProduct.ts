@@ -7,6 +7,7 @@ import { api } from "@/lib/axios";
 export function useProduct(slug: string, locale: string) {
   const [product, setProduct] = useState<ProductApi | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     if (!slug) return;
@@ -23,6 +24,7 @@ export function useProduct(slug: string, locale: string) {
       } catch (error) {
         console.error("Failed to fetch product:", error);
         setProduct(null);
+        setError(error as Error);
       } finally {
         setLoading(false);
       }
@@ -31,5 +33,5 @@ export function useProduct(slug: string, locale: string) {
     fetchProduct();
   }, [slug, locale]);
 
-  return { product, loading };
+  return { product, loading, error };
 }

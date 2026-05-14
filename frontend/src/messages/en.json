@@ -599,6 +599,14 @@
     }
   },
 
+  "productDetails": {
+    "addToCart": "Add To Cart",
+    "inStock": "in stock",
+    "sold": "Sold",
+    "stock": "Stock",
+    "productId": "Product ID"
+  },
+
   "advertisements": {
     "profileComplete": {
       "badge": "Tip",

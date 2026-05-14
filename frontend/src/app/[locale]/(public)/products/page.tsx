@@ -2,10 +2,10 @@ import { FeaturedProducts, ProductFilter } from "@/components";
 
 const page = () => {
   return (
-    <div>
+    <main className="w-full max-w-7xl px-4 mt-6 mx-auto">
       <ProductFilter />
       <FeaturedProducts />
-    </div>
+    </main>
   );
 };
 
