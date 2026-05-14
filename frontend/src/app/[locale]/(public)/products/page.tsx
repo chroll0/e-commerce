@@ -1,7 +1,12 @@
-import React from "react";
+import { FeaturedProducts, ProductFilter } from "@/components";
 
 const page = () => {
-  return <div>product</div>;
+  return (
+    <main className="w-full max-w-7xl px-4 mt-6 mx-auto">
+      <ProductFilter />
+      <FeaturedProducts />
+    </main>
+  );
 };
 
 export default page;
