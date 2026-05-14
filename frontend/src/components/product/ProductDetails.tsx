@@ -1,12 +1,11 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { Package2Icon, ShoppingCartIcon, TagIcon } from "lucide-react";
-
-import type { ProductApi } from "@/types";
 import { Button } from "@/components";
+import type { ProductApi } from "@/types";
 import { useProductData } from "@/hooks";
+import { useLocale, useTranslations } from "next-intl";
+import { Package2Icon, ShoppingCartIcon, TagIcon } from "lucide-react";
 
 type Props = {
   product: ProductApi;
