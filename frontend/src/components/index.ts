@@ -28,6 +28,7 @@ export { default as BestStores } from "./home/BestStores";
 
 // Product components
 export { default as ProductCard } from "./product/ProductCard";
+export { default as ProductDetails } from "./product/ProductDetails";
 
 // Layout components
 export { default as Navigation } from "./layout/Navigation";
