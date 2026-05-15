@@ -1,8 +1,21 @@
-import { api } from "@/lib/axios";
+import { api } from "./axios";
 import type { StoreApi } from "@/types";
 
-export async function getStores() {
-  const res = await api.get("/stores");
+export type GetStoresParams = {
+  search?: string;
+  limit?: number;
+  sort?: "sales" | "rating" | "newest";
+};
+
+export async function getStores(params?: GetStoresParams) {
+  const res = await api.get("/stores", {
+    params: {
+      search: params?.search || undefined,
+      limit: params?.limit || undefined,
+      sort: params?.sort || undefined,
+    },
+  });
+
   return (res.data ?? []) as StoreApi[];
 }
 

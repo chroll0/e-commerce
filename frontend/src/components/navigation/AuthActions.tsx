@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components";
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/state/useAuthStore";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { User } from "lucide-react";

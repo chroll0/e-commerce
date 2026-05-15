@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { User } from "@/stores/useAuthStore";
+import { User } from "@/state/useAuthStore";
 import { Avatar, Button } from "@/components";
 import { useLocale, useTranslations } from "next-intl";
 

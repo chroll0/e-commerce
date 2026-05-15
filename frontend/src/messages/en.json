@@ -615,6 +615,27 @@
     "productId": "Product ID"
   },
 
+  "stores": {
+    "pageTitle": "All Stores",
+    "pageDescription": "Discover the best stores and brands on our platform",
+    "searchPlaceholder": "Search stores...",
+    "search": "Search",
+    "sales": "sales",
+    "products": "products",
+    "storesCount": "{count} stores found",
+    "sort": {
+      "sales": "Most Sales",
+      "rating": "Highest Rated",
+      "newest": "Newest"
+    },
+    "noStoresTitle": "No stores found",
+    "noStoresDescription": "Try adjusting your search or filters",
+    "clearFilters": "Clear filters",
+    "loadMore": "Load More Stores",
+    "loading": "Loading...",
+    "allStoresLoaded": "You've seen all stores"
+  },
+
   "advertisements": {
     "profileComplete": {
       "badge": "Tip",

@@ -614,6 +614,27 @@
     "productId": "პროდუქტის ID"
   },
 
+  "stores": {
+    "pageTitle": "ყველა მაღაზია",
+    "pageDescription": "აღმოაჩინეთ საუკეთესო მაღაზიები და ბრენდები",
+    "searchPlaceholder": "მაღაზიების ძიება...",
+    "search": "ძიება",
+    "sales": "გაყიდვები",
+    "products": "პროდუქტები",
+    "storesCount": "{count} მაღაზია ნაპოვნია",
+    "sort": {
+      "sales": "ყველაზე მეტი გაყიდვა",
+      "rating": "ყველაზე მაღალი რეიტინგი",
+      "newest": "ახალი"
+    },
+    "noStoresTitle": "მაღაზიები ვერ მოიძებნა",
+    "noStoresDescription": "სცადეთ ძიების ან ფილტრების შეცვლა",
+    "clearFilters": "ფილტრების გასუფთავება",
+    "loadMore": "მეტის ჩატვირთვა",
+    "loading": "იტვირთება...",
+    "allStoresLoaded": "ყველა მაღაზია ნანახია"
+  },
+
   "advertisements": {
     "profileComplete": {
       "badge": "რჩევა",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/state/useAuthStore";
 import { useEffect } from "react";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
