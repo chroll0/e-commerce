@@ -25,6 +25,7 @@ export { default as CategoryScroller } from "./home/CategoryScroller";
 export { default as ProductFilter } from "./home/ProductFilter";
 export { default as FeaturedProducts } from "./home/FeaturedProducts";
 export { default as BestStores } from "./home/BestStores";
+export { default as RunningText } from "./home/RunningText";
 
 // Product components
 export { default as ProductCard } from "./product/ProductCard";
