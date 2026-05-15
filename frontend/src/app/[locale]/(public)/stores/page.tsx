@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Search, Filter, Loader2, Store as StoreIcon } from "lucide-react";
-import { Button } from "@/components";
+import { Button, StoreCard } from "@/components";
 import { getStores } from "@/lib/storesApi";
 import type { StoreApi } from "@/types";
-import StoreCard from "@/components/stores/StoreCard";
 
 type SortOption = "sales" | "rating" | "newest";
 

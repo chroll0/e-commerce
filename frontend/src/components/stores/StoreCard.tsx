@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import type { StoreApi } from "@/types";
 import { useTranslations } from "next-intl";
 import { Store, Star, TrendingUp, Package } from "lucide-react";
-import type { StoreApi } from "@/types";
 
 type Props = {
   store: StoreApi;
