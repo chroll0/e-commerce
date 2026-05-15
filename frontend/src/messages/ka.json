@@ -606,9 +606,11 @@
 
   "productDetails": {
     "addToCart": "კალათაში დამატება",
+    "buyNow": "ახლავე ყიდვა",
     "inStock": "მარაგშია",
-    "sold": "გაყიდულია",
+    "sold": "გაყიდული",
     "stock": "მარაგი",
+    "discount": "ფასდაკლება",
     "productId": "პროდუქტის ID"
   },
 

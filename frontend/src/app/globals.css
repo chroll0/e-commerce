@@ -102,7 +102,7 @@ select:-webkit-autofill:focus {
   gap: 3rem;
   padding-right: 3rem;
   white-space: nowrap;
-  animation: scroll 18s linear infinite;
+  animation: scroll 26s linear infinite;
 }
 
 .item {

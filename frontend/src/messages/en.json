@@ -607,9 +607,11 @@
 
   "productDetails": {
     "addToCart": "Add To Cart",
+    "buyNow": "Buy Now",
     "inStock": "in stock",
     "sold": "Sold",
     "stock": "Stock",
+    "discount": "Discount",
     "productId": "Product ID"
   },
 

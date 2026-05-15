@@ -12,7 +12,8 @@ type Props = {
 };
 
 export default function ProductDetails({ product }: Props) {
-  const t = useTranslations("productCard");
+  const t = useTranslations("productDetails");
+  const tCard = useTranslations("productCard");
   const locale = useLocale();
   const data = useProductData(product);
 
@@ -42,7 +43,7 @@ export default function ProductDetails({ product }: Props) {
                 <Package2Icon className="h-10 w-10 opacity-50" />
               </div>
 
-              <span className="text-sm font-medium">{t("noImage")}</span>
+              <span className="text-sm font-medium">{tCard("noImage")}</span>
             </div>
           )}
 
@@ -86,15 +87,15 @@ export default function ProductDetails({ product }: Props) {
         <div className="mt-6 flex flex-wrap gap-3">
           {data.isOutOfStock ? (
             <div className="rounded-lg border border-destructive/20 bg-destructive/10 px-3 py-2 text-sm font-medium text-destructive">
-              {t("outOfStock")}
+              {tCard("outOfStock")}
             </div>
           ) : data.isLowStock ? (
             <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/10 px-3 py-2 text-sm font-medium text-yellow-600">
-              {t("lowStock")}
+              {tCard("lowStock")}
             </div>
           ) : (
             <div className="rounded-lg border border-border bg-card-soft px-3 py-2 text-sm font-medium text-primary">
-              {data.stock} in stock
+              {data.stock} {t("inStock")}
             </div>
           )}
         </div>
@@ -102,23 +103,19 @@ export default function ProductDetails({ product }: Props) {
         {/* META */}
         <div className="mt-8 space-y-4 rounded-2xl border border-border bg-card p-5">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted">Product ID</span>
-
+            <span className="text-sm text-muted">{t("productId")}</span>
             <span className="font-medium text-primary">#{product.id}</span>
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted">Stock</span>
-
+            <span className="text-sm text-muted">{t("stock")}</span>
             <span className="font-medium text-primary">{data.stock}</span>
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-sm text-muted">Discount</span>
-
+            <span className="text-sm text-muted">{t("discount")}</span>
             <span className="inline-flex items-center gap-1 font-medium text-primary">
               <TagIcon className="h-4 w-4" />
-
               {data.discount ? `${data.discount}%` : "—"}
             </span>
           </div>
@@ -131,11 +128,11 @@ export default function ProductDetails({ product }: Props) {
             size="lg"
             leftIcon={<ShoppingCartIcon className="h-5 w-5" />}
           >
-            Add To Cart
+            {t("addToCart")}
           </Button>
 
           <Button variant="outline" size="lg">
-            Buy Now
+            {t("buyNow")}
           </Button>
         </div>
       </div>
