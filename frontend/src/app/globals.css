@@ -111,7 +111,6 @@ select:-webkit-autofill:focus {
   white-space: nowrap;
 }
 
-/* IMPORTANT */
 @keyframes scroll {
   0% {
     transform: translateX(0);
