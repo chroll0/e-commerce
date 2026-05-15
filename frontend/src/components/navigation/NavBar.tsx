@@ -17,7 +17,7 @@ const NavBar = () => {
 
   const links = [
     { href: "/", label: t("nav.home") },
-    { href: "/shop", label: t("nav.shop") },
+    { href: "/stores", label: t("nav.stores") },
     { href: "/categories", label: t("nav.categories") },
     { href: "/deals", label: t("nav.deals") },
     { href: "/about", label: t("nav.about") },
