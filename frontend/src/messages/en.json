@@ -5,7 +5,13 @@
     "categories": "Categories",
     "deals": "Deals",
     "about": "About",
-    "contact": "Contact"
+    "contact": "Contact",
+    "ticker": {
+      "fastDelivery": "Fast delivery across the country",
+      "discount": "Special discounts available today",
+      "support": "24/7 customer support",
+      "secure": "Secure online payments"
+    }
   },
 
   "auth": {

@@ -91,3 +91,33 @@ select:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px var(--card) inset !important;
   box-shadow: 0 0 0px 1000px var(--card) inset !important;
 }
+
+.marquee {
+  display: flex;
+  width: max-content;
+}
+
+.marqueeTrack {
+  display: flex;
+  gap: 3rem;
+  padding-right: 3rem;
+  white-space: nowrap;
+  animation: scroll 18s linear infinite;
+}
+
+.item {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+
+/* IMPORTANT */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
