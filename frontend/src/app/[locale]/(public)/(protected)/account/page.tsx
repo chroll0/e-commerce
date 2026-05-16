@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/state/useAuthStore";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import {

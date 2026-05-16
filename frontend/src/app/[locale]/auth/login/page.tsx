@@ -6,7 +6,7 @@ import { AxiosError } from "axios";
 import { Button, Input } from "@/components";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/state/useAuthStore";
 
 export default function LoginPage() {
   const t = useTranslations("auth");

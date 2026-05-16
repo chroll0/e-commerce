@@ -31,6 +31,9 @@ export { default as RunningText } from "./home/RunningText";
 export { default as ProductCard } from "./product/ProductCard";
 export { default as ProductDetails } from "./product/ProductDetails";
 
+// Store components
+export { default as StoreCard } from "./stores/StoreCard";
+
 // Layout components
 export { default as Navigation } from "./layout/Navigation";
 export { default as Footer } from "./layout/Footer";

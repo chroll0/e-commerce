@@ -12,7 +12,7 @@ import {
   AdminUsersTable,
 } from "@/components";
 import { RefreshCw } from "lucide-react";
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/state/useAuthStore";
 
 export default function AdminUsersPage() {
   const t = useTranslations("admin.users");
