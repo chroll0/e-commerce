@@ -9,7 +9,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-card border-t mt-10">
-      <div className="px-5 py-12 space-y-10 max-w-7xl mx-auto">
+      <div className="px-6 md:px-12 py-12 space-y-10 max-w-400 mx-auto">
         {/* Promo */}
         <Advertisement
           title={t("advertisements.freeDelivery.title")}

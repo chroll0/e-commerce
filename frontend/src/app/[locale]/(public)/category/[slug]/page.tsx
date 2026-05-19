@@ -1,5 +1,6 @@
 import { getProducts } from "@/lib/productsApi";
 import { getCategoryBySlug } from "@/lib/categoriesApi";
+import { ProductCard } from "@/components";
 
 type Props = {
   params: Promise<{
@@ -21,15 +22,13 @@ export default async function Page({ params }: Props) {
   ]);
 
   return (
-    <div className="container mx-auto py-10">
+    <section className="w-full max-w-7xl px-4 mt-10 mx-auto">
       <h1 className="text-2xl font-semibold mb-6">{category?.name ?? slug}</h1>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {products.map((product) => (
-          <div key={product.id} className="border p-4 rounded-lg">
-            <p>{product.name}</p>
-          </div>
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
-    </div>
+    </section>
   );
 }
