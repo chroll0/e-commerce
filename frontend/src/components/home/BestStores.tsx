@@ -16,8 +16,8 @@ export default function BestStores() {
 
   if (loading) {
     return (
-      <section className="border-t border-border py-6">
-        <h2 className="text-xl font-semibold mb-4 text-primary">
+      <section>
+        <h2 className="text-xl font-semibold my-6 text-primary">
           {t("title")}
         </h2>
 
@@ -40,8 +40,8 @@ export default function BestStores() {
 
   if (error) {
     return (
-      <section className="border-t border-border py-6">
-        <h2 className="text-xl font-semibold mb-4 text-primary">
+      <section>
+        <h2 className="text-xl font-semibold my-6 text-primary">
           {t("title")}
         </h2>
         <p className="text-sm text-destructive">{t("loadError")}</p>
@@ -51,8 +51,8 @@ export default function BestStores() {
 
   if (!stores.length) {
     return (
-      <section className="border-t border-border py-6">
-        <h2 className="text-xl font-semibold mb-4 text-primary">
+      <section>
+        <h2 className="text-xl font-semibold my-6 text-primary">
           {t("title")}
         </h2>
         <p className="text-sm text-muted">{t("noStores")}</p>
@@ -61,8 +61,8 @@ export default function BestStores() {
   }
 
   return (
-    <section className="border-t border-border py-6">
-      <h2 className="text-xl font-semibold mb-4 text-primary">{t("title")}</h2>
+    <section>
+      <h2 className="text-xl font-semibold my-6 text-primary">{t("title")}</h2>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {stores.map((store) => (

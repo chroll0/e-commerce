@@ -572,9 +572,8 @@
   },
 
   "home": {
-    "productFilter": {
-      "title": "Product Filter"
-    },
+    "bigSales": "Big Sales",
+    "allProducts": "All Products",
     "featuredProducts": {
       "tabs": {
         "bestSeller": "Best Seller",
