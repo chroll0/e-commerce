@@ -590,6 +590,49 @@
     }
   },
 
+  "about": {
+    "hero": {
+      "badge": "About Us",
+      "title": "Built for modern shopping experience",
+      "description": "We are focused on delivering high-quality products with a fast, simple and secure shopping experience designed for modern users."
+    },
+    "stats": {
+      "products": "Products",
+      "customers": "Customers",
+      "stores": "Stores",
+      "countries": "Countries"
+    },
+    "statsValues": {
+      "products": "10K+",
+      "customers": "50K+",
+      "stores": "200+",
+      "countries": "15+"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "text": "To create a seamless and intuitive e-commerce platform that connects customers with the best products at the best value."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "text": "To become a leading digital marketplace known for performance, simplicity and trust."
+    },
+    "whyChooseUs": {
+      "title": "Why Choose Us",
+      "fastDelivery": {
+        "title": "Fast Delivery",
+        "text": "Optimized logistics for quick shipping."
+      },
+      "securePayments": {
+        "title": "Secure Payments",
+        "text": "Encrypted and trusted payment systems."
+      },
+      "support": {
+        "title": "24/7 Support",
+        "text": "Always available customer support team."
+      }
+    }
+  },
+
   "productCard": {
     "noImage": "No Image",
     "lowStock": "Low Stock",
@@ -643,15 +686,20 @@
       "description": "Add phone and address to checkout faster.",
       "ctaLabel": "Update settings"
     },
-
     "winterSale": {
       "badge": "New",
       "title": "Up to 30% off Winter Sale",
       "description": "Limited time deals on best-selling products.",
       "ctaLabel": "Shop now"
     },
-
+    "cta": {
+      "badge": "About Us",
+      "title": "Start exploring our products",
+      "description": "Discover deals, new arrivals and best sellers.",
+      "button": "Shop Now"
+    },
     "freeDelivery": {
+      "badge": "Free",
       "title": "Free delivery over ₾199",
       "description": "Applies to Tbilisi area."
     }
