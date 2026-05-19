@@ -64,6 +64,9 @@ export default function ProductCard({ product }: Props) {
           </div>
         )}
 
+        {/* HOVER OVERLAY */}
+        <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
+
         {/* VIEW BUTTON */}
         <div className="absolute top-2 left-2 opacity-0 translate-y-2 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
           <Button
@@ -76,6 +79,19 @@ export default function ProductCard({ product }: Props) {
             }}
           >
             <EyeIcon className="h-4.5 w-4.5" />
+          </Button>
+        </div>
+
+        {/* ACTION BUTTON */}
+        <div className="absolute bottom-3 left-0 right-0 z-10 flex justify-center translate-y-4 opacity-0 transition-all duration-300 ease-out delay-75 group-hover:translate-y-0 group-hover:opacity-100">
+          <Button
+            className="w-fit"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            {t("addToCart")}
           </Button>
         </div>
 

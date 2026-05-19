@@ -594,6 +594,7 @@
     "noImage": "No Image",
     "lowStock": "Low Stock",
     "outOfStock": "Out of Stock",
+    "addToCart": "Add to Cart",
     "storePage": {
       "notFound": "Store Not Found",
       "notFoundDescription": "The store you're looking for doesn't exist.",
