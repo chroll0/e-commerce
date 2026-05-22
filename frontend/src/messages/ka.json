@@ -566,6 +566,20 @@
         "highlight": "პოპულარული სტილები!",
         "description": "ნახე რას ყიდულობენ სხვები",
         "image": "/carousel/now_trending.png"
+      },
+      {
+        "tag": "#ზამთრის კოლექცია",
+        "title": "ზამთრის აუცილებლობა",
+        "highlight": "თბილი და მინიმალისტური სტილი",
+        "description": "კომფორტული არჩევანი ცივი დღეებისთვის.",
+        "image": "/carousel/winter_collections.png"
+      },
+      {
+        "tag": "#გამორჩეული კოლექცია",
+        "title": "ექსკლუზიური ნაკრები",
+        "highlight": "შეზღუდული გამოშვება",
+        "description": "იშვიათი პროდუქტები შეზღუდული დროით.",
+        "image": "/carousel/solid_collection.png"
       }
     ]
   },
