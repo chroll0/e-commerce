@@ -42,10 +42,10 @@ const Footer = () => {
                 <Link href="/stores">{t("nav.stores")}</Link>
               </li>
               <li>
-                <Link href="/categories">{t("nav.categories")}</Link>
+                <Link href="/products">{t("nav.products")}</Link>
               </li>
               <li>
-                <Link href="/deals">{t("nav.deals")}</Link>
+                <Link href="/sales">{t("nav.sales")}</Link>
               </li>
             </ul>
           </div>

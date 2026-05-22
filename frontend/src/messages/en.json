@@ -2,8 +2,8 @@
   "nav": {
     "home": "Home",
     "stores": "Stores",
-    "categories": "Categories",
-    "deals": "Deals",
+    "products": "Products",
+    "sales": "Sales",
     "about": "About",
     "contact": "Contact",
     "ticker": {
