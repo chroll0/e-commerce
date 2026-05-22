@@ -567,6 +567,20 @@
         "highlight": "Most Loved Styles",
         "description": "See what everyone is buying",
         "image": "/carousel/now_trending.png"
+      },
+      {
+        "tag": "#Winter Collection",
+        "title": "Winter Essentials",
+        "highlight": "Warm & Minimal Styles",
+        "description": "Comfortable styles for cold days.",
+        "image": "/carousel/winter_collections.png"
+      },
+      {
+        "tag": "#Featured Drop",
+        "title": "Exclusive Collection",
+        "highlight": "Limited Edition Items",
+        "description": "Rare picks available for a short time.",
+        "image": "/carousel/solid_collection.png"
       }
     ]
   },
