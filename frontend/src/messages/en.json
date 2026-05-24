@@ -2,8 +2,8 @@
   "nav": {
     "home": "Home",
     "stores": "Stores",
-    "categories": "Categories",
-    "deals": "Deals",
+    "products": "Products",
+    "sales": "Sales",
     "about": "About",
     "contact": "Contact",
     "ticker": {
@@ -567,6 +567,20 @@
         "highlight": "Most Loved Styles",
         "description": "See what everyone is buying",
         "image": "/carousel/now_trending.png"
+      },
+      {
+        "tag": "#Winter Collection",
+        "title": "Winter Essentials",
+        "highlight": "Warm & Minimal Styles",
+        "description": "Comfortable styles for cold days.",
+        "image": "/carousel/winter_collections.png"
+      },
+      {
+        "tag": "#Featured Drop",
+        "title": "Exclusive Collection",
+        "highlight": "Limited Edition Items",
+        "description": "Rare picks available for a short time.",
+        "image": "/carousel/solid_collection.png"
       }
     ]
   },
@@ -593,14 +607,15 @@
   "about": {
     "hero": {
       "badge": "About Us",
-      "title": "Built for modern shopping experience",
-      "description": "We are focused on delivering high-quality products with a fast, simple and secure shopping experience designed for modern users."
+      "title": "Building a Better Online Shopping Experience",
+      "description": "We are dedicated to creating a seamless e-commerce platform where customers can discover quality products, enjoy secure transactions, and receive exceptional service every step of the way.",
+      "secondaryDescription": "By combining technology, reliability, and customer-focused solutions, we help thousands of shoppers find exactly what they need with confidence."
     },
     "stats": {
-      "products": "Products",
-      "customers": "Customers",
-      "stores": "Stores",
-      "countries": "Countries"
+      "products": "Products Available",
+      "customers": "Happy Customers",
+      "stores": "Partner Brands",
+      "countries": "Countries Served"
     },
     "statsValues": {
       "products": "10K+",
@@ -608,28 +623,85 @@
       "stores": "200+",
       "countries": "15+"
     },
+    "story": {
+      "badge": "Our Story",
+      "title": "Driven by Innovation and Customer Satisfaction",
+      "description": "Founded with a vision to simplify online shopping, our platform connects customers with trusted products from reliable sellers. We continuously improve our services, technology, and logistics to deliver a shopping experience that is fast, secure, and enjoyable."
+    },
     "mission": {
       "title": "Our Mission",
-      "text": "To create a seamless and intuitive e-commerce platform that connects customers with the best products at the best value."
+      "text": "Our mission is to empower customers by providing access to high-quality products through an intuitive, transparent, and reliable digital marketplace. We strive to make every purchase simple, secure, and rewarding."
     },
     "vision": {
       "title": "Our Vision",
-      "text": "To become a leading digital marketplace known for performance, simplicity and trust."
+      "text": "We envision a future where online shopping is effortless, trustworthy, and accessible to everyone. Our goal is to become a leading global marketplace recognized for innovation, customer satisfaction, and long-term value."
+    },
+    "values": {
+      "title": "Our Core Values",
+      "customerFirst": {
+        "title": "Customer First",
+        "text": "Every decision we make is focused on improving the customer experience."
+      },
+      "quality": {
+        "title": "Quality Standards",
+        "text": "We carefully select products and partners to maintain high standards."
+      },
+      "innovation": {
+        "title": "Continuous Innovation",
+        "text": "We constantly improve our platform using modern technology and insights."
+      },
+      "trust": {
+        "title": "Trust & Transparency",
+        "text": "Security, privacy, and honesty are at the center of everything we do."
+      }
     },
     "whyChooseUs": {
-      "title": "Why Choose Us",
+      "title": "Why Customers Choose Us",
       "fastDelivery": {
         "title": "Fast Delivery",
-        "text": "Optimized logistics for quick shipping."
+        "text": "Efficient logistics and fulfillment systems ensure your orders arrive quickly and reliably."
       },
       "securePayments": {
         "title": "Secure Payments",
-        "text": "Encrypted and trusted payment systems."
+        "text": "Advanced encryption and trusted payment gateways keep every transaction protected."
       },
       "support": {
-        "title": "24/7 Support",
-        "text": "Always available customer support team."
+        "title": "24/7 Customer Support",
+        "text": "Our support team is always available to assist you whenever you need help."
+      },
+      "selection": {
+        "title": "Wide Product Selection",
+        "text": "Thousands of carefully curated products across multiple categories."
       }
+    }
+  },
+
+  "contact": {
+    "hero": {
+      "title": "Get in Touch",
+      "description": "We’re here to help you with any questions about products, orders, or support."
+    },
+    "email": {
+      "title": "Email Support"
+    },
+    "phone": {
+      "title": "Phone Support"
+    },
+    "location": {
+      "title": "Location",
+      "value": "Tbilisi, Georgia"
+    },
+    "form": {
+      "title": "Send us a message",
+      "description": "We usually respond within 24 hours.",
+      "name": "Your name",
+      "email": "Email address",
+      "message": "Your message",
+      "button": "Send Message"
+    },
+    "support": {
+      "title": "Need fast help?",
+      "description": "Use live chat or call support for urgent issues."
     }
   },
 
