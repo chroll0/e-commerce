@@ -40,15 +40,13 @@ export default function CategoryScroller() {
             className="flex flex-col items-center min-w-20 cursor-pointer hover:opacity-80 transition"
           >
             <div className="w-14 h-14 rounded-full overflow-hidden border border-border">
-              {cat.image && (
-                <Image
-                  src={cat.image}
-                  alt={cat.name}
-                  width={56}
-                  height={56}
-                  className="object-cover"
-                />
-              )}
+              <Image
+                src={cat.image || "/category.png"}
+                alt={cat.name}
+                width={56}
+                height={56}
+                className="w-full h-full object-cover"
+              />
             </div>
 
             <p className="text-sm mt-2 text-primary">{cat.name}</p>
