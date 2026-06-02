@@ -722,7 +722,7 @@
 
     "searchFilters": {
       "notFound": "Product Not Found",
-      "clearFilters": "Clear Filters",
+      "clearFilters": "Clear",
       "searchPlaceholder": "Search products...",
       "search": "Search",
       "searching": "Searching..."

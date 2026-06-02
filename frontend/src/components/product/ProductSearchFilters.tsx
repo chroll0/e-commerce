@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
-import Button from "../ui/Button";
-import ProductCard from "./ProductCard";
-import CategorySelect from "../navigation/CategorySelect";
 import { useProducts } from "@/hooks";
 import type { ProductApi } from "@/types";
+import { useLocale, useTranslations } from "next-intl";
+import { Button, CategorySelect, ProductCard, SearchBar } from "@/components";
 
 export default function ProductSearchFilters() {
   const locale = useLocale();
@@ -33,27 +31,29 @@ export default function ProductSearchFilters() {
 
   return (
     <section className="border-b border-border pb-8">
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <form
-          onSubmit={handleSearchSubmit}
-          className="flex-1 flex flex-col gap-3 sm:flex-row"
-        >
-          <div className="relative flex-1">
-            <input
-              type="text"
+      {/* Filters Header */}
+      <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        {/* Search */}
+        <form onSubmit={handleSearchSubmit} className="w-full">
+          <div className="flex flex-1 items-end gap-2 flex-col sm:flex-row">
+            <SearchBar
               value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder={t("searchPlaceholder")}
-              className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+              onChange={setSearchQuery}
+              locale="en"
             />
-          </div>
 
-          <Button type="submit" disabled={loading} className="w-full sm:w-auto">
-            {t("search")}
-          </Button>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full sm:w-auto whitespace-nowrap"
+            >
+              {t("search")}
+            </Button>
+          </div>
         </form>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        {/* Filters */}
+        <div className="flex justify-center gap-3 items-end">
           <div className="min-w-[220px]">
             <CategorySelect value={categoryId} onChange={setCategoryId} />
           </div>
@@ -62,24 +62,25 @@ export default function ProductSearchFilters() {
             variant="outline"
             onClick={handleClearFilters}
             disabled={loading}
-            className="w-full sm:w-auto"
+            className="sm:w-auto whitespace-nowrap"
           >
             {t("clearFilters")}
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+      {/* Results Grid */}
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
         {loading &&
-          [1, 2, 3, 4].map((id) => (
+          Array.from({ length: 4 }).map((_, id) => (
             <div
               key={id}
-              className="h-[340px] rounded-2xl border border-border bg-card animate-pulse"
+              className="h-[340px] rounded-2xl border border-border bg-card/60 animate-pulse"
             />
           ))}
 
         {!loading && products.length === 0 && (
-          <div className="col-span-full rounded-2xl border border-border bg-card p-10 text-center text-muted">
+          <div className="col-span-full rounded-2xl border border-border bg-card p-10 text-center text-muted-foreground">
             {t("notFound")}
           </div>
         )}

@@ -719,7 +719,7 @@
     },
     "searchFilters": {
       "notFound": "პროდუქტი ვერ მოიძებნა",
-      "clearFilters": "ფილტრების გასუფთავება",
+      "clearFilters": "გასუფთავება",
       "searchPlaceholder": "პროდუქტების ძიება...",
       "search": "ძიება",
       "searching": "იძებნება..."
