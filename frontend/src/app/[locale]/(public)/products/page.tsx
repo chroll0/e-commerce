@@ -1,9 +1,9 @@
-import { FeaturedProducts, ProductFilter } from "@/components";
+import { FeaturedProducts, ProductSearchFilters } from "@/components";
 
 const page = () => {
   return (
     <main className="w-full max-w-7xl px-4 mt-10 mx-auto">
-      <ProductFilter />
+      <ProductSearchFilters />
       <FeaturedProducts />
     </main>
   );

@@ -6,9 +6,19 @@ type Params = {
   locale: string;
   limit?: number;
   onlyDiscounted?: boolean;
+  search?: string;
+  categoryId?: string | number;
+  categorySlug?: string;
 };
 
-export function useProducts({ locale, limit = 10, onlyDiscounted }: Params) {
+export function useProducts({
+  locale,
+  limit = 10,
+  onlyDiscounted,
+  search,
+  categoryId,
+  categorySlug,
+}: Params) {
   const [products, setProducts] = useState<ProductApi[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,7 +29,13 @@ export function useProducts({ locale, limit = 10, onlyDiscounted }: Params) {
       try {
         setLoading(true);
 
-        const data = await getProducts({ locale, limit: 100 });
+        const data = await getProducts({
+          locale,
+          limit: 100,
+          search,
+          categoryId,
+          categorySlug,
+        });
 
         if (cancelled) return;
 
@@ -42,7 +58,7 @@ export function useProducts({ locale, limit = 10, onlyDiscounted }: Params) {
     return () => {
       cancelled = true;
     };
-  }, [locale, limit, onlyDiscounted]);
+  }, [locale, limit, onlyDiscounted, search, categoryId, categorySlug]);
 
   return { products, loading };
 }

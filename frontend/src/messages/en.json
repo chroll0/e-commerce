@@ -710,6 +710,7 @@
     "lowStock": "Low Stock",
     "outOfStock": "Out of Stock",
     "addToCart": "Add to Cart",
+
     "storePage": {
       "notFound": "Store Not Found",
       "notFoundDescription": "The store you're looking for doesn't exist.",
@@ -717,6 +718,14 @@
       "products": "products",
       "storeProducts": "Brand Products",
       "empty": "No products available in this store yet."
+    },
+
+    "searchFilters": {
+      "notFound": "Product Not Found",
+      "clearFilters": "Clear Filters",
+      "searchPlaceholder": "Search products...",
+      "search": "Search",
+      "searching": "Searching..."
     }
   },
 

@@ -30,6 +30,7 @@ export { default as RunningText } from "./home/RunningText";
 // Product components
 export { default as ProductCard } from "./product/ProductCard";
 export { default as ProductDetails } from "./product/ProductDetails";
+export { default as ProductSearchFilters } from "./product/ProductSearchFilters";
 
 // Store components
 export { default as StoreCard } from "./stores/StoreCard";
