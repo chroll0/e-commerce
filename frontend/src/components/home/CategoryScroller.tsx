@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { getCategoriesClient } from "@/lib/categoriesApi";
 import { CategoryScrollerSkeleton } from "@/components";
 import { useRouter } from "next/navigation";
-import { ImageIcon } from "lucide-react";
+import { Package } from "lucide-react";
 
 export default function CategoryScroller() {
   const locale = useLocale();
@@ -50,7 +50,7 @@ export default function CategoryScroller() {
                   className="object-cover w-full h-full"
                 />
               ) : (
-                <ImageIcon className="w-5.5 h-5.5 text-muted-foreground" />
+                <Package className="w-5.5 h-5.5 text-muted-foreground" />
               )}
             </div>
 
