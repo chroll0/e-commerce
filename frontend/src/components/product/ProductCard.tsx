@@ -83,7 +83,7 @@ export default function ProductCard({ product }: Props) {
         </div>
 
         {/* ACTION BUTTON */}
-        <div className="absolute bottom-3 left-0 right-0 z-10 flex justify-center translate-y-4 opacity-0 transition-all duration-300 ease-out delay-75 group-hover:translate-y-0 group-hover:opacity-100">
+        <div className="absolute bottom-3 left-0 right-3 z-10 flex justify-end translate-y-4 opacity-0 transition-all duration-300 ease-out delay-75 group-hover:translate-y-0 group-hover:opacity-100">
           <Button
             className="w-fit"
             size="sm"

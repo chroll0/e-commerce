@@ -6,8 +6,8 @@ import { useTranslations } from "next-intl";
 import { getStoreBySlug } from "@/lib/storesApi";
 import type { StoreApi } from "@/types";
 import { ProductCard } from "@/components";
-import Image from "next/image";
 import { ImageIcon, Star } from "lucide-react";
+import Image from "next/image";
 
 export default function StorePage() {
   const params = useParams();
