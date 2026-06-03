@@ -3,9 +3,10 @@
 import { FC } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, ImageIcon } from "lucide-react";
 import { Button } from "@/components";
 import { ProductApi } from "@/types";
+import Image from "next/image";
 
 type Props = {
   product: ProductApi;
@@ -27,37 +28,51 @@ const ProductRow: FC<Props> = ({ product, onDelete }) => {
     product.category?.translations?.[0]?.name ??
     "—";
 
+  const image = product.images?.[0];
+
   return (
-    <div className="grid grid-cols-12 px-4 py-3 border-b last:border-b-0 items-center border-border gap-2">
-      {/* Title */}
-      <div className="col-span-4 flex items-center gap-3 min-w-0">
-        {product.images?.[0] && (
-          <img
-            src={product.images[0]}
-            alt={title}
-            className="h-10 w-10 rounded object-cover shrink-0"
-          />
-        )}
+    <div className="grid grid-cols-12 items-center gap-2 border-b border-border px-4 py-3 last:border-b-0 hover:bg-muted/30 transition">
+      {/* PRODUCT */}
+      <div className="col-span-4 flex min-w-0 items-center gap-3">
+        {/* IMAGE */}
+        <div className="h-10 w-10 shrink-0 overflow-hidden rounded border border-border bg-muted/10">
+          {image ? (
+            <div className="relative h-full w-full">
+              <Image src={image} alt={title} fill className="object-cover" />
+            </div>
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+              <ImageIcon className="h-4 w-4" />
+            </div>
+          )}
+        </div>
+
+        {/* TEXT */}
         <div className="min-w-0">
-          <div className="text-lg font-medium truncate mb-1">{title}</div>
-          <div className="text-[10px] text-muted-foreground truncate">
+          <div className="truncate text-sm font-medium text-foreground">
+            {title}
+          </div>
+
+          <div className="truncate text-[11px] text-muted-foreground">
             {t("slug")}: {product.slug}
           </div>
         </div>
       </div>
 
-      {/* Category */}
-      <div className="col-span-3 text-sm text-muted-foreground truncate">
+      {/* CATEGORY */}
+      <div className="col-span-3 truncate text-sm text-muted-foreground">
         {categoryName}
       </div>
 
-      {/* Price */}
-      <div className="col-span-2 text-sm">{product.price}</div>
+      {/* PRICE */}
+      <div className="col-span-2 text-sm text-foreground">{product.price}</div>
 
-      {/* Stock */}
-      <div className="col-span-1 text-sm">{product.stock}</div>
+      {/* STOCK */}
+      <div className="col-span-1 text-sm text-muted-foreground">
+        {product.stock}
+      </div>
 
-      {/* Actions */}
+      {/* ACTIONS */}
       <div className="col-span-2 flex justify-end gap-2">
         <Button asChild size="xs" variant="secondary">
           <Link href={`/${locale}/admin/products/${product.slug}/edit`}>
