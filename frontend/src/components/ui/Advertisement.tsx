@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import classNames from "classnames";
 import { Button } from "@/components";
+import Image from "next/image";
 
 type AdvertisementProps = {
   title: string;
@@ -23,7 +24,7 @@ type AdvertisementProps = {
 
   // Optional dismiss
   dismissible?: boolean;
-  storageKey?: string; // if provided, will persist dismissed state in localStorage
+  storageKey?: string;
 
   className?: string;
 };
@@ -88,17 +89,18 @@ export default function Advertisement({
         "rounded-2xl p-4 sm:p-6 shadow-[0_4px_18px_var(--color-shadow)]",
         "flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between",
         styles.wrapper,
-        className
+        className,
       )}
       role="region"
       aria-label="Advertisement"
     >
       <div className="flex items-start gap-4 min-w-0">
         {imageSrc ? (
-          // If you prefer Next/Image, you can swap this for <Image />
-          <img
+          <Image
             src={imageSrc}
             alt={imageAlt}
+            width={56}
+            height={56}
             className="h-14 w-14 rounded-xl object-cover border border-border/40"
           />
         ) : null}
@@ -109,7 +111,7 @@ export default function Advertisement({
               <span
                 className={classNames(
                   "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold",
-                  styles.badge
+                  styles.badge,
                 )}
               >
                 {badge}
@@ -139,17 +141,17 @@ export default function Advertisement({
         ) : null}
 
         {dismissible ? (
-          <button
+          <Button
             type="button"
             onClick={handleDismiss}
             className={classNames(
               "rounded-md px-3 py-2 text-sm font-medium",
-              "border border-border/40 hover:bg-muted transition"
+              "border border-border/40 hover:bg-muted transition",
             )}
             aria-label="Dismiss advertisement"
           >
             ✕
-          </button>
+          </Button>
         ) : null}
       </div>
     </div>
