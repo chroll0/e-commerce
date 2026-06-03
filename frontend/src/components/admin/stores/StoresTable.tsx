@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components";
 import { ImageIcon, Images, Pencil, Trash2 } from "lucide-react";
 import { StoreApi } from "@/types";
+import Image from "next/image";
 
 type StoresTableProps = {
   locale: string;
@@ -57,16 +58,21 @@ const StoresTable: FC<StoresTableProps> = ({
               <div className="grid grid-cols-12 gap-2 px-4 py-1 hover:bg-muted/40 transition">
                 <div className="col-span-5 flex items-center gap-2 min-w-0">
                   {store.logo ? (
-                    <img
-                      src={store.logo}
-                      alt={store.name}
-                      className="w-8 h-8 rounded object-cover shrink-0"
-                    />
+                    <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded">
+                      <Image
+                        src={store.logo}
+                        alt={store.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                   ) : (
-                    <div className="h-6 w-6 rounded bg-muted/10" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded">
+                      <ImageIcon className="h-4.5 w-4.5" />
+                    </div>
                   )}
 
-                  <span className="text-sm truncate font-medium text-foreground">
+                  <span className="truncate text-sm font-medium text-foreground">
                     {store.name}
                   </span>
                 </div>

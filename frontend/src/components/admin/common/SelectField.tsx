@@ -89,7 +89,7 @@ const SelectField: FC<Props> = ({
           disabled={disabled}
           onClick={() => setOpen((v) => !v)}
           className={[
-            "relative w-full text-left bg-card outline-none",
+            "relative w-full text-left outline-none",
             "pb-2 pr-10",
             "border-b-2 transition-colors duration-200",
             borderClass,

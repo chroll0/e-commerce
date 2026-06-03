@@ -716,6 +716,13 @@
       "products": "პროდუქტი",
       "storeProducts": "ბრენდის პროდუქტები",
       "empty": "ამ მაღაზიაში პროდუქტები ჯერ არ არის."
+    },
+    "searchFilters": {
+      "notFound": "პროდუქტი ვერ მოიძებნა",
+      "clearFilters": "გასუფთავება",
+      "searchPlaceholder": "პროდუქტების ძიება...",
+      "search": "ძიება",
+      "searching": "იძებნება..."
     }
   },
 
