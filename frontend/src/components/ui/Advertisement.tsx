@@ -5,6 +5,7 @@ import Link from "next/link";
 import classNames from "classnames";
 import { Button } from "@/components";
 import Image from "next/image";
+import { X } from "lucide-react";
 
 type AdvertisementProps = {
   title: string;
@@ -44,7 +45,6 @@ export default function Advertisement({
 }: AdvertisementProps) {
   const [hidden, setHidden] = useState(false);
 
-  // restore dismiss state (optional)
   useEffect(() => {
     if (!storageKey) return;
     try {
@@ -134,23 +134,13 @@ export default function Advertisement({
       <div className="flex items-center gap-2 sm:justify-end">
         {href ? (
           <Link href={href}>
-            <Button variant={variant === "dark" ? "secondary" : "primary"}>
-              {ctaLabel}
-            </Button>
+            <Button size="sm">{ctaLabel}</Button>
           </Link>
         ) : null}
 
         {dismissible ? (
-          <Button
-            type="button"
-            onClick={handleDismiss}
-            className={classNames(
-              "rounded-md px-3 py-2 text-sm font-medium",
-              "border border-border/40 hover:bg-muted transition",
-            )}
-            aria-label="Dismiss advertisement"
-          >
-            ✕
+          <Button onClick={handleDismiss} variant="outline" size="sm" iconOnly>
+            <X className="h-4 w-4" />
           </Button>
         ) : null}
       </div>
