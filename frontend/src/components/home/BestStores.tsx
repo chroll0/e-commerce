@@ -4,6 +4,8 @@ import { useStores } from "@/hooks";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components";
+import Image from "next/image";
+import { ImageIcon, Star } from "lucide-react";
 
 export default function BestStores() {
   const t = useTranslations("home.stores");
@@ -69,26 +71,28 @@ export default function BestStores() {
           <div
             key={store.id}
             onClick={() => handleStoreClick(store.slug)}
-            className="group bg-card shadow-[0_2px_12px_var(--color-shadow)] p-4 rounded-xl border border-border transition-all duration-300 hover:border-primary/30 hover:shadow-[0_8px_24px_var(--color-shadow)] cursor-pointer"
+            className="group cursor-pointer rounded-xl border border-border bg-card p-4 shadow-[0_2px_12px_var(--color-shadow)] transition-all duration-300 hover:border-primary/30 hover:shadow-[0_8px_24px_var(--color-shadow)]"
           >
             {/* LOGO */}
-            <div className="w-full h-20 bg-card-soft rounded-lg border border-border flex items-center justify-center overflow-hidden">
+            <div className="relative mb-3 flex h-20 w-full items-center justify-center overflow-hidden rounded-lg border border-border bg-card-soft">
               {store.logo ? (
-                <img
+                <Image
                   src={store.logo}
                   alt={store.name}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
               ) : (
-                <span className="text-xs text-muted">{store.name}</span>
+                <ImageIcon className="h-6 w-6 text-muted-foreground" />
               )}
             </div>
 
             {/* INFO */}
-            <p className="mt-2 font-medium text-primary">{store.name}</p>
+            <p className="font-medium text-primary truncate">{store.name}</p>
 
-            <div className="flex items-center gap-1 text-xs text-muted">
-              ⭐ {(store.rating ?? 0).toFixed(1)}
+            <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+              <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
+              <span>{(store.rating ?? 0).toFixed(1)}</span>
               <span>•</span>
               <span>
                 {store.sales ?? 0} {t("sales")}
