@@ -1,17 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProducts } from "@/hooks";
-import type { ProductApi } from "@/types";
+import type { ProductApi, Locale } from "@/types";
 import { useLocale, useTranslations } from "next-intl";
 import { Button, CategorySelect, ProductCard, SearchBar } from "@/components";
 
-export default function ProductSearchFilters() {
-  const locale = useLocale();
+type ProductSearchFiltersProps = {
+  initialCategoryId?: string;
+  keepCategoryOnClear?: boolean;
+  initialSearch?: string;
+};
+
+export default function ProductSearchFilters({
+  initialCategoryId,
+  keepCategoryOnClear = false,
+  initialSearch = "",
+}: ProductSearchFiltersProps) {
+  const locale = useLocale() as Locale;
   const t = useTranslations("productCard.searchFilters");
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [categoryId, setCategoryId] = useState(initialCategoryId ?? "");
+
+  useEffect(() => {
+    if (initialCategoryId !== undefined) {
+      setCategoryId(initialCategoryId);
+    }
+  }, [initialCategoryId]);
 
   const { products, loading } = useProducts({
     locale,
@@ -26,7 +42,7 @@ export default function ProductSearchFilters() {
 
   const handleClearFilters = () => {
     setSearchQuery("");
-    setCategoryId("");
+    setCategoryId(keepCategoryOnClear ? (initialCategoryId ?? "") : "");
   };
 
   return (
@@ -39,7 +55,7 @@ export default function ProductSearchFilters() {
             <SearchBar
               value={searchQuery}
               onChange={setSearchQuery}
-              locale="en"
+              locale={locale}
             />
 
             <Button
