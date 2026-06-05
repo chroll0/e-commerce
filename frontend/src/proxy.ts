@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 const locales = ["en", "ka"];
 const fallbackLocale = "en";
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const segments = pathname.split("/");
   const localeInPath = locales.includes(segments[1]) ? segments[1] : null;
