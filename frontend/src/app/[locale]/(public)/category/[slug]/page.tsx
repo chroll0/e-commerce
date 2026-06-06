@@ -1,6 +1,5 @@
-import { getProducts } from "@/lib/productsApi";
+import { ProductSearchFilters } from "@/components";
 import { getCategoryBySlug } from "@/lib/categoriesApi";
-import { ProductCard } from "@/components";
 
 type Props = {
   params: Promise<{
@@ -12,23 +11,20 @@ export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: Props) {
   const { slug, locale } = await params;
-
-  const [products, category] = await Promise.all([
-    getProducts({
-      categorySlug: slug,
-      locale,
-    }),
-    getCategoryBySlug(slug, locale),
-  ]);
+  const category = await getCategoryBySlug(slug, locale);
+  const categoryId = category?.id ? String(category.id) : "";
+  const categoryName = category?.name ?? slug;
 
   return (
-    <section className="w-full max-w-7xl px-4 mt-10 mx-auto">
-      <h1 className="text-2xl font-semibold mb-6">{category?.name ?? slug}</h1>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+    <main className="w-full max-w-7xl px-4 mt-10 mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-primary mb-2">{categoryName}</h1>
       </div>
-    </section>
+
+      <ProductSearchFilters
+        initialCategoryId={categoryId}
+        keepCategoryOnClear
+      />
+    </main>
   );
 }
