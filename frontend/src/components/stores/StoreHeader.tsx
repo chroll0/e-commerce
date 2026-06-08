@@ -1,12 +1,15 @@
 "use client";
 
 import type { StoreApi } from "@/types";
+import { useTranslations } from "next-intl";
 import { ImageIcon, Star } from "lucide-react";
 import Image from "next/image";
 
+type TranslationFn = ReturnType<typeof useTranslations>;
+
 type StoreHeaderProps = {
   store: StoreApi;
-  t: any;
+  t: TranslationFn;
 };
 
 export default function StoreHeader({ store, t }: StoreHeaderProps) {

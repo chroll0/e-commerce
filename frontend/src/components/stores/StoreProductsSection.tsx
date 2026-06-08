@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { Locale, StoreApi } from "@/types";
 import { Button, CategorySelect, ProductCard, SearchBar } from "@/components";
 
+type TranslationFn = ReturnType<typeof useTranslations>;
+
 type StoreProductsSectionProps = {
   products?: StoreApi["products"];
-  filterT: any;
+  filterT: TranslationFn;
   locale: Locale;
   activeSearch: string;
   activeCategoryId: string;
@@ -19,7 +22,7 @@ function ProductGrid({
   filterT,
 }: {
   products?: StoreApi["products"];
-  filterT: any;
+  filterT: TranslationFn;
 }) {
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
@@ -47,7 +50,7 @@ function StoreFilters({
   initialSearch: string;
   initialCategoryId: string;
   locale: Locale;
-  filterT: any;
+  filterT: TranslationFn;
   onFilterChange: (filters: { search: string; categoryId: string }) => void;
   onClearFilters: () => void;
 }) {
