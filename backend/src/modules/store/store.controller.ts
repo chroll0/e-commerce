@@ -50,8 +50,17 @@ export class StoreController {
   }
 
   @Get("slug/:slug")
-  findBySlug(@Param("slug") slug: string) {
-    return this.storeService.findBySlug(slug);
+  findBySlug(
+    @Param("slug") slug: string,
+    @Query("search") search?: string,
+    @Query("categoryId") categoryId?: string,
+    @Query("locale") locale?: string,
+  ) {
+    return this.storeService.findBySlug(slug, {
+      search: search?.trim() || undefined,
+      categoryId: categoryId ? Number(categoryId) : undefined,
+      locale,
+    });
   }
 
   @Patch(":id")

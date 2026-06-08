@@ -56,11 +56,49 @@ export class StoreService {
     });
   }
 
-  async findBySlug(slug: string) {
+  async findBySlug(
+    slug: string,
+    params?: { search?: string; categoryId?: number; locale?: string },
+  ) {
+    const productSearch = params?.search?.trim();
+    const productFilter: any = {};
+
+    if (productSearch) {
+      productFilter.OR = [
+        { slug: { contains: productSearch, mode: "insensitive" as const } },
+        {
+          translations: {
+            some: {
+              locale: params?.locale || "en",
+              OR: [
+                {
+                  title: {
+                    contains: productSearch,
+                    mode: "insensitive" as const,
+                  },
+                },
+                {
+                  description: {
+                    contains: productSearch,
+                    mode: "insensitive" as const,
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ];
+    }
+
+    if (params?.categoryId) {
+      productFilter.categoryId = params.categoryId;
+    }
+
     const store = await this.prisma.store.findUnique({
       where: { slug },
       include: {
         products: {
+          where: Object.keys(productFilter).length ? productFilter : undefined,
           include: {
             translations: true,
             category: { include: { translations: true } },
