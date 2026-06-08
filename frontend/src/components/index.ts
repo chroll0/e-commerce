@@ -34,6 +34,8 @@ export { default as ProductSearchFilters } from "./product/ProductSearchFilters"
 
 // Store components
 export { default as StoreCard } from "./stores/StoreCard";
+export { default as StoreHeader } from "./stores/StoreHeader";
+export { default as StoreProductsSection } from "./stores/StoreProductsSection";
 
 // Layout components
 export { default as Navigation } from "./layout/Navigation";
