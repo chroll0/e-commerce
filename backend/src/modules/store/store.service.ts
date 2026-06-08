@@ -20,14 +20,39 @@ export class StoreService {
     });
   }
 
-  async findAll() {
+  async findAll(params?: {
+    search?: string;
+    limit?: number;
+    sort?: "sales" | "rating" | "newest";
+  }) {
+    const where = params?.search
+      ? {
+          OR: [
+            { name: { contains: params.search, mode: "insensitive" as const } },
+            { slug: { contains: params.search, mode: "insensitive" as const } },
+          ],
+        }
+      : undefined;
+
+    let orderBy: any = { createdAt: "desc" };
+
+    if (params?.sort === "sales") {
+      orderBy = [{ sales: "desc" }, { rating: "desc" }];
+    } else if (params?.sort === "rating") {
+      orderBy = [{ rating: "desc" }, { sales: "desc" }];
+    } else if (params?.sort === "newest") {
+      orderBy = [{ createdAt: "desc" }];
+    }
+
     return this.prisma.store.findMany({
+      where,
       include: {
         _count: {
           select: { products: true },
         },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy,
+      take: params?.limit,
     });
   }
 

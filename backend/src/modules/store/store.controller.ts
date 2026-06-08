@@ -30,8 +30,17 @@ export class StoreController {
   }
 
   @Get()
-  findAll() {
-    return this.storeService.findAll();
+  findAll(
+    @Query("search") search?: string,
+    @Query("limit") limit?: string,
+    @Query("sort") sort?: string,
+  ) {
+    const limitNum = limit ? Number(limit) : undefined;
+    return this.storeService.findAll({
+      search: search?.trim() || undefined,
+      limit: limitNum,
+      sort: (sort as "sales" | "rating" | "newest") || undefined,
+    });
   }
 
   @Get("best")

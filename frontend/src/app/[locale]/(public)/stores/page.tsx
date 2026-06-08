@@ -16,19 +16,29 @@ export default function AllStoresPage() {
   const [stores, setStores] = useState<StoreApi[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeSearch, setActiveSearch] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("sales");
   const [limit, setLimit] = useState(12);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     fetchStores();
-  }, [sortBy, limit, locale]);
+  }, [sortBy, limit, locale, activeSearch]);
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      setLimit(12);
+      setActiveSearch(searchQuery.trim());
+    }, 300);
+
+    return () => window.clearTimeout(timeout);
+  }, [searchQuery]);
 
   const fetchStores = async () => {
     setLoading(true);
     try {
       const data = await getStores({
-        search: searchQuery || undefined,
+        search: activeSearch || undefined,
         sort: sortBy,
         limit: limit + 1,
       });
@@ -52,7 +62,7 @@ export default function AllStoresPage() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setLimit(12);
-    fetchStores();
+    setActiveSearch(searchQuery.trim());
   };
 
   const handleLoadMore = () => {
@@ -61,6 +71,7 @@ export default function AllStoresPage() {
 
   const handleClearFilters = () => {
     setSearchQuery("");
+    setActiveSearch("");
     setSortBy("sales");
     setLimit(12);
   };
