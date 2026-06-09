@@ -30,8 +30,17 @@ export class StoreController {
   }
 
   @Get()
-  findAll() {
-    return this.storeService.findAll();
+  findAll(
+    @Query("search") search?: string,
+    @Query("limit") limit?: string,
+    @Query("sort") sort?: string,
+  ) {
+    const limitNum = limit ? Number(limit) : undefined;
+    return this.storeService.findAll({
+      search: search?.trim() || undefined,
+      limit: limitNum,
+      sort: (sort as "sales" | "rating" | "newest") || undefined,
+    });
   }
 
   @Get("best")
@@ -41,8 +50,17 @@ export class StoreController {
   }
 
   @Get("slug/:slug")
-  findBySlug(@Param("slug") slug: string) {
-    return this.storeService.findBySlug(slug);
+  findBySlug(
+    @Param("slug") slug: string,
+    @Query("search") search?: string,
+    @Query("categoryId") categoryId?: string,
+    @Query("locale") locale?: string,
+  ) {
+    return this.storeService.findBySlug(slug, {
+      search: search?.trim() || undefined,
+      categoryId: categoryId ? Number(categoryId) : undefined,
+      locale,
+    });
   }
 
   @Patch(":id")

@@ -26,7 +26,23 @@ export async function getBestStores(limit: number = 10) {
   return (res.data ?? []) as StoreApi[];
 }
 
-export async function getStoreBySlug(slug: string) {
-  const res = await api.get(`/stores/slug/${slug}`);
+export type GetStoreBySlugParams = {
+  locale?: string;
+  search?: string;
+  categoryId?: string | number;
+};
+
+export async function getStoreBySlug(
+  slug: string,
+  params?: GetStoreBySlugParams,
+) {
+  const res = await api.get(`/stores/slug/${slug}`, {
+    params: {
+      locale: params?.locale || undefined,
+      search: params?.search || undefined,
+      categoryId: params?.categoryId || undefined,
+    },
+  });
+
   return res.data as StoreApi;
 }
