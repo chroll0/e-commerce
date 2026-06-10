@@ -5,7 +5,12 @@ import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { getStoreBySlug } from "@/lib/storesApi";
 import type { Locale, StoreApi } from "@/types";
-import { StoreHeader, StoreProductsSection } from "@/components";
+import {
+  ProductCardSkeleton,
+  StoreHeader,
+  StoreHeaderSkeleton,
+  StoreProductsSection,
+} from "@/components";
 
 export default function StorePage() {
   const params = useParams();
@@ -82,7 +87,34 @@ export default function StorePage() {
   }, []);
 
   if (loading && !storeHeader) {
-    return <div className="max-w-7xl mx-auto px-4 py-8">Loading...</div>;
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
+        <StoreHeaderSkeleton />
+
+        <section className="border-b border-border pb-8">
+          <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="flex-1 min-w-0">
+              <ProductCardSkeleton className="h-14 w-full rounded-2xl" />
+            </div>
+            <div className="grid flex-1 min-w-[220px] grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+              <ProductCardSkeleton className="h-12 w-full rounded-2xl" />
+              <ProductCardSkeleton className="h-12 w-full rounded-2xl" />
+              <ProductCardSkeleton className="h-12 w-full rounded-2xl" />
+              <ProductCardSkeleton className="h-12 w-full rounded-2xl" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+            {Array.from({ length: 10 }).map((_, index) => (
+              <ProductCardSkeleton
+                key={index}
+                className="h-60 w-full rounded-3xl"
+              />
+            ))}
+          </div>
+        </section>
+      </div>
+    );
   }
 
   if (error || !storeHeader) {
@@ -103,6 +135,7 @@ export default function StorePage() {
         locale={locale as Locale}
         activeSearch={filters.search}
         activeCategoryId={filters.categoryId}
+        loading={loading}
         onFilterChange={handleFilterChange}
         onClearFilters={handleClearFilters}
       />

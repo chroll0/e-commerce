@@ -3,7 +3,13 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { Locale, StoreApi } from "@/types";
-import { Button, CategorySelect, ProductCard, SearchBar } from "@/components";
+import {
+  Button,
+  CategorySelect,
+  ProductCard,
+  ProductCardSkeleton,
+  SearchBar,
+} from "@/components";
 
 type TranslationFn = ReturnType<typeof useTranslations>;
 
@@ -13,6 +19,7 @@ type StoreProductsSectionProps = {
   locale: Locale;
   activeSearch: string;
   activeCategoryId: string;
+  loading?: boolean;
   onFilterChange: (filters: { search: string; categoryId: string }) => void;
   onClearFilters: () => void;
 };
@@ -20,10 +27,25 @@ type StoreProductsSectionProps = {
 function ProductGrid({
   products,
   filterT,
+  loading,
 }: {
   products?: StoreApi["products"];
   filterT: TranslationFn;
+  loading?: boolean;
 }) {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+        {Array.from({ length: 10 }).map((_, index) => (
+          <ProductCardSkeleton
+            key={index}
+            className="h-60 w-full rounded-3xl"
+          />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
       {!products?.length ? (
@@ -126,6 +148,7 @@ export default function StoreProductsSection({
   locale,
   activeSearch,
   activeCategoryId,
+  loading,
   onFilterChange,
   onClearFilters,
 }: StoreProductsSectionProps) {
@@ -140,7 +163,7 @@ export default function StoreProductsSection({
         onClearFilters={onClearFilters}
       />
 
-      <ProductGrid products={products} filterT={filterT} />
+      <ProductGrid products={products} filterT={filterT} loading={loading} />
     </section>
   );
 }
