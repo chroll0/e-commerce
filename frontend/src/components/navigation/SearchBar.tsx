@@ -18,9 +18,10 @@ type Props = {
   value: string;
   onChange: (next: string) => void;
   locale: Locale;
+  placeholder?: string;
 };
 
-const SearchBar = ({ value, onChange, locale }: Props) => {
+const SearchBar = ({ value, onChange, locale, placeholder }: Props) => {
   const t = useTranslations("admin.products");
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
@@ -90,7 +91,7 @@ const SearchBar = ({ value, onChange, locale }: Props) => {
       </label>
 
       <Input
-        placeholder={t("searchPlaceholder")}
+        placeholder={placeholder || t("searchPlaceholder")}
         size="md"
         value={value}
         onChange={(e) => {

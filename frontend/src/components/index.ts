@@ -99,3 +99,4 @@ export { default as ProductsFilters } from "./admin/products/ProductsFilters";
 // Skeleton components
 export { default as CategoryScrollerSkeleton } from "./skeletons/CategoryScrollerSkeleton";
 export { default as ProductCardSkeleton } from "./skeletons/ProductCardSkeleton";
+export { default as StoreHeaderSkeleton } from "./skeletons/StoreHeaderSkeleton";

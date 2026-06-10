@@ -739,14 +739,14 @@
   "stores": {
     "pageTitle": "ყველა მაღაზია",
     "pageDescription": "აღმოაჩინეთ საუკეთესო მაღაზიები და ბრენდები",
-    "searchPlaceholder": "მაღაზიების ძიება...",
+    "searchPlaceholder": "მაღაზიის ძიება...",
     "search": "ძიება",
     "sales": "გაყიდვები",
     "products": "პროდუქტები",
     "storesCount": "{count} მაღაზია ნაპოვნია",
     "sort": {
-      "sales": "ყველაზე მეტი გაყიდვა",
-      "rating": "ყველაზე მაღალი რეიტინგი",
+      "sales": "გაყიდვები",
+      "rating": "რეიტინგი",
       "newest": "ახალი"
     },
     "noStoresTitle": "მაღაზიები ვერ მოიძებნა",

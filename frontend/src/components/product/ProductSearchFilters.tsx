@@ -48,7 +48,7 @@ export default function ProductSearchFilters({
   return (
     <section className="border-b border-border pb-8">
       {/* Filters Header */}
-      <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         {/* Search */}
         <form onSubmit={handleSearchSubmit} className="w-full">
           <div className="flex flex-1 items-end gap-2 flex-col sm:flex-row">
