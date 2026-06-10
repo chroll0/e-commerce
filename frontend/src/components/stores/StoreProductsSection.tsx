@@ -85,7 +85,7 @@ function StoreFilters({
 
   return (
     <form onSubmit={handleSearchSubmit} className="w-full">
-      <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="flex flex-1 items-end gap-2 flex-col sm:flex-row">
           <SearchBar
             value={searchQuery}

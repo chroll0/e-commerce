@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Filter, Loader2, Store as StoreIcon } from "lucide-react";
+import { ChevronDown, Filter, Loader2, Store as StoreIcon } from "lucide-react";
 import { Button, SearchBar, StoreCard } from "@/components";
 import { getStores, type GetStoresParams } from "@/lib/storesApi";
 import type { Locale, StoreApi } from "@/types";
@@ -118,22 +118,32 @@ export default function AllStoresPage() {
       </div>
 
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end">
-        <SearchBar value={search} onChange={setSearch} locale={locale} />
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+          locale={locale}
+          placeholder={t("searchPlaceholder")}
+        />
 
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4 text-muted" />
-          <select
-            value={sortBy}
-            onChange={(event) => {
-              setSortBy(event.target.value as SortOption);
-              setLimit(PAGE_SIZE);
-            }}
-            className="text-sm border border-border rounded-lg px-3 py-2 bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-          >
-            <option value="sales">{t("sort.sales")}</option>
-            <option value="rating">{t("sort.rating")}</option>
-            <option value="newest">{t("sort.newest")}</option>
-          </select>
+
+          <div className="relative">
+            <select
+              value={sortBy}
+              onChange={(event) => {
+                setSortBy(event.target.value as SortOption);
+                setLimit(PAGE_SIZE);
+              }}
+              className="appearance-none text-sm border border-border rounded-lg bg-background py-2.5 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary truncate max-w-[150px]"
+            >
+              <option value="sales">{t("sort.sales")}</option>
+              <option value="rating">{t("sort.rating")}</option>
+              <option value="newest">{t("sort.newest")}</option>
+            </select>
+
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          </div>
         </div>
 
         <Button variant="outline" onClick={handleClearFilters}>
