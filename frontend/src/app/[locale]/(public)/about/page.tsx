@@ -1,6 +1,6 @@
 "use client";
 
-import { Advertisement } from "@/components";
+import { Advertisement, Breadcrumbs } from "@/components";
 import {
   Package,
   Users,
@@ -12,10 +12,12 @@ import {
   Target,
   Eye,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function AboutPage() {
+  const locale = useLocale();
   const t = useTranslations("about");
+  const navT = useTranslations("nav");
   const cta = useTranslations("advertisements.cta");
 
   const stats = [
@@ -61,6 +63,12 @@ export default function AboutPage() {
 
   return (
     <main className="mx-auto mt-10 w-full max-w-7xl px-4 space-y-16">
+      <Breadcrumbs
+        items={[
+          { label: "Satori", href: `/${locale}` },
+          { label: navT("about") },
+        ]}
+      />
       {/* HERO */}
       <section className="relative overflow-hidden rounded-3xl border border-border bg-card p-8 sm:p-12">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent" />

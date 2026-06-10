@@ -5,17 +5,26 @@ import { useLocale, useTranslations } from "next-intl";
 import { AlertCircleIcon, PackageSearchIcon } from "lucide-react";
 
 import { useProduct, useProductData } from "@/hooks";
-import { ProductDetails, ProductCardSkeleton } from "@/components";
+import { Breadcrumbs, ProductDetails, ProductCardSkeleton } from "@/components";
 
 export default function Page() {
   const { slug } = useParams<{ slug: string }>();
   const locale = useLocale();
   const t = useTranslations("productDetails");
+  const navT = useTranslations("nav");
   const { product, loading, error } = useProduct(slug, locale);
   const data = useProductData(product ?? undefined);
 
   return (
     <section className="mx-auto mt-10 w-full max-w-7xl px-4">
+      <Breadcrumbs
+        items={[
+          { label: "Satori", href: `/${locale}` },
+          { label: navT("products"), href: `/${locale}/products` },
+          { label: product?.translations?.[0]?.title ?? slug },
+        ]}
+      />
+
       {/* LOADING */}
       {loading && (
         <div className="grid gap-8 lg:grid-cols-2">
