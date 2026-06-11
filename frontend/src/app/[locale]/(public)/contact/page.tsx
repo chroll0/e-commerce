@@ -2,14 +2,16 @@
 
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
-import { Input, Button } from "@/components";
+import { Breadcrumbs, Input, Button } from "@/components";
 
 export const dynamic = "force-dynamic";
 
 export default function Contact() {
+  const locale = useLocale();
   const t = useTranslations("contact");
+  const navT = useTranslations("nav");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,6 +37,12 @@ export default function Contact() {
 
   return (
     <main className="mx-auto mt-12 w-full max-w-6xl px-4">
+      <Breadcrumbs
+        items={[
+          { label: "Satori", href: `/${locale}` },
+          { label: navT("contact") },
+        ]}
+      />
       {/* HERO */}
       <section className="mb-12">
         <h1 className="text-4xl font-bold">{t("hero.title")}</h1>
@@ -116,7 +124,7 @@ export default function Contact() {
       </section>
 
       {/* SUPPORT STRIP */}
-      <section className="mt-16 rounded-3xl border border-border bg-gradient-to-r from-primary/10 to-card p-8">
+      <section className="mt-16 rounded-3xl border border-border bg-linear-to-r from-primary/10 to-card p-8">
         <h3 className="text-xl font-semibold">{t("support.title")}</h3>
 
         <p className="mt-2 text-muted">{t("support.description")}</p>

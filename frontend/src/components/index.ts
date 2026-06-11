@@ -18,6 +18,7 @@ export { default as AuthActions } from "./navigation/AuthActions";
 export { default as CategorySelect } from "./navigation/CategorySelect";
 export { default as ThemeToggle } from "./navigation/ThemeToggle";
 export { default as SearchBar } from "./navigation/SearchBar";
+export { default as Breadcrumbs } from "./navigation/Breadcrumbs";
 
 // Home page components
 export { default as Hero } from "./home/Hero";

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ChevronDown, Filter, Loader2, Store as StoreIcon } from "lucide-react";
-import { Button, SearchBar, StoreCard } from "@/components";
+import { Breadcrumbs, Button, SearchBar, StoreCard } from "@/components";
 import { getStores, type GetStoresParams } from "@/lib/storesApi";
 import type { Locale, StoreApi } from "@/types";
 
@@ -47,6 +47,7 @@ function StoresGrid({ stores, loading }: StoresGridProps) {
 
 export default function AllStoresPage() {
   const t = useTranslations("stores");
+  const navT = useTranslations("nav");
   const locale = useLocale() as Locale;
 
   const [stores, setStores] = useState<StoreApi[]>([]);
@@ -110,6 +111,13 @@ export default function AllStoresPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 pt-10">
+      <Breadcrumbs
+        items={[
+          { label: "Satori", href: `/${locale}` },
+          { label: navT("stores"), href: `/${locale}/stores` },
+        ]}
+      />
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-primary mb-2">
           {t("pageTitle")}

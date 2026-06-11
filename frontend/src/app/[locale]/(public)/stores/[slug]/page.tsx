@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { getStoreBySlug } from "@/lib/storesApi";
 import type { Locale, StoreApi } from "@/types";
 import {
+  Breadcrumbs,
   ProductCardSkeleton,
   StoreHeader,
   StoreHeaderSkeleton,
@@ -17,6 +18,7 @@ export default function StorePage() {
   const slug = params.slug as string;
   const locale = params.locale as string;
 
+  const navT = useTranslations("nav");
   const t = useTranslations("productCard.storePage");
   const filterT = useTranslations("productCard.searchFilters");
 
@@ -89,6 +91,14 @@ export default function StorePage() {
   if (loading && !storeHeader) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
+        <Breadcrumbs
+          items={[
+            { label: "Satori", href: `/${locale}` },
+            { label: navT("stores"), href: `/${locale}/stores` },
+            { label: slug },
+          ]}
+        />
+
         <StoreHeaderSkeleton />
 
         <section className="border-b border-border pb-8">
@@ -127,6 +137,14 @@ export default function StorePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <Breadcrumbs
+        items={[
+          { label: "Satori", href: `/${locale}` },
+          { label: navT("stores"), href: `/${locale}/stores` },
+          { label: storeHeader.name },
+        ]}
+      />
+
       <StoreHeader store={storeHeader} t={t} />
 
       <StoreProductsSection

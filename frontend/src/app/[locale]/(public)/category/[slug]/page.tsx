@@ -1,4 +1,4 @@
-import { ProductSearchFilters } from "@/components";
+import { Breadcrumbs, ProductSearchFilters } from "@/components";
 import { getCategoryBySlug } from "@/lib/categoriesApi";
 
 type Props = {
@@ -17,6 +17,14 @@ export default async function Page({ params }: Props) {
 
   return (
     <main className="w-full max-w-7xl px-4 mt-10 mx-auto">
+      <Breadcrumbs
+        items={[
+          { label: "Satori", href: `/${locale}` },
+          { label: "Category" },
+          { label: categoryName },
+        ]}
+      />
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-primary mb-2">{categoryName}</h1>
       </div>
