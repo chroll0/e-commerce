@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+
 import { Breadcrumbs } from "@/components";
 import { useLocale, useTranslations } from "next-intl";
 
