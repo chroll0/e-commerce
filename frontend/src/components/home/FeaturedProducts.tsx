@@ -42,9 +42,6 @@ export default function FeaturedProducts() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-6">
-        {loading &&
-          [1, 2, 3, 4, 5].map((id) => <ProductCard key={id} productId={id} />)}
-
         {!loading &&
           products.map((product) => (
             <ProductCard key={product.id} product={product} />
