@@ -5,7 +5,8 @@ import { Button } from "@/components";
 import type { ProductApi } from "@/types";
 import { useProductData } from "@/hooks";
 import { useLocale, useTranslations } from "next-intl";
-import { Package2Icon, ShoppingCartIcon, TagIcon } from "lucide-react";
+import { Package2Icon, ShoppingCartIcon } from "lucide-react";
+import { useAddToCart } from "@/state/useAddToCart";
 
 type Props = {
   product: ProductApi;
@@ -17,12 +18,27 @@ export default function ProductDetails({ product }: Props) {
   const locale = useLocale();
   const data = useProductData(product);
 
+  const addToCart = useAddToCart();
+
   if (!data) return null;
 
   const normalizedLocale = locale.split("-")[0];
   const translation =
     product.translations?.find((t) => t.locale === normalizedLocale) ??
     product.translations?.[0];
+
+  const handleAddToCart = () => {
+    if (!product?.id) return;
+
+    addToCart({
+      productId: product.id,
+      name: data.title,
+      slug: data.slug ?? String(product.id),
+      image: data.image ?? "",
+      price: data.price,
+      quantity: 1,
+    });
+  };
 
   return (
     <section className="grid gap-8 lg:grid-cols-2">
@@ -42,12 +58,10 @@ export default function ProductDetails({ product }: Props) {
               <div className="rounded-full border border-border bg-card p-5">
                 <Package2Icon className="h-10 w-10 opacity-50" />
               </div>
-
               <span className="text-sm font-medium">{tCard("noImage")}</span>
             </div>
           )}
 
-          {/* DISCOUNT */}
           {data.discount && data.discount > 0 && (
             <div className="absolute top-4 right-4 rounded-lg bg-destructive px-3 py-1 text-sm font-medium text-white shadow-lg">
               -{data.discount}%
@@ -58,19 +72,16 @@ export default function ProductDetails({ product }: Props) {
 
       {/* CONTENT SIDE */}
       <div className="flex flex-col">
-        {/* TITLE */}
         <h1 className="text-2xl font-semibold tracking-tight text-primary md:text-3xl">
           {data.title}
         </h1>
 
-        {/* DESCRIPTION */}
         {translation?.description && (
           <p className="mt-4 leading-7 text-secondary">
             {translation.description}
           </p>
         )}
 
-        {/* PRICE */}
         <div className="mt-6 flex items-end gap-3">
           <span className="text-3xl font-bold text-primary">
             ${data.price.toFixed(2)}
@@ -100,33 +111,14 @@ export default function ProductDetails({ product }: Props) {
           )}
         </div>
 
-        {/* META */}
-        <div className="mt-8 space-y-4 rounded-2xl border border-border bg-card p-5">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted">{t("productId")}</span>
-            <span className="font-medium text-primary">#{product.id}</span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted">{t("stock")}</span>
-            <span className="font-medium text-primary">{data.stock}</span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted">{t("discount")}</span>
-            <span className="inline-flex items-center gap-1 font-medium text-primary">
-              <TagIcon className="h-4 w-4" />
-              {data.discount ? `${data.discount}%` : "—"}
-            </span>
-          </div>
-        </div>
-
         {/* CTA */}
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button
             variant="primary"
             size="lg"
             leftIcon={<ShoppingCartIcon className="h-5 w-5" />}
+            disabled={data.isOutOfStock}
+            onClick={handleAddToCart}
           >
             {t("addToCart")}
           </Button>

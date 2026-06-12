@@ -785,6 +785,22 @@
     }
   },
 
+  "cart": {
+    "title": "კალათა",
+    "empty": "კალათა ცარიელია",
+    "emptyDescription": "დაამატეთ პროდუქტები კალათაში.",
+    "continueShopping": "შოპინგის გაგრძელება",
+    "subtotal": "ჯამი",
+    "shipping": "მიტანა",
+    "tax": "გადასახადი",
+    "total": "სულ",
+    "totalItems": "პროდუქტი",
+    "checkout": "გადახდა",
+    "clearCart": "გასუფთავება",
+    "remove": "წაშლა",
+    "quantity": "რაოდენობა"
+  },
+
   "footer": {
     "about": {
       "title": "ჩვენ შესახებ",

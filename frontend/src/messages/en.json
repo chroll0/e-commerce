@@ -786,6 +786,22 @@
     }
   },
 
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "emptyDescription": "Add products to your cart to continue shopping.",
+    "continueShopping": "Continue Shopping",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "totalItems": "Items",
+    "checkout": "Pay Now",
+    "clearCart": "Clear Cart",
+    "remove": "Remove",
+    "quantity": "Quantity"
+  },
+
   "footer": {
     "about": {
       "title": "About",
