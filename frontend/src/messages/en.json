@@ -68,10 +68,10 @@
           "desc": "Manage delivery addresses for faster checkout.",
           "action": "Manage addresses"
         },
-        "support": {
-          "title": "Support",
-          "desc": "Need help? Contact our support team.",
-          "action": "Contact support"
+        "notifications": {
+          "title": "Notifications",
+          "desc": "View and manage your notifications.",
+          "action": "View notifications"
         }
       }
     },

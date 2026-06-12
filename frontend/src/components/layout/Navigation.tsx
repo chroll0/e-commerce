@@ -21,7 +21,7 @@ const Navigation = () => {
       </div>
 
       <div className="py-1.5 px-6 md:px-12 border-b border-border gap-6">
-        <div className="flex items-center justify-between max-w-400 mx-auto w-full gap-3">
+        <div className="flex items-center justify-between max-w-400 mx-auto w-full gap-6">
           {/* LOGO */}
           <div className="shrink-0">
             <Logo />
