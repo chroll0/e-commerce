@@ -7,7 +7,7 @@ const ITEMS = [
   { key: "orders", href: "/account/orders" },
   { key: "wishlist", href: "/account/wishlist" },
   { key: "addresses", href: "/account/addresses" },
-  { key: "support", href: "/support" },
+  { key: "notifications", href: "/account/notifications" },
 ] as const;
 
 export default function AccountQuickActions() {

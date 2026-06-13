@@ -21,9 +21,6 @@ export default function ProductFilter() {
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
-        {loading &&
-          [1, 2, 3, 4, 5].map((id) => <ProductCard key={id} productId={id} />)}
-
         {!loading &&
           products.map((product) => (
             <ProductCard key={product.id} product={product} />

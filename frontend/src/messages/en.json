@@ -68,10 +68,10 @@
           "desc": "Manage delivery addresses for faster checkout.",
           "action": "Manage addresses"
         },
-        "support": {
-          "title": "Support",
-          "desc": "Need help? Contact our support team.",
-          "action": "Contact support"
+        "notifications": {
+          "title": "Notifications",
+          "desc": "View and manage your notifications.",
+          "action": "View notifications"
         }
       }
     },
@@ -784,6 +784,22 @@
       "title": "Free delivery over ₾199",
       "description": "Applies to Tbilisi area."
     }
+  },
+
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "emptyDescription": "Add products to your cart to continue shopping.",
+    "continueShopping": "Continue Shopping",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "totalItems": "Items",
+    "checkout": "Pay Now",
+    "clearCart": "Clear Cart",
+    "remove": "Remove",
+    "quantity": "Quantity"
   },
 
   "footer": {

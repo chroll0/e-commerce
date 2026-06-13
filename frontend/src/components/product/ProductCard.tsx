@@ -1,24 +1,27 @@
 "use client";
 
-import { useLocale } from "next-intl";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import type { ProductApi } from "@/types";
 import { Button, ProductCardSkeleton } from "@/components";
 import { useProductData } from "@/hooks";
 import { EyeIcon } from "lucide-react";
 import Image from "next/image";
+import { useCartStore } from "@/state/useCartStore";
+import { useAuthStore } from "@/state/useAuthStore";
 
 type Props = {
   product?: ProductApi;
-  productId?: number;
 };
 
 export default function ProductCard({ product }: Props) {
   const t = useTranslations("productCard");
   const locale = useLocale();
   const router = useRouter();
+
   const data = useProductData(product);
+
+  const addItem = useCartStore((state) => state.addItem);
 
   const handleNavigation = () => {
     const target = data?.slug ?? String(product?.id ?? "");
@@ -26,7 +29,6 @@ export default function ProductCard({ product }: Props) {
     router.push(`/${locale}/products/${target}`);
   };
 
-  // Loading State
   if (!data) {
     return (
       <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_2px_12px_var(--color-shadow)]">
@@ -34,14 +36,33 @@ export default function ProductCard({ product }: Props) {
         <div className="space-y-3 p-3">
           <ProductCardSkeleton className="h-4 w-full rounded-md" />
           <ProductCardSkeleton className="h-4 w-2/3 rounded-md" />
-          <div className="flex items-center gap-2">
-            <ProductCardSkeleton className="h-5 w-20 rounded-md" />
-            <ProductCardSkeleton className="h-4 w-14 rounded-md" />
-          </div>
         </div>
       </div>
     );
   }
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!product?.id) return;
+
+    addItem({
+      productId: product.id,
+      name: data.title,
+      slug: data.slug ?? product.slug ?? String(product.id),
+      image: data.image ?? "",
+      price: data.price,
+      quantity: 1,
+    });
+
+    // SAFE auth check (no crash, no store coupling)
+    const user = useAuthStore.getState().user;
+
+    // backend sync removed for now (not implemented yet)
+    if (user) {
+      console.warn("syncLocalCartToServer not implemented yet");
+    }
+  };
 
   return (
     <div
@@ -55,20 +76,16 @@ export default function ProductCard({ product }: Props) {
             src={data.image}
             alt={data.title}
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full items-center justify-center">
-            <span className="text-xs text-muted">{t("noImage")}</span>
+          <div className="flex h-full items-center justify-center text-xs text-muted">
+            {t("noImage")}
           </div>
         )}
 
-        {/* HOVER OVERLAY */}
-        <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
-
-        {/* VIEW BUTTON */}
-        <div className="absolute top-2 left-2 opacity-0 translate-y-2 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+        {/* VIEW */}
+        <div className="absolute top-2 left-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition">
           <Button
             variant="text"
             iconOnly
@@ -78,26 +95,24 @@ export default function ProductCard({ product }: Props) {
               handleNavigation();
             }}
           >
-            <EyeIcon className="h-4.5 w-4.5" />
+            <EyeIcon className="h-4 w-4" />
           </Button>
         </div>
 
-        {/* ACTION BUTTON */}
-        <div className="absolute bottom-3 left-0 right-3 z-10 flex justify-end translate-y-4 opacity-0 transition-all duration-300 ease-out delay-75 group-hover:translate-y-0 group-hover:opacity-100">
+        {/* ADD TO CART */}
+        <div className="absolute bottom-3 right-3 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition">
           <Button
-            className="w-fit"
             size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
+            disabled={data.isOutOfStock}
+            onClick={handleAddToCart}
           >
             {t("addToCart")}
           </Button>
         </div>
 
         {/* DISCOUNT */}
-        {data.discount && data.discount > 0 && (
-          <div className="absolute top-2 right-2 rounded-md bg-(--color-destructive) px-2 py-1 text-[11px] font-semibold text-white">
+        {data.discount && (
+          <div className="absolute top-2 right-2 rounded-md bg-destructive px-2 py-1 text-[11px] font-semibold text-white">
             -{data.discount}%
           </div>
         )}
@@ -105,19 +120,17 @@ export default function ProductCard({ product }: Props) {
 
       {/* CONTENT */}
       <div className="p-3">
-        {/* TITLE */}
-        <h3 className="line-clamp-2 mt-1 text-sm font-medium leading-5 text-primary sm:text-base">
+        <h3 className="line-clamp-2 mt-1 text-sm font-medium text-primary">
           {data.title}
         </h3>
 
-        {/* PRICE */}
         <div className="mt-2 flex items-center gap-2">
-          <span className="text-base font-bold text-primary sm:text-lg">
+          <span className="font-bold text-primary">
             ${data.price.toFixed(2)}
           </span>
 
           {data.oldPrice && data.oldPrice > data.price && (
-            <span className="text-xs text-destructive line-through">
+            <span className="text-xs line-through text-destructive">
               ${data.oldPrice.toFixed(2)}
             </span>
           )}
