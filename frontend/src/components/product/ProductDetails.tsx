@@ -6,7 +6,7 @@ import type { ProductApi } from "@/types";
 import { useProductData } from "@/hooks";
 import { useLocale, useTranslations } from "next-intl";
 import { Package2Icon, ShoppingCartIcon } from "lucide-react";
-import { useAddToCart } from "@/state/useAddToCart";
+import { useCartActions } from "@/state/useAddToCart";
 
 type Props = {
   product: ProductApi;
@@ -18,7 +18,7 @@ export default function ProductDetails({ product }: Props) {
   const locale = useLocale();
   const data = useProductData(product);
 
-  const addToCart = useAddToCart();
+  const addToCart = useCartActions();
 
   if (!data) return null;
 
