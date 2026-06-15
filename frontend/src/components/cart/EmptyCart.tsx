@@ -21,7 +21,7 @@ export default function EmptyCart({ locale }: Props) {
 
         <h1 className="text-3xl font-bold text-primary">{t("empty")}</h1>
 
-        <p className="mt-3 text-secondary">{t("emptyDesc")}</p>
+        <p className="mt-3 text-secondary">{t("emptyDescription")}</p>
 
         <Link href={`/${locale}/products`} className="mt-8 inline-block">
           <Button size="lg">{t("continueShopping")}</Button>

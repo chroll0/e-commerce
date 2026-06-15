@@ -3,10 +3,11 @@
 import { useTranslations, useLocale } from "next-intl";
 import { useCartStore } from "@/state/useCartStore";
 import { useEffect, useState } from "react";
-import { CartItem, CartSummary, EmptyCart } from "@/components";
+import { Breadcrumbs, CartItem, CartSummary, EmptyCart } from "@/components";
 
 export default function CartPage() {
   const t = useTranslations("cart");
+  const navT = useTranslations("nav");
   const locale = useLocale();
   const items = useCartStore((s) => s.items);
   const [mounted, setMounted] = useState(false);
@@ -28,25 +29,29 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen py-12 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">{t("title")}</h1>
-        </div>
-
-        <div className="grid gap-8 lg:grid-cols-3">
-          <div className="space-y-4 lg:col-span-2">
-            {items.map((item) => (
-              <CartItem
-                key={`${item.productId}-${item.variantId ?? "default"}`}
-                item={item}
-              />
-            ))}
-          </div>
-
-          <CartSummary />
-        </div>
+    <main className="mx-auto mt-10 w-full max-w-7xl px-4 space-y-16">
+      <Breadcrumbs
+        items={[
+          { label: "Satori", href: `/${locale}` },
+          { label: navT("cart") },
+        ]}
+      />
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-bold">{t("title")}</h1>
       </div>
-    </div>
+
+      <div className="grid gap-8 lg:grid-cols-3">
+        <div className="space-y-4 lg:col-span-2">
+          {items.map((item) => (
+            <CartItem
+              key={`${item.productId}-${item.variantId ?? "default"}`}
+              item={item}
+            />
+          ))}
+        </div>
+
+        <CartSummary />
+      </div>
+    </main>
   );
 }
