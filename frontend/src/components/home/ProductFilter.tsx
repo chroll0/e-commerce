@@ -26,8 +26,6 @@ export default function ProductFilter() {
             <ProductCard key={product.id} product={product} />
           ))}
       </div>
-
-      {/* TAB BUTTONS */}
     </section>
   );
 }

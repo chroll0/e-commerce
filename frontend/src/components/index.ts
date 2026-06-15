@@ -42,7 +42,10 @@ export { default as StoreProductsSection } from "./stores/StoreProductsSection";
 export { default as Navigation } from "./layout/Navigation";
 export { default as Footer } from "./layout/Footer";
 
-// Other components
+// Cart components
+export { default as CartItem } from "./cart/CartItem";
+export { default as CartSummary } from "./cart/CartSummary";
+export { default as EmptyCart } from "./cart/EmptyCart";
 
 // Footer components
 export { default as LanguageSwitcher } from "./footer/LanguageSwitcher";

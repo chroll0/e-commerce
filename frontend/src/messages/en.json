@@ -6,6 +6,7 @@
     "sales": "Sales",
     "about": "About",
     "contact": "Contact",
+    "cart": "Cart",
     "ticker": {
       "fastDelivery": "Fast delivery across the country",
       "discount": "Special discounts available today",
@@ -791,6 +792,7 @@
     "empty": "Your cart is empty",
     "emptyDescription": "Add products to your cart to continue shopping.",
     "continueShopping": "Continue Shopping",
+    "summary": "Order Summary",
     "subtotal": "Subtotal",
     "shipping": "Shipping",
     "tax": "Tax",
@@ -799,7 +801,11 @@
     "checkout": "Pay Now",
     "clearCart": "Clear Cart",
     "remove": "Remove",
-    "quantity": "Quantity"
+    "quantity": "Quantity",
+    "secureCheckout": "Secure checkout",
+    "encryptedPayments": "Encrypted payment processing",
+    "fastDelivery": "Fast worldwide delivery",
+    "discount": "Discount"
   },
 
   "footer": {

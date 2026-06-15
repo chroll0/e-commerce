@@ -6,6 +6,7 @@
     "sales": "აქციები",
     "about": "ჩვენ შესახებ",
     "contact": "კონტაქტი",
+    "cart": "კალათა",
     "ticker": {
       "fastDelivery": "სწრაფი მიწოდება მთელი ქვეყნის მასშტაბით",
       "discount": "სპეციალური ფასდაკლებები დღეს",
@@ -789,16 +790,21 @@
     "title": "კალათა",
     "empty": "კალათა ცარიელია",
     "emptyDescription": "დაამატეთ პროდუქტები კალათაში.",
-    "continueShopping": "შოპინგის გაგრძელება",
-    "subtotal": "ჯამი",
-    "shipping": "მიტანა",
+    "continueShopping": "პროდუქტების ნახვა",
+    "summary": "შეკვეთის შეჯამება",
+    "subtotal": "შუალედური ჯამი",
+    "shipping": "მიწოდება",
     "tax": "გადასახადი",
     "total": "სულ",
     "totalItems": "პროდუქტი",
     "checkout": "გადახდა",
-    "clearCart": "გასუფთავება",
+    "clearCart": "კალათის გასუფთავება",
     "remove": "წაშლა",
-    "quantity": "რაოდენობა"
+    "quantity": "რაოდენობა",
+    "secureCheckout": "უსაფრთხო გადახდა",
+    "encryptedPayments": "დაშიფრული გადახდების სისტემა",
+    "fastDelivery": "სწრაფი მიწოდება",
+    "discount": "ფასდაკლება"
   },
 
   "footer": {
