@@ -109,6 +109,7 @@ export default function Hero() {
                       alt={slide.title}
                       fill
                       priority
+                      sizes="100vw"
                       className="object-cover object-center scale-110"
                     />
                     <div className="absolute inset-0 bg-background/20" />
@@ -122,8 +123,8 @@ export default function Hero() {
                         alt={slide.title}
                         fill
                         priority
+                        sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-contain object-center scale-[1.05] drop-shadow-2xl"
-                        sizes="50vw"
                       />
                     </div>
                   </div>
