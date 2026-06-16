@@ -7,8 +7,7 @@ import { Button, ProductCardSkeleton } from "@/components";
 import { useProductData } from "@/hooks";
 import { EyeIcon } from "lucide-react";
 import Image from "next/image";
-import { useCartStore } from "@/state/useCartStore";
-import { useAuthStore } from "@/state/useAuthStore";
+import { useCartActions } from "@/state/useAddToCart";
 
 type Props = {
   product?: ProductApi;
@@ -20,8 +19,7 @@ export default function ProductCard({ product }: Props) {
   const router = useRouter();
 
   const data = useProductData(product);
-
-  const addItem = useCartStore((state) => state.addItem);
+  const addToCart = useCartActions();
 
   const handleNavigation = () => {
     const target = data?.slug ?? String(product?.id ?? "");
@@ -46,22 +44,14 @@ export default function ProductCard({ product }: Props) {
 
     if (!product?.id) return;
 
-    addItem({
+    addToCart({
       productId: product.id,
       name: data.title,
       slug: data.slug ?? product.slug ?? String(product.id),
-      image: data.image ?? "",
+      image: data.image ?? null,
       price: data.price,
       quantity: 1,
     });
-
-    // SAFE auth check (no crash, no store coupling)
-    const user = useAuthStore.getState().user;
-
-    // backend sync removed for now (not implemented yet)
-    if (user) {
-      console.warn("syncLocalCartToServer not implemented yet");
-    }
   };
 
   return (

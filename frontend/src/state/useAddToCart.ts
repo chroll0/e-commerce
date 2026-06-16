@@ -1,17 +1,20 @@
-"use client";
-
+import { cartApi } from "@/lib/cartApi";
 import { useCartStore } from "@/state/useCartStore";
 import { useAuthStore } from "@/state/useAuthStore";
 
-export function useAddToCart() {
+export function useCartActions() {
   const addItem = useCartStore((s) => s.addItem);
 
-  return (item: any) => {
+  return async (item: any) => {
     addItem(item);
-
     const user = useAuthStore.getState().user;
-    // if (user) {
-    //   void useCartStore.getState().syncLocalCartToServer?.();
-    // }
+
+    if (!user) return;
+
+    try {
+      await cartApi.addToCart(item.productId, item.quantity ?? 1);
+    } catch (e) {
+      console.error("Cart sync failed", e);
+    }
   };
 }
