@@ -7,7 +7,8 @@ export function useCartActions() {
   const addItem = useCartStore((s) => s.addItem);
   const removeItem = useCartStore((s) => s.removeItem);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
-  const items = useCartStore((s) => s.items);
+  const setBackendId = useCartStore((s) => s.setBackendId);
+  const clearCart = useCartStore((s) => s.clearCart);
 
   const isLoggedIn = () => !!useAuthStore.getState().user;
 
@@ -20,18 +21,21 @@ export function useCartActions() {
 
     try {
       const res = await cartApi.addToCart(item.productId, item.quantity ?? 1);
-      addItem({ ...item, quantity: 0, backendId: res.id });
+
+      setBackendId(item.productId, item.variantId, res.id);
     } catch (e) {
       console.error("Cart sync failed", e);
     }
   };
 
   const remove = async (productId: number, variantId?: number | string) => {
-    const item = items.find(
-      (it) =>
-        it.productId === productId &&
-        String(it.variantId ?? "") === String(variantId ?? ""),
-    );
+    const item = useCartStore
+      .getState()
+      .items.find(
+        (it) =>
+          it.productId === productId &&
+          String(it.variantId ?? "") === String(variantId ?? ""),
+      );
 
     removeItem(productId, variantId);
 
@@ -49,11 +53,13 @@ export function useCartActions() {
     variantId: number | string | undefined,
     quantity: number,
   ) => {
-    const item = items.find(
-      (it) =>
-        it.productId === productId &&
-        String(it.variantId ?? "") === String(variantId ?? ""),
-    );
+    const item = useCartStore
+      .getState()
+      .items.find(
+        (it) =>
+          it.productId === productId &&
+          String(it.variantId ?? "") === String(variantId ?? ""),
+      );
 
     updateQuantity(productId, variantId, quantity);
 
@@ -66,5 +72,28 @@ export function useCartActions() {
     }
   };
 
-  return { add, remove, update };
+  const clear = async () => {
+    const items = useCartStore.getState().items;
+
+    clearCart();
+
+    if (!isLoggedIn()) return;
+
+    try {
+      await Promise.all(
+        items
+          .filter((item) => item.backendId)
+          .map((item) => cartApi.removeItem(item.backendId!)),
+      );
+    } catch (e) {
+      console.error("Cart clear failed", e);
+    }
+  };
+
+  return {
+    add,
+    remove,
+    update,
+    clear,
+  };
 }

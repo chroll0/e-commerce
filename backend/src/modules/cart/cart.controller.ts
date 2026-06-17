@@ -37,7 +37,7 @@ export class CartController {
   updateCartItem(
     @Req() req: AuthRequest,
     @Param("id", ParseIntPipe) id: number,
-    @Body() dto: UpdateCartItemDto
+    @Body() dto: UpdateCartItemDto,
   ) {
     const userId = req.user.id;
     return this.cartService.updateCartItem(userId, id, dto);
@@ -46,7 +46,7 @@ export class CartController {
   @Delete(":id")
   removeCartItem(
     @Req() req: AuthRequest,
-    @Param("id", ParseIntPipe) id: number
+    @Param("id", ParseIntPipe) id: number,
   ) {
     const userId = req.user.id;
     return this.cartService.removeCartItem(userId, id);

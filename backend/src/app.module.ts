@@ -7,6 +7,7 @@ import { ProductModule } from "./modules/product/product.module";
 import { AdminModule } from "./modules/admin/admin.module";
 import { CloudinaryModule } from "./modules/cloudinary/cloudinary.module";
 import { StoreModule } from "./modules/store/store.module";
+import { CartModule } from "./modules/cart/cart.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { StoreModule } from "./modules/store/store.module";
     ProductModule,
     AdminModule,
     StoreModule,
+    CartModule,
   ],
 })
 export class AppModule {}
