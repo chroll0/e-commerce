@@ -3,15 +3,15 @@
 import Image from "next/image";
 import { ImageIcon, MinusIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components";
-import { CartItem as CartItemType, useCartStore } from "@/state/useCartStore";
+import { CartItem as CartItemType } from "@/state/useCartStore";
+import { useCartActions } from "@/state/useCartActions";
 
 type Props = {
   item: CartItemType;
 };
 
 export default function CartItem({ item }: Props) {
-  const removeItem = useCartStore((s) => s.removeItem);
-  const updateQuantity = useCartStore((s) => s.updateQuantity);
+  const { remove, update } = useCartActions();
 
   return (
     <div className="flex gap-4 rounded-xl border border-border bg-card p-4">
@@ -39,7 +39,7 @@ export default function CartItem({ item }: Props) {
             iconOnly
             size="sm"
             onClick={() =>
-              updateQuantity(item.productId, item.variantId, item.quantity - 1)
+              update(item.productId, item.variantId, item.quantity - 1)
             }
           >
             <MinusIcon className="h-4 w-4" />
@@ -52,7 +52,7 @@ export default function CartItem({ item }: Props) {
             iconOnly
             size="sm"
             onClick={() =>
-              updateQuantity(item.productId, item.variantId, item.quantity + 1)
+              update(item.productId, item.variantId, item.quantity + 1)
             }
           >
             <PlusIcon className="h-4 w-4" />
@@ -69,7 +69,7 @@ export default function CartItem({ item }: Props) {
           variant="outline"
           iconOnly
           size="sm"
-          onClick={() => removeItem(item.productId, item.variantId)}
+          onClick={() => remove(item.productId, item.variantId)}
         >
           <Trash2Icon className="h-4 w-4 text-destructive" />
         </Button>

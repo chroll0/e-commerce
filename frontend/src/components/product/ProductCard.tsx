@@ -7,7 +7,7 @@ import { Button, ProductCardSkeleton } from "@/components";
 import { useProductData } from "@/hooks";
 import { EyeIcon } from "lucide-react";
 import Image from "next/image";
-import { useCartActions } from "@/state/useAddToCart";
+import { useCartActions } from "@/state/useCartActions";
 
 type Props = {
   product?: ProductApi;
@@ -19,7 +19,7 @@ export default function ProductCard({ product }: Props) {
   const router = useRouter();
 
   const data = useProductData(product);
-  const addToCart = useCartActions();
+  const { add } = useCartActions();
 
   const handleNavigation = () => {
     const target = data?.slug ?? String(product?.id ?? "");
@@ -44,7 +44,7 @@ export default function ProductCard({ product }: Props) {
 
     if (!product?.id) return;
 
-    addToCart({
+    add({
       productId: product.id,
       name: data.title,
       slug: data.slug ?? product.slug ?? String(product.id),

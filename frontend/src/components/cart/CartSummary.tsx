@@ -4,6 +4,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components";
 import { useCartStore } from "@/state/useCartStore";
+import { useCartActions } from "@/state/useCartActions";
 import { ShieldCheckIcon, TruckIcon, CreditCardIcon } from "lucide-react";
 
 export default function CartSummary() {
@@ -12,13 +13,15 @@ export default function CartSummary() {
   const router = useRouter();
 
   const items = useCartStore((s) => s.items);
-  const clearCart = useCartStore((s) => s.clearCart);
+  const { clear } = useCartActions();
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
+
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+
   const shipping = items.length ? 9.99 : 0;
   const tax = subtotal * 0.1;
   const discount = 0;
@@ -105,7 +108,7 @@ export default function CartSummary() {
           {t("continueShopping")}
         </Button>
 
-        <Button variant="text" fullWidth onClick={clearCart}>
+        <Button variant="text" fullWidth onClick={clear}>
           {t("clearCart")}
         </Button>
       </div>
