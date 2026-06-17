@@ -6,14 +6,14 @@ export type CartItem = {
   variantId?: number | string;
   name: string;
   slug: string;
-  image: string;
+  image: string | null;
   price: number;
   quantity: number;
+  backendId?: number;
 };
 
 type CartState = {
   items: CartItem[];
-
   addItem: (item: Omit<CartItem, "quantity"> & { quantity?: number }) => void;
   removeItem: (productId: number, variantId?: number | string) => void;
   updateQuantity: (
