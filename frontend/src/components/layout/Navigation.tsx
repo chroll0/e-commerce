@@ -66,14 +66,16 @@ const Navigation = () => {
             </Link>
 
             {/* NOTIFICATIONS */}
-            <Button
-              variant="outline"
-              size="sm"
-              iconOnly
-              aria-label="Notifications"
-            >
-              <Bell className="h-6 w-6" />
-            </Button>
+            <Link href="/account/notifications">
+              <Button
+                variant="outline"
+                size="sm"
+                iconOnly
+                aria-label="Notifications"
+              >
+                <Bell className="h-6 w-6" />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
