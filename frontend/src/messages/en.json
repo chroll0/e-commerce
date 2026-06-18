@@ -546,42 +546,42 @@
         "title": "Limited Time Offer!",
         "highlight": "Up to 50% OFF!",
         "description": "Redefine Your Everyday Style",
-        "image": "/carousel/fashion_sale.png"
+        "image": "/carousel/image_1.png"
       },
       {
         "tag": "#New Collection",
         "title": "Fresh Arrivals",
         "highlight": "Spring-Summer 2026",
         "description": "Discover the latest trends",
-        "image": "/carousel/new_collection.png"
+        "image": "/carousel/image_2.png"
       },
       {
         "tag": "#Best Deals",
         "title": "Exclusive Offers",
         "highlight": "Save Big Today",
         "description": "Handpicked deals just for you",
-        "image": "/carousel/best_deal.png"
+        "image": "/carousel/image_3.png"
       },
       {
         "tag": "#Trending Now",
         "title": "Top Picks",
         "highlight": "Most Loved Styles",
         "description": "See what everyone is buying",
-        "image": "/carousel/now_trending.png"
+        "image": "/carousel/image_1.png"
       },
       {
         "tag": "#Winter Collection",
         "title": "Winter Essentials",
         "highlight": "Warm & Minimal Styles",
         "description": "Comfortable styles for cold days.",
-        "image": "/carousel/winter_collections.png"
+        "image": "/carousel/image_2.png"
       },
       {
         "tag": "#Featured Drop",
         "title": "Exclusive Collection",
         "highlight": "Limited Edition Items",
         "description": "Rare picks available for a short time.",
-        "image": "/carousel/solid_collection.png"
+        "image": "/carousel/image_3.png"
       }
     ]
   },
