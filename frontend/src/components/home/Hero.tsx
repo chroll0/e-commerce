@@ -81,7 +81,7 @@ export default function Hero() {
     <section>
       <div className="relative h-[420px] overflow-hidden rounded-3xl bg-card shadow-xl group my-10">
         {/* Global Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/30 to-transparent z-10 pointer-events-none" />
 
         <div
           ref={emblaRef}
@@ -107,13 +107,13 @@ export default function Hero() {
                       {slide.tag}
                     </span>
 
-                    <h1 className="mt-5 text-4xl md:text-[52px] font-bold text-white leading-tight">
+                    <h1 className="mt-5 text-4xl md:text-[52px] font-bold leading-tight text-primary">
                       {slide.title}
                       <br />
                       <span className="text-primary">{slide.highlight}</span>
                     </h1>
 
-                    <p className="text-white/90 mt-4">{slide.description}</p>
+                    <p className="mt-4 text-secondary">{slide.description}</p>
                   </div>
 
                   {/* IMAGE */}
@@ -136,7 +136,7 @@ export default function Hero() {
                         className="object-contain object-right scale-90 pointer-events-none"
                         draggable={false}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/50 to-transparent" />
                     </div>
 
                     {/* DESKTOP */}
