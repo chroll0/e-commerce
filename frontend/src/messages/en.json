@@ -542,6 +542,13 @@
   "hero": {
     "slides": [
       {
+        "tag": "#Featured Drop",
+        "title": "Exclusive Collection",
+        "highlight": "Limited Edition Items",
+        "description": "Rare picks available for a short time.",
+        "image": "/carousel/image_0.png"
+      },
+      {
         "tag": "#Big Fashion Sale",
         "title": "Limited Time Offer!",
         "highlight": "Up to 50% OFF!",
@@ -567,21 +574,14 @@
         "title": "Top Picks",
         "highlight": "Most Loved Styles",
         "description": "See what everyone is buying",
-        "image": "/carousel/image_1.png"
+        "image": "/carousel/image_4.png"
       },
       {
         "tag": "#Winter Collection",
         "title": "Winter Essentials",
         "highlight": "Warm & Minimal Styles",
         "description": "Comfortable styles for cold days.",
-        "image": "/carousel/image_2.png"
-      },
-      {
-        "tag": "#Featured Drop",
-        "title": "Exclusive Collection",
-        "highlight": "Limited Edition Items",
-        "description": "Rare picks available for a short time.",
-        "image": "/carousel/image_3.png"
+        "image": "/carousel/image_5.png"
       }
     ]
   },

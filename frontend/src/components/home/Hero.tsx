@@ -168,7 +168,7 @@ export default function Hero() {
                 className={`rounded-full transition-all duration-300 ${
                   idx === index
                     ? "w-6 h-2 bg-primary"
-                    : "w-2 h-2 bg-white/40 hover:bg-white/60"
+                    : "w-2 h-2 bg-primary/50 hover:bg-primary/70"
                 }`}
               />
             ))}
