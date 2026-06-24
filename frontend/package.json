@@ -13,6 +13,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "axios": "^1.15.2",
     "classnames": "^2.5.1",
+    "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
     "embla-carousel": "^8.6.0",
     "embla-carousel-autoplay": "^8.6.0",
