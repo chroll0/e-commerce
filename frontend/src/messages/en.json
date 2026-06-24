@@ -542,45 +542,45 @@
   "hero": {
     "slides": [
       {
-        "tag": "#Featured Drop",
-        "title": "Exclusive Collection",
-        "highlight": "Limited Edition Items",
-        "description": "Rare picks available for a short time.",
+        "tag": "#New Arrivals",
+        "title": "Just Dropped",
+        "highlight": "Fresh Tech & Lifestyle Picks",
+        "description": "The latest gear you didn't know you needed.",
         "image": "/carousel/image_0.png"
       },
       {
-        "tag": "#Big Fashion Sale",
+        "tag": "#Best Deals",
         "title": "Limited Time Offer!",
-        "highlight": "Up to 50% OFF!",
-        "description": "Redefine Your Everyday Style",
+        "highlight": "Up to 50% OFF",
+        "description": "Top products at unbeatable prices.",
         "image": "/carousel/image_1.png"
       },
       {
-        "tag": "#New Collection",
-        "title": "Fresh Arrivals",
-        "highlight": "Spring-Summer 2026",
-        "description": "Discover the latest trends",
+        "tag": "#Editor's Choice",
+        "title": "Handpicked For You",
+        "highlight": "Staff Favorites",
+        "description": "Products our team loves and recommends.",
         "image": "/carousel/image_2.png"
       },
       {
-        "tag": "#Best Deals",
-        "title": "Exclusive Offers",
-        "highlight": "Save Big Today",
-        "description": "Handpicked deals just for you",
+        "tag": "#Top Rated",
+        "title": "Customer Favorites",
+        "highlight": "Most Loved Products",
+        "description": "Loved by thousands, built to last.",
         "image": "/carousel/image_3.png"
       },
       {
         "tag": "#Trending Now",
-        "title": "Top Picks",
-        "highlight": "Most Loved Styles",
-        "description": "See what everyone is buying",
+        "title": "What's Hot",
+        "highlight": "Flying Off the Shelves",
+        "description": "See what everyone is grabbing right now.",
         "image": "/carousel/image_4.png"
       },
       {
-        "tag": "#Winter Collection",
-        "title": "Winter Essentials",
-        "highlight": "Warm & Minimal Styles",
-        "description": "Comfortable styles for cold days.",
+        "tag": "#Premium Picks",
+        "title": "Upgrade Your Life",
+        "highlight": "Quality Worth Every Penny",
+        "description": "Invest in gear that makes a difference.",
         "image": "/carousel/image_5.png"
       }
     ]
