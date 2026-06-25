@@ -37,6 +37,9 @@ services:
       - /app/node_modules
     environment:
       NODE_ENV: development
+      CLOUDINARY_CLOUD_NAME: dfdeb8b2b
+      CLOUDINARY_API_KEY: 929116492675579
+      CLOUDINARY_API_SECRET: qAb3WCuSmMFxH2aWDclRybWtZmk
     command: sh -c "npx prisma generate && npm run start:dev"
 
 networks:
