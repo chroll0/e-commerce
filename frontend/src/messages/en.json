@@ -761,6 +761,41 @@
     "allStoresLoaded": "You've seen all stores"
   },
 
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: January 1, 2025",
+    "sections": {
+      "intro": {
+        "title": "Introduction",
+        "text": "We are committed to protecting your personal information and your right to privacy. This policy explains what information we collect, how we use it, and what rights you have."
+      },
+      "collection": {
+        "title": "Information We Collect",
+        "text": "We collect information you provide directly: name, email, phone number, and delivery address when you register or place an order. We also collect usage data automatically."
+      },
+      "usage": {
+        "title": "How We Use Your Information",
+        "text": "We use your information to process orders, send updates, improve our services, and communicate with you about your account and purchases."
+      },
+      "sharing": {
+        "title": "Information Sharing",
+        "text": "We do not sell your personal data. We only share it with trusted partners necessary to fulfill your orders (e.g. delivery services) or as required by law."
+      },
+      "security": {
+        "title": "Data Security",
+        "text": "We use industry-standard encryption and security measures to protect your personal information from unauthorized access or disclosure."
+      },
+      "rights": {
+        "title": "Your Rights",
+        "text": "You have the right to access, correct, or delete your personal data at any time. Contact us at any time to exercise these rights."
+      },
+      "contact": {
+        "title": "Contact Us",
+        "text": "If you have any questions about this Privacy Policy, please contact us via the contact page or email us directly."
+      }
+    }
+  },
+
   "advertisements": {
     "profileComplete": {
       "badge": "Tip",
