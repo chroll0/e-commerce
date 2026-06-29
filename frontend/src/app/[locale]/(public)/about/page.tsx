@@ -13,6 +13,7 @@ import {
   Eye,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 
 export default function AboutPage() {
   const locale = useLocale();
@@ -73,16 +74,29 @@ export default function AboutPage() {
       <section className="relative overflow-hidden rounded-3xl border border-border bg-card p-8 sm:p-12">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent" />
 
-        <div className="relative max-w-3xl">
-          <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-            {t("hero.badge")}
-          </span>
+        <div className="relative flex flex-col gap-6">
+          {/* Text */}
+          <div className="flex justify-between items-center w-full">
+            {/* Logo */}
+            <div className="bg-muted/50 rounded-full p-1">
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={40}
+                height={40}
+                className="object-contain dark:invert"
+              />
+            </div>
+            <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+              {t("hero.badge")}
+            </span>
+          </div>
 
-          <h1 className="mt-4 text-4xl font-bold tracking-tight leading-tight sm:text-6xl">
+          <h1 className="text-4xl font-bold tracking-tight leading-tight sm:text-6xl max-w-4xl">
             {t("hero.title")}
           </h1>
 
-          <p className="mt-6 text-base leading-8 text-muted sm:text-lg">
+          <p className="mt-2 text-base leading-8 text-muted sm:text-lg max-w-4xl">
             {t("hero.description")}
           </p>
         </div>
