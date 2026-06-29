@@ -1,22 +1,47 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Shield, Eye, Share2, Lock, UserCheck, Mail, Info } from "lucide-react";
+import {
+  FileText,
+  UserCheck,
+  ShoppingCart,
+  Truck,
+  RotateCcw,
+  Ban,
+  Copyright,
+  AlertTriangle,
+  RefreshCw,
+  Mail,
+} from "lucide-react";
 
-const icons = [Info, Eye, Shield, Share2, Lock, UserCheck, Mail];
+const icons = [
+  FileText,
+  UserCheck,
+  ShoppingCart,
+  Truck,
+  RotateCcw,
+  Ban,
+  Copyright,
+  AlertTriangle,
+  RefreshCw,
+  Mail,
+];
+
+const sections = [
+  "acceptance",
+  "account",
+  "orders",
+  "delivery",
+  "returns",
+  "prohibited",
+  "intellectual",
+  "liability",
+  "changes",
+  "contact",
+] as const;
 
 const Page = () => {
-  const t = useTranslations("privacy");
-
-  const sections = [
-    "intro",
-    "collection",
-    "usage",
-    "sharing",
-    "security",
-    "rights",
-    "contact",
-  ] as const;
+  const t = useTranslations("terms");
 
   return (
     <main>
@@ -24,7 +49,7 @@ const Page = () => {
       <section className="border-b border-border bg-muted/10 py-16">
         <div className="mx-auto max-w-3xl px-4 text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-1.5 text-sm text-muted-foreground">
-            <Shield className="h-4 w-4" />
+            <FileText className="h-4 w-4" />
             {t("title")}
           </div>
           <h1 className="text-4xl font-bold tracking-tight">{t("title")}</h1>

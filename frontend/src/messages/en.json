@@ -796,6 +796,137 @@
     }
   },
 
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: January 1, 2025",
+    "sections": {
+      "acceptance": {
+        "title": "Acceptance of Terms",
+        "text": "By accessing or using our platform, you agree to be bound by these Terms of Service. If you do not agree, please do not use our services."
+      },
+      "account": {
+        "title": "Account Responsibilities",
+        "text": "You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. Notify us immediately of any unauthorized use."
+      },
+      "orders": {
+        "title": "Orders & Payments",
+        "text": "All orders are subject to availability and confirmation. We reserve the right to cancel any order and issue a full refund if a product becomes unavailable or a pricing error occurs."
+      },
+      "delivery": {
+        "title": "Delivery & Shipping",
+        "text": "We aim to deliver all orders within the estimated timeframe. Delivery times may vary depending on location. We are not responsible for delays caused by third-party carriers."
+      },
+      "returns": {
+        "title": "Returns & Refunds",
+        "text": "You may return eligible items within 14 days of delivery. Items must be unused and in original packaging. Refunds are processed within 5–7 business days after we receive the return."
+      },
+      "prohibited": {
+        "title": "Prohibited Activities",
+        "text": "You may not use our platform for any unlawful purpose, to transmit harmful content, attempt to gain unauthorized access, or engage in any activity that disrupts our services."
+      },
+      "intellectual": {
+        "title": "Intellectual Property",
+        "text": "All content on this platform including logos, text, images, and software is owned by us or licensed to us. You may not reproduce or distribute any content without written permission."
+      },
+      "liability": {
+        "title": "Limitation of Liability",
+        "text": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our platform. Our total liability shall not exceed the amount paid for the order in question."
+      },
+      "changes": {
+        "title": "Changes to Terms",
+        "text": "We reserve the right to update these Terms of Service at any time. Continued use of our platform after changes constitutes acceptance of the new terms."
+      },
+      "contact": {
+        "title": "Contact Us",
+        "text": "If you have any questions about these Terms of Service, please contact us through our contact page or email us directly."
+      }
+    }
+  },
+
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "description": "Find answers to the most common questions about our platform.",
+    "categories": {
+      "orders": "Orders",
+      "delivery": "Delivery",
+      "returns": "Returns",
+      "account": "Account",
+      "payments": "Payments"
+    },
+    "items": {
+      "orders": [
+        {
+          "q": "How do I place an order?",
+          "a": "Browse products, add them to your cart, and proceed to checkout. You'll need an account to complete your purchase."
+        },
+        {
+          "q": "Can I modify or cancel my order?",
+          "a": "You can cancel or modify your order within 1 hour of placing it. After that, the order enters processing and cannot be changed."
+        },
+        {
+          "q": "How do I track my order?",
+          "a": "Once your order ships, you'll receive a tracking number via email. You can also view order status in your account under Orders."
+        }
+      ],
+      "delivery": [
+        {
+          "q": "How long does delivery take?",
+          "a": "Standard delivery takes 2–5 business days. Express delivery is available at checkout for next-day arrival in most areas."
+        },
+        {
+          "q": "Do you deliver outside Tbilisi?",
+          "a": "Yes, we deliver across Georgia. Delivery times and fees may vary depending on your location."
+        },
+        {
+          "q": "Is free delivery available?",
+          "a": "Free delivery is available on orders over ₾199 within the Tbilisi area."
+        }
+      ],
+      "returns": [
+        {
+          "q": "What is your return policy?",
+          "a": "You can return eligible items within 14 days of delivery. Items must be unused and in their original packaging."
+        },
+        {
+          "q": "How do I start a return?",
+          "a": "Go to your Orders page, select the item you want to return, and follow the return instructions. Our team will arrange a pickup."
+        },
+        {
+          "q": "When will I receive my refund?",
+          "a": "Refunds are processed within 5–7 business days after we receive and inspect the returned item."
+        }
+      ],
+      "account": [
+        {
+          "q": "How do I create an account?",
+          "a": "Click Sign Up at the top of the page, enter your name, email, and password. You'll be ready to shop immediately."
+        },
+        {
+          "q": "I forgot my password. What do I do?",
+          "a": "Click Forgot Password on the login page and enter your email. You'll receive a reset link within a few minutes."
+        },
+        {
+          "q": "How do I update my profile information?",
+          "a": "Go to Account Settings from your profile menu. You can update your name, phone number, and password there."
+        }
+      ],
+      "payments": [
+        {
+          "q": "What payment methods do you accept?",
+          "a": "We accept all major credit and debit cards, as well as popular digital wallets. All transactions are secured with encryption."
+        },
+        {
+          "q": "Is it safe to pay on your platform?",
+          "a": "Yes. We use industry-standard SSL encryption and trusted payment gateways to ensure your payment details are always protected."
+        },
+        {
+          "q": "Can I get an invoice for my order?",
+          "a": "Yes, invoices are automatically generated for every order and available to download from your Orders page."
+        }
+      ]
+    }
+  },
+
   "advertisements": {
     "profileComplete": {
       "badge": "Tip",
