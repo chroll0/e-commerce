@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import { Shield, Eye, Share2, Lock, UserCheck, Mail, Info } from "lucide-react";
 
@@ -17,9 +19,9 @@ const Page = () => {
   ] as const;
 
   return (
-    <main className="min-h-screen bg-background">
+    <main>
       {/* Hero */}
-      <section className="border-b border-border bg-muted/30 py-16">
+      <section className="border-b border-border bg-muted/10 py-16">
         <div className="mx-auto max-w-3xl px-4 text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-1.5 text-sm text-muted-foreground">
             <Shield className="h-4 w-4" />
