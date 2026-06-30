@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FC } from "react";
 import { Button } from "@/components";
-import { Plus, Boxes, Users, Layers, ExternalLink } from "lucide-react";
+import { Boxes, Users, Layers, ExternalLink } from "lucide-react";
 import { Locale, useTranslations } from "next-intl";
 
 const AdminQuickActions: FC<{ locale: Locale }> = ({ locale }) => {
