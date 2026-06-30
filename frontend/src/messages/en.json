@@ -188,11 +188,16 @@
       "welcome": "Welcome to the Admin Panel",
       "overview": "Use the sidebar to navigate through management sections.",
       "quickActions": "Quick Actions",
+      "quickActionsDescription": "Frequently used administration tools.",
       "actions": {
-        "backToSite": "Back to site",
-        "addProduct": "Add product",
-        "addCategory": "Add category",
-        "viewUsers": "View users"
+        "backToSite": "Back to Store",
+        "backToSiteDescription": "Return to your storefront.",
+        "addProduct": "Add Product",
+        "addProductDescription": "Create a new product with images, pricing and translations.",
+        "addCategory": "Add Category",
+        "addCategoryDescription": "Organize products by creating categories and subcategories.",
+        "viewUsers": "Manage Users",
+        "viewUsersDescription": "View, edit and manage registered customer accounts."
       },
       "view": "View details",
       "stats": {
