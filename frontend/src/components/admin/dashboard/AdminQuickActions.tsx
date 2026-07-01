@@ -1,47 +1,76 @@
-import Link from "next/link";
-import { FC } from "react";
-import { Button } from "@/components";
-import { Plus, Boxes, Users, Layers, ExternalLink } from "lucide-react";
-import { Locale, useTranslations } from "next-intl";
+"use client";
 
-const AdminQuickActions: FC<{ locale: Locale }> = ({ locale }) => {
+import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import {
+  Layers,
+  PackagePlus,
+  Users,
+  ExternalLink,
+  LucideIcon,
+} from "lucide-react";
+
+type ActionKey = "addCategory" | "addProduct" | "viewUsers" | "backToSite";
+
+type Action = {
+  key: ActionKey;
+  href: (locale: string) => string;
+  icon: LucideIcon;
+};
+
+const ACTIONS: Action[] = [
+  {
+    key: "addCategory",
+    href: (l) => `/${l}/admin/categories/new`,
+    icon: Layers,
+  },
+  {
+    key: "addProduct",
+    href: (l) => `/${l}/admin/products/new`,
+    icon: PackagePlus,
+  },
+  {
+    key: "viewUsers",
+    href: (l) => `/${l}/admin/users`,
+    icon: Users,
+  },
+  {
+    key: "backToSite",
+    href: (l) => `/${l}`,
+    icon: ExternalLink,
+  },
+];
+
+export default function AdminQuickActions() {
+  const locale = useLocale();
   const t = useTranslations("admin.dashboard");
 
   return (
     <div className="rounded-xl border border-border bg-card p-4">
+      {/* Header */}
       <div className="text-sm font-medium">{t("quickActions")}</div>
 
+      {/* Actions */}
       <div className="mt-4 flex flex-wrap gap-2">
-        <Button asChild variant="secondary" size="sm">
-          <Link href={`/${locale}/admin/categories/new`}>
-            <Layers className="h-4 w-4 mr-2" />
-            {t("actions.addCategory")}
+        {ACTIONS.map(({ key, href, icon: Icon }) => (
+          <Link
+            key={key}
+            href={href(locale)}
+            className="
+              inline-flex items-center gap-2
+              rounded-md border border-border
+              bg-background px-3 py-2
+              text-sm font-medium
+              transition
+              hover:border-primary/40
+              hover:bg-muted/30
+            "
+          >
+            <Icon className="h-4 w-4" />
+            {t(`actions.${key}`)}
           </Link>
-        </Button>
-
-        <Button asChild variant="secondary" size="sm">
-          <Link href={`/${locale}/admin/products/new`}>
-            <Boxes className="h-4 w-4 mr-2" />
-            {t("actions.addProduct")}
-          </Link>
-        </Button>
-
-        <Button asChild variant="secondary" size="sm">
-          <Link href={`/${locale}/admin/users`}>
-            <Users className="h-4 w-4 mr-2" />
-            {t("actions.viewUsers")}
-          </Link>
-        </Button>
-
-        <Button asChild variant="secondary" size="sm">
-          <Link href={`/${locale}`}>
-            <ExternalLink className="h-4 w-4 mr-2" />
-            {t("actions.backToSite")}
-          </Link>
-        </Button>
+        ))}
       </div>
     </div>
   );
-};
-
-export default AdminQuickActions;
+}
