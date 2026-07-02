@@ -33,7 +33,7 @@ export default function BestStores() {
 
       {/* EMPTY */}
       {!loading && !error && (!stores || stores.length === 0) && (
-        <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center text-muted-foreground">
+        <div className="rounded-2xl border border-border bg-card p-10 text-center text-muted-foreground">
           {t("noStores")}
         </div>
       )}

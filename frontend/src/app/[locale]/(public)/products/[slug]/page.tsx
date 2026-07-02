@@ -5,18 +5,24 @@ import { useLocale, useTranslations } from "next-intl";
 import { AlertCircleIcon, PackageSearchIcon } from "lucide-react";
 
 import { useProduct, useProductData } from "@/hooks";
-import { Breadcrumbs, ProductDetails, ProductCardSkeleton } from "@/components";
+import {
+  Breadcrumbs,
+  ProductDetails,
+  ProductDetailsPageSkeleton,
+} from "@/components";
 
 export default function Page() {
   const { slug } = useParams<{ slug: string }>();
   const locale = useLocale();
   const t = useTranslations("productDetails");
   const navT = useTranslations("nav");
+
   const { product, loading, error } = useProduct(slug, locale);
   const data = useProductData(product ?? undefined);
 
   return (
     <section className="mx-auto mt-10 w-full max-w-7xl px-4">
+      {/* BREADCRUMBS */}
       <Breadcrumbs
         items={[
           { label: "Satori", href: `/${locale}` },
@@ -26,36 +32,7 @@ export default function Page() {
       />
 
       {/* LOADING */}
-      {loading && (
-        <div className="grid gap-8 lg:grid-cols-2">
-          {/* IMAGE */}
-          <div className="overflow-hidden rounded-2xl border border-border bg-card p-4">
-            <ProductCardSkeleton className="aspect-square w-full rounded-xl" />
-          </div>
-
-          {/* CONTENT */}
-          <div className="space-y-4">
-            <ProductCardSkeleton className="h-10 w-2/3 rounded-lg" />
-
-            <ProductCardSkeleton className="h-5 w-full rounded-lg" />
-            <ProductCardSkeleton className="h-5 w-5/6 rounded-lg" />
-            <ProductCardSkeleton className="h-5 w-4/6 rounded-lg" />
-
-            <div className="flex gap-3 pt-4">
-              <ProductCardSkeleton className="h-12 w-32 rounded-xl" />
-              <ProductCardSkeleton className="h-12 w-28 rounded-xl" />
-            </div>
-
-            <div className="rounded-2xl border border-border bg-card p-5">
-              <div className="space-y-4">
-                <ProductCardSkeleton className="h-5 w-full rounded-lg" />
-                <ProductCardSkeleton className="h-5 w-full rounded-lg" />
-                <ProductCardSkeleton className="h-5 w-full rounded-lg" />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {loading && <ProductDetailsPageSkeleton />}
 
       {/* ERROR */}
       {!loading && error && (

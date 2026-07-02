@@ -2,15 +2,16 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import type { ProductApi } from "@/types";
-import { Button, ProductCardSkeleton } from "@/components";
-import { useProductData } from "@/hooks";
-import { EyeIcon } from "lucide-react";
 import Image from "next/image";
+import { EyeIcon } from "lucide-react";
+
+import type { ProductApi } from "@/types";
+import { Button } from "@/components";
+import { useProductData } from "@/hooks";
 import { useCartActions } from "@/state/useCartActions";
 
 type Props = {
-  product?: ProductApi;
+  product: ProductApi;
 };
 
 export default function ProductCard({ product }: Props) {
@@ -22,37 +23,26 @@ export default function ProductCard({ product }: Props) {
   const { add } = useCartActions();
 
   const handleNavigation = () => {
-    const target = data?.slug ?? String(product?.id ?? "");
-    if (!target) return;
-    router.push(`/${locale}/products/${target}`);
+    if (!data?.slug) return;
+    router.push(`/${locale}/products/${data.slug}`);
   };
-
-  if (!data) {
-    return (
-      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_2px_12px_var(--color-shadow)]">
-        <ProductCardSkeleton className="h-44 w-full rounded-none sm:h-52" />
-        <div className="space-y-3 p-3">
-          <ProductCardSkeleton className="h-4 w-full rounded-md" />
-          <ProductCardSkeleton className="h-4 w-2/3 rounded-md" />
-        </div>
-      </div>
-    );
-  }
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    if (!product?.id) return;
+    if (!product?.id || !data) return;
 
     add({
       productId: product.id,
       name: data.title,
-      slug: data.slug ?? product.slug ?? String(product.id),
+      slug: data.slug ?? String(product.id),
       image: data.image ?? null,
       price: data.price,
       quantity: 1,
     });
   };
+
+  if (!data) return null;
 
   return (
     <div
