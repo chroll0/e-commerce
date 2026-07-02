@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { Advertisement, LanguageSwitcher } from "@/components";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 const Footer = () => {
   const t = useTranslations();
+  const locale = useLocale();
 
   return (
     <footer className="bg-card border-t mt-10">
@@ -36,16 +37,24 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2 text-muted-foreground">
               <li>
-                <Link href="/">{t("nav.home")}</Link>
+                <Link href="/" locale={locale}>
+                  {t("nav.home")}
+                </Link>
               </li>
               <li>
-                <Link href="/stores">{t("nav.stores")}</Link>
+                <Link href="/stores" locale={locale}>
+                  {t("nav.stores")}
+                </Link>
               </li>
               <li>
-                <Link href="/products">{t("nav.products")}</Link>
+                <Link href="/products" locale={locale}>
+                  {t("nav.products")}
+                </Link>
               </li>
               <li>
-                <Link href="/sales">{t("nav.sales")}</Link>
+                <Link href="/sales" locale={locale}>
+                  {t("nav.sales")}
+                </Link>
               </li>
             </ul>
           </div>
@@ -57,16 +66,24 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2 text-muted-foreground">
               <li>
-                <Link href="/contact">{t("footer.support.contact")}</Link>
+                <Link href="/contact" locale={locale}>
+                  {t("footer.support.contact")}
+                </Link>
               </li>
               <li>
-                <Link href="/faq">{t("footer.support.faq")}</Link>
+                <Link href="/faq" locale={locale}>
+                  {t("footer.support.faq")}
+                </Link>
               </li>
               <li>
-                <Link href="/privacy">{t("footer.support.privacy")}</Link>
+                <Link href="/privacy" locale={locale}>
+                  {t("footer.support.privacy")}
+                </Link>
               </li>
               <li>
-                <Link href="/terms">{t("footer.support.terms")}</Link>
+                <Link href="/terms" locale={locale}>
+                  {t("footer.support.terms")}
+                </Link>
               </li>
             </ul>
           </div>
