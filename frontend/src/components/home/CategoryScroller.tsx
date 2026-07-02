@@ -1,26 +1,37 @@
 "use client";
 
 import Image from "next/image";
-import { Category } from "@/types";
-import { useLocale } from "next-intl";
 import { useEffect, useState } from "react";
-import { getCategoriesClient } from "@/lib/categoriesApi";
-import { CategoryScrollerSkeleton } from "@/components";
+import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Package } from "lucide-react";
+import { Category } from "@/types";
+import { getCategoriesClient } from "@/lib/categoriesApi";
+import { CategoryScrollerSkeleton } from "@/components";
 
 export default function CategoryScroller() {
   const locale = useLocale();
   const router = useRouter();
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
     setLoading(true);
 
     getCategoriesClient(locale)
-      .then(setCategories)
-      .finally(() => setLoading(false));
+      .then((data) => {
+        if (!active) return;
+        setCategories(data ?? []);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
   }, [locale]);
 
   const handleClick = (slug: string) => {
@@ -31,31 +42,35 @@ export default function CategoryScroller() {
     return <CategoryScrollerSkeleton />;
   }
 
+  if (!categories.length) {
+    return null;
+  }
+
   return (
     <section>
-      <div className="flex gap-4 overflow-x-auto no-scrollbar p-3 bg-card-soft rounded-xl border border-border my-10">
+      <div className="my-10 flex gap-4 overflow-x-auto rounded-xl border border-border bg-card-soft p-3 no-scrollbar">
         {categories.map((cat) => (
-          <div
+          <button
             key={cat.id}
             onClick={() => handleClick(cat.slug)}
-            className="flex flex-col items-center min-w-20 cursor-pointer hover:opacity-80 transition"
+            className="flex min-w-20 flex-col items-center transition hover:opacity-80"
           >
-            <div className="w-14 h-14 rounded-full overflow-hidden border border-border flex items-center justify-center bg-card-soft">
+            <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-border bg-card-soft">
               {cat.image ? (
                 <Image
                   src={cat.image}
                   alt={cat.name}
                   width={56}
                   height={56}
-                  className="object-cover w-full h-full"
+                  className="h-full w-full object-cover"
                 />
               ) : (
-                <Package className="w-5.5 h-5.5 text-muted-foreground" />
+                <Package className="h-5.5 w-5.5 text-muted-foreground" />
               )}
             </div>
 
-            <p className="text-sm mt-2 text-primary">{cat.name}</p>
-          </div>
+            <p className="mt-2 text-sm text-primary">{cat.name}</p>
+          </button>
         ))}
       </div>
     </section>

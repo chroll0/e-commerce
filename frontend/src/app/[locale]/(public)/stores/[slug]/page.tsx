@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { getStoreBySlug } from "@/lib/storesApi";
 import type { Locale, StoreApi } from "@/types";
+
 import {
   Breadcrumbs,
   ProductCardSkeleton,
@@ -24,7 +25,8 @@ export default function StorePage() {
 
   const [storeHeader, setStoreHeader] = useState<StoreApi | null>(null);
   const [products, setProducts] = useState<StoreApi["products"]>([]);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [filtersLoading, setFiltersLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const [filters, setFilters] = useState({
@@ -32,13 +34,12 @@ export default function StorePage() {
     categoryId: "",
   });
 
-  // FETCH STORE HEADER ONLY ONCE
   useEffect(() => {
     if (!slug) return;
 
     const load = async () => {
       try {
-        setLoading(true);
+        setInitialLoading(true);
         setError(false);
 
         const data = await getStoreBySlug(slug, {
@@ -47,23 +48,22 @@ export default function StorePage() {
 
         setStoreHeader(data);
         setProducts(data.products ?? []);
-      } catch (e) {
+      } catch {
         setError(true);
       } finally {
-        setLoading(false);
+        setInitialLoading(false);
       }
     };
 
     load();
   }, [slug, locale]);
 
-  // FETCH PRODUCTS ONLY WHEN FILTERS CHANGE
   useEffect(() => {
     if (!slug) return;
 
     const timeout = setTimeout(async () => {
       try {
-        setLoading(true);
+        setFiltersLoading(true);
 
         const data = await getStoreBySlug(slug, {
           locale: locale || undefined,
@@ -73,7 +73,7 @@ export default function StorePage() {
 
         setProducts(data.products ?? []);
       } finally {
-        setLoading(false);
+        setFiltersLoading(false);
       }
     }, 300);
 
@@ -88,7 +88,7 @@ export default function StorePage() {
     setFilters({ search: "", categoryId: "" });
   }, []);
 
-  if (loading && !storeHeader) {
+  if (initialLoading && !storeHeader) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
         <Breadcrumbs
@@ -101,25 +101,10 @@ export default function StorePage() {
 
         <StoreHeaderSkeleton />
 
-        <section className="border-b border-border pb-8">
-          <div className="mb-12 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div className="flex-1 min-w-0">
-              <ProductCardSkeleton className="h-14 w-full rounded-2xl" />
-            </div>
-            <div className="grid flex-1 min-w-[220px] grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
-              <ProductCardSkeleton className="h-12 w-full rounded-2xl" />
-              <ProductCardSkeleton className="h-12 w-full rounded-2xl" />
-              <ProductCardSkeleton className="h-12 w-full rounded-2xl" />
-              <ProductCardSkeleton className="h-12 w-full rounded-2xl" />
-            </div>
-          </div>
-
+        <section>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-            {Array.from({ length: 10 }).map((_, index) => (
-              <ProductCardSkeleton
-                key={index}
-                className="h-60 w-full rounded-3xl"
-              />
+            {Array.from({ length: 5 }).map((_, index) => (
+              <ProductCardSkeleton key={index} />
             ))}
           </div>
         </section>
@@ -127,6 +112,7 @@ export default function StorePage() {
     );
   }
 
+  // ERROR
   if (error || !storeHeader) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-16 text-center">
@@ -153,7 +139,7 @@ export default function StorePage() {
         locale={locale as Locale}
         activeSearch={filters.search}
         activeCategoryId={filters.categoryId}
-        loading={loading}
+        loading={filtersLoading}
         onFilterChange={handleFilterChange}
         onClearFilters={handleClearFilters}
       />

@@ -3,13 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { Locale, StoreApi } from "@/types";
-import {
-  Button,
-  CategorySelect,
-  ProductCard,
-  ProductCardSkeleton,
-  SearchBar,
-} from "@/components";
+import { Button, CategorySelect, ProductCard, SearchBar } from "@/components";
 
 type TranslationFn = ReturnType<typeof useTranslations>;
 
@@ -19,43 +13,30 @@ type StoreProductsSectionProps = {
   locale: Locale;
   activeSearch: string;
   activeCategoryId: string;
-  loading?: boolean;
   onFilterChange: (filters: { search: string; categoryId: string }) => void;
   onClearFilters: () => void;
+  loading?: boolean;
 };
 
 function ProductGrid({
   products,
   filterT,
-  loading,
 }: {
   products?: StoreApi["products"];
   filterT: TranslationFn;
-  loading?: boolean;
 }) {
-  if (loading) {
-    return (
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-        {Array.from({ length: 10 }).map((_, index) => (
-          <ProductCardSkeleton
-            key={index}
-            className="h-60 w-full rounded-3xl"
-          />
-        ))}
-      </div>
-    );
-  }
+  const hasProducts = products && products.length > 0;
 
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-      {!products?.length ? (
-        <div className="col-span-full rounded-2xl border border-border bg-card p-10 text-center text-muted-foreground">
-          {filterT("notFound")}
-        </div>
-      ) : (
+      {hasProducts ? (
         products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))
+      ) : (
+        <div className="col-span-full rounded-2xl border border-border bg-card p-10 text-center text-muted-foreground">
+          {filterT("notFound")}
+        </div>
       )}
     </div>
   );
@@ -95,18 +76,8 @@ function StoreFilters({
     return () => window.clearTimeout(timeout);
   }, [searchQuery, categoryId, onFilterChange]);
 
-  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
-
-  const handleClear = () => {
-    setSearchQuery("");
-    setCategoryId("");
-    onClearFilters();
-  };
-
   return (
-    <form onSubmit={handleSearchSubmit} className="w-full">
+    <form onSubmit={(e) => e.preventDefault()} className="w-full">
       <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="flex flex-1 items-end gap-2 flex-col sm:flex-row">
           <SearchBar
@@ -115,11 +86,7 @@ function StoreFilters({
             locale={locale}
           />
 
-          <Button
-            type="submit"
-            disabled={false}
-            className="w-full sm:w-auto whitespace-nowrap"
-          >
+          <Button type="submit" className="w-full sm:w-auto whitespace-nowrap">
             {filterT("search")}
           </Button>
         </div>
@@ -131,7 +98,11 @@ function StoreFilters({
 
           <Button
             variant="outline"
-            onClick={handleClear}
+            onClick={() => {
+              setSearchQuery("");
+              setCategoryId("");
+              onClearFilters();
+            }}
             className="sm:w-auto whitespace-nowrap"
           >
             {filterT("clearFilters")}
@@ -148,7 +119,6 @@ export default function StoreProductsSection({
   locale,
   activeSearch,
   activeCategoryId,
-  loading,
   onFilterChange,
   onClearFilters,
 }: StoreProductsSectionProps) {
@@ -163,7 +133,7 @@ export default function StoreProductsSection({
         onClearFilters={onClearFilters}
       />
 
-      <ProductGrid products={products} filterT={filterT} loading={loading} />
+      <ProductGrid products={products} filterT={filterT} />
     </section>
   );
 }

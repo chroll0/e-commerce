@@ -1,6 +1,6 @@
 export default function CategoryScrollerSkeleton() {
   return (
-    <div className="flex gap-8 overflow-x-auto no-scrollbar p-3 bg-card-soft rounded-xl border border-border">
+    <div className="flex gap-8 overflow-x-auto no-scrollbar mb-8 p-3 bg-card-soft rounded-xl border border-border">
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}

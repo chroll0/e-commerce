@@ -3,44 +3,40 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ChevronDown, Filter, Loader2, Store as StoreIcon } from "lucide-react";
-import { Breadcrumbs, Button, SearchBar, StoreCard } from "@/components";
+
+import {
+  Breadcrumbs,
+  Button,
+  SearchBar,
+  StoreCard,
+  StoreCardSkeleton,
+} from "@/components";
+
 import { getStores, type GetStoresParams } from "@/lib/storesApi";
 import type { Locale, StoreApi } from "@/types";
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 8;
 
 type SortOption = GetStoresParams["sort"];
 
-type StoresGridProps = {
+function StoresGrid({
+  stores,
+  loading,
+}: {
   stores: StoreApi[];
   loading: boolean;
-};
-
-function StoresGrid({ stores, loading }: StoresGridProps) {
-  if (loading) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {Array.from({ length: PAGE_SIZE }).map((_, index) => (
-          <div
-            key={index}
-            className="rounded-2xl border border-border bg-card animate-pulse overflow-hidden"
-          >
-            <div className="h-32 bg-card-soft" />
-            <div className="px-5 pb-5 pt-14">
-              <div className="h-6 bg-card-soft rounded mb-2" />
-              <div className="h-4 bg-card-soft rounded w-2/3 mx-auto" />
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
+}) {
+  const hasStores = stores.length > 0;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {stores.map((store) => (
-        <StoreCard key={store.id} store={store} />
-      ))}
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {loading
+        ? Array.from({ length: PAGE_SIZE }).map((_, index) => (
+            <StoreCardSkeleton key={index} />
+          ))
+        : hasStores
+          ? stores.map((store) => <StoreCard key={store.id} store={store} />)
+          : null}
     </div>
   );
 }
@@ -52,9 +48,12 @@ export default function AllStoresPage() {
 
   const [stores, setStores] = useState<StoreApi[]>([]);
   const [loading, setLoading] = useState(true);
+
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+
   const [sortBy, setSortBy] = useState<SortOption>("sales");
+
   const [limit, setLimit] = useState(PAGE_SIZE);
   const [hasMore, setHasMore] = useState(true);
 
@@ -82,9 +81,10 @@ export default function AllStoresPage() {
 
       try {
         const data = await getStores(query);
-        const nextPage = data.slice(0, limit);
 
-        setStores(nextPage);
+        const pageData = data.slice(0, limit);
+
+        setStores(pageData);
         setHasMore(data.length > limit);
       } catch (error) {
         console.error(error);
@@ -98,7 +98,7 @@ export default function AllStoresPage() {
     fetchStores();
   }, [query, locale, limit]);
 
-  const handleLoadMore = () => setLimit((current) => current + PAGE_SIZE);
+  const handleLoadMore = () => setLimit((prev) => prev + PAGE_SIZE);
 
   const handleClearFilters = () => {
     setSearch("");
@@ -109,8 +109,10 @@ export default function AllStoresPage() {
 
   const isEmpty = !loading && stores.length === 0;
 
+  const isInitialLoading = loading && limit === PAGE_SIZE;
+
   return (
-    <div className="max-w-7xl mx-auto px-4 pt-10">
+    <div className="mx-auto max-w-7xl px-4 pt-10">
       <Breadcrumbs
         items={[
           { label: "Satori", href: `/${locale}` },
@@ -118,13 +120,15 @@ export default function AllStoresPage() {
         ]}
       />
 
+      {/* HEADER */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-primary mb-2">
+        <h1 className="mb-2 text-3xl font-bold text-primary">
           {t("pageTitle")}
         </h1>
         <p className="text-muted">{t("pageDescription")}</p>
       </div>
 
+      {/* FILTERS */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end">
         <SearchBar
           value={search}
@@ -134,16 +138,16 @@ export default function AllStoresPage() {
         />
 
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-muted" />
+          <Filter className="h-4 w-4 text-muted" />
 
           <div className="relative">
             <select
               value={sortBy}
-              onChange={(event) => {
-                setSortBy(event.target.value as SortOption);
+              onChange={(e) => {
+                setSortBy(e.target.value as SortOption);
                 setLimit(PAGE_SIZE);
               }}
-              className="appearance-none text-sm border border-border rounded-lg bg-background py-2.5 pl-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary truncate max-w-[150px]"
+              className="max-w-[150px] appearance-none truncate rounded-lg border border-border bg-background py-2.5 pl-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="sales">{t("sort.sales")}</option>
               <option value="rating">{t("sort.rating")}</option>
@@ -159,24 +163,28 @@ export default function AllStoresPage() {
         </Button>
       </div>
 
+      {/* COUNT */}
       {!loading && stores.length > 0 && (
-        <p className="text-sm text-muted mb-4">
+        <p className="mb-4 text-sm text-muted">
           {t("storesCount", { count: stores.length })}
         </p>
       )}
 
-      <StoresGrid stores={stores} loading={loading && limit === PAGE_SIZE} />
+      {/* GRID */}
+      <StoresGrid stores={stores} loading={isInitialLoading} />
 
+      {/* EMPTY STATE */}
       {isEmpty && (
-        <div className="text-center py-16">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-card-soft mb-4">
-            <StoreIcon className="w-8 h-8 text-muted" />
+        <div className="py-16 text-center">
+          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-card-soft">
+            <StoreIcon className="h-8 w-8 text-muted" />
           </div>
 
-          <h3 className="text-lg font-semibold text-primary mb-2">
+          <h3 className="mb-2 text-lg font-semibold text-primary">
             {t("noStoresTitle")}
           </h3>
-          <p className="text-muted mb-6">{t("noStoresDescription")}</p>
+
+          <p className="mb-6 text-muted">{t("noStoresDescription")}</p>
 
           <Button variant="outline" onClick={handleClearFilters}>
             {t("clearFilters")}
@@ -184,8 +192,9 @@ export default function AllStoresPage() {
         </div>
       )}
 
+      {/* LOAD MORE */}
       {!loading && stores.length > 0 && hasMore && (
-        <div className="flex justify-center mt-8">
+        <div className="mt-8 flex justify-center">
           <Button
             variant="outline"
             size="lg"
@@ -204,8 +213,9 @@ export default function AllStoresPage() {
         </div>
       )}
 
+      {/* END */}
       {!loading && stores.length > 0 && !hasMore && (
-        <p className="text-center text-sm text-muted mt-8">
+        <p className="mt-8 text-center text-sm text-muted">
           {t("allStoresLoaded")}
         </p>
       )}
