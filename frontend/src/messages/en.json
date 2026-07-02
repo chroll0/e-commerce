@@ -593,7 +593,9 @@
 
   "home": {
     "bigSales": "Big Sales",
-    "allProducts": "All Products",
+    "allProducts": "Products",
+    "noProducts": "No products available",
+    "notFound": "No products found",
     "featuredProducts": {
       "tabs": {
         "bestSeller": "Best Seller",

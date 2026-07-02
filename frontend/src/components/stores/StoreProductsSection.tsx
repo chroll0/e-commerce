@@ -33,29 +33,22 @@ function ProductGrid({
   filterT: TranslationFn;
   loading?: boolean;
 }) {
-  if (loading) {
-    return (
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-        {Array.from({ length: 10 }).map((_, index) => (
-          <ProductCardSkeleton
-            key={index}
-            className="h-60 w-full rounded-3xl"
-          />
-        ))}
-      </div>
-    );
-  }
+  const hasProducts = products && products.length > 0;
 
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-      {!products?.length ? (
-        <div className="col-span-full rounded-2xl border border-border bg-card p-10 text-center text-muted-foreground">
-          {filterT("notFound")}
-        </div>
-      ) : (
+      {loading ? (
+        Array.from({ length: 5 }).map((_, index) => (
+          <ProductCardSkeleton key={index} />
+        ))
+      ) : hasProducts ? (
         products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))
+      ) : (
+        <div className="col-span-full rounded-2xl border border-dashed border-border bg-card p-10 text-center text-muted-foreground">
+          {filterT("notFound")}
+        </div>
       )}
     </div>
   );

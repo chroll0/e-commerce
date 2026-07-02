@@ -592,7 +592,9 @@
 
   "home": {
     "bigSales": "დიდი ფასდაკლებები",
-    "allProducts": "ყველა პროდუქტი",
+    "allProducts": "პროდუქტები",
+    "noProducts": "პროდუქტები არაა ხელმისაწვდომი",
+    "notFound": "პროდუქტები ვერ მოიძებნა",
     "featuredProducts": {
       "tabs": {
         "bestSeller": "ბესტსელერი",
