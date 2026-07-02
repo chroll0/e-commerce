@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
@@ -14,6 +14,8 @@ const NavBar = () => {
   const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const links = [
     { href: "/", label: t("nav.home") },
@@ -33,6 +35,26 @@ const NavBar = () => {
   };
 
   const fullHref = (href: string) => `/${locale}${href}`;
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
+      ) {
+        setOpen(false);
+      }
+    };
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
 
   return (
     <>
@@ -59,7 +81,9 @@ const NavBar = () => {
         })}
       </nav>
 
+      {/* BUTTON */}
       <Button
+        ref={buttonRef}
         variant="outline"
         iconOnly
         size="sm"
@@ -68,7 +92,7 @@ const NavBar = () => {
       >
         <motion.div
           initial={false}
-          animate={{ rotate: open ? 90 : 0, scale: 1 }}
+          animate={{ rotate: open ? 90 : 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
           {open ? <X size={20} /> : <Menu size={20} />}
@@ -79,13 +103,14 @@ const NavBar = () => {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={menuRef}
             initial={{ opacity: 0, y: -10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="md:hidden absolute top-12 left-0 w-full bg-background border-t border-border shadow-lg z-50"
           >
-            <div className="flex flex-col px-2 py-1.5 gap-1 shadow-2xl">
+            <div className="flex flex-col px-2 py-1.5 gap-1">
               {links.map((item, i) => {
                 const active = isActive(item.href);
 
