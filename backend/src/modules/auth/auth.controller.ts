@@ -18,23 +18,29 @@ import { UserService } from "../user/user.service";
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
   ) {}
+
+  private getCookieOptions() {
+    const isProduction = process.env.NODE_ENV === "production";
+
+    return {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? ("none" as const) : ("lax" as const),
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    };
+  }
 
   @Post("register")
   async register(
     @Body() dto: RegisterDto,
-    @Res({ passthrough: true }) res: Response
+    @Res({ passthrough: true }) res: Response,
   ) {
     const token = await this.authService.register(dto);
 
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie("access_token", token, this.getCookieOptions());
 
     return { success: true };
   }
@@ -42,29 +48,20 @@ export class AuthController {
   @Post("login")
   async login(
     @Body() dto: LoginDto,
-    @Res({ passthrough: true }) res: Response
+    @Res({ passthrough: true }) res: Response,
   ) {
     const token = await this.authService.login(dto.email, dto.password);
 
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie("access_token", token, this.getCookieOptions());
 
     return { success: true };
   }
 
   @Post("logout")
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie("access_token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-    });
+    const options = this.getCookieOptions();
+
+    res.clearCookie("access_token", options);
 
     return { success: true };
   }
@@ -73,6 +70,7 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"))
   me(@Req() req: Request) {
     const user = req.user as any;
+
     return this.userService.findSafeById(user.id);
   }
 
