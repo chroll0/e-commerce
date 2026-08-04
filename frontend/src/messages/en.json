@@ -157,6 +157,47 @@
     "description": "Need help? Our support team is here for you."
   },
 
+  "sales": {
+    "nav": "Sales",
+    "title": "Sales & Offers",
+    "description": "Clean, handpicked deals from the best stores on Satori.",
+    "heroBadge": "Quick deals",
+    "heroSideTitle": "Limited time offers",
+    "heroSideDescription": "Check them out now",
+    "offerLabel": "Limited offer",
+    "viewStore": "View store",
+    "ads": [
+      {
+        "storeName": "Outdoor Hub",
+        "badge": "Weekend Only",
+        "title": "Summer Blowout",
+        "description": "Fresh deals on outdoor essentials and weekend gear.",
+        "discountPercent": 40
+      },
+      {
+        "storeName": "Gadget Zone",
+        "badge": "Tech Week",
+        "title": "Smart Tech Deals",
+        "description": "Big savings on accessories, smart devices, and everyday tech.",
+        "discountPercent": 25
+      },
+      {
+        "storeName": "Style Co.",
+        "badge": "New Arrivals",
+        "title": "Fashion Forward",
+        "description": "Discover trendy essentials with limited-time reductions.",
+        "discountPercent": 30
+      },
+      {
+        "storeName": "Home Fair",
+        "badge": "Seasonal",
+        "title": "Home Refresh",
+        "description": "Upgrade your space with practical home essentials at better prices.",
+        "discountPercent": 20
+      }
+    ]
+  },
+
   "admin": {
     "brand": {
       "name": "Satori",
