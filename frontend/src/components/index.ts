@@ -107,3 +107,4 @@ export { default as ProductCardSkeleton } from "./skeletons/ProductCardSkeleton"
 export { default as StoreHeaderSkeleton } from "./skeletons/StoreHeaderSkeleton";
 export { default as StoreCardSkeleton } from "./skeletons/StoreCardSkeleton";
 export { default as ProductDetailsPageSkeleton } from "./skeletons/ProductDetailsPageSkeleton";
+export { default as AccountDetailsSkeleton } from "./skeletons/AccountDetailsSkeleton";
