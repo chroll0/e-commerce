@@ -19,6 +19,12 @@ export default function Contact() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<Status>("idle");
+  const [errors, setErrors] = useState<{
+    name?: string;
+    email?: string;
+    message?: string;
+    general?: string;
+  }>({});
 
   const contacts = [
     { icon: Mail, title: t("email.title"), value: "support@yourstore.com" },
@@ -26,20 +32,64 @@ export default function Contact() {
     { icon: MapPin, title: t("location.title"), value: t("location.value") },
   ];
 
-  const isValid = name.trim() && email.trim() && message.trim().length >= 10;
+  const isEmailValid = (v: string) => /\S+@\S+\.\S+/.test(v);
+
+  const isValid =
+    name.trim().length > 0 &&
+    isEmailValid(email) &&
+    message.trim().length >= 10;
+
+  const validate = () => {
+    const next: typeof errors = {};
+
+    if (!name.trim()) next.name = t("form.errors.nameRequired");
+    if (!email.trim()) next.email = t("form.errors.emailRequired");
+    else if (!isEmailValid(email)) next.email = t("form.errors.emailInvalid");
+    if (message.trim().length < 10)
+      next.message = t("form.errors.messageMin", { count: 10 });
+
+    setErrors(next);
+
+    return Object.keys(next).length === 0;
+  };
 
   const handleSubmit = async () => {
-    if (!isValid) return;
+    // client-side validation
+    if (!validate()) {
+      setStatus("error");
+      return;
+    }
 
     setStatus("loading");
+    setErrors({});
     try {
       await api.post("/contact", { name, email, message });
       setStatus("success");
       setName("");
       setEmail("");
       setMessage("");
-    } catch {
+      setErrors({});
+    } catch (err: any) {
       setStatus("error");
+
+      const remote = err?.response?.data;
+      // class-validator returns an array of messages by default
+      if (remote?.message && Array.isArray(remote.message)) {
+        const next: typeof errors = {};
+        remote.message.forEach((m: string) => {
+          const msg = String(m);
+          const lower = msg.toLowerCase();
+          if (lower.includes("name")) next.name = msg;
+          else if (lower.includes("email")) next.email = msg;
+          else if (lower.includes("message")) next.message = msg;
+          else next.general = msg;
+        });
+        setErrors(next);
+      } else if (remote?.message) {
+        setErrors({ general: String(remote.message) });
+      } else {
+        setErrors({ general: t("form.error") });
+      }
     }
   };
 
@@ -91,6 +141,7 @@ export default function Contact() {
               fullWidth
               required
               disabled={status === "loading"}
+              error={errors.name}
             />
             <Input
               label={t("form.email")}
@@ -100,6 +151,7 @@ export default function Contact() {
               fullWidth
               required
               disabled={status === "loading"}
+              error={errors.email}
             />
             <div className="space-y-1">
               <label className="text-sm font-medium text-muted">
@@ -118,8 +170,8 @@ export default function Contact() {
             {status === "success" && (
               <p className="text-sm text-green-500">{t("form.success")}</p>
             )}
-            {status === "error" && (
-              <p className="text-sm text-destructive">{t("form.error")}</p>
+            {errors.general && (
+              <p className="text-sm text-destructive">{errors.general}</p>
             )}
 
             <Button
