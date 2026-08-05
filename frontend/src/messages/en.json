@@ -746,7 +746,15 @@
       "name": "Your name",
       "email": "Email address",
       "message": "Your message",
-      "button": "Send Message"
+      "button": "Send Message",
+      "errors": {
+        "nameRequired": "Name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "messageMin": "Message must be at least {count} characters"
+      },
+      "success": "Message sent successfully.",
+      "error": "Failed to send message. Please try again."
     },
     "support": {
       "title": "Need fast help?",

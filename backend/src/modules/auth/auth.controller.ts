@@ -27,7 +27,7 @@ export class AuthController {
     return {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? ("none" as const) : ("lax" as const),
+      sameSite: "none" as const,
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     };

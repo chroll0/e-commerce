@@ -3,10 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useLocale, useMessages, useTranslations } from "next-intl";
-import { Breadcrumbs, StoreCardSkeleton } from "@/components";
 import { getStores } from "@/lib/storesApi";
 import type { Locale, StoreApi } from "@/types";
+import { Breadcrumbs, StoreCardSkeleton } from "@/components";
+import { useLocale, useMessages, useTranslations } from "next-intl";
 
 interface SaleAdContent {
   storeSlug: string;
