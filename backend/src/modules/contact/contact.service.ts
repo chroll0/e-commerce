@@ -5,19 +5,19 @@ import { ContactDto } from "./dto/contact.dto";
 @Injectable()
 export class ContactService {
   private transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST, // e.g. smtp.gmail.com
+    host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT) || 587,
     secure: false,
     auth: {
       user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS, // gmail: use App Password
+      pass: process.env.SMTP_PASS,
     },
   });
 
   async send(dto: ContactDto) {
     await this.transporter.sendMail({
       from: `"Satori Contact" <${process.env.SMTP_USER}>`,
-      to: process.env.CONTACT_RECEIVER, // your inbox
+      to: process.env.CONTACT_RECEIVER,
       replyTo: dto.email,
       subject: `New message from ${dto.name}`,
       html: `
