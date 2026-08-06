@@ -62,7 +62,7 @@ export default function CartItem({ item }: Props) {
 
       <div className="flex flex-col items-end justify-between">
         <span className="font-semibold text-primary">
-          ${(item.price * item.quantity).toFixed(2)}
+          ₾{(item.price * item.quantity).toFixed(2)}
         </span>
 
         <Button

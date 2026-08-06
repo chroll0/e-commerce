@@ -17,7 +17,7 @@ const AdminLayout = async ({ children, params }: AdminLayoutProps) => {
   const token = cookieStore.get("access_token");
 
   if (!token) {
-    redirect("/auth/login");
+    redirect(`/${locale}/auth/login`);
   }
 
   return (

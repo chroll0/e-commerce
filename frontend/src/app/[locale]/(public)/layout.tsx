@@ -5,7 +5,7 @@ export default function LocaleLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <Navigation />
-      <div>{children}</div>
+      <>{children}</>
       <Footer />
     </>
   );

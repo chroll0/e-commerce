@@ -15,7 +15,7 @@ import { UserRole } from "../../common/enums/user-role.enum";
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwt: JwtService
+    private jwt: JwtService,
   ) {}
 
   async register(dto: RegisterDto) {

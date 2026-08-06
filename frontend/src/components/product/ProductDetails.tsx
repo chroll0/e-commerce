@@ -84,12 +84,12 @@ export default function ProductDetails({ product }: Props) {
 
         <div className="mt-6 flex items-end gap-3">
           <span className="text-3xl font-bold text-primary">
-            ${data.price.toFixed(2)}
+            ₾{data.price.toFixed(2)}
           </span>
 
           {data.oldPrice && data.oldPrice > data.price && (
             <span className="pb-1 text-sm text-muted line-through">
-              ${data.oldPrice.toFixed(2)}
+              ₾{data.oldPrice.toFixed(2)}
             </span>
           )}
         </div>

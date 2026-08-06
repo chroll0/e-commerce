@@ -42,17 +42,17 @@ export default function CartSummary() {
       <div className="space-y-3">
         <div className="flex justify-between text-sm">
           <span className="text-secondary">{t("subtotal")}</span>
-          <span className="font-medium">${subtotal.toFixed(2)}</span>
+          <span className="font-medium">₾{subtotal.toFixed(2)}</span>
         </div>
 
         <div className="flex justify-between text-sm">
           <span className="text-secondary">{t("shipping")}</span>
-          <span className="font-medium">${shipping.toFixed(2)}</span>
+          <span className="font-medium">₾{shipping.toFixed(2)}</span>
         </div>
 
         <div className="flex justify-between text-sm">
           <span className="text-secondary">{t("tax")}</span>
-          <span className="font-medium">${tax.toFixed(2)}</span>
+          <span className="font-medium">₾{tax.toFixed(2)}</span>
         </div>
 
         {discount > 0 && (
@@ -68,7 +68,7 @@ export default function CartSummary() {
         <span className="text-base font-semibold">{t("total")}</span>
 
         <span className="text-2xl font-bold text-primary">
-          ${total.toFixed(2)}
+          ₾{total.toFixed(2)}
         </span>
       </div>
 
