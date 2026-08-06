@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 import { PrismaService } from "../../prisma/prisma.service";
 import { UserRole } from "../../common/enums/user-role.enum";
 
