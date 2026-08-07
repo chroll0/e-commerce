@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useStores } from "@/hooks";
 import { useTranslations } from "next-intl";
 import { ImageIcon, Star } from "lucide-react";
-import { StoreCardSkeleton } from "@/components";
+import { Button, StoreCardSkeleton } from "@/components";
 
 export default function BestStores() {
   const t = useTranslations("home.stores");
@@ -85,9 +85,9 @@ export default function BestStores() {
 
               {/* CTA */}
               <div className="mt-auto pt-4">
-                <div className="w-full rounded-lg bg-primary px-3 py-2 text-center text-sm text-primary-foreground transition-colors group-hover:bg-primary/90">
+                <Button variant="outline" size="sm" fullWidth>
                   {t("viewStore")}
-                </div>
+                </Button>
               </div>
             </Link>
           ))}
