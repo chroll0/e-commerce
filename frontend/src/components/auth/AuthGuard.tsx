@@ -1,6 +1,9 @@
-import { ReactNode } from "react";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+"use client";
+
+import { ReactNode, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+import { useAuthStore } from "@/state/useAuthStore";
 
 type Props = {
   children: ReactNode;
@@ -8,24 +11,40 @@ type Props = {
   locale?: string;
 };
 
-export default async function AuthGuard({
-  children,
-  role,
-  locale = "en",
-}: Props) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("access_token");
+export default function AuthGuard({ children, role, locale }: Props) {
+  const router = useRouter();
+  const currentLocale = useLocale();
+  const { user, loading, fetchMe } = useAuthStore();
 
-  if (!token) {
-    redirect(`/${locale}/auth/login`);
+  const resolvedLocale = locale ?? currentLocale;
+
+  useEffect(() => {
+    void fetchMe();
+  }, [fetchMe]);
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!user) {
+      router.replace(`/${resolvedLocale}/auth/login`);
+      return;
+    }
+
+    if (role && user.role !== role) {
+      router.replace(`/${resolvedLocale}`);
+    }
+  }, [loading, user, role, resolvedLocale, router]);
+
+  if (loading) {
+    return null;
   }
 
-  if (role) {
-    const cookieValue = token?.value;
+  if (!user) {
+    return null;
+  }
 
-    if (!cookieValue) {
-      redirect(`/${locale}/auth/login`);
-    }
+  if (role && user.role !== role) {
+    return null;
   }
 
   return <>{children}</>;

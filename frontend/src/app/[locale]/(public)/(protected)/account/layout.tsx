@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
-import { AccountNav } from "@/components";
-import AuthGuard from "@/components/auth/AuthGuard";
+import { AccountNav, AuthGuard } from "@/components";
 
 type Props = {
   children: ReactNode;

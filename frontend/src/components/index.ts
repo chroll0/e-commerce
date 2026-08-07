@@ -57,6 +57,9 @@ export { default as AccountProfileCard } from "./account/AccountProfileCard";
 export { default as AccountHeader } from "./account/AccountHeader";
 export { default as AccountQuickActions } from "./account/AccountQuickActions";
 
+// Auth components
+export { default as AuthGuard } from "./auth/AuthGuard";
+
 // Admin common components
 export { default as SidebarLink } from "./admin/common/SidebarLink";
 export { AdminSidebar } from "./admin/common/AdminSidebar";

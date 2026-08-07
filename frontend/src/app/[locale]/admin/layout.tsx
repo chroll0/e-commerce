@@ -1,7 +1,11 @@
 import { ReactNode } from "react";
-import { AdminSidebar, LanguageSwitcher, ThemeToggle } from "@/components";
+import {
+  AdminSidebar,
+  LanguageSwitcher,
+  ThemeToggle,
+  AuthGuard,
+} from "@/components";
 import { getTranslations } from "next-intl/server";
-import AuthGuard from "@/components/auth/AuthGuard";
 
 type AdminLayoutProps = {
   children: ReactNode;
