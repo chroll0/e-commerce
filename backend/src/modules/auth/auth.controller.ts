@@ -23,14 +23,16 @@ export class AuthController {
 
   private getCookieOptions() {
     const isProduction = process.env.NODE_ENV === "production";
+    const isHttps = process.env.FRONTEND_URL?.startsWith("https://") || false;
+    const isSecureEnvironment = isProduction || isHttps;
 
     return {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: "none" as const,
+      secure: isSecureEnvironment,
+      sameSite: isSecureEnvironment ? "none" : "lax",
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-    };
+    } as const;
   }
 
   @Post("register")

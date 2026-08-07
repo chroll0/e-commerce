@@ -15,7 +15,7 @@ export type User = {
 type AuthState = {
   user: User | null;
   loading: boolean;
-  fetchMe: () => Promise<void>;
+  fetchMe: (force?: boolean) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 };
@@ -50,11 +50,15 @@ const syncCartOnLogin = async () => {
   );
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   loading: true,
 
-  fetchMe: async () => {
+  fetchMe: async (force = false) => {
+    // fast path: if we already have a user and `force` isn't requested, skip network
+    const { user } = get();
+    if (user && !force) return;
+
     set({ loading: true });
     try {
       const { data } = await api.get("/auth/me");
@@ -70,7 +74,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (email, password) => {
     set({ loading: true });
     await api.post("/auth/login", { email, password });
-    await useAuthStore.getState().fetchMe();
+    await useAuthStore.getState().fetchMe(true);
     await syncCartOnLogin();
   },
 
