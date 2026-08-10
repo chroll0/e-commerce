@@ -16,13 +16,14 @@ export default function AccountNav() {
   const pathname = usePathname();
   const locale = useLocale();
   const t = useTranslations("account.nav");
+
   const cleanPathname = (pathname.replace(`/${locale}`, "") || "/").replace(
     /\/$/,
-    ""
+    "",
   );
 
   return (
-    <nav className="flex flex-wrap justify-center md:justify-end gap-2 mb-4">
+    <nav className="grid grid-cols-2 gap-2 mb-4 md:flex md:flex-wrap md:justify-end">
       {ITEMS.map((item) => {
         const isOverview = item.href === "/account";
         const isActive = isOverview
@@ -33,19 +34,15 @@ export default function AccountNav() {
         return (
           <Link
             key={item.key}
-            href={item.href}
+            href={`/${locale}${item.href}`}
             aria-current={isActive ? "page" : undefined}
             className={clsx(
-              // base
-              "inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium",
-              "transition-colors select-none",
-              "border",
-              // focus
+              "inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium",
+              "transition-colors select-none border",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
-              // states
               isActive
                 ? "bg-primary/10 text-primary border-primary/20"
-                : "bg-transparent text-muted-foreground border-transparent hover:bg-muted hover:text-foreground"
+                : "bg-transparent text-muted-foreground border-transparent hover:bg-muted hover:text-foreground",
             )}
           >
             {t(item.key)}
