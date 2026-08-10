@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Logo, SidebarLink } from "@/components";
+import { AdminSidebarDrawer } from "../dashboard/AdminSidebarDrawer";
 
 type AdminSidebarProps = {
   locale: string;
@@ -52,49 +53,50 @@ export const AdminSidebar = async ({ locale }: AdminSidebarProps) => {
   const t = await getTranslations({ locale, namespace: "admin" });
 
   return (
-    <aside className="w-64 border-r bg-background sticky top-0 h-screen overflow-y-auto">
-      <div className="h-16 flex items-center px-6 border-b">
-        <div className="flex items-end gap-2 text-xl font-semibold tracking-tight">
-          <Logo />
-          <span className="text-muted-foreground text-xs tracking-wider mb-1">
-            {t("brand.admin")}
-          </span>
+    <AdminSidebarDrawer>
+      <aside className="w-64 border-r bg-background h-screen overflow-y-auto">
+        <div className="h-16 flex items-center px-6 border-b">
+          <div className="flex items-end gap-2 text-xl font-semibold tracking-tight">
+            <Logo />
+            <span className="text-muted-foreground text-xs tracking-wider mb-1">
+              {t("brand.admin")}
+            </span>
+          </div>
         </div>
-      </div>
 
-      <nav className="p-4 space-y-1">
-        {SIDEBAR_ITEMS.map((item) => {
-          if (item.children?.length) {
-            const parentPrefix = getParentPrefix(item.children);
+        <nav className="p-4 space-y-1">
+          {SIDEBAR_ITEMS.map((item) => {
+            if (item.children?.length) {
+              const parentPrefix = getParentPrefix(item.children);
+              return (
+                <div key={item.key}>
+                  <div className="px-3 py-2 text-sm">
+                    {t(`sidebar.${item.key}`)}
+                  </div>
+                  <div className="ml-2 border-l border-border pl-3 space-y-1 capitalize">
+                    {item.children.map((child) => (
+                      <SidebarLink
+                        key={child.key}
+                        href={`/${locale}${child.href}`}
+                        label={t(`sidebar.${child.key}`)}
+                        variant="child"
+                        exact={child.href === parentPrefix}
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            }
             return (
-              <div key={item.key}>
-                <div className="px-3 py-2 text-sm">
-                  {t(`sidebar.${item.key}`)}
-                </div>
-
-                <div className="ml-2 border-l border-border pl-3 space-y-1 capitalize">
-                  {item.children.map((child) => (
-                    <SidebarLink
-                      key={child.key}
-                      href={`/${locale}${child.href}`}
-                      label={t(`sidebar.${child.key}`)}
-                      variant="child"
-                      exact={child.href === parentPrefix}
-                    />
-                  ))}
-                </div>
-              </div>
+              <SidebarLink
+                key={item.key}
+                href={`/${locale}${item.href}`}
+                label={t(`sidebar.${item.key}`)}
+              />
             );
-          }
-          return (
-            <SidebarLink
-              key={item.key}
-              href={`/${locale}${item.href}`}
-              label={t(`sidebar.${item.key}`)}
-            />
-          );
-        })}
-      </nav>
-    </aside>
+          })}
+        </nav>
+      </aside>
+    </AdminSidebarDrawer>
   );
 };

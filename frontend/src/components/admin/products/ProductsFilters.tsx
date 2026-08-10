@@ -17,7 +17,7 @@ const ProductsFilters: FC<Props> = ({
   onCategoryChange,
 }) => {
   return (
-    <div className="flex items-end flex-col md:flex-row gap-3 mb-12">
+    <div className="flex items-end flex-row sm:flex-nowrap flex-wrap gap-3 mb-12">
       <div className="flex-3/4">
         <SearchBar value={search} onChange={onSearchChange} locale="en" />
       </div>

@@ -123,7 +123,7 @@ const SalesPage = () => {
     <main className="mx-auto mt-8 w-full max-w-7xl px-4 pb-16">
       <Breadcrumbs
         items={[
-          { label: "Satori", href: `/${locale}` },
+          { label: "eShop", href: `/${locale}` },
           { label: t("nav"), href: `/${locale}/sales` },
         ]}
       />

@@ -160,7 +160,7 @@
   "sales": {
     "nav": "Sales",
     "title": "Sales & Offers",
-    "description": "Clean, handpicked deals from the best stores on Satori.",
+    "description": "Clean, handpicked deals from the best stores on eShop.",
     "heroBadge": "Quick deals",
     "heroSideTitle": "Limited time offers",
     "heroSideDescription": "Check them out now",
@@ -200,7 +200,7 @@
 
   "admin": {
     "brand": {
-      "name": "Satori",
+      "name": "eShop",
       "admin": "Manage"
     },
 

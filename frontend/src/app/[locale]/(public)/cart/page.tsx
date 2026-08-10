@@ -32,7 +32,7 @@ export default function CartPage() {
     <main className="mx-auto mt-10 w-full max-w-7xl px-4 space-y-16">
       <Breadcrumbs
         items={[
-          { label: "Satori", href: `/${locale}` },
+          { label: "eShop", href: `/${locale}` },
           { label: navT("cart") },
         ]}
       />

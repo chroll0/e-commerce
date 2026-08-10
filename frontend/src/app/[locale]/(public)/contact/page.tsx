@@ -97,7 +97,7 @@ export default function Contact() {
     <main className="mx-auto mt-12 w-full max-w-6xl px-4">
       <Breadcrumbs
         items={[
-          { label: "Satori", href: `/${locale}` },
+          { label: "eShop", href: `/${locale}` },
           { label: navT("contact") },
         ]}
       />

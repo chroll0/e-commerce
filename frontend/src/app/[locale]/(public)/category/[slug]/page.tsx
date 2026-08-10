@@ -19,7 +19,7 @@ export default async function Page({ params }: Props) {
     <main className="w-full max-w-7xl px-4 mt-10 mx-auto">
       <Breadcrumbs
         items={[
-          { label: "Satori", href: `/${locale}` },
+          { label: "eShop", href: `/${locale}` },
           { label: "Category" },
           { label: categoryName },
         ]}

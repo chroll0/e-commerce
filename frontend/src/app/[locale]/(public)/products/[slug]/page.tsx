@@ -25,7 +25,7 @@ export default function Page() {
       {/* BREADCRUMBS */}
       <Breadcrumbs
         items={[
-          { label: "Satori", href: `/${locale}` },
+          { label: "eShop", href: `/${locale}` },
           { label: navT("products"), href: `/${locale}/products` },
           { label: product?.translations?.[0]?.title ?? slug },
         ]}

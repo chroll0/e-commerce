@@ -16,7 +16,7 @@ export class ContactService {
 
   async send(dto: ContactDto) {
     await this.transporter.sendMail({
-      from: `"Satori Contact" <${process.env.SMTP_USER}>`,
+      from: `"eShop Contact" <${process.env.SMTP_USER}>`,
       to: process.env.CONTACT_RECEIVER,
       replyTo: dto.email,
       subject: `New message from ${dto.name}`,
