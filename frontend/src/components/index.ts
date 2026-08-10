@@ -78,6 +78,7 @@ export { default as AdminDonutStats } from "./admin/dashboard/AdminDonutStats";
 export { default as AdminRecentOrders } from "./admin/dashboard/AdminRecentOrders";
 export { default as AdminLowStock } from "./admin/dashboard/AdminLowStock";
 export { default as AdminOrdersStatusDonut } from "./admin/dashboard/AdminOrdersStatusDonut";
+export { AdminSidebarDrawer } from "./admin/dashboard/AdminSidebarDrawer";
 
 // User management components
 export { default as UserEditModal } from "./admin/users/UserEditModal";
