@@ -93,7 +93,7 @@ export default function StorePage() {
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
         <Breadcrumbs
           items={[
-            { label: "Satori", href: `/${locale}` },
+            { label: "eShop", href: `/${locale}` },
             { label: navT("stores"), href: `/${locale}/stores` },
             { label: slug },
           ]}
@@ -125,7 +125,7 @@ export default function StorePage() {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <Breadcrumbs
         items={[
-          { label: "Satori", href: `/${locale}` },
+          { label: "eShop", href: `/${locale}` },
           { label: navT("stores"), href: `/${locale}/stores` },
           { label: storeHeader.name },
         ]}

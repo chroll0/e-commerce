@@ -97,7 +97,8 @@ const Footer = () => {
         {/* Bottom */}
         <div className="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <p>
-            © {new Date().getFullYear()} Satori. {t("footer.bottom.rights")}
+            © {new Date().getFullYear()} eShop online.{" "}
+            {t("footer.bottom.rights")}
           </p>
         </div>
       </div>

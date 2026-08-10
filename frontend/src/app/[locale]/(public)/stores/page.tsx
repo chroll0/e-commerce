@@ -115,7 +115,7 @@ export default function AllStoresPage() {
     <div className="mx-auto max-w-7xl px-4 pt-10">
       <Breadcrumbs
         items={[
-          { label: "Satori", href: `/${locale}` },
+          { label: "eShop", href: `/${locale}` },
           { label: navT("stores"), href: `/${locale}/stores` },
         ]}
       />
