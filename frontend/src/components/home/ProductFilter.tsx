@@ -17,6 +17,10 @@ export default function ProductFilter() {
 
   const hasProducts = products.length > 0;
 
+  if (loading && !hasProducts) {
+    return null;
+  }
+
   return (
     <section className="border-b border-border pb-8">
       {/* HEADER */}
@@ -26,11 +30,7 @@ export default function ProductFilter() {
 
       {/* GRID */}
       <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
-        {loading ? (
-          Array.from({ length: 5 }).map((_, index) => (
-            <ProductCardSkeleton key={index} />
-          ))
-        ) : hasProducts ? (
+        {hasProducts ? (
           products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))

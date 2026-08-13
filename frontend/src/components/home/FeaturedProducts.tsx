@@ -34,6 +34,10 @@ export default function FeaturedProducts() {
     };
   }, [locale]);
 
+  if (loading && products.length === 0) {
+    return null;
+  }
+
   return (
     <section className="border-b border-border pb-8">
       <div className="flex items-center justify-between">
@@ -43,11 +47,7 @@ export default function FeaturedProducts() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-6">
-        {loading ? (
-          Array.from({ length: 5 }).map((_, index) => (
-            <ProductCardSkeleton key={index} />
-          ))
-        ) : products.length > 0 ? (
+        {products.length > 0 ? (
           products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))

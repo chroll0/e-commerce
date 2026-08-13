@@ -38,8 +38,8 @@ export default function CategoryScroller() {
     router.push(`/${locale}/category/${slug}`);
   };
 
-  if (loading) {
-    return <CategoryScrollerSkeleton />;
+  if (loading && categories.length === 0) {
+    return null;
   }
 
   if (!categories.length) {
