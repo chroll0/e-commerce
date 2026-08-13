@@ -7,21 +7,25 @@ import GlobalCircularLoader from "@/app/loading";
 export default function LoadingProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [loading, setLoading] = useState(false);
+  const [booting, setBooting] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
+    let active = true;
+    setBooting(true);
+
     const timeout = setTimeout(() => {
-      setLoading(false);
+      if (active) setBooting(false);
     }, 400);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      active = false;
+      clearTimeout(timeout);
+    };
   }, [pathname, searchParams]);
 
-  return (
-    <>
-      {loading && <GlobalCircularLoader />}
-      {children}
-    </>
-  );
+  if (booting) {
+    return <GlobalCircularLoader />;
+  }
+
+  return <>{children}</>;
 }

@@ -11,18 +11,13 @@ export default function BestStores() {
   const t = useTranslations("home.stores");
   const { stores, loading, error } = useStores(4);
 
+  if (loading && (!stores || stores.length === 0)) {
+    return null;
+  }
+
   return (
     <section>
       <h2 className="my-6 text-xl font-semibold text-primary">{t("title")}</h2>
-
-      {/* LOADING */}
-      {loading && (
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <StoreCardSkeleton key={i} />
-          ))}
-        </div>
-      )}
 
       {/* ERROR */}
       {!loading && error && (
