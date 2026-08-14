@@ -1,17 +1,88 @@
 "use client";
 
 import Image from "next/image";
+import { useLocale } from "next-intl";
 import { ImageIcon, MinusIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { useEffect, useState } from "react";
+
 import { Button } from "@/components";
-import { CartItem as CartItemType } from "@/state/useCartStore";
+import { api } from "@/lib/axios";
 import { useCartActions } from "@/state/useCartActions";
+import { CartItem as CartItemType } from "@/state/useCartStore";
 
 type Props = {
   item: CartItemType;
 };
 
 export default function CartItem({ item }: Props) {
+  const locale = useLocale();
   const { remove, update } = useCartActions();
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [displayName, setDisplayName] = useState(item.name);
+  const [isRefreshingName, setIsRefreshingName] = useState(false);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const refreshName = async () => {
+      if (!item.productId) return;
+
+      setIsRefreshingName(true);
+
+      try {
+        const res = await api.get(`/products/${item.productId}`, {
+          params: { locale },
+        });
+
+        const product = res.data;
+        const nextName =
+          product?.translations?.find(
+            (translation: { locale?: string }) => translation.locale === locale,
+          )?.title ??
+          product?.name ??
+          item.name;
+
+        if (!isCancelled) {
+          setDisplayName(nextName);
+        }
+      } catch {
+        if (!isCancelled) {
+          setDisplayName(item.name);
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsRefreshingName(false);
+        }
+      }
+    };
+
+    setDisplayName(item.name);
+    refreshName();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [item.name, item.productId, locale]);
+
+  const handleUpdateQuantity = async (newQuantity: number) => {
+    if (newQuantity < 1) return;
+    setIsUpdating(true);
+    try {
+      await update(item.productId, item.variantId, newQuantity);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleRemove = async () => {
+    setIsRemoving(true);
+    try {
+      await remove(item.productId, item.variantId);
+    } finally {
+      setIsRemoving(false);
+    }
+  };
 
   return (
     <div className="flex gap-4 rounded-xl border border-border bg-card p-4">
@@ -19,7 +90,7 @@ export default function CartItem({ item }: Props) {
         {item.image ? (
           <Image
             src={item.image}
-            alt={item.name}
+            alt={displayName}
             fill
             className="object-cover"
           />
@@ -31,16 +102,18 @@ export default function CartItem({ item }: Props) {
       </div>
 
       <div className="flex-1">
-        <h3 className="font-semibold text-primary">{item.name}</h3>
+        <h3 className="font-semibold text-primary">
+          {isRefreshingName ? `${displayName}…` : displayName}
+        </h3>
 
         <div className="mt-4 flex items-center gap-2">
           <Button
             variant="text"
             iconOnly
             size="sm"
-            onClick={() =>
-              update(item.productId, item.variantId, item.quantity - 1)
-            }
+            disabled={isUpdating}
+            loading={isUpdating}
+            onClick={() => handleUpdateQuantity(item.quantity - 1)}
           >
             <MinusIcon className="h-4 w-4" />
           </Button>
@@ -51,9 +124,9 @@ export default function CartItem({ item }: Props) {
             variant="text"
             iconOnly
             size="sm"
-            onClick={() =>
-              update(item.productId, item.variantId, item.quantity + 1)
-            }
+            disabled={isUpdating}
+            loading={isUpdating}
+            onClick={() => handleUpdateQuantity(item.quantity + 1)}
           >
             <PlusIcon className="h-4 w-4" />
           </Button>
@@ -69,7 +142,9 @@ export default function CartItem({ item }: Props) {
           variant="outline"
           iconOnly
           size="sm"
-          onClick={() => remove(item.productId, item.variantId)}
+          disabled={isRemoving}
+          loading={isRemoving}
+          onClick={handleRemove}
         >
           <Trash2Icon className="h-4 w-4 text-destructive" />
         </Button>

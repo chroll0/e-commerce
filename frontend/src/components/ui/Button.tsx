@@ -3,6 +3,7 @@
 import classNames from "classnames";
 import { Slot } from "@radix-ui/react-slot";
 import { forwardRef, ButtonHTMLAttributes, ReactNode } from "react";
+import Spinner from "./Spinner";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary" | "tertiary" | "outline" | "text";
@@ -12,6 +13,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   rightIcon?: ReactNode;
   iconOnly?: boolean;
   asChild?: boolean;
+  loading?: boolean;
   children: React.ReactNode;
 };
 
@@ -24,9 +26,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       leftIcon,
       rightIcon,
       iconOnly = false,
+      loading = false,
       children,
       asChild = false,
       className,
+      disabled,
       ...props
     },
     ref,
@@ -51,6 +55,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       lg: iconOnly ? "p-4 text-lg" : "px-6 py-3 text-lg",
     };
 
+    const spinnerSizeMap = {
+      xs: "xs" as const,
+      sm: "xs" as const,
+      md: "sm" as const,
+      lg: "md" as const,
+    };
+
     const classes = classNames(
       baseStyles,
       variantStyles[variant],
@@ -59,21 +70,41 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       className,
     );
 
+    const content = loading ? (
+      <Spinner size={spinnerSizeMap[size]} />
+    ) : (
+      <span className="inline-flex items-center justify-center gap-2">
+        {leftIcon && !iconOnly ? (
+          <span className="shrink-0">{leftIcon}</span>
+        ) : null}
+        {children}
+        {rightIcon && !iconOnly ? (
+          <span className="shrink-0">{rightIcon}</span>
+        ) : null}
+      </span>
+    );
+
     if (asChild) {
       return (
-        <Comp ref={ref as any} className={classes} {...props}>
-          {children}
+        <Comp
+          ref={ref as any}
+          className={classes}
+          disabled={disabled || loading}
+          {...props}
+        >
+          {content}
         </Comp>
       );
     }
 
     return (
-      <button ref={ref} className={classes} {...props}>
-        {leftIcon && !iconOnly && <span className="shrink-0">{leftIcon}</span>}
-        {children}
-        {rightIcon && !iconOnly && (
-          <span className="shrink-0">{rightIcon}</span>
-        )}
+      <button
+        ref={ref}
+        className={classes}
+        disabled={disabled || loading}
+        {...props}
+      >
+        {content}
       </button>
     );
   },

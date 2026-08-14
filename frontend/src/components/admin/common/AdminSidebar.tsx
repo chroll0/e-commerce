@@ -54,7 +54,7 @@ export const AdminSidebar = async ({ locale }: AdminSidebarProps) => {
 
   return (
     <AdminSidebarDrawer>
-      <aside className="w-64 border-r bg-background h-screen overflow-y-auto">
+      <aside className="h-screen w-64 overflow-y-auto border-r bg-background">
         <div className="h-16 flex items-center px-6 border-b">
           <div className="flex items-end gap-2 text-xl font-semibold tracking-tight">
             <Logo />
@@ -63,7 +63,6 @@ export const AdminSidebar = async ({ locale }: AdminSidebarProps) => {
             </span>
           </div>
         </div>
-
         <nav className="p-4 space-y-1">
           {SIDEBAR_ITEMS.map((item) => {
             if (item.children?.length) {

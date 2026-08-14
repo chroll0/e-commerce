@@ -7,6 +7,7 @@ import { useProductData } from "@/hooks";
 import { useLocale, useTranslations } from "next-intl";
 import { Package2Icon, ShoppingCartIcon } from "lucide-react";
 import { useCartActions } from "@/state/useCartActions";
+import { useState } from "react";
 
 type Props = {
   product: ProductApi;
@@ -17,6 +18,7 @@ export default function ProductDetails({ product }: Props) {
   const tCard = useTranslations("productCard");
   const locale = useLocale();
   const data = useProductData(product);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const { add } = useCartActions();
 
@@ -27,17 +29,22 @@ export default function ProductDetails({ product }: Props) {
     product.translations?.find((t) => t.locale === normalizedLocale) ??
     product.translations?.[0];
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!product?.id) return;
 
-    add({
-      productId: product.id,
-      name: data.title,
-      slug: data.slug ?? String(product.id),
-      image: data.image ?? null,
-      price: data.price,
-      quantity: 1,
-    });
+    setIsAddingToCart(true);
+    try {
+      await add({
+        productId: product.id,
+        name: data.title,
+        slug: data.slug ?? String(product.id),
+        image: data.image ?? null,
+        price: data.price,
+        quantity: 1,
+      });
+    } finally {
+      setIsAddingToCart(false);
+    }
   };
 
   return (
@@ -118,6 +125,7 @@ export default function ProductDetails({ product }: Props) {
             size="lg"
             leftIcon={<ShoppingCartIcon className="h-5 w-5" />}
             disabled={data.isOutOfStock}
+            loading={isAddingToCart}
             onClick={handleAddToCart}
           >
             {t("addToCart")}
