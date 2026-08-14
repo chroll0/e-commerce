@@ -15,15 +15,22 @@ export default function CategoryScroller() {
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
     setLoading(true);
+    setError(null);
 
     getCategoriesClient(locale)
       .then((data) => {
         if (!active) return;
         setCategories(data ?? []);
+      })
+      .catch((err) => {
+        if (!active) return;
+        console.error("Failed to fetch categories:", err);
+        setError("failed_to_load");
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -38,11 +45,11 @@ export default function CategoryScroller() {
     router.push(`/${locale}/category/${slug}`);
   };
 
-  if (loading && categories.length === 0) {
-    return null;
+  if (loading) {
+    return <CategoryScrollerSkeleton />;
   }
 
-  if (!categories.length) {
+  if (error || !categories.length) {
     return null;
   }
 

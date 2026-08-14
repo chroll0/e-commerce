@@ -4,6 +4,7 @@ export { default as LoadingProvider } from "./providers/LoadingProvider";
 
 // Central exports for shared components
 export { default as Button } from "./ui/Button";
+export { default as Spinner } from "./ui/Spinner";
 export { default as Card } from "./ui/Card";
 export { default as Modal } from "./ui/Modal";
 export { default as Input } from "./ui/Input";

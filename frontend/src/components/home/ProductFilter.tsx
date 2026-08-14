@@ -17,10 +17,6 @@ export default function ProductFilter() {
 
   const hasProducts = products.length > 0;
 
-  if (loading && !hasProducts) {
-    return null;
-  }
-
   return (
     <section className="border-b border-border pb-8">
       {/* HEADER */}
@@ -30,11 +26,18 @@ export default function ProductFilter() {
 
       {/* GRID */}
       <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
-        {hasProducts ? (
+        {loading ? (
+          // Show skeletons while loading
+          Array.from({ length: 5 }).map((_, i) => (
+            <ProductCardSkeleton key={i} />
+          ))
+        ) : hasProducts ? (
+          // Show products
           products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))
         ) : (
+          // Show empty state
           <div className="col-span-full rounded-2xl border border-border bg-card p-8 text-center text-muted-foreground">
             {t("noProducts")}
           </div>

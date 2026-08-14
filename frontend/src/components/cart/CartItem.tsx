@@ -5,6 +5,7 @@ import { ImageIcon, MinusIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components";
 import { CartItem as CartItemType } from "@/state/useCartStore";
 import { useCartActions } from "@/state/useCartActions";
+import { useState } from "react";
 
 type Props = {
   item: CartItemType;
@@ -12,6 +13,27 @@ type Props = {
 
 export default function CartItem({ item }: Props) {
   const { remove, update } = useCartActions();
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
+
+  const handleUpdateQuantity = async (newQuantity: number) => {
+    if (newQuantity < 1) return;
+    setIsUpdating(true);
+    try {
+      await update(item.productId, item.variantId, newQuantity);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleRemove = async () => {
+    setIsRemoving(true);
+    try {
+      await remove(item.productId, item.variantId);
+    } finally {
+      setIsRemoving(false);
+    }
+  };
 
   return (
     <div className="flex gap-4 rounded-xl border border-border bg-card p-4">
@@ -38,9 +60,9 @@ export default function CartItem({ item }: Props) {
             variant="text"
             iconOnly
             size="sm"
-            onClick={() =>
-              update(item.productId, item.variantId, item.quantity - 1)
-            }
+            disabled={isUpdating}
+            loading={isUpdating}
+            onClick={() => handleUpdateQuantity(item.quantity - 1)}
           >
             <MinusIcon className="h-4 w-4" />
           </Button>
@@ -51,9 +73,9 @@ export default function CartItem({ item }: Props) {
             variant="text"
             iconOnly
             size="sm"
-            onClick={() =>
-              update(item.productId, item.variantId, item.quantity + 1)
-            }
+            disabled={isUpdating}
+            loading={isUpdating}
+            onClick={() => handleUpdateQuantity(item.quantity + 1)}
           >
             <PlusIcon className="h-4 w-4" />
           </Button>
@@ -69,7 +91,9 @@ export default function CartItem({ item }: Props) {
           variant="outline"
           iconOnly
           size="sm"
-          onClick={() => remove(item.productId, item.variantId)}
+          disabled={isRemoving}
+          loading={isRemoving}
+          onClick={handleRemove}
         >
           <Trash2Icon className="h-4 w-4 text-destructive" />
         </Button>
