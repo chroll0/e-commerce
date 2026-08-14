@@ -1,20 +1,69 @@
 "use client";
 
 import Image from "next/image";
+import { useLocale } from "next-intl";
 import { ImageIcon, MinusIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { useEffect, useState } from "react";
+
 import { Button } from "@/components";
-import { CartItem as CartItemType } from "@/state/useCartStore";
+import { api } from "@/lib/axios";
 import { useCartActions } from "@/state/useCartActions";
-import { useState } from "react";
+import { CartItem as CartItemType } from "@/state/useCartStore";
 
 type Props = {
   item: CartItemType;
 };
 
 export default function CartItem({ item }: Props) {
+  const locale = useLocale();
   const { remove, update } = useCartActions();
   const [isUpdating, setIsUpdating] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
+  const [displayName, setDisplayName] = useState(item.name);
+  const [isRefreshingName, setIsRefreshingName] = useState(false);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const refreshName = async () => {
+      if (!item.productId) return;
+
+      setIsRefreshingName(true);
+
+      try {
+        const res = await api.get(`/products/${item.productId}`, {
+          params: { locale },
+        });
+
+        const product = res.data;
+        const nextName =
+          product?.translations?.find(
+            (translation: { locale?: string }) => translation.locale === locale,
+          )?.title ??
+          product?.name ??
+          item.name;
+
+        if (!isCancelled) {
+          setDisplayName(nextName);
+        }
+      } catch {
+        if (!isCancelled) {
+          setDisplayName(item.name);
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsRefreshingName(false);
+        }
+      }
+    };
+
+    setDisplayName(item.name);
+    refreshName();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [item.name, item.productId, locale]);
 
   const handleUpdateQuantity = async (newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -41,7 +90,7 @@ export default function CartItem({ item }: Props) {
         {item.image ? (
           <Image
             src={item.image}
-            alt={item.name}
+            alt={displayName}
             fill
             className="object-cover"
           />
@@ -53,7 +102,9 @@ export default function CartItem({ item }: Props) {
       </div>
 
       <div className="flex-1">
-        <h3 className="font-semibold text-primary">{item.name}</h3>
+        <h3 className="font-semibold text-primary">
+          {isRefreshingName ? `${displayName}…` : displayName}
+        </h3>
 
         <div className="mt-4 flex items-center gap-2">
           <Button
