@@ -18,11 +18,11 @@ const AdminLayout = async ({ children, params }: AdminLayoutProps) => {
 
   return (
     <AuthGuard role="ADMIN" locale={locale}>
-      <div className="flex min-h-screen bg-card">
+      <div className="flex h-screen items-stretch overflow-hidden bg-card">
         {/* Sidebar */}
         <AdminSidebar locale={locale} />
         {/* Content */}
-        <main className="flex-1 min-w-0">
+        <main className="flex-1 min-w-0 overflow-y-auto">
           <header className="sticky top-0 z-30 h-16 border-b bg-background/90 backdrop-blur flex items-center px-4 lg:px-12 justify-between">
             <h1 className="sm:text-lg text-sm font-medium pl-10 lg:pl-0">
               {t("title")}
