@@ -238,32 +238,34 @@ export default function OrdersPage() {
                 key={order.id}
                 type="button"
                 onClick={() => setSelectedOrderId(order.id)}
-                className={`w-full rounded-2xl border p-5 text-left transition-all ${
+                className={`w-full rounded-2xl border p-5 text-left transition-all duration-200 ${
                   selectedOrder?.id === order.id
-                    ? "border-primary bg-primary/5 shadow-sm text-foreground"
-                    : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-muted/60"
+                    ? "border-primary bg-primary/5 shadow-sm"
+                    : "border-border bg-card hover:border-primary/40 hover:bg-muted/40"
                 }`}
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-sm text-secondary">#{order.id}</p>
-                    <h2 className="mt-1 text-lg font-semibold text-primary">
+                    <p className="text-xs font-medium text-muted-foreground tracking-wide">
+                      #{order.id}
+                    </p>
+                    <h2 className="mt-1 text-base font-semibold text-foreground">
                       {formatDate(order.createdAt)}
                     </h2>
                   </div>
 
                   <span
-                    className={`inline-flex rounded-full border px-3 py-1 text-xs font-medium ${getStatusStyles(order.status)}`}
+                    className={`inline-flex w-fit rounded-full border px-3 py-1 text-xs font-medium ${getStatusStyles(order.status)}`}
                   >
                     {formatStatus(order.status)}
                   </span>
                 </div>
 
-                <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-sm text-secondary">
-                  <span className="text-foreground/80">
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-sm text-muted-foreground">
                     {t("itemsCount", { count: order.items.length })}
                   </span>
-                  <span className="font-semibold text-foreground">
+                  <span className="text-sm font-semibold text-foreground">
                     ₾{Number(order.total).toFixed(2)}
                   </span>
                 </div>
