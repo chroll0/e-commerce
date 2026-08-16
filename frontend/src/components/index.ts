@@ -12,6 +12,7 @@ export { default as PageWrapper } from "./ui/PageWrapper";
 export { default as Logo } from "./ui/Logo";
 export { default as Tooltip } from "./ui/Tooltip";
 export { default as Advertisement } from "./ui/Advertisement";
+export { default as NotificationCenter } from "./ui/NotificationCenter";
 
 // Navigation components
 export { default as NavBar } from "./navigation/NavBar";

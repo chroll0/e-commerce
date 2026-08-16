@@ -104,7 +104,15 @@ model ProductTranslation {
 enum OrderStatus {
   PENDING
   PAID
+  PAYMENT_FAILED
   SHIPPED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
   CANCELLED
 }
 
@@ -125,8 +133,23 @@ model Order {
   updatedAt DateTime    @updatedAt
 
   items     OrderItem[]
+  payment   Payment?
 
   @@index([userId])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  orderId        Int           @unique
+  order          Order         @relation(fields: [orderId], references: [id])
+  amount         Float
+  status         PaymentStatus @default(PENDING)
+  provider       String        @default("TEST")
+  transactionId  String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([status])
 }
 
 model OrderItem {

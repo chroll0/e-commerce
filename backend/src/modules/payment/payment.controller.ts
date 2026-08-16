@@ -1,6 +1,7 @@
 import {
   Controller,
   Post,
+  Get,
   Body,
   Param,
   ParseIntPipe,
@@ -10,28 +11,32 @@ import {
 import { PaymentService } from "./payment.service";
 import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
 import { AuthRequest } from "../../common/types/auth.types";
+import { SimulatePaymentDto } from "./dto/simulate-payment.dto";
 
 @Controller("payments")
 @UseGuards(JwtAuthGuard)
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
-  // Step 1: Create payment (user must own the order)
   @Post(":orderId/create")
   createPayment(
     @Req() req: AuthRequest,
-    @Param("orderId", ParseIntPipe) orderId: number
+    @Param("orderId", ParseIntPipe) orderId: number,
   ) {
     return this.paymentService.createPayment(req.user.id, orderId);
   }
 
-  // Step 2: Confirm payment (user must own the order)
-  @Post("confirm")
-  confirmPayment(
+  @Get(":paymentId")
+  getPayment(@Req() req: AuthRequest, @Param("paymentId") paymentId: string) {
+    return this.paymentService.getPayment(req.user.id, paymentId);
+  }
+
+  @Post(":paymentId/simulate")
+  simulatePayment(
     @Req() req: AuthRequest,
-    @Body("paymentId") paymentId: string,
-    @Body("orderId", ParseIntPipe) orderId: number
+    @Param("paymentId") paymentId: string,
+    @Body() dto: SimulatePaymentDto,
   ) {
-    return this.paymentService.confirmPayment(req.user.id, paymentId, orderId);
+    return this.paymentService.simulatePayment(req.user.id, paymentId, dto);
   }
 }

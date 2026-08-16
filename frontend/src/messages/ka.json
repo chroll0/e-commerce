@@ -146,6 +146,50 @@
     }
   },
 
+  "checkout": {
+    "title": "შეკვეთა",
+    "subtitle": "დაასრულე შეკვეთა და გაუშვი სატესტო გადახდა.",
+    "form": {
+      "address": "მისამართი",
+      "city": "ქალაქი",
+      "phone": "ტელეფონი",
+      "zip": "საფოსტო კოდი"
+    },
+    "actions": {
+      "placeOrder": "შეკვეთის განთავსება",
+      "simulateSuccess": "წარმატების სიმულაცია",
+      "simulateFailed": "წარუმატებლობის სიმულაცია",
+      "simulateCancelled": "გაუქმების სიმულაცია",
+      "goToOrders": "ჩემი შეკვეთები",
+      "continueShopping": "შოპინგის გაგრძელება"
+    },
+    "summary": {
+      "title": "შეკვეთის შეჯამება",
+      "items": "ნივთები",
+      "total": "ჯამი"
+    },
+    "payment": {
+      "pendingHint": "შეკვეთა შექმნილია. აირჩიე სატესტო გადახდის შედეგი."
+    },
+    "result": {
+      "title": "შეკვეთის დადასტურება",
+      "orderId": "შეკვეთა # {orderId}",
+      "orderStatus": "შეკვეთის სტატუსი: {status}",
+      "paymentStatus": "გადახდის სტატუსი: {status}"
+    },
+    "notifications": {
+      "orderCreated": "შეკვეთა წარმატებით განთავსდა. შეკვეთა # {orderId}",
+      "paymentSuccess": "გადახდა წარმატებულია შეკვეთისთვის # {orderId}",
+      "paymentFailed": "გადახდა ვერ შესრულდა შეკვეთისთვის # {orderId}",
+      "paymentCancelled": "გადახდა გაუქმდა შეკვეთისთვის # {orderId}"
+    },
+    "errors": {
+      "emptyCart": "კალათა ცარიელია.",
+      "createOrder": "შეკვეთის შექმნა ვერ მოხერხდა.",
+      "simulatePayment": "სატესტო გადახდა ვერ დამუშავდა."
+    }
+  },
+
   "wishlist": {
     "add": "რჩეულებში დამატება",
     "remove": "რჩეულებიდან წაშლა"
