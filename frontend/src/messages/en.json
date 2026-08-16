@@ -87,17 +87,28 @@
       "title": "My Orders",
       "description": "View and manage your orders.",
       "empty": "You don’t have any orders yet.",
+      "loading": "Loading your orders...",
+      "loadError": "We could not load your orders right now.",
       "orderId": "Order ID",
       "status": "Status",
       "total": "Total",
       "date": "Date",
+      "shipping": "Shipping address",
+      "itemsLabel": "Items",
+      "item": "Item",
+      "quantity": "Qty",
+      "subtotal": "Subtotal",
       "viewDetails": "View details",
       "export": "Export as PDF",
+      "exportEmpty": "Select an order before exporting.",
+      "exportBlocked": "Your browser blocked the print window. Please allow pop-ups and try again.",
+      "exportMessage": "Preparing the export for order # {orderId}.",
+      "itemsCount": "{count} item(s)",
       "statuses": {
         "pending": "Pending",
         "paid": "Paid",
+        "paymentFailed": "Payment failed",
         "shipped": "Shipped",
-        "delivered": "Delivered",
         "cancelled": "Cancelled"
       }
     },
@@ -143,6 +154,50 @@
       "shipping": "Shipping",
       "payment": "Payment",
       "summary": "Order Summary"
+    }
+  },
+
+  "checkout": {
+    "title": "Checkout",
+    "subtitle": "Complete your order and run a test payment.",
+    "form": {
+      "address": "Address",
+      "city": "City",
+      "phone": "Phone",
+      "zip": "ZIP / Postal code"
+    },
+    "actions": {
+      "placeOrder": "Place Order",
+      "simulateSuccess": "Simulate Success",
+      "simulateFailed": "Simulate Failure",
+      "simulateCancelled": "Simulate Cancel",
+      "goToOrders": "Go to My Orders",
+      "continueShopping": "Continue shopping"
+    },
+    "summary": {
+      "title": "Order Summary",
+      "items": "Items",
+      "total": "Total"
+    },
+    "payment": {
+      "pendingHint": "Order created. Pick a test payment result."
+    },
+    "result": {
+      "title": "Order Confirmation",
+      "orderId": "Order # {orderId}",
+      "orderStatus": "Order status: {status}",
+      "paymentStatus": "Payment status: {status}"
+    },
+    "notifications": {
+      "orderCreated": "Order placed successfully. Order # {orderId}",
+      "paymentSuccess": "Payment successful for order # {orderId}",
+      "paymentFailed": "Payment failed for order # {orderId}",
+      "paymentCancelled": "Payment cancelled for order # {orderId}"
+    },
+    "errors": {
+      "emptyCart": "Your cart is empty.",
+      "createOrder": "Failed to create order.",
+      "simulatePayment": "Failed to process test payment."
     }
   },
 

@@ -9,6 +9,8 @@ import { CloudinaryModule } from "./modules/cloudinary/cloudinary.module";
 import { StoreModule } from "./modules/store/store.module";
 import { CartModule } from "./modules/cart/cart.module";
 import { ContactModule } from "./modules/contact/contact.module";
+import { OrderModule } from "./modules/order/order.module";
+import { PaymentModule } from "./modules/payment/payment.module";
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { ContactModule } from "./modules/contact/contact.module";
     StoreModule,
     CartModule,
     ContactModule,
+    OrderModule,
+    PaymentModule,
   ],
 })
 export class AppModule {}

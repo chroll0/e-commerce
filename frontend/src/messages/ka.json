@@ -87,17 +87,28 @@
       "title": "ჩემი შეკვეთები",
       "description": "იხილე და მართე შენი შეკვეთები.",
       "empty": "ჯერ არ გაქვს არცერთი შეკვეთა.",
+      "loading": "მიმდინარეობს შეკვეთების ჩატვირთვა...",
+      "loadError": "შეკვეთების ჩატვირთვა ამჟამად ვერ მოხერხდა.",
       "orderId": "შეკვეთის ID",
       "status": "სტატუსი",
       "total": "ჯამი",
       "date": "თარიღი",
+      "shipping": "მიტანის მისამართი",
+      "itemsLabel": "პროდუქტები",
+      "item": "პროდუქტი",
+      "quantity": "რაოდენობა",
+      "subtotal": "ჯამი",
       "viewDetails": "დეტალების ნახვა",
       "export": "PDF-ის გადმოტვირთვა",
+      "exportEmpty": "აირჩიეთ შეკვეთა PDF-ის export-ის წინ.",
+      "exportBlocked": "ბრაუზერმა დაბლოკა print window. გთხოვთ, დაუშვათ pop-ups და სცადოთ თავიდან.",
+      "exportMessage": "მომზადდება export შეკვეთისთვის # {orderId}.",
+      "itemsCount": "{count} პროდუქტი",
       "statuses": {
         "pending": "მოლოდინში",
         "paid": "გადახდილი",
+        "paymentFailed": "გადახდა ვერ მოხერხდა",
         "shipped": "გაგზავნილი",
-        "delivered": "მიწოდებული",
         "cancelled": "გაუქმებული"
       }
     },
@@ -143,6 +154,50 @@
       "shipping": "მიტანა",
       "payment": "გადახდა",
       "summary": "შეკვეთის შეჯამება"
+    }
+  },
+
+  "checkout": {
+    "title": "შეკვეთა",
+    "subtitle": "დაასრულე შეკვეთა და გაუშვი სატესტო გადახდა.",
+    "form": {
+      "address": "მისამართი",
+      "city": "ქალაქი",
+      "phone": "ტელეფონი",
+      "zip": "საფოსტო კოდი"
+    },
+    "actions": {
+      "placeOrder": "შეკვეთის განთავსება",
+      "simulateSuccess": "წარმატების სიმულაცია",
+      "simulateFailed": "წარუმატებლობის სიმულაცია",
+      "simulateCancelled": "გაუქმების სიმულაცია",
+      "goToOrders": "ჩემი შეკვეთები",
+      "continueShopping": "შოპინგის გაგრძელება"
+    },
+    "summary": {
+      "title": "შეკვეთის შეჯამება",
+      "items": "ნივთები",
+      "total": "ჯამი"
+    },
+    "payment": {
+      "pendingHint": "შეკვეთა შექმნილია. აირჩიე სატესტო გადახდის შედეგი."
+    },
+    "result": {
+      "title": "შეკვეთის დადასტურება",
+      "orderId": "შეკვეთა # {orderId}",
+      "orderStatus": "შეკვეთის სტატუსი: {status}",
+      "paymentStatus": "გადახდის სტატუსი: {status}"
+    },
+    "notifications": {
+      "orderCreated": "შეკვეთა წარმატებით განთავსდა. შეკვეთა # {orderId}",
+      "paymentSuccess": "გადახდა წარმატებულია შეკვეთისთვის # {orderId}",
+      "paymentFailed": "გადახდა ვერ შესრულდა შეკვეთისთვის # {orderId}",
+      "paymentCancelled": "გადახდა გაუქმდა შეკვეთისთვის # {orderId}"
+    },
+    "errors": {
+      "emptyCart": "კალათა ცარიელია.",
+      "createOrder": "შეკვეთის შექმნა ვერ მოხერხდა.",
+      "simulatePayment": "სატესტო გადახდა ვერ დამუშავდა."
     }
   },
 
