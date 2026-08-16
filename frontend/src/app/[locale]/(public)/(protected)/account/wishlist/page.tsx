@@ -1,7 +1,5 @@
 import React from "react";
 
-const page = () => {
+export default function WishlistPage() {
   return <div></div>;
-};
-
-export default page;
+}
