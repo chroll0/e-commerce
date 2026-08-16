@@ -101,6 +101,7 @@
       "viewDetails": "View details",
       "export": "Export as PDF",
       "exportEmpty": "Select an order before exporting.",
+      "exportBlocked": "Your browser blocked the print window. Please allow pop-ups and try again.",
       "exportMessage": "Preparing the export for order # {orderId}.",
       "itemsCount": "{count} item(s)",
       "statuses": {

@@ -101,6 +101,7 @@
       "viewDetails": "დეტალების ნახვა",
       "export": "PDF-ის გადმოტვირთვა",
       "exportEmpty": "აირჩიეთ შეკვეთა PDF-ის export-ის წინ.",
+      "exportBlocked": "ბრაუზერმა დაბლოკა print window. გთხოვთ, დაუშვათ pop-ups და სცადოთ თავიდან.",
       "exportMessage": "მომზადდება export შეკვეთისთვის # {orderId}.",
       "itemsCount": "{count} პროდუქტი",
       "statuses": {

@@ -89,6 +89,25 @@ export default function OrdersPage() {
     return labels[normalized] ?? status;
   };
 
+  const getStatusStyles = (status: string) => {
+    const normalized = status.toLowerCase();
+
+    switch (normalized) {
+      case "paid":
+        return "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300";
+      case "pending":
+        return "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300";
+      case "payment_failed":
+        return "border-red-500/30 bg-red-500/10 text-red-700 dark:text-red-300";
+      case "shipped":
+        return "border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300";
+      case "cancelled":
+        return "border-slate-500/30 bg-slate-500/10 text-slate-700 dark:text-slate-300";
+      default:
+        return "border-border bg-card-soft text-secondary";
+    }
+  };
+
   const formatDate = (date: string) =>
     new Date(date).toLocaleDateString(locale, {
       year: "numeric",
@@ -110,7 +129,81 @@ export default function OrdersPage() {
       return;
     }
 
-    notify("info", t("exportMessage", { orderId: selectedOrder.id }));
+    const printWindow = window.open("", "_blank", "width=900,height=700");
+
+    if (!printWindow) {
+      notify("error", t("exportBlocked"));
+      return;
+    }
+
+    const orderRows = selectedOrder.items
+      .map(
+        (item) => `
+          <tr>
+            <td>${getProductTitle(item.product)}</td>
+            <td>${item.quantity}</td>
+            <td>₾${Number(item.price).toFixed(2)}</td>
+            <td>₾${Number(item.price * item.quantity).toFixed(2)}</td>
+          </tr>
+        `,
+      )
+      .join("");
+
+    const html = `
+      <html>
+        <head>
+          <title>Order #${selectedOrder.id}</title>
+          <style>
+            body { font-family: Arial, sans-serif; color: #111827; margin: 32px; }
+            .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+            .badge { display: inline-block; padding: 6px 10px; border-radius: 999px; background: #f3f4f6; font-size: 12px; }
+            .meta { margin-bottom: 24px; color: #4b5563; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border-bottom: 1px solid #e5e7eb; padding: 10px 8px; text-align: left; }
+            .total { margin-top: 16px; text-align: right; font-weight: 700; }
+            @media print { body { margin: 0; } }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <h1>Order #${selectedOrder.id}</h1>
+            </div>
+            <span class="badge">${formatStatus(selectedOrder.status)}</span>
+          </div>
+
+          <div class="meta">
+            <p><strong>Date:</strong> ${formatDate(selectedOrder.createdAt)}</p>
+            <p><strong>Address:</strong> ${selectedOrder.address}, ${selectedOrder.city}</p>
+            <p><strong>Phone:</strong> ${selectedOrder.phone}</p>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${orderRows}
+            </tbody>
+          </table>
+
+          <div class="total">Total: ₾${Number(selectedOrder.total).toFixed(2)}</div>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+
+    notify("success", t("exportMessage", { orderId: selectedOrder.id }));
   };
 
   return (
@@ -147,8 +240,8 @@ export default function OrdersPage() {
                 onClick={() => setSelectedOrderId(order.id)}
                 className={`w-full rounded-2xl border p-5 text-left transition-all ${
                   selectedOrder?.id === order.id
-                    ? "border-primary bg-primary/5 shadow-sm"
-                    : "border-border bg-card hover:border-primary/40"
+                    ? "border-primary bg-primary/5 shadow-sm text-foreground"
+                    : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-muted/60"
                 }`}
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -159,14 +252,18 @@ export default function OrdersPage() {
                     </h2>
                   </div>
 
-                  <span className="inline-flex rounded-full border border-border bg-card-soft px-3 py-1 text-xs font-medium text-secondary">
+                  <span
+                    className={`inline-flex rounded-full border px-3 py-1 text-xs font-medium ${getStatusStyles(order.status)}`}
+                  >
                     {formatStatus(order.status)}
                   </span>
                 </div>
 
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-sm text-secondary">
-                  <span>{t("itemsCount", { count: order.items.length })}</span>
-                  <span className="font-semibold text-primary">
+                  <span className="text-foreground/80">
+                    {t("itemsCount", { count: order.items.length })}
+                  </span>
+                  <span className="font-semibold text-foreground">
                     ₾{Number(order.total).toFixed(2)}
                   </span>
                 </div>
@@ -184,7 +281,9 @@ export default function OrdersPage() {
                   </h3>
                 </div>
 
-                <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+                <span
+                  className={`rounded-full border px-2.5 py-1 text-xs font-medium ${getStatusStyles(selectedOrder.status)}`}
+                >
                   {formatStatus(selectedOrder.status)}
                 </span>
               </div>
