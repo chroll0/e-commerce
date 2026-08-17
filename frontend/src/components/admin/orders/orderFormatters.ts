@@ -12,8 +12,10 @@ export const formatDate = (value: string, locale: string) =>
   }).format(new Date(value));
 
 export const getProductTitle = (
-  product: { slug: string; translations: { locale: string; title: string }[] },
+  product: { slug: string; translations?: { locale: string; title: string }[] },
   locale: string,
 ) =>
-  product.translations.find((translation) => translation.locale === locale)
-    ?.title ?? product.translations[0]?.title ?? product.slug;
+  product.translations?.find((translation) => translation.locale === locale)
+    ?.title ??
+  product.translations?.[0]?.title ??
+  product.slug;

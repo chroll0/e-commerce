@@ -83,7 +83,7 @@ export class OrderService {
       where: { id: orderId },
       include: {
         user: true,
-        items: { include: { product: true } },
+        items: { include: { product: { include: { translations: true } } } },
         payment: true,
       },
     });
