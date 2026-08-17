@@ -601,6 +601,12 @@
           "role": "Select role"
         }
       },
+      "filters": {
+        "searchLabel": "Search",
+        "searchPlaceholder": "Name, email, or phone",
+        "roleLabel": "Role",
+        "allRoles": "All roles"
+      },
       "table": {
         "name": "Name",
         "email": "Email",
@@ -610,6 +616,7 @@
         "joined": "Joined",
         "actions": "Actions",
         "empty": "No users found.",
+        "noResults": "No users match the current filters.",
         "loading": "Loading...",
         "refresh": "Refresh"
       },

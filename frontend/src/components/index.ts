@@ -85,6 +85,7 @@ export { AdminSidebarDrawer } from "./admin/dashboard/AdminSidebarDrawer";
 // User management components
 export { default as UserEditModal } from "./admin/users/UserEditModal";
 export { default as AdminUsersTable } from "./admin/users/AdminUsersTable";
+export { default as AdminUsersFilters } from "./admin/users/AdminUsersFilters";
 
 // Category management components
 export { default as CategoriesTable } from "./admin/categories/CategoriesTable";

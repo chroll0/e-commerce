@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { api } from "@/lib/axios";
-import type { UserApi } from "@/types";
+import type { UserApi, UserRole } from "@/types";
 import {
   AdminPageHeader,
+  AdminUsersFilters,
   Button,
   ConfirmModal,
   UserEditModal,
@@ -14,6 +15,8 @@ import {
 import { RefreshCw } from "lucide-react";
 import { useAuthStore } from "@/state/useAuthStore";
 
+const roles: UserRole[] = ["USER", "ADMIN"];
+
 export default function AdminUsersPage() {
   const t = useTranslations("admin.users");
   const { user } = useAuthStore();
@@ -21,6 +24,8 @@ export default function AdminUsersPage() {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<UserApi[]>([]);
   const [error, setError] = useState<string>("");
+  const [search, setSearch] = useState("");
+  const [role, setRole] = useState("");
 
   // delete
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -127,6 +132,18 @@ export default function AdminUsersPage() {
     }
   };
 
+  const filteredUsers = users
+    .filter((u) => {
+      const query = search.trim().toLowerCase();
+      return (
+        !query ||
+        [u.name ?? "", u.email, u.phone ?? ""].some((value) =>
+          value.toLowerCase().includes(query),
+        )
+      );
+    })
+    .filter((u) => !role || u.role === role);
+
   return (
     <>
       <AdminPageHeader
@@ -156,13 +173,23 @@ export default function AdminUsersPage() {
         </div>
       )}
 
+      <AdminUsersFilters
+        search={search}
+        onSearchChange={setSearch}
+        role={role}
+        onRoleChange={setRole}
+        roles={roles}
+        t={t}
+      />
+
       <AdminUsersTable
-        users={users}
+        users={filteredUsers}
         loading={loading}
         t={t}
         onEdit={openEdit}
         onDelete={openDelete}
         currentUserId={user?.id}
+        emptyMessage={users.length ? t("table.noResults") : undefined}
       />
 
       <UserEditModal
