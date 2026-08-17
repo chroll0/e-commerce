@@ -25,7 +25,7 @@ const CategoriesTable: FC<TableProps> = ({
   isExpandedAll,
 }) => {
   return (
-    <div className="mt-6 rounded-xl border border-border bg-card overflow-hidden">
+    <div className="mt-6 rounded-xl border border-border bg-card overflow-x-auto">
       <div className="grid grid-cols-12 items-center gap-2 px-4 py-3 border-b border-border text-xs font-medium text-muted-foreground">
         <div className="col-span-5 flex items-center">
           <Button

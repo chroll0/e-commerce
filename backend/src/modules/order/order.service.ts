@@ -78,6 +78,23 @@ export class OrderService {
     return order;
   }
 
+  async getAdminOrderById(orderId: number) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        user: true,
+        items: { include: { product: { include: { translations: true } } } },
+        payment: true,
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException("Order not found");
+    }
+
+    return order;
+  }
+
   // Admin only: Change order status
   async updateStatus(orderId: number, status: OrderStatus) {
     return this.prisma.order.update({
@@ -92,7 +109,9 @@ export class OrderService {
       include: {
         items: { include: { product: true } },
         user: true,
+        payment: true,
       },
+      orderBy: { createdAt: "desc" },
     });
   }
 }

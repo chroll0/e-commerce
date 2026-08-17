@@ -1,4 +1,5 @@
 import { api } from "./axios";
+import type { AdminPaymentRecord } from "@/types";
 
 export type PaymentOutcome = "SUCCESS" | "FAILED" | "CANCELLED";
 
@@ -15,6 +16,11 @@ export const paymentApi = {
 
   getById: async (paymentId: string) => {
     const res = await api.get(`/payments/${paymentId}`);
+    return res.data;
+  },
+
+  getAllForAdmin: async (): Promise<AdminPaymentRecord[]> => {
+    const res = await api.get("/payments/admin");
     return res.data;
   },
 };

@@ -45,11 +45,19 @@ export class OrderController {
     return this.orderService.getAllOrders();
   }
 
+  // Admin: get a single order with customer, items, and payment details
+  @Get("admin/:id")
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  getAdminOrder(@Param("id", ParseIntPipe) orderId: number) {
+    return this.orderService.getAdminOrderById(orderId);
+  }
+
   // Single order details
   @Get(":id")
   getOrder(
     @Req() req: AuthRequest,
-    @Param("id", ParseIntPipe) orderId: number
+    @Param("id", ParseIntPipe) orderId: number,
   ) {
     const userId = req.user.id;
     return this.orderService.getOrderById(userId, orderId);
@@ -61,7 +69,7 @@ export class OrderController {
   @Roles(UserRole.ADMIN)
   updateStatus(
     @Param("id", ParseIntPipe) id: number,
-    @Body("status") status: OrderStatus
+    @Body("status") status: OrderStatus,
   ) {
     return this.orderService.updateStatus(id, status);
   }

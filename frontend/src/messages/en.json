@@ -601,6 +601,12 @@
           "role": "Select role"
         }
       },
+      "filters": {
+        "searchLabel": "Search",
+        "searchPlaceholder": "Name, email, or phone",
+        "roleLabel": "Role",
+        "allRoles": "All"
+      },
       "table": {
         "name": "Name",
         "email": "Email",
@@ -610,6 +616,7 @@
         "joined": "Joined",
         "actions": "Actions",
         "empty": "No users found.",
+        "noResults": "No users match the current filters.",
         "loading": "Loading...",
         "refresh": "Refresh"
       },
@@ -625,6 +632,145 @@
       "messages": {
         "updated": "User updated successfully.",
         "deleted": "User deleted successfully."
+      }
+    },
+
+    "orders": {
+      "title": "Orders",
+      "description": "Monitor customer orders, payment progress, and fulfillment status.",
+      "filters": {
+        "searchLabel": "Search",
+        "searchPlaceholder": "Order ID, customer, or email",
+        "orderStatusLabel": "Order status",
+        "paymentStatusLabel": "Payment status",
+        "allStatuses": "All",
+        "sortNewest": "Newest",
+        "sortOldest": "Oldest"
+      },
+      "table": {
+        "order": "Order",
+        "customer": "Customer",
+        "date": "Date",
+        "items": "Items",
+        "total": "Total",
+        "payment": "Payment",
+        "status": "Order status",
+        "actions": "Actions",
+        "notCreated": "Not created",
+        "details": "Details",
+        "empty": "No orders match the current filters.",
+        "loading": "Loading orders..."
+      },
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "pageOf": "Page {current} of {total}",
+        "count": "{count} orders"
+      },
+      "errors": {
+        "load": "Orders could not be loaded. Please try again.",
+        "update": "Order #{id} could not be updated.",
+        "cancel": "Order #{id} could not be cancelled."
+      },
+      "actions": {
+        "retry": "Retry",
+        "allOrders": "All orders"
+      },
+      "cancelModal": {
+        "title": "Cancel order",
+        "description": "Cancel order #{id}? This is the only destructive order action available.",
+        "cancel": "Keep order",
+        "confirm": "Cancel order"
+      },
+      "details": {
+        "title": "Order #{id}",
+        "createdAt": "Created {date}",
+        "invalidId": "This order ID is invalid.",
+        "loadError": "Order details could not be loaded.",
+        "export": "Export as PDF",
+        "overview": {
+          "title": "Order overview",
+          "orderStatus": "Order status",
+          "paymentStatus": "Payment status",
+          "total": "Total",
+          "items": "Items",
+          "notCreated": "Not created"
+        },
+        "customer": {
+          "title": "Customer",
+          "name": "Name",
+          "email": "Email",
+          "phone": "Phone"
+        },
+        "items": {
+          "title": "Order items",
+          "product": "Product",
+          "variant": "Variant",
+          "unitPrice": "Unit price",
+          "quantity": "Quantity",
+          "itemTotal": "Item total",
+          "none": "-"
+        },
+        "delivery": {
+          "title": "Delivery"
+        },
+        "financial": {
+          "title": "Financial summary",
+          "subtotal": "Items subtotal",
+          "total": "Total",
+          "note": "Shipping, discounts, and taxes are not stored separately for this order."
+        },
+        "payment": {
+          "title": "Payment information",
+          "id": "Payment ID",
+          "provider": "Provider",
+          "amount": "Amount",
+          "transactionId": "Transaction ID",
+          "notAssigned": "Not assigned",
+          "status": "Status",
+          "created": "Created",
+          "empty": "No payment has been created for this order."
+        }
+      }
+    },
+
+    "payments": {
+      "title": "Payments",
+      "description": "Review financial transactions and their linked customer orders.",
+      "filters": {
+        "searchLabel": "Search",
+        "searchPlaceholder": "Payment, transaction, order, or customer",
+        "statusLabel": "Status",
+        "providerLabel": "Provider",
+        "allStatuses": "All",
+        "allProviders": "All",
+        "sortNewest": "Newest",
+        "sortOldest": "Oldest"
+      },
+      "table": {
+        "payment": "Payment",
+        "order": "Order",
+        "customer": "Customer",
+        "amount": "Amount",
+        "provider": "Provider",
+        "transactionId": "Transaction ID",
+        "status": "Status",
+        "created": "Created",
+        "notAssigned": "Not assigned",
+        "empty": "No payments match the current filters.",
+        "loading": "Loading payments..."
+      },
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "pageOf": "Page {current} of {total}",
+        "count": "{count} payments"
+      },
+      "errors": {
+        "load": "Payments could not be loaded. Please try again."
+      },
+      "actions": {
+        "retry": "Retry"
       }
     }
   },

@@ -29,7 +29,7 @@ export default function NotificationCenter() {
   }, [items, remove]);
 
   return (
-    <div className="pointer-events-none fixed right-4 top-4 z-[60] flex w-full max-w-sm flex-col gap-2">
+    <div className="pointer-events-none fixed right-4 top-4 z-60 flex w-full max-w-sm flex-col gap-2">
       {items.map((item) => (
         <div
           key={item.id}

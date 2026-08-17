@@ -23,4 +23,12 @@ export type { Locale } from "@/types/common";
 
 export type { UserApi, UserRole } from "@/types/user";
 
-export type { DashboardResponse } from "@/types/order";
+export type {
+  DashboardResponse,
+  AdminOrder,
+  AdminOrderItem,
+  AdminPayment,
+  AdminPaymentRecord,
+  OrderStatus,
+  PaymentStatus,
+} from "@/types/order";
