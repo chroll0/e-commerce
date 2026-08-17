@@ -10,6 +10,9 @@ import {
 } from "@nestjs/common";
 import { PaymentService } from "./payment.service";
 import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
+import { RolesGuard } from "../../common/guards/roles.guard";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { UserRole } from "../../common/enums/user-role.enum";
 import { AuthRequest } from "../../common/types/auth.types";
 import { SimulatePaymentDto } from "./dto/simulate-payment.dto";
 
@@ -17,6 +20,13 @@ import { SimulatePaymentDto } from "./dto/simulate-payment.dto";
 @UseGuards(JwtAuthGuard)
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
+
+  @Get("admin")
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  getAllPayments() {
+    return this.paymentService.getAllPayments();
+  }
 
   @Post(":orderId/create")
   createPayment(

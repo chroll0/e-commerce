@@ -45,6 +45,14 @@ export class OrderController {
     return this.orderService.getAllOrders();
   }
 
+  // Admin: get a single order with customer, items, and payment details
+  @Get("admin/:id")
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  getAdminOrder(@Param("id", ParseIntPipe) orderId: number) {
+    return this.orderService.getAdminOrderById(orderId);
+  }
+
   // Single order details
   @Get(":id")
   getOrder(

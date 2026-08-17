@@ -39,7 +39,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
     key: "orders",
     children: [
       { key: "ordersAll", href: "/admin/orders" },
-      { key: "paymentsList", href: "/admin/orders/payments" },
+      { key: "paymentsList", href: "/admin/payments" },
     ],
   },
   { key: "users", href: "/admin/users" },

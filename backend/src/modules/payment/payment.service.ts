@@ -67,6 +67,19 @@ export class PaymentService {
     return payment;
   }
 
+  async getAllPayments() {
+    return this.prisma.payment.findMany({
+      include: {
+        order: {
+          include: {
+            user: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  }
+
   async simulatePayment(
     userId: number,
     paymentId: string,
