@@ -39,7 +39,7 @@ const AdminUsersTable: FC<Props> = ({
   }
 
   return (
-    <div className="rounded-xl border border-border overflow-hidden">
+    <div className="rounded-xl border border-border overflow-x-auto">
       <div className="grid grid-cols-12 px-4 py-3 text-xs font-medium text-muted-foreground border-b border-border gap-2">
         <div className="col-span-4">{t("table.email")}</div>
         <div className="col-span-3">{t("table.name")}</div>

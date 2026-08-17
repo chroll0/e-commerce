@@ -30,7 +30,7 @@ const StoresTable: FC<StoresTableProps> = ({
   labels,
 }) => {
   return (
-    <div className="mt-6 rounded-xl border border-border bg-card overflow-hidden">
+    <div className="mt-6 rounded-xl border border-border bg-card overflow-x-auto">
       <div className="grid grid-cols-12 items-center gap-2 px-4 py-3 border-b border-border text-xs font-medium text-muted-foreground">
         <div className="col-span-5 flex items-center px-1 gap-2">
           <Images className="h-4.5 w-4.5" />

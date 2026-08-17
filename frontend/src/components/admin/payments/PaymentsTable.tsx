@@ -19,7 +19,7 @@ const PaymentsTable = ({ payments, locale }: Props) => {
 
   return (
     <div className="overflow-x-auto rounded-xl border border-border">
-      <table className="w-full text-sm">
+      <table className="w-full min-w-250 text-sm">
         <thead className="border-b border-border bg-card-soft text-left text-xs text-muted-foreground">
           <tr>
             <th className="px-4 py-3">{t("payment")}</th>
@@ -63,7 +63,7 @@ const PaymentsTable = ({ payments, locale }: Props) => {
               </td>
               <td className="px-4 py-3">{payment.provider}</td>
               <td
-                className="max-w-44 truncate px-4 py-3 font-mono text-xs"
+                className="max-w-40 truncate px-4 py-3 font-mono text-xs"
                 title={payment.transactionId ?? ""}
               >
                 {payment.transactionId ?? t("notAssigned")}
