@@ -2,8 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { ArrowUpDown, Search } from "lucide-react";
-import { Button } from "@/components";
-import type { OrderStatus, PaymentStatus } from "@/types";
+import { Button, Input, SelectField } from "@/components";
+import type { OrderStatus, PaymentStatus, SelectOption } from "@/types";
 
 type Props = {
   search: string;
@@ -32,50 +32,42 @@ const OrdersFilters = ({
 }: Props) => {
   const t = useTranslations("admin.orders.filters");
 
+  const orderStatusOptions: SelectOption[] = orderStatuses.map((status) => ({
+    value: status,
+    label: status,
+  }));
+  const paymentStatusOptions: SelectOption[] = paymentStatuses.map(
+    (status) => ({ value: status, label: status }),
+  );
+
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-end">
-      <label className="flex-1 text-sm font-medium">
-        {t("searchLabel")}
-        <span className="relative mt-1 block">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            value={search}
-            onChange={(event) => onSearchChange(event.target.value)}
-            placeholder={t("searchPlaceholder")}
-            className="w-full rounded border border-border bg-background py-2 pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-primary/40"
-          />
-        </span>
-      </label>
-      <label className="text-sm font-medium">
-        {t("orderStatusLabel")}
-        <select
+      <div className="flex-1">
+        <Input
+          label={t("searchLabel")}
+          value={search}
+          onChange={(event) => onSearchChange(event.target.value)}
+          leftIcon={<Search className="h-4 w-4" />}
+        />
+      </div>
+      <div className="sm:w-56">
+        <SelectField
+          label={t("orderStatusLabel")}
           value={orderStatus}
-          onChange={(event) => onOrderStatusChange(event.target.value)}
-          className="mt-1 block w-full rounded border border-border bg-background px-3 py-2 text-sm"
-        >
-          <option value="">{t("allStatuses")}</option>
-          {orderStatuses.map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label className="text-sm font-medium">
-        {t("paymentStatusLabel")}
-        <select
+          onChange={onOrderStatusChange}
+          options={orderStatusOptions}
+          placeholderLabel={t("allStatuses")}
+        />
+      </div>
+      <div className="sm:w-56">
+        <SelectField
+          label={t("paymentStatusLabel")}
           value={paymentStatus}
-          onChange={(event) => onPaymentStatusChange(event.target.value)}
-          className="mt-1 block w-full rounded border border-border bg-background px-3 py-2 text-sm"
-        >
-          <option value="">{t("allStatuses")}</option>
-          {paymentStatuses.map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))}
-        </select>
-      </label>
+          onChange={onPaymentStatusChange}
+          options={paymentStatusOptions}
+          placeholderLabel={t("allStatuses")}
+        />
+      </div>
       <Button
         variant="outline"
         size="sm"
