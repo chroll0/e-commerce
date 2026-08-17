@@ -604,7 +604,7 @@
         "searchLabel": "ძიება",
         "searchPlaceholder": "სახელი, ელფოსტა ან ტელეფონი",
         "roleLabel": "როლი",
-        "allRoles": "ყველა როლი"
+        "allRoles": "ყველა"
       },
       "table": {
         "name": "სახელი",
@@ -642,9 +642,9 @@
         "searchPlaceholder": "შეკვეთის ID, მომხმარებელი ან ელფოსტა",
         "orderStatusLabel": "შეკვეთის სტატუსი",
         "paymentStatusLabel": "გადახდის სტატუსი",
-        "allStatuses": "ყველა სტატუსი",
-        "sortNewest": "ჯერ ახალი",
-        "sortOldest": "ჯერ ძველი"
+        "allStatuses": "ყველა",
+        "sortNewest": "ახალი",
+        "sortOldest": "ძველი"
       },
       "table": {
         "order": "შეკვეთა",
@@ -686,6 +686,7 @@
         "createdAt": "შექმნილია {date}",
         "invalidId": "შეკვეთის ID არასწორია.",
         "loadError": "შეკვეთის დეტალების ჩატვირთვა ვერ მოხერხდა.",
+        "export": "გადმოწერე PDF",
         "overview": {
           "title": "შეკვეთის მიმოხილვა",
           "orderStatus": "შეკვეთის სტატუსი",
@@ -740,10 +741,10 @@
         "searchPlaceholder": "გადახდა, ტრანზაქცია, შეკვეთა ან მომხმარებელი",
         "statusLabel": "სტატუსი",
         "providerLabel": "პროვაიდერი",
-        "allStatuses": "ყველა სტატუსი",
-        "allProviders": "ყველა პროვაიდერი",
-        "sortNewest": "ჯერ ახალი",
-        "sortOldest": "ჯერ ძველი"
+        "allStatuses": "ყველა",
+        "allProviders": "ყველა",
+        "sortNewest": "ჯერ",
+        "sortOldest": "ჯერ"
       },
       "table": {
         "payment": "გადახდა",

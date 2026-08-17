@@ -605,7 +605,7 @@
         "searchLabel": "Search",
         "searchPlaceholder": "Name, email, or phone",
         "roleLabel": "Role",
-        "allRoles": "All roles"
+        "allRoles": "All"
       },
       "table": {
         "name": "Name",
@@ -643,9 +643,9 @@
         "searchPlaceholder": "Order ID, customer, or email",
         "orderStatusLabel": "Order status",
         "paymentStatusLabel": "Payment status",
-        "allStatuses": "All statuses",
-        "sortNewest": "Newest first",
-        "sortOldest": "Oldest first"
+        "allStatuses": "All",
+        "sortNewest": "Newest",
+        "sortOldest": "Oldest"
       },
       "table": {
         "order": "Order",
@@ -687,6 +687,7 @@
         "createdAt": "Created {date}",
         "invalidId": "This order ID is invalid.",
         "loadError": "Order details could not be loaded.",
+        "export": "Export as PDF",
         "overview": {
           "title": "Order overview",
           "orderStatus": "Order status",
@@ -741,10 +742,10 @@
         "searchPlaceholder": "Payment, transaction, order, or customer",
         "statusLabel": "Status",
         "providerLabel": "Provider",
-        "allStatuses": "All statuses",
-        "allProviders": "All providers",
-        "sortNewest": "Newest first",
-        "sortOldest": "Oldest first"
+        "allStatuses": "All",
+        "allProviders": "All",
+        "sortNewest": "Newest",
+        "sortOldest": "Oldest"
       },
       "table": {
         "payment": "Payment",
