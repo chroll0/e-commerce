@@ -305,9 +305,22 @@
         "before": "წინა პერიოდი",
         "last7d": "ბოლო 7 დღე",
         "last30d": "ბოლო 30 დღე",
+        "noData": "მონაცემები არ არის",
         "usersLast30d": "მომხმარებლები: ბოლო 30 დღე",
         "ordersLast30d": "შეკვეთები: ბოლო 30 დღე",
-        "paymentsLast30d": "გადახდები: ბოლო 30 დღე"
+        "paymentsLast30d": "გადახდები: ბოლო 30 დღე",
+        "statuses": {
+          "pending": "მოლოდინში",
+          "pendingPayment": "გადახდა მოლოდინში",
+          "paid": "გადახდილი",
+          "processing": "პროცესში",
+          "shipped": "გაგზავნილი",
+          "delivered": "მიწოდებული",
+          "completed": "დასრულებული",
+          "failed": "ვერ მოხერხდა",
+          "paymentFailed": "გადახდა ვერ მოხერხდა",
+          "cancelled": "გაუქმებული"
+        }
       },
       "widgets": {
         "recentOrders": "ბოლო შეკვეთები",

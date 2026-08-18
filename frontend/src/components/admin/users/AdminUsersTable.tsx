@@ -41,9 +41,9 @@ const AdminUsersTable: FC<Props> = ({
   }
 
   return (
-    <div className="rounded-xl border border-border overflow-x-auto">
-      <div className="min-w-160">
-        <div className="grid grid-cols-12 px-4 py-3 text-xs font-medium text-muted-foreground border-b border-border gap-2">
+    <div className="overflow-x-auto rounded-xl border border-border">
+      <div className="min-w-[760px]">
+        <div className="grid grid-cols-12 gap-2 border-b border-border px-4 py-3 text-xs font-medium text-muted-foreground">
           <div className="col-span-4">{t("table.email")}</div>
           <div className="col-span-3">{t("table.name")}</div>
           <div className="col-span-2">{t("table.role")}</div>
@@ -58,15 +58,15 @@ const AdminUsersTable: FC<Props> = ({
           return (
             <div
               key={u.id}
-              className="grid grid-cols-12 px-4 py-3 border-b last:border-b-0 items-center border-border gap-2"
+              className="grid grid-cols-12 items-center gap-2 border-b border-border px-4 py-3 last:border-b-0"
             >
               <div className="col-span-4 min-w-0">
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="text-sm font-medium truncate">{u.email}</div>
+                <div className="flex min-w-0 items-center gap-2">
+                  <div className="truncate text-sm font-medium">{u.email}</div>
 
                   {showBadge && (
                     <span
-                      className="inline-flex items-center justify-center rounded-full border border-border bg-muted/40 h-6 w-6 shrink-0"
+                      className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border bg-muted/40"
                       title={t("table.youAdmin")}
                       aria-label={t("table.youAdmin")}
                     >
@@ -76,13 +76,13 @@ const AdminUsersTable: FC<Props> = ({
                 </div>
 
                 {u.phone ? (
-                  <div className="text-xs text-muted-foreground truncate">
+                  <div className="truncate text-xs text-muted-foreground">
                     {u.phone}
                   </div>
                 ) : null}
               </div>
 
-              <div className="col-span-3 text-sm text-muted-foreground truncate">
+              <div className="col-span-3 truncate text-sm text-muted-foreground">
                 {u.name ?? "—"}
               </div>
 
