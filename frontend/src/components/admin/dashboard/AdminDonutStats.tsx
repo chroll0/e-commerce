@@ -6,8 +6,6 @@ import { useTranslations } from "next-intl";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Users, ShoppingBag, CreditCard } from "lucide-react";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 type StatsResponse = {
   users: { total: number; last30d: number };
   orders: { total: number; last30d: number };
@@ -24,15 +22,10 @@ type CustomTooltipProps = {
   }>;
 };
 
-// ─── Theme-safe colors ────────────────────────────────────────────────────────
-// Using CSS variables so they adapt to light/dark automatically
-
 const COLORS = {
   active: "hsl(var(--primary))",
   muted: "hsl(var(--muted))",
 };
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function clampNonNeg(n: number) {
   return n < 0 ? 0 : n;
@@ -46,8 +39,6 @@ function pct(part: number, total: number) {
   if (!total) return "0%";
   return `${Math.round((part / total) * 100)}%`;
 }
-
-// ─── Custom Tooltip ───────────────────────────────────────────────────────────
 
 function CustomTooltip({ active, payload }: CustomTooltipProps) {
   if (!active || !payload?.length) return null;
@@ -63,8 +54,6 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
     </div>
   );
 }
-
-// ─── Single Donut Card ────────────────────────────────────────────────────────
 
 function DonutCard({
   title,
@@ -155,8 +144,6 @@ function DonutCard({
     </div>
   );
 }
-
-// ─── Main Component ───────────────────────────────────────────────────────────
 
 const AdminDonutStats: FC = () => {
   const t = useTranslations("admin.dashboard");

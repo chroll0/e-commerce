@@ -310,7 +310,19 @@
         "noData": "No data available",
         "usersLast30d": "Users: last 30 days",
         "ordersLast30d": "Orders: last 30 days",
-        "paymentsLast30d": "Payments: last 30 days"
+        "paymentsLast30d": "Payments: last 30 days",
+        "statuses": {
+          "pending": "Pending",
+          "pendingPayment": "Pending payment",
+          "paid": "Paid",
+          "processing": "Processing",
+          "shipped": "Shipped",
+          "delivered": "Delivered",
+          "completed": "Completed",
+          "failed": "Failed",
+          "paymentFailed": "Payment failed",
+          "cancelled": "Cancelled"
+        }
       },
       "widgets": {
         "recentOrders": "Recent Orders",
