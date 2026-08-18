@@ -36,18 +36,20 @@ const ProductsTable: FC<Props> = ({ loading, products, onDelete }) => {
   }
 
   return (
-    <div className="rounded-xl border border-border overflow-x-auto">
-      <div className="grid grid-cols-12 px-4 py-3 text-xs font-medium text-muted-foreground border-b border-border gap-2">
-        <div className="col-span-4">{t("title")}</div>
-        <div className="col-span-3">{t("category")}</div>
-        <div className="col-span-2">{t("price")}</div>
-        <div className="col-span-1">{t("stock")}</div>
-        <div className="col-span-2 text-right">{t("actions")}</div>
-      </div>
+    <div className="overflow-x-auto rounded-xl border border-border">
+      <div className="min-w-[820px]">
+        <div className="grid grid-cols-12 gap-2 border-b border-border px-4 py-3 text-xs font-medium text-muted-foreground">
+          <div className="col-span-4">{t("title")}</div>
+          <div className="col-span-3">{t("category")}</div>
+          <div className="col-span-2">{t("price")}</div>
+          <div className="col-span-1">{t("stock")}</div>
+          <div className="col-span-2 text-right">{t("actions")}</div>
+        </div>
 
-      {products.map((p) => (
-        <ProductRow key={p.id} product={p} onDelete={onDelete} />
-      ))}
+        {products.map((p) => (
+          <ProductRow key={p.id} product={p} onDelete={onDelete} />
+        ))}
+      </div>
     </div>
   );
 };
