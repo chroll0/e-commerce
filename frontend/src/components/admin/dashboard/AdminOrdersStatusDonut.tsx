@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { PieChart, Pie, ResponsiveContainer, Tooltip, Cell } from "recharts";
 import { useTranslations } from "next-intl";
 import { ShoppingBag } from "lucide-react";
@@ -59,11 +59,19 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
   const firstEntry = payload[0];
   const name = String(firstEntry?.name ?? "");
   const value = firstEntry?.value ?? 0;
+  const color = getStatusColor(name);
 
   return (
-    <div className="rounded-lg border border-border bg-card px-3 py-2 text-xs shadow-md">
+    <div
+      className="relative z-100 min-w-[100px] rounded-lg border border-border bg-card px-3 py-2 text-xs shadow-xl"
+      style={{
+        borderLeftColor: color,
+        borderLeftWidth: 3,
+      }}
+    >
       <p className="font-medium text-foreground">{formatStatus(name)}</p>
-      <p className="text-muted-foreground">{String(value)}</p>
+
+      <p className="mt-0.5 text-muted-foreground">{String(value)} orders</p>
     </div>
   );
 }
@@ -73,6 +81,7 @@ function getLocalizedStatus(
   t: ReturnType<typeof useTranslations<"admin.dashboard">>,
 ) {
   const normalized = status.toLowerCase().replace(/\s+/g, "_");
+
   const labels: Record<string, string> = {
     pending: t("charts.statuses.pending"),
     pending_payment: t("charts.statuses.pendingPayment"),
@@ -109,8 +118,24 @@ const AdminOrdersStatusDonut: FC<Props> = ({ data }) => {
     [donut],
   );
 
-  const primaryEntry = donut[0];
-  const primaryValue = primaryEntry?.value ?? 0;
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [donut.length]);
+
+  useEffect(() => {
+    if (donut.length <= 1) return;
+
+    const interval = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % donut.length);
+    }, 10_000);
+
+    return () => window.clearInterval(interval);
+  }, [donut.length]);
+
+  const activeEntry = donut[activeIndex];
+  const activeValue = activeEntry?.value ?? 0;
 
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-5">
@@ -131,11 +156,22 @@ const AdminOrdersStatusDonut: FC<Props> = ({ data }) => {
         </div>
       </div>
 
-      {/* Chart + center label */}
+      {/* Chart + animated center */}
       {total > 0 ? (
         <div className="relative">
-          <ResponsiveContainer width="100%" height={160}>
-            <PieChart>
+          <ResponsiveContainer
+            width="100%"
+            height={160}
+            className="overflow-visible"
+          >
+            <PieChart
+              margin={{
+                top: 10,
+                right: 20,
+                bottom: 10,
+                left: 20,
+              }}
+            >
               <Pie
                 data={donut}
                 dataKey="value"
@@ -147,28 +183,56 @@ const AdminOrdersStatusDonut: FC<Props> = ({ data }) => {
                 startAngle={90}
                 endAngle={-270}
               >
-                {donut.map((entry) => (
-                  <Cell
-                    key={entry.name}
-                    fill={getStatusColor(entry.name)}
-                    opacity={0.9}
-                  />
-                ))}
+                {donut.map((entry, index) => {
+                  const isActive = index === activeIndex;
+
+                  return (
+                    <Cell
+                      key={entry.name}
+                      fill={getStatusColor(entry.name)}
+                      opacity={isActive ? 1 : 0.4}
+                      style={{
+                        transition: "opacity 500ms ease, filter 500ms ease",
+                        filter: isActive
+                          ? `drop-shadow(0 0 6px ${getStatusColor(entry.name)})`
+                          : "none",
+                      }}
+                    />
+                  );
+                })}
               </Pie>
 
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip
+                content={<CustomTooltip />}
+                allowEscapeViewBox={{
+                  x: true,
+                  y: true,
+                }}
+                wrapperStyle={{
+                  zIndex: 9999,
+                  outline: "none",
+                }}
+                cursor={false}
+              />
             </PieChart>
           </ResponsiveContainer>
 
-          {/* Center text */}
-          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-xl font-bold text-foreground">
-              {pct(primaryValue, total)}
-            </span>
+          {/* Center content */}
+          <div
+            key={activeEntry?.name}
+            className="pointer-events-none absolute inset-0 flex items-center justify-center"
+          >
+            <div className="animate-in fade-in zoom-in-95 duration-500">
+              <div className="text-center">
+                <span className="block text-xl font-bold text-foreground">
+                  {pct(activeValue, total)}
+                </span>
 
-            <span className="max-w-[90px] truncate text-xs text-muted-foreground">
-              {getLocalizedStatus(primaryEntry?.name ?? "", t)}
-            </span>
+                <span className="block max-w-[110px] truncate text-xs text-muted-foreground">
+                  {getLocalizedStatus(activeEntry?.name ?? "", t)}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       ) : (
@@ -180,26 +244,44 @@ const AdminOrdersStatusDonut: FC<Props> = ({ data }) => {
       {/* Legend */}
       {donut.length > 0 && (
         <div className="space-y-2 rounded-xl bg-muted/40 px-4 py-3">
-          {donut.map((entry) => {
+          {donut.map((entry, index) => {
             const color = getStatusColor(entry.name);
+            const isActive = index === activeIndex;
 
             return (
               <div
                 key={entry.name}
-                className="flex items-center justify-between text-xs"
+                className={`flex items-center justify-between rounded-lg px-2 py-1.5 text-xs transition-all duration-500 ${
+                  isActive ? "bg-primary/10" : "bg-transparent"
+                }`}
               >
                 <div className="flex items-center gap-2">
                   <span
-                    className="h-2.5 w-2.5 rounded-full"
-                    style={{ background: color }}
+                    className={`h-2.5 w-2.5 rounded-full transition-all duration-500 ${
+                      isActive ? "scale-125" : "scale-100"
+                    }`}
+                    style={{
+                      background: color,
+                      boxShadow: isActive ? `0 0 6px ${color}` : "none",
+                    }}
                   />
 
-                  <span className="text-muted-foreground">
+                  <span
+                    className={`transition-colors duration-500 ${
+                      isActive
+                        ? "font-medium text-foreground"
+                        : "text-muted-foreground"
+                    }`}
+                  >
                     {getLocalizedStatus(entry.name, t)}
                   </span>
                 </div>
 
-                <span className="text-sm font-semibold text-foreground">
+                <span
+                  className={`text-sm font-semibold transition-colors duration-500 ${
+                    isActive ? "text-foreground" : "text-muted-foreground"
+                  }`}
+                >
                   {entry.value}
                 </span>
               </div>
