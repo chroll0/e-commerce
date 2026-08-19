@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 
 import { AccountHeader, Button } from "@/components";
 import { api } from "@/lib/axios";
@@ -34,10 +35,20 @@ export default function OrdersPage() {
   const t = useTranslations("account.orders");
   const locale = useLocale();
   const notify = useNotificationStore((state) => state.push);
+  const searchParams = useSearchParams();
+  const orderIdParam = searchParams.get("orderId");
 
   const [orders, setOrders] = useState<UserOrder[]>([]);
-  const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
+  const [selectedOrderId, setSelectedOrderId] = useState<number | null>(
+    orderIdParam ? Number(orderIdParam) : null,
+  );
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (orderIdParam) {
+      setSelectedOrderId(Number(orderIdParam));
+    }
+  }, [orderIdParam]);
 
   useEffect(() => {
     let isMounted = true;
@@ -49,7 +60,15 @@ export default function OrdersPage() {
         if (!isMounted) return;
 
         setOrders(data ?? []);
-        setSelectedOrderId((current) => current ?? data?.[0]?.id ?? null);
+        setSelectedOrderId((current) => {
+          if (
+            current &&
+            data?.some((order: UserOrder) => order.id === current)
+          ) {
+            return current;
+          }
+          return data?.[0]?.id ?? null;
+        });
       } catch (error: unknown) {
         const message =
           (error as { response?: { data?: { message?: string } } })?.response

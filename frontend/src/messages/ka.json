@@ -38,6 +38,59 @@
     "passwordMismatch": "პაროლები არ ემთხვევა."
   },
 
+  "notifications": {
+    "title": "შეტყობინებები",
+    "description": "მიიღე ინფორმაცია შეკვეთებისა და გადახდების შესახებ.",
+    "open": "შეტყობინებების გახსნა",
+    "unread": "წაუკითხავი",
+    "unreadCount": "წაუკითხავი: {count}",
+    "markAllAsRead": "ყველას წაკითხულად მონიშვნა",
+    "viewAll": "ყველა შეტყობინების ნახვა",
+    "empty": "შეტყობინებები ჯერ არ არის",
+    "caughtUp": "ყველა შეტყობინება წაკითხულია",
+    "loadError": "შეტყობინებების ჩატვირთვა ამჟამად ვერ მოხერხდა.",
+    "previous": "წინა",
+    "next": "შემდეგი",
+    "page": "გვერდი {page} / {totalPages}",
+    "filters": {
+      "all": "ყველა",
+      "unread": "წაუკითხავი"
+    },
+    "time": {
+      "justNow": "ახლახან",
+      "minutes": "{count} წუთის წინ",
+      "hours": "{count} საათის წინ",
+      "yesterday": "გუშინ",
+      "days": "{count} დღის წინ"
+    },
+    "types": {
+      "ORDER_CREATED": {
+        "title": "შეკვეთა შეიქმნა",
+        "message": "შეკვეთა #{orderId} შეიქმნა."
+      },
+      "ORDER_STATUS_CHANGED": {
+        "title": "შეკვეთის სტატუსი განახლდა",
+        "message": "შეკვეთის #{orderId} სტატუსი შეიცვალა."
+      },
+      "PAYMENT_SUCCESS": {
+        "title": "გადახდა წარმატებულია",
+        "message": "შეკვეთის #{orderId} გადახდა წარმატებით დასრულდა."
+      },
+      "PAYMENT_FAILED": {
+        "title": "გადახდა ვერ შესრულდა",
+        "message": "შეკვეთის #{orderId} გადახდა ვერ შესრულდა."
+      },
+      "ORDER_SHIPPED": {
+        "title": "შეკვეთა გაიგზავნა",
+        "message": "შეკვეთა #{orderId} გაიგზავნა."
+      },
+      "ORDER_DELIVERED": {
+        "title": "შეკვეთა ჩაბარდა",
+        "message": "შეკვეთა #{orderId} ჩაბარდა."
+      }
+    }
+  },
+
   "account": {
     "nav": {
       "overview": "მიმოხილვა",

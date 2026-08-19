@@ -8,8 +8,9 @@ import {
   NavBar,
   RunningText,
   Button,
+  NotificationBell,
 } from "@/components";
-import { Bell, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/state/useCartStore";
 
 const Navigation = () => {
@@ -66,16 +67,7 @@ const Navigation = () => {
             </Link>
 
             {/* NOTIFICATIONS */}
-            <Link href="/account/notifications">
-              <Button
-                variant="outline"
-                size="sm"
-                iconOnly
-                aria-label="Notifications"
-              >
-                <Bell className="h-6 w-6" />
-              </Button>
-            </Link>
+            <NotificationBell />
           </div>
         </div>
       </div>

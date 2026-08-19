@@ -13,6 +13,9 @@ export { default as Logo } from "./ui/Logo";
 export { default as Tooltip } from "./ui/Tooltip";
 export { default as Advertisement } from "./ui/Advertisement";
 export { default as NotificationCenter } from "./ui/NotificationCenter";
+export { default as NotificationBell } from "./notifications/NotificationBell";
+export { default as NotificationDropdown } from "./notifications/NotificationDropdown";
+export { default as NotificationItem } from "./notifications/NotificationItem";
 
 // Navigation components
 export { default as NavBar } from "./navigation/NavBar";

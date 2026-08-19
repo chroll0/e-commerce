@@ -38,6 +38,59 @@
     "passwordMismatch": "Passwords do not match."
   },
 
+  "notifications": {
+    "title": "Notifications",
+    "description": "Stay up to date with your orders and payments.",
+    "open": "Open notifications",
+    "unread": "Unread",
+    "unreadCount": "Unread: {count}",
+    "markAllAsRead": "Mark all as read",
+    "viewAll": "View all notifications",
+    "empty": "No notifications yet",
+    "caughtUp": "You're all caught up",
+    "loadError": "We could not load your notifications right now.",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page} of {totalPages}",
+    "filters": {
+      "all": "All",
+      "unread": "Unread"
+    },
+    "time": {
+      "justNow": "Just now",
+      "minutes": "{count, plural, =1 {1 minute ago} other {# minutes ago}}",
+      "hours": "{count, plural, =1 {1 hour ago} other {# hours ago}}",
+      "yesterday": "Yesterday",
+      "days": "{count, plural, =1 {1 day ago} other {# days ago}}"
+    },
+    "types": {
+      "ORDER_CREATED": {
+        "title": "Order created",
+        "message": "Your order #{orderId} has been created."
+      },
+      "ORDER_STATUS_CHANGED": {
+        "title": "Order status updated",
+        "message": "The status of order #{orderId} has changed."
+      },
+      "PAYMENT_SUCCESS": {
+        "title": "Payment successful",
+        "message": "Payment for order #{orderId} was successful."
+      },
+      "PAYMENT_FAILED": {
+        "title": "Payment failed",
+        "message": "Payment for order #{orderId} failed."
+      },
+      "ORDER_SHIPPED": {
+        "title": "Order shipped",
+        "message": "Your order #{orderId} has been shipped."
+      },
+      "ORDER_DELIVERED": {
+        "title": "Order delivered",
+        "message": "Your order #{orderId} has been delivered."
+      }
+    }
+  },
+
   "account": {
     "nav": {
       "overview": "Overview",

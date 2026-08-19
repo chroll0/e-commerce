@@ -20,6 +20,7 @@ model User {
 
   orders       Order[]
   cartItems    CartItem[]
+  notifications Notification[]
 }
 
 enum UserRole {
@@ -114,6 +115,33 @@ enum PaymentStatus {
   SUCCESS
   FAILED
   CANCELLED
+}
+
+enum NotificationType {
+  ORDER_CREATED
+  ORDER_STATUS_CHANGED
+  PAYMENT_SUCCESS
+  PAYMENT_FAILED
+  ORDER_SHIPPED
+  ORDER_DELIVERED
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  userId      Int
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        NotificationType
+  eventKey    String           @unique
+  entityType  String?
+  entityId    String?
+  metadata    Json?
+  isRead      Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([userId])
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
 }
 
 model Order {
