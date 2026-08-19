@@ -13,6 +13,9 @@ export { default as Logo } from "./ui/Logo";
 export { default as Tooltip } from "./ui/Tooltip";
 export { default as Advertisement } from "./ui/Advertisement";
 export { default as NotificationCenter } from "./ui/NotificationCenter";
+export { default as NotificationBell } from "./notifications/NotificationBell";
+export { default as NotificationDropdown } from "./notifications/NotificationDropdown";
+export { default as NotificationItem } from "./notifications/NotificationItem";
 
 // Navigation components
 export { default as NavBar } from "./navigation/NavBar";
@@ -48,6 +51,7 @@ export { default as Footer } from "./layout/Footer";
 export { default as CartItem } from "./cart/CartItem";
 export { default as CartSummary } from "./cart/CartSummary";
 export { default as EmptyCart } from "./cart/EmptyCart";
+export { default as CartDropdown } from "./cart/CartDropdown";
 
 // Footer components
 export { default as LanguageSwitcher } from "./footer/LanguageSwitcher";

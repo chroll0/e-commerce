@@ -6,10 +6,14 @@ import {
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { PrismaService } from "../../prisma/prisma.service";
 import { OrderStatus } from "@prisma/client";
+import { NotificationService } from "../notification/notification.service";
 
 @Injectable()
 export class OrderService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly notificationService: NotificationService,
+  ) {}
 
   async createOrder(userId: number, dto: CreateOrderDto) {
     return this.prisma.$transaction(async (tx) => {
@@ -44,6 +48,14 @@ export class OrderService {
           },
         },
         include: { items: true },
+      });
+
+      await this.notificationService.createIfAbsent(tx, {
+        userId,
+        type: "ORDER_CREATED",
+        eventKey: `ORDER_CREATED:${order.id}`,
+        entityType: "ORDER",
+        entityId: String(order.id),
       });
 
       await tx.cartItem.deleteMany({ where: { userId } });
@@ -97,9 +109,39 @@ export class OrderService {
 
   // Admin only: Change order status
   async updateStatus(orderId: number, status: OrderStatus) {
-    return this.prisma.order.update({
-      where: { id: orderId },
-      data: { status },
+    return this.prisma.$transaction(async (tx) => {
+      const existingOrder = await tx.order.findUnique({
+        where: { id: orderId },
+        select: { id: true, userId: true, status: true },
+      });
+
+      if (!existingOrder) {
+        throw new NotFoundException("Order not found");
+      }
+
+      const order = await tx.order.update({
+        where: { id: orderId },
+        data: { status },
+      });
+
+      if (existingOrder.status !== status) {
+        const type =
+          status === "SHIPPED" ? "ORDER_SHIPPED" : "ORDER_STATUS_CHANGED";
+
+        await this.notificationService.createIfAbsent(tx, {
+          userId: existingOrder.userId,
+          type,
+          eventKey:
+            type === "ORDER_STATUS_CHANGED"
+              ? `ORDER_STATUS_CHANGED:${orderId}:${status}`
+              : `${type}:${orderId}`,
+          entityType: "ORDER",
+          entityId: String(orderId),
+          metadata: { status },
+        });
+      }
+
+      return order;
     });
   }
 

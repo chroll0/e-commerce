@@ -4,6 +4,7 @@ import { PaymentController } from "./payment.controller";
 import { PrismaService } from "../../prisma/prisma.service";
 import { PAYMENT_PROVIDER } from "./providers/payment-provider.interface";
 import { TestPaymentProvider } from "./providers/test-payment.provider";
+import { NotificationModule } from "../notification/notification.module";
 
 @Module({
   controllers: [PaymentController],
@@ -16,5 +17,6 @@ import { TestPaymentProvider } from "./providers/test-payment.provider";
       useExisting: TestPaymentProvider,
     },
   ],
+  imports: [NotificationModule],
 })
 export class PaymentModule {}

@@ -11,12 +11,14 @@ import {
   PAYMENT_PROVIDER,
   PaymentProvider,
 } from "./providers/payment-provider.interface";
+import { NotificationService } from "../notification/notification.service";
 
 @Injectable()
 export class PaymentService {
   constructor(
     private prisma: PrismaService,
     @Inject(PAYMENT_PROVIDER) private paymentProvider: PaymentProvider,
+    private readonly notificationService: NotificationService,
   ) {}
 
   async createPayment(userId: number, orderId: number) {
@@ -103,21 +105,41 @@ export class PaymentService {
     );
     const nextOrderStatus = this.mapOrderStatus(nextPaymentStatus);
 
-    const [updatedPayment, updatedOrder] = await this.prisma.$transaction([
-      this.prisma.payment.update({
+    const result = await this.prisma.$transaction(async (tx) => {
+      const updatedPayment = await tx.payment.update({
         where: { id: payment.id },
         data: { status: nextPaymentStatus },
-      }),
-      this.prisma.order.update({
+      });
+      const updatedOrder = await tx.order.update({
         where: { id: payment.orderId },
         data: { status: nextOrderStatus },
-      }),
-    ]);
+      });
+
+      const notificationType =
+        nextPaymentStatus === "SUCCESS"
+          ? "PAYMENT_SUCCESS"
+          : nextPaymentStatus === "FAILED"
+            ? "PAYMENT_FAILED"
+            : null;
+
+      if (notificationType) {
+        await this.notificationService.createIfAbsent(tx, {
+          userId,
+          type: notificationType,
+          eventKey: `${notificationType}:${payment.id}`,
+          entityType: "ORDER",
+          entityId: String(payment.orderId),
+          metadata: { paymentId: payment.id },
+        });
+      }
+
+      return { updatedPayment, updatedOrder };
+    });
 
     return {
       message: "Payment processed",
-      payment: updatedPayment,
-      order: updatedOrder,
+      payment: result.updatedPayment,
+      order: result.updatedOrder,
     };
   }
 
