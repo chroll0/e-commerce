@@ -6,8 +6,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { ImageIcon, Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { useState } from "react";
+import { useEffect } from "react";
 
 import { Button } from "@/components";
+import { api } from "@/lib/axios";
 import { useCartActions } from "@/state/useCartActions";
 import { useCartStore, type CartItem } from "@/state/useCartStore";
 
@@ -28,6 +30,49 @@ export default function CartDropdown({ onClose }: Props) {
   const itemCount = useCartStore((state) => state.totalItems)();
   const { remove, update } = useCartActions();
   const [busyKey, setBusyKey] = useState<string | null>(null);
+  const [displayNames, setDisplayNames] = useState<Record<string, string>>(() =>
+    Object.fromEntries(items.map((item) => [itemKey(item), item.name])),
+  );
+  const [namesLocale, setNamesLocale] = useState(locale);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const refreshNames = async () => {
+      const results = await Promise.all(
+        items.map(async (item) => {
+          try {
+            const response = await api.get(`/products/${item.productId}`, {
+              params: { locale },
+            });
+            const product = response.data;
+            const name =
+              product?.translations?.find(
+                (translation: { locale?: string; title?: string }) =>
+                  translation.locale === locale,
+              )?.title ??
+              product?.name ??
+              item.name;
+
+            return [itemKey(item), name] as const;
+          } catch {
+            return [itemKey(item), item.name] as const;
+          }
+        }),
+      );
+
+      if (!isCancelled) {
+        setDisplayNames(Object.fromEntries(results));
+        setNamesLocale(locale);
+      }
+    };
+
+    void refreshNames();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [items, locale]);
 
   const handleUpdate = async (item: CartItem, quantity: number) => {
     if (quantity < 1) return;
@@ -96,6 +141,9 @@ export default function CartDropdown({ onClose }: Props) {
           {items.map((item) => {
             const key = itemKey(item);
             const isBusy = busyKey === key;
+            const displayName = displayNames[key];
+            const accessibleName = displayName ?? item.name;
+            const isNameReady = namesLocale === locale && !!displayName;
 
             return (
               <div
@@ -106,7 +154,7 @@ export default function CartDropdown({ onClose }: Props) {
                   {item.image ? (
                     <Image
                       src={item.image}
-                      alt={item.name}
+                      alt={accessibleName}
                       fill
                       sizes="56px"
                       className="object-cover"
@@ -118,7 +166,14 @@ export default function CartDropdown({ onClose }: Props) {
 
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium text-foreground">
-                    {item.name}
+                    {isNameReady ? (
+                      displayName
+                    ) : (
+                      <span
+                        className="block h-4 w-3/4 animate-pulse rounded bg-muted"
+                        aria-hidden="true"
+                      />
+                    )}
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
                     ₾{item.price.toFixed(2)}
@@ -129,7 +184,7 @@ export default function CartDropdown({ onClose }: Props) {
                       variant="outline"
                       size="xs"
                       iconOnly
-                      aria-label={t("decreaseQuantity", { name: item.name })}
+                      aria-label={t("decreaseQuantity", { name: accessibleName })}
                       disabled={isBusy || item.quantity <= 1}
                       loading={isBusy}
                       onClick={() => void handleUpdate(item, item.quantity - 1)}
@@ -147,7 +202,7 @@ export default function CartDropdown({ onClose }: Props) {
                       variant="outline"
                       size="xs"
                       iconOnly
-                      aria-label={t("increaseQuantity", { name: item.name })}
+                      aria-label={t("increaseQuantity", { name: accessibleName })}
                       disabled={isBusy}
                       loading={isBusy}
                       onClick={() => void handleUpdate(item, item.quantity + 1)}
@@ -166,7 +221,7 @@ export default function CartDropdown({ onClose }: Props) {
                     variant="text"
                     size="xs"
                     iconOnly
-                    aria-label={t("removeItem", { name: item.name })}
+                    aria-label={t("removeItem", { name: accessibleName })}
                     disabled={isBusy}
                     loading={isBusy}
                     onClick={() => void handleRemove(item)}

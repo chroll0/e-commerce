@@ -20,15 +20,13 @@ export default function CartItem({ item }: Props) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const [displayName, setDisplayName] = useState(item.name);
-  const [isRefreshingName, setIsRefreshingName] = useState(false);
+  const [namesLocale, setNamesLocale] = useState(locale);
 
   useEffect(() => {
     let isCancelled = false;
 
     const refreshName = async () => {
       if (!item.productId) return;
-
-      setIsRefreshingName(true);
 
       try {
         const res = await api.get(`/products/${item.productId}`, {
@@ -45,19 +43,16 @@ export default function CartItem({ item }: Props) {
 
         if (!isCancelled) {
           setDisplayName(nextName);
+          setNamesLocale(locale);
         }
       } catch {
         if (!isCancelled) {
           setDisplayName(item.name);
-        }
-      } finally {
-        if (!isCancelled) {
-          setIsRefreshingName(false);
+          setNamesLocale(locale);
         }
       }
     };
 
-    setDisplayName(item.name);
     refreshName();
 
     return () => {
@@ -103,7 +98,14 @@ export default function CartItem({ item }: Props) {
 
       <div className="flex-1">
         <h3 className="font-semibold text-primary">
-          {isRefreshingName ? `${displayName}…` : displayName}
+          {namesLocale === locale ? (
+            displayName
+          ) : (
+            <span
+              className="block h-6 w-3/4 animate-pulse rounded bg-muted"
+              aria-hidden="true"
+            />
+          )}
         </h3>
 
         <div className="mt-4 flex items-center gap-2">
