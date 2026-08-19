@@ -5,8 +5,7 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { ImageIcon, Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components";
 import { api } from "@/lib/axios";
@@ -160,7 +159,7 @@ export default function CartDropdown({ onClose }: Props) {
                       className="object-cover"
                     />
                   ) : (
-                    <ImageIcon className="m-auto h-5 w-5 text-muted-foreground" />
+                    <ImageIcon className="m-auto h-5 w-5 text-muted" />
                   )}
                 </div>
 
@@ -184,7 +183,9 @@ export default function CartDropdown({ onClose }: Props) {
                       variant="outline"
                       size="xs"
                       iconOnly
-                      aria-label={t("decreaseQuantity", { name: accessibleName })}
+                      aria-label={t("decreaseQuantity", {
+                        name: accessibleName,
+                      })}
                       disabled={isBusy || item.quantity <= 1}
                       loading={isBusy}
                       onClick={() => void handleUpdate(item, item.quantity - 1)}
@@ -202,7 +203,9 @@ export default function CartDropdown({ onClose }: Props) {
                       variant="outline"
                       size="xs"
                       iconOnly
-                      aria-label={t("increaseQuantity", { name: accessibleName })}
+                      aria-label={t("increaseQuantity", {
+                        name: accessibleName,
+                      })}
                       disabled={isBusy}
                       loading={isBusy}
                       onClick={() => void handleUpdate(item, item.quantity + 1)}

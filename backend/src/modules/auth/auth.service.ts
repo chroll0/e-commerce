@@ -2,6 +2,7 @@ import {
   Injectable,
   UnauthorizedException,
   ConflictException,
+  BadRequestException,
 } from "@nestjs/common";
 import * as bcrypt from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
@@ -34,6 +35,25 @@ export class AuthService {
     if (!match) throw new UnauthorizedException("Invalid credentials");
 
     return this.generateToken(user);
+  }
+
+  async changePassword(
+    userId: number,
+    currentPassword: string,
+    newPassword: string,
+  ) {
+    const user = await this.userService.findOne(userId);
+    if (!user) throw new UnauthorizedException("Invalid credentials");
+
+    const matches = await bcrypt.compare(currentPassword, user.password);
+    if (!matches) throw new UnauthorizedException("Invalid current password");
+
+    if (currentPassword === newPassword) {
+      throw new BadRequestException("New password must be different");
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await this.userService.updatePassword(userId, hashedPassword);
   }
 
   private generateToken(user: User) {

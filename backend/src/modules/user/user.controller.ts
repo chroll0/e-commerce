@@ -14,6 +14,7 @@ import { AuthRequest } from "../../common/types/auth.types";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { UpdateProfileDto } from "./dto/update-profile.dto";
 import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
 import { RolesGuard } from "../../common/guards/roles.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
@@ -35,6 +36,23 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  // Get current user's profile
+  @Get("me")
+  @UseGuards(JwtAuthGuard)
+  getProfile(@Req() req: AuthRequest) {
+    return this.userService.findSafeById(req.user.id);
+  }
+
+  // Update current user's profile
+  @Patch("me")
+  @UseGuards(JwtAuthGuard)
+  updateProfile(
+    @Req() req: AuthRequest,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ) {
+    return this.userService.updateProfile(req.user.id, updateProfileDto);
+  }
+
   @Get(":id")
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
@@ -47,7 +65,7 @@ export class UserController {
   @Roles(UserRole.ADMIN)
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserDto: UpdateUserDto
+    @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.userService.update(id, updateUserDto);
   }
@@ -59,27 +77,13 @@ export class UserController {
     return this.userService.remove(id);
   }
 
-  // Get current user's profile
-  @Get("me")
-  @UseGuards(JwtAuthGuard)
-  getProfile(@Req() req: AuthRequest) {
-    return this.userService.findOne(req.user.id);
-  }
-
-  // Update current user's profile
-  @Patch("me")
-  @UseGuards(JwtAuthGuard)
-  updateProfile(@Req() req: AuthRequest, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(req.user.id, updateUserDto);
-  }
-
   // Update user role (ADMIN only)
   @Patch(":id/role")
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   updateRole(
     @Param("id", ParseIntPipe) id: number,
-    @Body("role") role: UserRole
+    @Body("role") role: UserRole,
   ) {
     return this.userService.updateRole(id, role);
   }

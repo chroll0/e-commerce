@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { UpdateProfileDto } from "./dto/update-profile.dto";
 import { hash } from "bcryptjs";
 import { PrismaService } from "../../prisma/prisma.service";
 import { UserRole } from "../../common/enums/user-role.enum";
@@ -38,6 +39,25 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: updateUserDto,
+    });
+  }
+
+  async updateProfile(id: number, updateProfileDto: UpdateProfileDto) {
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: updateProfileDto,
+    });
+
+    return this.findSafeById(user.id);
+  }
+
+  async updatePassword(id: number, password: string) {
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        password,
+        tokenVersion: { increment: 1 },
+      },
     });
   }
 

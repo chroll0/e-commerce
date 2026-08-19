@@ -6,6 +6,7 @@ import {
   Get,
   UseGuards,
   Req,
+  BadRequestException,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { Response, Request } from "express";
@@ -13,6 +14,7 @@ import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { UserService } from "../user/user.service";
+import { ChangePasswordDto } from "./dto/change-password.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -80,5 +82,23 @@ export class AuthController {
   @UseGuards(AuthGuard("jwt"))
   verify() {
     return { valid: true };
+  }
+
+  @Post("change-password")
+  @UseGuards(AuthGuard("jwt"))
+  async changePassword(@Req() req: Request, @Body() dto: ChangePasswordDto) {
+    const user = req.user as { id: number };
+
+    if (dto.newPassword !== dto.confirmPassword) {
+      throw new BadRequestException("Passwords do not match");
+    }
+
+    await this.authService.changePassword(
+      user.id,
+      dto.currentPassword,
+      dto.newPassword,
+    );
+
+    return { success: true };
   }
 }
