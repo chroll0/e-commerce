@@ -1269,9 +1269,16 @@
 
   "cart": {
     "title": "კალათა",
+    "open": "კალათის გახსნა",
     "empty": "კალათა ცარიელია",
     "emptyDescription": "დაამატეთ პროდუქტები კალათაში.",
     "continueShopping": "პროდუქტების ნახვა",
+    "viewCart": "კალათის ნახვა",
+    "close": "კალათის დახურვა",
+    "itemsCount": "{count} პროდუქტი",
+    "increaseQuantity": "რაოდენობის გაზრდა: {name}",
+    "decreaseQuantity": "რაოდენობის შემცირება: {name}",
+    "removeItem": "წაშლა: {name}",
     "summary": "შეკვეთის შეჯამება",
     "subtotal": "შუალედური ჯამი",
     "shipping": "მიწოდება",

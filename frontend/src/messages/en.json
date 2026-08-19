@@ -1278,9 +1278,16 @@
 
   "cart": {
     "title": "Shopping Cart",
+    "open": "Open shopping cart",
     "empty": "Your cart is empty",
     "emptyDescription": "Add products to your cart to continue shopping.",
     "continueShopping": "Continue Shopping",
+    "viewCart": "View Cart",
+    "close": "Close cart",
+    "itemsCount": "{count, plural, =0 {0 items} =1 {1 item} other {# items}}",
+    "increaseQuantity": "Increase quantity for {name}",
+    "decreaseQuantity": "Decrease quantity for {name}",
+    "removeItem": "Remove {name}",
     "summary": "Order Summary",
     "subtotal": "Subtotal",
     "shipping": "Shipping",

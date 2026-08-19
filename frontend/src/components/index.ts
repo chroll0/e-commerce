@@ -51,6 +51,7 @@ export { default as Footer } from "./layout/Footer";
 export { default as CartItem } from "./cart/CartItem";
 export { default as CartSummary } from "./cart/CartSummary";
 export { default as EmptyCart } from "./cart/EmptyCart";
+export { default as CartDropdown } from "./cart/CartDropdown";
 
 // Footer components
 export { default as LanguageSwitcher } from "./footer/LanguageSwitcher";
