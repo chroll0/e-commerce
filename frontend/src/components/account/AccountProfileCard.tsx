@@ -53,10 +53,16 @@ export default function AccountProfileCard({ user }: { user: User }) {
       </div>
 
       {/* Action */}
-      <div className="mt-8 flex flex-col gap-4">
-        {isAdmin && (
+      <div className="mt-4 flex flex-col gap-4">
+        {isAdmin ? (
           <Button asChild variant="primary" fullWidth type="button">
             <Link href={`/${locale}/admin/dashboard`}>{t("nav.admin")}</Link>
+          </Button>
+        ) : (
+          <Button asChild variant="primary" fullWidth type="button">
+            <Link href={`/${locale}/account/notifications`}>
+              {t("nav.notifications")}
+            </Link>
           </Button>
         )}
 
