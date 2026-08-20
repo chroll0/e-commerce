@@ -15,17 +15,97 @@ model User {
   phone        String?   @unique
   role         UserRole  @default(USER)
   tokenVersion Int       @default(0)
+  emailVerifiedAt DateTime?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
   orders       Order[]
   cartItems    CartItem[]
   notifications Notification[]
+  addresses    Address[]
+  preferences  UserPreferences?
+  emailVerificationTokens EmailVerificationToken[]
+  passwordResetTokens PasswordResetToken[]
+  oauthAccounts OAuthAccount[]
 }
 
 enum UserRole {
   USER
   ADMIN
+}
+
+enum AuthProviderType {
+  GOOGLE
+  APPLE
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model OAuthAccount {
+  id                Int              @id @default(autoincrement())
+  userId            Int
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider          AuthProviderType
+  providerAccountId String
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Address {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String?
+  firstName   String
+  lastName    String
+  phone       String
+  country     String   @default("Georgia")
+  city        String
+  address     String
+  apartment   String?
+  postalCode  String?
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model UserPreferences {
+  id                 Int      @id @default(autoincrement())
+  userId             Int      @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language           String   @default("en")
+  emailNotifications Boolean  @default(true)
+  orderNotifications Boolean  @default(true)
+  marketingEmails    Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 model Category {

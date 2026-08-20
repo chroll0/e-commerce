@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useLocale } from "next-intl";
-import { ImageIcon, MinusIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { ImageIcon, Minus, Plus, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components";
@@ -113,11 +113,11 @@ export default function CartItem({ item }: Props) {
             variant="text"
             iconOnly
             size="sm"
-            disabled={isUpdating}
+            disabled={isUpdating || item.quantity <= 1}
             loading={isUpdating}
             onClick={() => handleUpdateQuantity(item.quantity - 1)}
           >
-            <MinusIcon className="h-4 w-4" />
+            <Minus className="h-4 w-4" />
           </Button>
 
           <span className="min-w-8 text-center">{item.quantity}</span>
@@ -130,7 +130,7 @@ export default function CartItem({ item }: Props) {
             loading={isUpdating}
             onClick={() => handleUpdateQuantity(item.quantity + 1)}
           >
-            <PlusIcon className="h-4 w-4" />
+            <Plus className="h-4 w-4" />
           </Button>
         </div>
       </div>
