@@ -12,12 +12,22 @@ export type User = {
   createdAt: Date;
 };
 
+export type AuthError = Error & { code?: string };
+
 type AuthState = {
   user: User | null;
   loading: boolean;
   fetchMe: (force?: boolean) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
+  completeOAuthLogin: () => Promise<void>;
   logout: () => Promise<void>;
+};
+
+type BackendCartItem = {
+  productId: number;
+  quantity: number;
+  id: number;
+  product: { name: string; slug: string; image?: string | null; price: number };
 };
 
 const getCart = () => useCartStore.getState();
@@ -37,7 +47,7 @@ const syncCartOnLogin = async () => {
   });
 
   clearCart();
-  backendCart.forEach((item: any) =>
+  (backendCart as BackendCartItem[]).forEach((item) =>
     addItem({
       productId: item.productId,
       name: item.product.name,
@@ -73,9 +83,23 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   login: async (email, password) => {
     set({ loading: true });
-    await api.post("/auth/login", { email, password });
-    await useAuthStore.getState().fetchMe(true);
-    await syncCartOnLogin();
+    try {
+      await api.post("/auth/login", { email, password });
+      await useAuthStore.getState().fetchMe(true);
+      await syncCartOnLogin();
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  completeOAuthLogin: async () => {
+    set({ loading: true });
+    try {
+      await useAuthStore.getState().fetchMe(true);
+      await syncCartOnLogin();
+    } finally {
+      set({ loading: false });
+    }
   },
 
   logout: async () => {
