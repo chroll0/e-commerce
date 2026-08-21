@@ -7,7 +7,14 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const fetchMe = useAuthStore((s) => s.fetchMe);
 
   useEffect(() => {
-    fetchMe();
+    void fetchMe();
+
+    const reconcileAuth = () => {
+      void fetchMe(true);
+    };
+
+    window.addEventListener("pageshow", reconcileAuth);
+    return () => window.removeEventListener("pageshow", reconcileAuth);
   }, [fetchMe]);
 
   return <>{children}</>;

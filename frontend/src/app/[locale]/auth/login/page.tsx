@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AxiosError } from "axios";
 import { Button, Input } from "@/components";
 import { useTranslations } from "next-intl";
@@ -28,19 +28,15 @@ export default function LoginPage() {
   const { login } = useAuthStore();
   const router = useRouter();
 
-  useEffect(() => {
-    const error = searchParams.get("error");
-    if (!error) return;
-
-    if (error === "oauth_failed" || error === "oauthError") {
-      setMessage(t("oauthError"));
-      return;
-    }
-
-    if (error === "OAUTH_ACCOUNT_LINK_REQUIRED") {
-      setMessage(t("oauthLinkRequired"));
-    }
-  }, [searchParams, t]);
+  const oauthError = searchParams.get("error");
+  const oauthMessage =
+    oauthError === "oauth_cancelled"
+      ? t("oauthCancelled")
+      : oauthError === "OAUTH_ACCOUNT_LINK_REQUIRED"
+        ? t("oauthLinkRequired")
+        : oauthError === "oauth_failed" || oauthError === "oauthError"
+          ? t("oauthError")
+          : "";
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,8 +137,10 @@ export default function LoginPage() {
           </Button>
         </div>
 
-        {message && (
-          <p className="mt-4 text-center text-sm text-accent">{message}</p>
+        {(message || oauthMessage) && (
+          <p className="mt-4 text-center text-sm text-accent">
+            {message || oauthMessage}
+          </p>
         )}
 
         {needsVerification && (

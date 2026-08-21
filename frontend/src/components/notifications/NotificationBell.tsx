@@ -12,7 +12,7 @@ import NotificationDropdown from "./NotificationDropdown";
 export default function NotificationBell() {
   const t = useTranslations("notifications");
   const locale = useLocale();
-  const { user, loading: authLoading, fetchMe } = useAuthStore();
+  const { user, loading: authLoading } = useAuthStore();
   const containerRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState<UserNotification[]>([]);
@@ -32,10 +32,6 @@ export default function NotificationBell() {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    void fetchMe();
-  }, [fetchMe]);
 
   useEffect(() => {
     if (authLoading) return;

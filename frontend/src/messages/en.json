@@ -58,6 +58,7 @@
     "google": "Google",
     "apple": "Apple",
     "oauthLinkRequired": "Sign in with your existing account before linking this provider.",
+    "oauthCancelled": "Sign-in was cancelled. You can try again.",
     "oauthError": "Authentication with this provider failed."
   },
 
