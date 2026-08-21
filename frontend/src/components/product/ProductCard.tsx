@@ -80,7 +80,7 @@ export default function ProductCard({ product }: Props) {
         </div>
 
         {/* ADD TO CART */}
-        <div className="absolute bottom-3 right-3 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition">
+        <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 opacity-100 translate-y-0 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
           <Button
             size="sm"
             disabled={data.isOutOfStock}

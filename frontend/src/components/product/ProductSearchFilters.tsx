@@ -69,6 +69,8 @@ export default function ProductSearchFilters({
             <Button
               type="submit"
               disabled={loading}
+              variant="primary"
+              size="sm"
               className="w-full whitespace-nowrap sm:w-auto"
             >
               {t("search")}
@@ -84,6 +86,7 @@ export default function ProductSearchFilters({
 
           <Button
             variant="outline"
+            size="sm"
             onClick={handleClearFilters}
             disabled={loading}
             className="whitespace-nowrap sm:w-auto"

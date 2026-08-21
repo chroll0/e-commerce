@@ -121,6 +121,7 @@
       "wishlist": "რჩეულები",
       "addresses": "მისამართები",
       "settings": "პარამეტრები",
+      "notifications": "შეტყობინებები",
       "admin": "ადმინ პანელი"
     },
     "overview": {
@@ -881,8 +882,8 @@
         "providerLabel": "პროვაიდერი",
         "allStatuses": "ყველა",
         "allProviders": "ყველა",
-        "sortNewest": "ჯერ",
-        "sortOldest": "ჯერ"
+        "sortNewest": "ახალი",
+        "sortOldest": "ძველი"
       },
       "table": {
         "payment": "გადახდა",
@@ -1132,7 +1133,9 @@
     "sales": "გაყიდვები",
     "products": "პროდუქტები",
     "storesCount": "{count} მაღაზია ნაპოვნია",
+    "sortLabel": "დალაგება",
     "sort": {
+      "all": "ყველა",
       "sales": "გაყიდვები",
       "rating": "რეიტინგი",
       "newest": "ახალი"

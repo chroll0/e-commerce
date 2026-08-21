@@ -2,12 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { ChevronDown, Filter, Loader2, Store as StoreIcon } from "lucide-react";
+import { Filter, Loader2, Store as StoreIcon } from "lucide-react";
 
 import {
   Breadcrumbs,
   Button,
   SearchBar,
+  SelectField,
   StoreCard,
   StoreCardSkeleton,
 } from "@/components";
@@ -17,7 +18,7 @@ import type { Locale, StoreApi } from "@/types";
 
 const PAGE_SIZE = 8;
 
-type SortOption = GetStoresParams["sort"];
+type SortOption = NonNullable<GetStoresParams["sort"]>;
 
 function StoresGrid({
   stores,
@@ -110,6 +111,7 @@ export default function AllStoresPage() {
   const isEmpty = !loading && stores.length === 0;
 
   const isInitialLoading = loading && limit === PAGE_SIZE;
+  const isLoadingMore = loading && limit > PAGE_SIZE;
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-10">
@@ -137,28 +139,26 @@ export default function AllStoresPage() {
           placeholder={t("searchPlaceholder")}
         />
 
-        <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 text-muted" />
-
-          <div className="relative">
-            <select
-              value={sortBy}
-              onChange={(e) => {
-                setSortBy(e.target.value as SortOption);
-                setLimit(PAGE_SIZE);
-              }}
-              className="max-w-[150px] appearance-none truncate rounded-lg border border-border bg-background py-2.5 pl-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="sales">{t("sort.sales")}</option>
-              <option value="rating">{t("sort.rating")}</option>
-              <option value="newest">{t("sort.newest")}</option>
-            </select>
-
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          </div>
+        <div className="min-w-[170px]">
+          <SelectField
+            label={t("sortLabel")}
+            name="sortBy"
+            value={sortBy}
+            placeholderLabel={t("sort.all")}
+            labelIcon={<Filter />}
+            onChange={(next) => {
+              setSortBy(next as SortOption);
+              setLimit(PAGE_SIZE);
+            }}
+            options={[
+              { value: "sales", label: t("sort.sales") },
+              { value: "rating", label: t("sort.rating") },
+              { value: "newest", label: t("sort.newest") },
+            ]}
+          />
         </div>
 
-        <Button variant="outline" onClick={handleClearFilters}>
+        <Button variant="outline" size="sm" onClick={handleClearFilters}>
           {t("clearFilters")}
         </Button>
       </div>
@@ -193,15 +193,16 @@ export default function AllStoresPage() {
       )}
 
       {/* LOAD MORE */}
-      {!loading && stores.length > 0 && hasMore && (
+      {!isInitialLoading && stores.length > 0 && (hasMore || isLoadingMore) && (
         <div className="mt-8 flex justify-center">
           <Button
             variant="outline"
             size="lg"
             onClick={handleLoadMore}
+            disabled={isLoadingMore}
             className="min-w-[200px]"
           >
-            {loading ? (
+            {isLoadingMore ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 {t("loading")}
