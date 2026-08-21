@@ -1133,7 +1133,9 @@
     "sales": "გაყიდვები",
     "products": "პროდუქტები",
     "storesCount": "{count} მაღაზია ნაპოვნია",
+    "sortLabel": "დალაგება",
     "sort": {
+      "all": "ყველა",
       "sales": "გაყიდვები",
       "rating": "რეიტინგი",
       "newest": "ახალი"

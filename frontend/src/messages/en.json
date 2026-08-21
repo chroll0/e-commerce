@@ -1144,7 +1144,9 @@
     "sales": "sales",
     "products": "products",
     "storesCount": "{count} stores found",
+    "sortLabel": "Sort by",
     "sort": {
+      "all": "All",
       "sales": "Most Sales",
       "rating": "Highest Rated",
       "newest": "Newest"
