@@ -19,7 +19,6 @@ type AuthState = {
   loading: boolean;
   fetchMe: (force?: boolean) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
-  completeOAuthLogin: () => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -31,6 +30,7 @@ type BackendCartItem = {
 };
 
 const getCart = () => useCartStore.getState();
+let authRequestId = 0;
 
 const syncCartOnLogin = async () => {
   const { items, clearCart, addItem } = getCart();
@@ -65,18 +65,27 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   loading: true,
 
   fetchMe: async (force = false) => {
-    // fast path: if we already have a user and `force` isn't requested, skip network
-    const { user } = get();
-    if (user && !force) return;
+    void force;
+    const requestId = ++authRequestId;
+    const previousUser = get().user;
 
     set({ loading: true });
     try {
       const { data } = await api.get("/auth/me");
+      if (requestId !== authRequestId) return;
       set({
         user: { ...data, createdAt: new Date(data.createdAt) },
-        loading: false,
       });
+
+      if (!previousUser) {
+        await syncCartOnLogin();
+      }
+
+      if (requestId === authRequestId) {
+        set({ loading: false });
+      }
     } catch {
+      if (requestId !== authRequestId) return;
       set({ user: null, loading: false });
     }
   },
@@ -86,17 +95,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       await api.post("/auth/login", { email, password });
       await useAuthStore.getState().fetchMe(true);
-      await syncCartOnLogin();
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  completeOAuthLogin: async () => {
-    set({ loading: true });
-    try {
-      await useAuthStore.getState().fetchMe(true);
-      await syncCartOnLogin();
     } finally {
       set({ loading: false });
     }

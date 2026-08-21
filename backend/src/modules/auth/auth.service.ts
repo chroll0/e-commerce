@@ -49,6 +49,47 @@ export class AuthService {
     return `https://appleid.apple.com/auth/authorize?${params.toString()}`;
   }
 
+  async createOAuthTransaction(
+    provider: "google" | "apple",
+    state: string,
+    locale: "en" | "ka",
+  ) {
+    await this.prisma.oAuthTransaction.create({
+      data: {
+        stateHash: this.hashToken(state),
+        provider:
+          provider === "google"
+            ? AuthProviderType.GOOGLE
+            : AuthProviderType.APPLE,
+        locale,
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+      },
+    });
+  }
+
+  async consumeOAuthTransaction(provider: "google" | "apple", state: string) {
+    const now = new Date();
+    const result = await this.prisma.oAuthTransaction.updateMany({
+      where: {
+        stateHash: this.hashToken(state),
+        provider:
+          provider === "google"
+            ? AuthProviderType.GOOGLE
+            : AuthProviderType.APPLE,
+        consumedAt: null,
+        expiresAt: { gt: now },
+      },
+      data: { consumedAt: now },
+    });
+
+    if (!result.count) {
+      throw new UnauthorizedException({
+        code: "OAUTH_STATE_INVALID",
+        message: "OAuth state is invalid or expired",
+      });
+    }
+  }
+
   async completeGoogle(code: string) {
     const client = this.getGoogleClient();
     const { tokens } = await client.getToken(code);
