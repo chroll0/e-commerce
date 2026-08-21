@@ -34,7 +34,7 @@ const AdminPageHeader: FC<Props> = ({
 
         {showAdd && (
           <Button asChild variant="tertiary" size="sm">
-            <Link href={addHref!}>
+            <Link href={addHref!} className="inline-flex items-center">
               <Plus className="h-4 w-4 mr-2" />
               {addLabel}
             </Link>

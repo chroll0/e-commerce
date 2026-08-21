@@ -882,8 +882,8 @@
         "providerLabel": "პროვაიდერი",
         "allStatuses": "ყველა",
         "allProviders": "ყველა",
-        "sortNewest": "ჯერ",
-        "sortOldest": "ჯერ"
+        "sortNewest": "ახალი",
+        "sortOldest": "ძველი"
       },
       "table": {
         "payment": "გადახდა",
