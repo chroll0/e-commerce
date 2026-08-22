@@ -63,6 +63,19 @@ model PasswordResetToken {
   @@index([userId])
 }
 
+model OAuthTransaction {
+  id         String           @id @default(cuid())
+  stateHash  String           @unique
+  provider   AuthProviderType
+  locale     String
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime         @default(now())
+
+  @@index([expiresAt])
+  @@index([provider, consumedAt])
+}
+
 model OAuthAccount {
   id                Int              @id @default(autoincrement())
   userId            Int

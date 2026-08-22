@@ -153,7 +153,7 @@ export class AuthController {
     return this.finishOAuth("apple", req, res);
   }
 
-  private startOAuth(
+  private async startOAuth(
     provider: "google" | "apple",
     req: Request,
     res: Response,
@@ -163,6 +163,7 @@ export class AuthController {
       typeof req.query.locale === "string" && req.query.locale === "ka"
         ? "ka"
         : "en";
+    await this.authService.createOAuthTransaction(provider, state, locale);
     res.cookie("oauth_state", state, this.getOAuthStateOptions());
     res.cookie("oauth_locale", locale, this.getOAuthStateOptions());
     return res.redirect(this.authService.getOAuthUrl(provider, state));
@@ -174,15 +175,41 @@ export class AuthController {
     res: Response,
   ) {
     const state = typeof req.query.state === "string" ? req.query.state : "";
-    if (!state || state !== req.cookies?.oauth_state) {
-      return res.redirect(this.frontendLoginErrorUrl("en", "oauth_failed"));
-    }
-    res.clearCookie("oauth_state", this.getOAuthStateOptions());
+    const cookieState = req.cookies?.oauth_state;
     const locale = req.cookies?.oauth_locale === "ka" ? "ka" : "en";
+    res.clearCookie("oauth_state", this.getOAuthStateOptions());
     res.clearCookie("oauth_locale", this.getOAuthStateOptions());
 
+    if (!state || state !== cookieState) {
+      if (cookieState) {
+        await this.authService
+          .consumeOAuthTransaction(provider, cookieState)
+          .catch(() => undefined);
+      }
+      return res.redirect(this.frontendLoginErrorUrl(locale, "oauth_failed"));
+    }
+
     try {
+      await this.authService.consumeOAuthTransaction(provider, state);
+
+      const providerError =
+        typeof req.query.error === "string" ? req.query.error : "";
+      if (providerError) {
+        return res.redirect(
+          this.frontendLoginErrorUrl(
+            locale,
+            providerError === "access_denied"
+              ? "oauth_cancelled"
+              : "oauth_failed",
+          ),
+        );
+      }
+
       const code = typeof req.query.code === "string" ? req.query.code : "";
+      if (!code) {
+        return res.redirect(this.frontendLoginErrorUrl(locale, "oauth_failed"));
+      }
+
       const token =
         provider === "google"
           ? await this.authService.completeGoogle(code)
@@ -190,12 +217,12 @@ export class AuthController {
       res.cookie("access_token", token, this.getCookieOptions());
       return res.redirect(this.frontendAccountUrl(locale));
     } catch (error) {
-      const response = (error as any)?.response;
+      const response =
+        (error as any)?.response ?? (error as any)?.getResponse?.();
       const codeValue =
-        response?.code ||
-        response?.data?.code ||
-        (typeof response === "string" ? response : undefined) ||
-        "oauth_failed";
+        response?.code === "OAUTH_ACCOUNT_LINK_REQUIRED"
+          ? "OAUTH_ACCOUNT_LINK_REQUIRED"
+          : "oauth_failed";
       return res.redirect(this.frontendLoginErrorUrl(locale, codeValue));
     }
   }
