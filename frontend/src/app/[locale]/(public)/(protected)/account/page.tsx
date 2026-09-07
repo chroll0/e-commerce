@@ -19,7 +19,7 @@ export default function AccountPage() {
 
   const t = useTranslations("account.overview");
   const tAuth = useTranslations("auth");
-  const tAdd = useTranslations("advertisements.winterSale");
+  const tAdd = useTranslations("advertisements.sale");
 
   if (!user) {
     return null;

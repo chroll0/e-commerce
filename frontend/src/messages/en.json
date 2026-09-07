@@ -1328,27 +1328,27 @@
 
   "advertisements": {
     "profileComplete": {
-      "badge": "Tip",
-      "title": "Complete your profile",
-      "description": "Add phone and address to checkout faster.",
-      "ctaLabel": "Update settings"
+      "badge": "Account",
+      "title": "Manage your account",
+      "description": "Keep your account information up to date for a better shopping experience.",
+      "ctaLabel": "Manage account"
     },
-    "winterSale": {
-      "badge": "New",
-      "title": "Up to 30% off Winter Sale",
-      "description": "Limited time deals on best-selling products.",
-      "ctaLabel": "Shop now"
+    "sale": {
+      "badge": "Discover",
+      "title": "Discover something new",
+      "description": "Explore our latest products, popular picks and everyday essentials.",
+      "ctaLabel": "Explore products"
     },
     "cta": {
-      "badge": "About Us",
-      "title": "Start exploring our products",
-      "description": "Discover deals, new arrivals and best sellers.",
+      "badge": "Explore",
+      "title": "Find what you're looking for",
+      "description": "Browse our collection and discover products selected for you.",
       "button": "Shop Now"
     },
-    "freeDelivery": {
-      "badge": "Free",
-      "title": "Free delivery over ₾199",
-      "description": "Applies to Tbilisi area."
+    "delivery": {
+      "badge": "Delivery",
+      "title": "Convenient delivery",
+      "description": "Enjoy a simple and convenient shopping experience with reliable delivery options."
     }
   },
 

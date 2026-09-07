@@ -14,13 +14,9 @@ type Props = {
 export default function AuthGuard({ children, role, locale }: Props) {
   const router = useRouter();
   const currentLocale = useLocale();
-  const { user, loading, fetchMe } = useAuthStore();
+  const { user, loading } = useAuthStore();
 
   const resolvedLocale = locale ?? currentLocale;
-
-  useEffect(() => {
-    void fetchMe();
-  }, [fetchMe]);
 
   useEffect(() => {
     if (loading) return;

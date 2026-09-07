@@ -13,17 +13,13 @@ export default function ProtectedLayout({
 }) {
   const router = useRouter();
   const locale = useLocale();
-  const { user, loading, fetchMe } = useAuthStore();
-
-  useEffect(() => {
-    fetchMe();
-  }, [fetchMe]);
+  const { user, loading } = useAuthStore();
 
   useEffect(() => {
     if (!loading && !user) {
       router.replace(`/${locale}/auth/login`);
     }
-  }, [loading, user, router]);
+  }, [loading, user, router, locale]);
 
   if (loading) {
     return <AccountDetailsSkeleton />;

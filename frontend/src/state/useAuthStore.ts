@@ -31,6 +31,7 @@ type BackendCartItem = {
 
 const getCart = () => useCartStore.getState();
 let authRequestId = 0;
+let inFlightAuthRequest: Promise<void> | null = null;
 
 const syncCartOnLogin = async () => {
   const { items, clearCart, addItem } = getCart();
@@ -64,30 +65,44 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   loading: true,
 
-  fetchMe: async (force = false) => {
-    void force;
+  fetchMe: (force = false) => {
+    if (!force && inFlightAuthRequest) {
+      return inFlightAuthRequest;
+    }
+
     const requestId = ++authRequestId;
     const previousUser = get().user;
 
-    set({ loading: true });
-    try {
-      const { data } = await api.get("/auth/me");
-      if (requestId !== authRequestId) return;
-      set({
-        user: { ...data, createdAt: new Date(data.createdAt) },
-      });
+    const request = (async () => {
+      set({ loading: true });
+      try {
+        const { data } = await api.get("/auth/me");
+        if (requestId !== authRequestId) return;
+        set({
+          user: { ...data, createdAt: new Date(data.createdAt) },
+        });
 
-      if (!previousUser) {
-        await syncCartOnLogin();
-      }
+        if (!previousUser) {
+          await syncCartOnLogin();
+        }
 
-      if (requestId === authRequestId) {
-        set({ loading: false });
+        if (requestId === authRequestId) {
+          set({ loading: false });
+        }
+      } catch {
+        if (requestId !== authRequestId) return;
+        set({ user: null, loading: false });
       }
-    } catch {
-      if (requestId !== authRequestId) return;
-      set({ user: null, loading: false });
-    }
+    })();
+
+    inFlightAuthRequest = request;
+    void request.finally(() => {
+      if (inFlightAuthRequest === request) {
+        inFlightAuthRequest = null;
+      }
+    });
+
+    return request;
   },
 
   login: async (email, password) => {
