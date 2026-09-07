@@ -13,8 +13,8 @@ const Footer = () => {
       <div className="px-6 md:px-12 py-12 space-y-10 max-w-400 mx-auto">
         {/* Promo */}
         <Advertisement
-          title={t("advertisements.freeDelivery.title")}
-          description={t("advertisements.freeDelivery.description")}
+          title={t("advertisements.delivery.title")}
+          description={t("advertisements.delivery.description")}
           variant="promo"
         />
 
