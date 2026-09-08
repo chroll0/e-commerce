@@ -150,7 +150,7 @@ export default function ProductDetails({ product }: Props) {
                 className={[
                   "relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border transition",
                   index === selectedImageIndex
-                    ? "border-primary ring-2 ring-primary"
+                    ? "border-destructive"
                     : "border-border hover:border-primary/50",
                 ].join(" ")}
               >
@@ -185,7 +185,7 @@ export default function ProductDetails({ product }: Props) {
           </span>
 
           {data.oldPrice && data.oldPrice > data.price && (
-            <span className="pb-1 text-sm text-muted line-through">
+            <span className="pb-1 text-md line-through text-destructive">
               ₾{data.oldPrice.toFixed(2)}
             </span>
           )}
@@ -203,7 +203,7 @@ export default function ProductDetails({ product }: Props) {
             </div>
           ) : (
             <div className="rounded-lg border border-border bg-card-soft px-3 py-2 text-sm font-medium text-primary">
-              {data.stock} {t("inStock")}
+              {t("inStock")}
             </div>
           )}
         </div>
