@@ -40,7 +40,7 @@ export function useProductData(product?: ProductApi): ProductCardData | null {
       oldPrice: product.oldPrice,
       discount: product.discount,
       stock,
-      image: product.images?.[0],
+      image: product.primaryImage ?? product.images?.[0],
       slug: product.slug,
       sold,
       progress,

@@ -76,7 +76,9 @@ export default function CategoryScroller() {
               )}
             </div>
 
-            <p className="mt-2 text-sm text-primary">{cat.name}</p>
+            <p className="mt-2 text-sm text-primary w-24 text-center">
+              {cat.name}
+            </p>
           </button>
         ))}
       </div>

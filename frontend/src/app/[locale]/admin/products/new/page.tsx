@@ -88,11 +88,16 @@ export default function AdminCreateProductPage() {
       storeId: "",
       isFeatured: false,
       images: [""],
+      primaryImage: "",
     }),
     [],
   );
 
-  const handleSubmit = async (v: ProductFormValues, cleanImages: string[]) => {
+  const handleSubmit = async (
+    v: ProductFormValues,
+    cleanImages: string[],
+    primaryImage: string | null,
+  ) => {
     try {
       setSubmitting(true);
       setServerError("");
@@ -105,6 +110,7 @@ export default function AdminCreateProductPage() {
         storeId: v.storeId ? Number(v.storeId) : undefined,
         isFeatured: v.isFeatured,
         images: cleanImages,
+        primaryImage,
         ...(v.oldPrice ? { oldPrice: Number(v.oldPrice) } : {}),
         ...(v.discount ? { discount: Number(v.discount) } : {}),
         translations: [

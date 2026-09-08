@@ -21,6 +21,8 @@ export class ProductService {
     }
 
     const slug = dto.slug ?? this.slugify(baseTitle);
+    const images = dto.images ?? [];
+    const primaryImage = this.resolvePrimaryImage(images, dto.primaryImage);
 
     return this.prisma.product.create({
       data: {
@@ -30,7 +32,8 @@ export class ProductService {
         discount: dto.discount,
         isFeatured: dto.isFeatured ?? false,
         stock: dto.stock ?? 0,
-        images: dto.images,
+        images,
+        primaryImage,
         categoryId: dto.categoryId,
         storeId: dto.storeId ?? null,
         translations: {
@@ -42,6 +45,31 @@ export class ProductService {
         category: { include: { translations: true } },
       },
     });
+  }
+
+  /**
+   * Ensures the primary image (if any) is one of the given gallery images.
+   * Falls back to the first image when none is explicitly selected.
+   */
+  private resolvePrimaryImage(
+    images: string[],
+    requestedPrimaryImage: string | null | undefined,
+  ): string | null {
+    if (requestedPrimaryImage === undefined) {
+      return images[0] ?? null;
+    }
+
+    if (requestedPrimaryImage === null) {
+      return null;
+    }
+
+    if (!images.includes(requestedPrimaryImage)) {
+      throw new BadRequestException(
+        "primaryImage must be one of the product images",
+      );
+    }
+
+    return requestedPrimaryImage;
   }
 
   async findAll(params: {
@@ -136,6 +164,7 @@ export class ProductService {
         isFeatured: p.isFeatured,
         price: p.price,
         images: p.images,
+        primaryImage: p.primaryImage,
         translations: p.translations,
         category: p.category,
         categoryId: p.categoryId,
@@ -178,11 +207,24 @@ export class ProductService {
   }
 
   async update(id: number, dto: UpdateProductDto) {
-    await this.ensureExists(id);
+    const current = await this.ensureExists(id);
 
     // slug: explicit > generate from EN title (if provided) > keep
     const enTitle = dto.translations?.find((t) => t.locale === "en")?.title;
     const slug = dto.slug ?? (enTitle ? this.slugify(enTitle) : undefined);
+
+    const images = dto.images ?? current.images;
+
+    let primaryImage: string | null | undefined;
+    if (dto.primaryImage !== undefined) {
+      // admin explicitly chose (or cleared) the primary image
+      primaryImage = this.resolvePrimaryImage(images, dto.primaryImage);
+    } else if (dto.images !== undefined) {
+      // gallery changed but primary wasn't touched: keep it if still valid, else fall back
+      primaryImage = images.includes(current.primaryImage ?? "")
+        ? current.primaryImage
+        : (images[0] ?? null);
+    }
 
     let translationOps:
       | {
@@ -244,6 +286,7 @@ export class ProductService {
         ...(dto.isFeatured !== undefined ? { isFeatured: dto.isFeatured } : {}),
         ...(dto.stock !== undefined ? { stock: dto.stock } : {}),
         ...(dto.images !== undefined ? { images: dto.images } : {}),
+        ...(primaryImage !== undefined ? { primaryImage } : {}),
         ...(dto.categoryId !== undefined ? { categoryId: dto.categoryId } : {}),
         ...(dto.storeId !== undefined ? { storeId: dto.storeId } : {}),
         ...(translationOps ? { translations: translationOps } : {}),
@@ -263,9 +306,10 @@ export class ProductService {
   private async ensureExists(id: number) {
     const exists = await this.prisma.product.findUnique({
       where: { id },
-      select: { id: true },
+      select: { id: true, images: true, primaryImage: true },
     });
     if (!exists) throw new NotFoundException(`Product with id ${id} not found`);
+    return exists;
   }
 
   private slugify(text: string) {

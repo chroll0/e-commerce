@@ -14,6 +14,9 @@ export type ImageUploadLabels = {
   tooMany: (maxFiles: number) => string;
 
   uploadFailed: string;
+
+  setPrimary?: string;
+  primary?: string;
 };
 
 export type Translation = {
