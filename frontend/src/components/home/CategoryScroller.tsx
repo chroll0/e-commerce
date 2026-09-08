@@ -60,7 +60,7 @@ export default function CategoryScroller() {
           <button
             key={cat.id}
             onClick={() => handleClick(cat.slug)}
-            className="flex min-w-20 flex-col items-center transition hover:opacity-80"
+            className="flex min-w-20 flex-col items-center transition hover:opacity-80 cursor-pointer"
           >
             <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-border bg-card-soft">
               {cat.image ? (
@@ -76,7 +76,7 @@ export default function CategoryScroller() {
               )}
             </div>
 
-            <p className="mt-2 text-sm text-primary w-24 text-center">
+            <p className="mt-2 text-xs text-primary w-24 text-center">
               {cat.name}
             </p>
           </button>

@@ -99,7 +99,7 @@ export default function ProductSearchFilters({
 
         {/* Filters */}
         <div className="flex items-end justify-center gap-3">
-          <div className="min-w-[220px]">
+          <div className="min-w-60">
             <CategorySelect
               value={categoryId}
               onChange={handleCategoryIdChange}
