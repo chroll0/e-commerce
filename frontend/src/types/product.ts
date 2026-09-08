@@ -27,6 +27,7 @@ export type ProductFormValues = {
   isFeatured: boolean;
 
   images: string[];
+  primaryImage: string;
 };
 
 export type ProductCategoryOption = {
@@ -54,6 +55,7 @@ export type ProductApi = {
   storeId?: number | null;
   isFeatured: boolean;
   images: string[];
+  primaryImage: string | null;
   translations: ProductTranslation[];
 };
 
@@ -84,6 +86,8 @@ export type ProductLabels = {
   addImage: string;
   imagesHint: string;
   remove: string;
+  setPrimary: string;
+  primary: string;
 
   preview: string;
   uploading: (count: number) => string;
@@ -113,7 +117,11 @@ export type ProductProps = {
   errors?: Record<string, string>;
 
   onCancel: () => void;
-  onSubmit: (values: ProductFormValues, cleanImages: string[]) => void;
+  onSubmit: (
+    values: ProductFormValues,
+    cleanImages: string[],
+    primaryImage: string | null,
+  ) => void;
 
   labels: ProductLabels;
 };

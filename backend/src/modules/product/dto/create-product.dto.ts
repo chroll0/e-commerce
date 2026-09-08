@@ -58,6 +58,10 @@ export class CreateProductDto {
   @IsString({ each: true })
   images?: string[];
 
+  @IsOptional()
+  @IsString()
+  primaryImage?: string | null;
+
   @IsNotEmpty()
   @IsNumber()
   categoryId: number;

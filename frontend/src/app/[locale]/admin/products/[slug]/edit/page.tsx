@@ -46,6 +46,7 @@ export default function AdminEditProductPage() {
     storeId: "",
     isFeatured: false,
     images: [""],
+    primaryImage: "",
   });
 
   const load = async () => {
@@ -78,6 +79,7 @@ export default function AdminEditProductPage() {
         storeId: String(product.storeId ?? ""),
         isFeatured: !!product.isFeatured,
         images: product.images?.length ? product.images : [""],
+        primaryImage: product.primaryImage ?? "",
       });
 
       // 2) categories and stores for dropdowns
@@ -119,7 +121,11 @@ export default function AdminEditProductPage() {
     load();
   }, [slug, locale]);
 
-  const handleSubmit = async (v: ProductFormValues, cleanImages: string[]) => {
+  const handleSubmit = async (
+    v: ProductFormValues,
+    cleanImages: string[],
+    primaryImage: string | null,
+  ) => {
     if (!id) return;
 
     try {
@@ -134,6 +140,7 @@ export default function AdminEditProductPage() {
         storeId: v.storeId ? Number(v.storeId) : null,
         isFeatured: v.isFeatured,
         images: cleanImages,
+        primaryImage,
         oldPrice: v.oldPrice ? Number(v.oldPrice) : null,
         discount: v.discount ? Number(v.discount) : null,
         translations: [

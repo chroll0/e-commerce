@@ -25,6 +25,9 @@ export { default as ThemeToggle } from "./navigation/ThemeToggle";
 export { default as SearchBar } from "./navigation/SearchBar";
 export { default as Breadcrumbs } from "./navigation/Breadcrumbs";
 
+// Category page components
+export { default as CategorySubcategories } from "./category/CategorySubcategories";
+
 // Home page components
 export { default as Hero } from "./home/Hero";
 export { default as CategoryScroller } from "./home/CategoryScroller";

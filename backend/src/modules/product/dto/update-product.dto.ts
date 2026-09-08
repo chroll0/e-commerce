@@ -53,6 +53,10 @@ export class UpdateProductDto {
   images?: string[];
 
   @IsOptional()
+  @IsString()
+  primaryImage?: string | null;
+
+  @IsOptional()
   @IsNumber()
   categoryId?: number;
 

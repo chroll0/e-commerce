@@ -16,7 +16,7 @@ import {
 } from "@/components";
 
 import type { ProductFormValues, ProductProps } from "@/types";
-import { slugify, cleanImageUrls } from "./productUtils";
+import { slugify, cleanImageUrls, resolvePrimaryImage } from "./productUtils";
 import { uploadImage } from "@/lib/cloudinary";
 import { makeProductSchema } from "@/hooks";
 
@@ -51,6 +51,7 @@ const ProductForm: FC<ProductProps> = ({
     defaultValues: {
       ...initialValues,
       images: initialValues.images ?? [],
+      primaryImage: initialValues.primaryImage ?? "",
     },
     mode: "onChange",
     reValidateMode: "onChange",
@@ -62,12 +63,14 @@ const ProductForm: FC<ProductProps> = ({
     reset({
       ...initialValues,
       images: initialValues.images ?? [],
+      primaryImage: initialValues.primaryImage ?? "",
     });
     setSlugTouched(mode === "edit");
   }, [initialValues, mode, reset]);
 
   const titleEn = watch("titleEn") ?? "";
   const images = watch("images") ?? [];
+  const primaryImage = watch("primaryImage") ?? "";
   const cleanImages = useMemo(() => cleanImageUrls(images), [images]);
 
   useEffect(() => {
@@ -85,7 +88,11 @@ const ProductForm: FC<ProductProps> = ({
     const ok = await trigger("slug");
     if (!ok) return;
 
-    onSubmit(values, cleanImages);
+    onSubmit(
+      values,
+      cleanImages,
+      resolvePrimaryImage(cleanImages, primaryImage),
+    );
   };
 
   return (
@@ -153,6 +160,13 @@ const ProductForm: FC<ProductProps> = ({
               shouldValidate: true,
             })
           }
+          primaryValue={primaryImage}
+          onPrimaryChange={(next) =>
+            setValue("primaryImage", next ?? "", {
+              shouldDirty: true,
+              shouldValidate: true,
+            })
+          }
           upload={(file) => uploadImage(file, "products")}
           maxFiles={5}
           maxSizeMb={10}
@@ -172,6 +186,8 @@ const ProductForm: FC<ProductProps> = ({
             tooLarge: (maxMb) => t("form.fields.tooLarge", { max: maxMb }),
             tooMany: (max) => t("form.fields.tooMany", { max }),
             uploadFailed: t("form.fields.uploadFailed"),
+            setPrimary: t("form.fields.setPrimary"),
+            primary: t("form.fields.primary"),
           }}
         />
 

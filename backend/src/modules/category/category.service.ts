@@ -100,9 +100,28 @@ export class CategoryService {
       category.translations.find((tr) => tr.locale === locale) ??
       category.translations[0];
 
+    const children = await this.prisma.category.findMany({
+      where: { parentId: category.id },
+      include: {
+        translations: {
+          where: locale ? { locale } : undefined,
+        },
+        _count: { select: { products: true } },
+      },
+      orderBy: { createdAt: "asc" },
+    });
+
     return {
       ...this.mapCategory(category, t),
       translations: category.translations,
+      children: children.map((child) => {
+        const childT =
+          child.translations?.[0] ??
+          child.translations.find((tr) => tr.locale === locale) ??
+          child.translations[0];
+
+        return this.mapCategory(child, childT);
+      }),
     };
   }
 

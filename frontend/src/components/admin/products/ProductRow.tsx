@@ -28,7 +28,7 @@ const ProductRow: FC<Props> = ({ product, onDelete }) => {
     product.category?.translations?.[0]?.name ??
     "—";
 
-  const image = product.images?.[0];
+  const image = product.primaryImage ?? product.images?.[0];
 
   return (
     <div className="grid grid-cols-12 items-center gap-2 border-b border-border px-4 py-3 last:border-b-0 hover:bg-muted/30 transition">

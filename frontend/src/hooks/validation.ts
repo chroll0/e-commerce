@@ -71,4 +71,6 @@ export const makeProductSchema = (t: TFn) =>
       .transform((value) => (Array.isArray(value) ? value : []))
       .default([])
       .defined(),
+
+    primaryImage: yup.string().trim().default(""),
   });

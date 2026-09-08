@@ -2,7 +2,7 @@
 
 import React, { useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { UploadCloud, X } from "lucide-react";
+import { UploadCloud, X, Star } from "lucide-react";
 import type { ImageUploadLabels } from "@/types/common";
 
 type UploadResult = { secureUrl: string };
@@ -25,6 +25,8 @@ type MultiProps = CommonProps & {
   maxFiles?: number; // default 5
   value: string[];
   onChange: (next: string[]) => void;
+  primaryValue?: string | null;
+  onPrimaryChange?: (next: string | null) => void;
 };
 
 type Props = SingleProps | MultiProps;
@@ -126,9 +128,19 @@ export default function ImageUpload(props: Props) {
       return;
     }
 
+    const removedUrl = urls[idx];
     const next = [...urls];
     next.splice(idx, 1);
     props.onChange(next);
+
+    if (props.onPrimaryChange && removedUrl === props.primaryValue) {
+      props.onPrimaryChange(next[0] ?? null);
+    }
+  }
+
+  function setPrimary(url: string) {
+    if (isBusy || isSingle(props)) return;
+    props.onPrimaryChange?.(url);
   }
 
   const errorText = localError ?? error;
@@ -216,47 +228,86 @@ export default function ImageUpload(props: Props) {
               : "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3"
           }
         >
-          {urls.map((url, index) => (
-            <div
-              key={`${url}-${index}`}
-              className="relative rounded-xl border border-border overflow-hidden bg-background"
-            >
-              <div className="relative aspect-square">
-                <Image
-                  src={url}
-                  alt={`${labels.title} ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                />
-              </div>
+          {urls.map((url, index) => {
+            const isPrimary =
+              !isSingle(props) &&
+              props.onPrimaryChange != null &&
+              props.primaryValue === url;
+            const canSetPrimary =
+              !isSingle(props) && props.onPrimaryChange != null;
 
-              <a
-                href={url}
-                target="_blank"
-                rel="noreferrer"
-                className="absolute bottom-2 left-2 inline-flex items-center rounded-lg bg-primary px-2 py-1 text-xs text-background"
-              >
-                {labels.preview}
-              </a>
-
-              <button
-                type="button"
-                onClick={() => removeAt(index)}
-                disabled={isBusy}
-                aria-label={labels.remove}
-                title={labels.remove}
+            return (
+              <div
+                key={`${url}-${index}`}
                 className={[
-                  "absolute top-2 right-2 inline-flex items-center justify-center",
-                  "h-8 w-8 rounded-lg border border-border bg-card",
-                  "hover:bg-muted/40 transition",
-                  isBusy ? "opacity-60 cursor-not-allowed" : "",
+                  "relative rounded-xl border overflow-hidden bg-background",
+                  isPrimary
+                    ? "border-primary ring-2 ring-primary"
+                    : "border-border",
                 ].join(" ")}
               >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-          ))}
+                <div className="relative aspect-square">
+                  <Image
+                    src={url}
+                    alt={`${labels.title} ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                </div>
+
+                {isPrimary ? (
+                  <div className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-lg bg-primary px-2 py-1 text-[11px] font-medium text-background">
+                    <Star className="h-3 w-3 fill-current" />
+                    {labels.primary ?? "Primary"}
+                  </div>
+                ) : null}
+
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="absolute bottom-2 left-2 inline-flex items-center rounded-lg bg-primary px-2 py-1 text-xs text-background"
+                >
+                  {labels.preview}
+                </a>
+
+                {canSetPrimary && !isPrimary ? (
+                  <button
+                    type="button"
+                    onClick={() => setPrimary(url)}
+                    disabled={isBusy}
+                    aria-label={labels.setPrimary ?? "Set as primary"}
+                    title={labels.setPrimary ?? "Set as primary"}
+                    className={[
+                      "absolute bottom-2 right-2 inline-flex items-center justify-center",
+                      "h-8 w-8 rounded-lg border border-border bg-card",
+                      "hover:bg-muted/40 transition",
+                      isBusy ? "opacity-60 cursor-not-allowed" : "",
+                    ].join(" ")}
+                  >
+                    <Star className="h-4 w-4" />
+                  </button>
+                ) : null}
+
+                <button
+                  type="button"
+                  onClick={() => removeAt(index)}
+                  disabled={isBusy}
+                  aria-label={labels.remove}
+                  title={labels.remove}
+                  className={[
+                    "absolute top-2 right-2 inline-flex items-center justify-center",
+                    "h-8 w-8 rounded-lg border border-border bg-card",
+                    "hover:bg-muted/40 transition",
+                    isBusy ? "opacity-60 cursor-not-allowed" : "",
+                  ].join(" ")}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            );
+          })}
         </div>
       ) : null}
     </div>

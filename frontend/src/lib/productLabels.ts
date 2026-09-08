@@ -29,6 +29,8 @@ export const buildProductLabels = (
   addImage: t("form.fields.addImage"),
   imagesHint: t("form.fields.imagesHint"),
   remove: t("form.fields.remove"),
+  setPrimary: t("form.fields.setPrimary"),
+  primary: t("form.fields.primary"),
 
   preview: t("form.fields.preview"),
   uploading: (count: number) => t("form.fields.uploading", { count }),

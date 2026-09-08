@@ -1,4 +1,8 @@
-import { Breadcrumbs, ProductSearchFilters } from "@/components";
+import {
+  Breadcrumbs,
+  CategorySubcategories,
+  ProductSearchFilters,
+} from "@/components";
 import { getCategoryBySlug } from "@/lib/categoriesApi";
 
 type Props = {
@@ -14,6 +18,7 @@ export default async function Page({ params }: Props) {
   const category = await getCategoryBySlug(slug, locale);
   const categoryId = category?.id ? String(category.id) : "";
   const categoryName = category?.name ?? slug;
+  const children = category?.children ?? [];
 
   return (
     <main className="w-full max-w-7xl px-4 mt-10 mx-auto">
@@ -29,9 +34,18 @@ export default async function Page({ params }: Props) {
         <h1 className="text-3xl font-bold text-primary mb-2">{categoryName}</h1>
       </div>
 
+      {children.length > 0 && (
+        <CategorySubcategories
+          categories={children}
+          locale={locale}
+          activeSlug={slug}
+        />
+      )}
+
       <ProductSearchFilters
         initialCategoryId={categoryId}
         keepCategoryOnClear
+        syncCategoryWithRoute
       />
     </main>
   );

@@ -518,7 +518,9 @@
           "invalidFile": "Only image files are allowed.",
           "tooLarge": "Max file size is {max}MB.",
           "tooMany": "Max {max} images allowed.",
-          "uploadFailed": "Upload failed. Please try again."
+          "uploadFailed": "Upload failed. Please try again.",
+          "setPrimary": "Set as primary",
+          "primary": "Primary"
         },
         "buttons": {
           "submitCreate": "Create product",
@@ -1108,6 +1110,8 @@
     "lowStock": "Low Stock",
     "outOfStock": "Out of Stock",
     "addToCart": "Add to Cart",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
 
     "storePage": {
       "notFound": "Store Not Found",

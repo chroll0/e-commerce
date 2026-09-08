@@ -10,6 +10,7 @@ import { Layers } from "lucide-react";
 type Props = {
   value: string;
   onChange: (v: string) => void;
+  onSelectCategory?: (category: CategoryOption | null) => void;
   label?: string;
   placeholderLabel?: string;
   loadingLabel?: string;
@@ -18,6 +19,7 @@ type Props = {
 const CategorySelect: FC<Props> = ({
   value,
   onChange,
+  onSelectCategory,
   label,
   placeholderLabel,
   loadingLabel,
@@ -46,6 +48,7 @@ const CategorySelect: FC<Props> = ({
             id: c.id,
             parentId: c.parentId ?? null,
             name,
+            slug: c.slug,
           };
         });
 
@@ -74,7 +77,13 @@ const CategorySelect: FC<Props> = ({
     <SelectField
       label={label ?? t("category")}
       value={value}
-      onChange={(next) => onChange(String(next ?? "").trim())}
+      onChange={(next) => {
+        const nextValue = String(next ?? "").trim();
+        onChange(nextValue);
+        onSelectCategory?.(
+          cats.find((c) => String(c.id) === nextValue) ?? null,
+        );
+      }}
       options={options}
       placeholderLabel={
         loading

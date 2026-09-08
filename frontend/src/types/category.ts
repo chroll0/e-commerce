@@ -4,6 +4,7 @@ export type CategoryOption = {
   id: number;
   parentId: number | null;
   name: string;
+  slug?: string;
 };
 
 export type Category = {
@@ -11,7 +12,8 @@ export type Category = {
   name: string;
   slug: string;
   image?: string | null;
-  parentId: null;
+  parentId: number | null;
+  children?: Category[];
 };
 
 export type CategoryApi = {
