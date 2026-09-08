@@ -35,12 +35,17 @@ export default async function Page({ params }: Props) {
       </div>
 
       {children.length > 0 && (
-        <CategorySubcategories categories={children} locale={locale} />
+        <CategorySubcategories
+          categories={children}
+          locale={locale}
+          activeSlug={slug}
+        />
       )}
 
       <ProductSearchFilters
         initialCategoryId={categoryId}
         keepCategoryOnClear
+        syncCategoryWithRoute
       />
     </main>
   );

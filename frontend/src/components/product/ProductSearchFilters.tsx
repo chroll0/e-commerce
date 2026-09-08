@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-
+import { useRouter, useSearchParams } from "next/navigation";
 import { useProducts } from "@/hooks";
-import type { ProductApi, Locale } from "@/types";
+import type { CategoryOption, ProductApi, Locale } from "@/types";
 
 import {
   Button,
@@ -18,15 +18,19 @@ type ProductSearchFiltersProps = {
   initialCategoryId?: string;
   keepCategoryOnClear?: boolean;
   initialSearch?: string;
+  syncCategoryWithRoute?: boolean;
 };
 
 export default function ProductSearchFilters({
   initialCategoryId,
   keepCategoryOnClear = false,
   initialSearch = "",
+  syncCategoryWithRoute = false,
 }: ProductSearchFiltersProps) {
   const locale = useLocale() as Locale;
   const t = useTranslations("productCard.searchFilters");
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [categoryId, setCategoryId] = useState(initialCategoryId ?? "");
@@ -51,6 +55,21 @@ export default function ProductSearchFilters({
   const handleClearFilters = () => {
     setSearchQuery("");
     setCategoryId(keepCategoryOnClear ? (initialCategoryId ?? "") : "");
+  };
+
+  const handleCategoryIdChange = (nextCategoryId: string) => {
+    if (syncCategoryWithRoute && nextCategoryId) return;
+    setCategoryId(nextCategoryId);
+  };
+
+  const handleCategorySelect = (category: CategoryOption | null) => {
+    if (!syncCategoryWithRoute || !category?.slug) return;
+
+    const params = new URLSearchParams(searchParams.toString());
+    const query = params.toString();
+    router.push(
+      `/${locale}/category/${category.slug}${query ? `?${query}` : ""}`,
+    );
   };
 
   return (
@@ -81,7 +100,11 @@ export default function ProductSearchFilters({
         {/* Filters */}
         <div className="flex items-end justify-center gap-3">
           <div className="min-w-[220px]">
-            <CategorySelect value={categoryId} onChange={setCategoryId} />
+            <CategorySelect
+              value={categoryId}
+              onChange={handleCategoryIdChange}
+              onSelectCategory={handleCategorySelect}
+            />
           </div>
 
           <Button

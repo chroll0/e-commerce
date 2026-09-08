@@ -4,6 +4,7 @@ export type CategoryOption = {
   id: number;
   parentId: number | null;
   name: string;
+  slug?: string;
 };
 
 export type Category = {
