@@ -1110,6 +1110,8 @@
     "lowStock": "Low Stock",
     "outOfStock": "Out of Stock",
     "addToCart": "Add to Cart",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
 
     "storePage": {
       "notFound": "Store Not Found",

@@ -1101,6 +1101,8 @@
     "lowStock": "შეზღუდული მარაგი",
     "outOfStock": "აღარ ხელმისაწვდომი",
     "addToCart": "კალათაში დამატება",
+    "previousImage": "წინა სურათი",
+    "nextImage": "შემდეგი სურათი",
     "storePage": {
       "notFound": "მაღაზია ვერ მოიძებნა",
       "notFoundDescription": "მოთხოვნილი მაღაზია არ არსებობს.",

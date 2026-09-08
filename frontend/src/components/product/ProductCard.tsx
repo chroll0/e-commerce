@@ -1,9 +1,10 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { EyeIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, EyeIcon } from "lucide-react";
 
 import type { ProductApi } from "@/types";
 import { Button } from "@/components";
@@ -22,9 +23,34 @@ export default function ProductCard({ product }: Props) {
   const data = useProductData(product);
   const { add } = useCartActions();
 
+  const images = useMemo(() => product.images ?? [], [product.images]);
+  const initialIndex = useMemo(() => {
+    if (!product.primaryImage) return 0;
+    const idx = images.indexOf(product.primaryImage);
+    return idx === -1 ? 0 : idx;
+  }, [images, product.primaryImage]);
+
+  const [imageIndex, setImageIndex] = useState(initialIndex);
+  const activeImage = images[imageIndex] ?? data?.image;
+  const hasMultipleImages = images.length > 1;
+
   const handleNavigation = () => {
     if (!data?.slug) return;
     router.push(`/${locale}/products/${data.slug}`);
+  };
+
+  const handlePreviousImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setImageIndex((current) =>
+      current === 0 ? images.length - 1 : current - 1,
+    );
+  };
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setImageIndex((current) =>
+      current === images.length - 1 ? 0 : current + 1,
+    );
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -51,9 +77,9 @@ export default function ProductCard({ product }: Props) {
     >
       {/* IMAGE */}
       <div className="relative aspect-square overflow-hidden bg-card-soft">
-        {data.image ? (
+        {activeImage ? (
           <Image
-            src={data.image}
+            src={activeImage}
             alt={data.title}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -62,6 +88,33 @@ export default function ProductCard({ product }: Props) {
           <div className="flex h-full items-center justify-center text-xs text-muted">
             {t("noImage")}
           </div>
+        )}
+
+        {/* CAROUSEL CONTROLS */}
+        {hasMultipleImages && (
+          <>
+            <button
+              type="button"
+              aria-label={t("previousImage")}
+              onClick={handlePreviousImage}
+              className="absolute left-1.5 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-full bg-background/70 text-primary opacity-0 backdrop-blur-sm transition group-hover:opacity-100 hover:bg-background"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+
+            <button
+              type="button"
+              aria-label={t("nextImage")}
+              onClick={handleNextImage}
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-full bg-background/70 text-primary opacity-0 backdrop-blur-sm transition group-hover:opacity-100 hover:bg-background"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-medium text-primary backdrop-blur-sm">
+              {imageIndex + 1} / {images.length}
+            </div>
+          </>
         )}
 
         {/* VIEW */}
