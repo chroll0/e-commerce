@@ -1,6 +1,10 @@
 // Central exports for provider components
 export { default as Providers } from "./providers/providers";
 export { default as LoadingProvider } from "./providers/LoadingProvider";
+export {
+  default as ThemeProvider,
+  useThemeContext,
+} from "./providers/ThemeProvider";
 
 // Central exports for shared components
 export { default as Button } from "./ui/Button";

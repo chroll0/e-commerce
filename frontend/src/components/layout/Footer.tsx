@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Advertisement, LanguageSwitcher } from "@/components";
+import { Advertisement, LanguageSwitcher, Logo } from "@/components";
 import { useLocale, useTranslations } from "next-intl";
 
 const Footer = () => {
@@ -96,6 +96,8 @@ const Footer = () => {
 
         {/* Bottom */}
         <div className="border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+          <Logo />
+
           <p>
             © {new Date().getFullYear()} eShop online.{" "}
             {t("footer.bottom.rights")}
