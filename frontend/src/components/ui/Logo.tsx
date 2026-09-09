@@ -1,16 +1,23 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
+import { useTheme } from "@/hooks";
 
 const Logo = () => {
+  const { theme } = useTheme();
+
   return (
     <Link
       href="/"
       className="relative flex items-baseline select-none tracking-wider"
     >
-      <span className="text-3xl font-bold text-primary leading-none">e</span>
-
-      <span className="relative text-lg font-medium tracking-wider text-foreground left-0 bottom-[0.1rem] underline decoration-1">
-        Shop
-      </span>
+      <Image
+        src={theme === "dark" ? "/logo_dark.png" : "/logo_light.png"}
+        alt="Logo"
+        width={100}
+        height={100}
+      />
     </Link>
   );
 };

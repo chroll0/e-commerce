@@ -36,12 +36,19 @@ let inFlightAuthRequest: Promise<void> | null = null;
 const syncCartOnLogin = async () => {
   const { items, clearCart, addItem } = getCart();
 
-  if (items.length > 0) {
+  // Only push items that were added as a GUEST and never synced to the
+  // backend (no backendId). Items that already have a backendId are already
+  // persisted server-side, so re-adding them would double their quantity on
+  // every refresh (backend addToCart increments quantity on conflict).
+  const unsynced = items.filter((item) => !item.backendId);
+
+  if (unsynced.length > 0) {
     await Promise.all(
-      items.map((item) => cartApi.addToCart(item.productId, item.quantity)),
+      unsynced.map((item) => cartApi.addToCart(item.productId, item.quantity)),
     ).catch((e) => console.error("Cart sync failed:", e));
   }
 
+  // The backend is the source of truth — always rehydrate from it.
   const backendCart = await cartApi.getCart().catch((e) => {
     console.error("Cart fetch failed:", e);
     return [];

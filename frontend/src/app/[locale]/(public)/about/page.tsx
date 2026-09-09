@@ -1,6 +1,6 @@
 "use client";
 
-import { Advertisement, Breadcrumbs } from "@/components";
+import { Advertisement, Breadcrumbs, Logo } from "@/components";
 import {
   Package,
   Users,
@@ -13,7 +13,6 @@ import {
   Eye,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
 
 export default function AboutPage() {
   const locale = useLocale();
@@ -78,15 +77,7 @@ export default function AboutPage() {
           {/* Text */}
           <div className="flex justify-between items-center w-full">
             {/* Logo */}
-            <div className="bg-muted/50 rounded-full p-1">
-              <Image
-                src="/logo.png"
-                alt="Logo"
-                width={40}
-                height={40}
-                className="object-contain dark:invert"
-              />
-            </div>
+            <Logo />
             <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
               {t("hero.badge")}
             </span>

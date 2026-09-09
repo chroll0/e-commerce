@@ -117,7 +117,7 @@ function StoreFilters({
         </div>
 
         <div className="flex justify-center gap-3 items-end">
-          <div className="min-w-[220px]">
+          <div className="min-w-60">
             <CategorySelect value={categoryId} onChange={setCategoryId} />
           </div>
 

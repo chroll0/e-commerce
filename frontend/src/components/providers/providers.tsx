@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuthStore } from "@/state/useAuthStore";
+import { ThemeProvider } from "@/components";
 import { useEffect } from "react";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
@@ -17,5 +18,5 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("pageshow", reconcileAuth);
   }, [fetchMe]);
 
-  return <>{children}</>;
+  return <ThemeProvider>{children}</ThemeProvider>;
 }
