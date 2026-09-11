@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Filter, Loader2, Store as StoreIcon } from "lucide-react";
+import { getStores, type GetStoresParams } from "@/lib/storesApi";
 
 import {
   Breadcrumbs,
@@ -13,7 +14,6 @@ import {
   StoreCardSkeleton,
 } from "@/components";
 
-import { getStores, type GetStoresParams } from "@/lib/storesApi";
 import type { Locale, StoreApi } from "@/types";
 
 const PAGE_SIZE = 8;
@@ -109,12 +109,11 @@ export default function AllStoresPage() {
   };
 
   const isEmpty = !loading && stores.length === 0;
-
   const isInitialLoading = loading && limit === PAGE_SIZE;
   const isLoadingMore = loading && limit > PAGE_SIZE;
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pt-10">
+    <div className="mx-auto max-w-7xl px-6 pt-10">
       <Breadcrumbs
         items={[
           { label: "eShop", href: `/${locale}` },

@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight, EyeIcon } from "lucide-react";
 
-import type { ProductApi } from "@/types";
 import { Button } from "@/components";
+import type { ProductApi } from "@/types";
 import { useProductData } from "@/hooks";
 import { useCartActions } from "@/state/useCartActions";
 
