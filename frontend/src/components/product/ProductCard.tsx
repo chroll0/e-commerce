@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight, EyeIcon } from "lucide-react";
 
-import type { ProductApi } from "@/types";
 import { Button } from "@/components";
+import type { ProductApi } from "@/types";
 import { useProductData } from "@/hooks";
 import { useCartActions } from "@/state/useCartActions";
 
@@ -93,25 +93,29 @@ export default function ProductCard({ product }: Props) {
         {/* CAROUSEL CONTROLS */}
         {hasMultipleImages && (
           <>
-            <button
-              type="button"
+            <Button
+              variant="outline"
+              iconOnly
+              size="sm"
               aria-label={t("previousImage")}
               onClick={handlePreviousImage}
-              className="absolute left-1.5 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-full bg-background/70 text-primary opacity-0 backdrop-blur-sm transition group-hover:opacity-100 hover:bg-background"
+              className="absolute left-1.5 top-1/2 -translate-y-1/2 rounded-full bg-background/70 opacity-0 backdrop-blur-sm transition group-hover:opacity-100 hover:bg-background"
             >
               <ChevronLeft className="h-4 w-4" />
-            </button>
+            </Button>
 
-            <button
-              type="button"
+            <Button
+              variant="outline"
+              iconOnly
+              size="sm"
               aria-label={t("nextImage")}
               onClick={handleNextImage}
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-full bg-background/70 text-primary opacity-0 backdrop-blur-sm transition group-hover:opacity-100 hover:bg-background"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-background/70 opacity-0 backdrop-blur-sm transition group-hover:opacity-100 hover:bg-background"
             >
               <ChevronRight className="h-4 w-4" />
-            </button>
+            </Button>
 
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-medium text-primary backdrop-blur-sm">
+            <div className="absolute top-2 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-medium text-primary backdrop-blur-sm">
               {imageIndex + 1} / {images.length}
             </div>
           </>
