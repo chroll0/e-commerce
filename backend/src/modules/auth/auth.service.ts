@@ -297,7 +297,7 @@ export class AuthService {
     currentPassword: string,
     newPassword: string,
   ) {
-    const user = await this.userService.findOne(userId);
+    const user = await this.userService.findOneForAuthentication(userId);
     if (!user) throw new UnauthorizedException("Invalid credentials");
 
     const matches = await bcrypt.compare(currentPassword, user.password);
