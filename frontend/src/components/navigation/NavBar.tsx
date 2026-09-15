@@ -59,7 +59,7 @@ const NavBar = () => {
   return (
     <>
       {/* DESKTOP */}
-      <nav className="hidden md:flex items-center gap-2">
+      <nav className="hidden lg:flex items-center gap-2">
         {links.map((item) => {
           const active = isActive(item.href);
 
@@ -87,7 +87,7 @@ const NavBar = () => {
         variant="outline"
         iconOnly
         size="sm"
-        className="md:hidden rounded-lg"
+        className="lg:hidden rounded-lg"
         onClick={() => setOpen((v) => !v)}
       >
         <motion.div
@@ -108,7 +108,7 @@ const NavBar = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="md:hidden absolute top-12 left-0 w-full bg-background border-t border-border shadow-lg z-50"
+            className="lg:hidden absolute top-12 left-0 w-full bg-background border-t border-border shadow-lg z-50"
           >
             <div className="flex flex-col px-2 py-1.5 gap-1">
               {links.map((item, i) => {

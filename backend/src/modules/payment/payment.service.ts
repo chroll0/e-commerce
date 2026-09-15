@@ -12,6 +12,7 @@ import {
   PaymentProvider,
 } from "./providers/payment-provider.interface";
 import { NotificationService } from "../notification/notification.service";
+import { safeUserSelect } from "../user/user.select";
 
 @Injectable()
 export class PaymentService {
@@ -74,7 +75,7 @@ export class PaymentService {
       include: {
         order: {
           include: {
-            user: true,
+            user: { select: safeUserSelect },
           },
         },
       },

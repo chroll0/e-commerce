@@ -10,6 +10,7 @@ import { hash } from "bcryptjs";
 import * as bcrypt from "bcryptjs";
 import { PrismaService } from "../../prisma/prisma.service";
 import { UserRole } from "../../common/enums/user-role.enum";
+import { safeUserSelect } from "./user.select";
 
 @Injectable()
 export class UserService {
@@ -19,17 +20,27 @@ export class UserService {
     const hashedPassword = await hash(createUserDto.password, 10);
     return this.prisma.user.create({
       data: {
-        ...createUserDto,
+        name: createUserDto.name,
+        email: createUserDto.email,
+        phone: createUserDto.phone,
         password: hashedPassword,
+        role: UserRole.USER,
       },
     });
   }
 
   async findAll() {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({ select: safeUserSelect });
   }
 
   async findOne(id: number) {
+    return this.prisma.user.findUnique({
+      where: { id },
+      select: safeUserSelect,
+    });
+  }
+
+  async findOneForAuthentication(id: number) {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
@@ -79,14 +90,7 @@ export class UserService {
   async findSafeById(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        role: true,
-        createdAt: true,
-      },
+      select: safeUserSelect,
     });
 
     if (!user) throw new NotFoundException("User not found");

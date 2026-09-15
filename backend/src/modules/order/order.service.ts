@@ -7,6 +7,7 @@ import { CreateOrderDto } from "./dto/create-order.dto";
 import { PrismaService } from "../../prisma/prisma.service";
 import { OrderStatus } from "@prisma/client";
 import { NotificationService } from "../notification/notification.service";
+import { safeUserSelect } from "../user/user.select";
 
 @Injectable()
 export class OrderService {
@@ -94,7 +95,7 @@ export class OrderService {
     const order = await this.prisma.order.findUnique({
       where: { id: orderId },
       include: {
-        user: true,
+        user: { select: safeUserSelect },
         items: { include: { product: { include: { translations: true } } } },
         payment: true,
       },
@@ -150,7 +151,7 @@ export class OrderService {
     return this.prisma.order.findMany({
       include: {
         items: { include: { product: true } },
-        user: true,
+        user: { select: safeUserSelect },
         payment: true,
       },
       orderBy: { createdAt: "desc" },
