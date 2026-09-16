@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { OrderStatus, PaymentStatus } from "@prisma/client";
+import { OrderStatus, PaymentStatus, Prisma } from "@prisma/client";
 import { PrismaService } from "../../prisma/prisma.service";
 import { SimulatePaymentDto } from "./dto/simulate-payment.dto";
 import {
@@ -34,27 +34,38 @@ export class PaymentService {
       throw new BadRequestException("Order is already paid");
     }
 
+    if (order.status !== "PENDING") {
+      throw new BadRequestException("Order is not awaiting payment");
+    }
+
     if (order.payment) {
       return order.payment;
     }
 
-    const payment = await this.prisma.payment.create({
-      data: {
-        orderId: order.id,
-        amount: order.total,
-        provider: this.paymentProvider.providerName,
-        status: "PENDING",
-      },
-    });
+    try {
+      return await this.prisma.$transaction(async (tx) => {
+        const payment = await tx.payment.create({
+          data: {
+            orderId: order.id,
+            amount: order.total,
+            provider: this.paymentProvider.providerName,
+            status: "PENDING",
+          },
+        });
 
-    const transactionId = await this.paymentProvider.createTransactionId(
-      payment.id,
-    );
+        const transactionId = await this.paymentProvider.createTransactionId(
+          payment.id,
+        );
 
-    return this.prisma.payment.update({
-      where: { id: payment.id },
-      data: { transactionId },
-    });
+        return tx.payment.update({
+          where: { id: payment.id },
+          data: { transactionId },
+        });
+      });
+    } catch (error) {
+      await this.cancelPendingOrderAndRestoreStock(userId, orderId);
+      throw error;
+    }
   }
 
   async getPayment(userId: number, paymentId: string) {
@@ -88,32 +99,56 @@ export class PaymentService {
     paymentId: string,
     dto: SimulatePaymentDto,
   ) {
-    const payment = await this.prisma.payment.findUnique({
-      where: { id: paymentId },
-      include: { order: true },
-    });
-
-    if (!payment || payment.order.userId !== userId) {
-      throw new NotFoundException("Payment not found");
-    }
-
-    if (payment.status !== "PENDING") {
-      throw new BadRequestException("Payment is already finalized");
-    }
-
     const nextPaymentStatus = this.paymentProvider.mapSimulationOutcome(
       dto.outcome,
     );
     const nextOrderStatus = this.mapOrderStatus(nextPaymentStatus);
 
     const result = await this.prisma.$transaction(async (tx) => {
-      const updatedPayment = await tx.payment.update({
-        where: { id: payment.id },
+      const payment = await tx.payment.findUnique({
+        where: { id: paymentId },
+        include: { order: true },
+      });
+
+      if (!payment || payment.order.userId !== userId) {
+        throw new NotFoundException("Payment not found");
+      }
+
+      if (payment.status !== "PENDING" || payment.order.status !== "PENDING") {
+        throw new BadRequestException("Payment is already finalized");
+      }
+
+      const paymentUpdate = await tx.payment.updateMany({
+        where: { id: payment.id, status: "PENDING" },
         data: { status: nextPaymentStatus },
       });
-      const updatedOrder = await tx.order.update({
-        where: { id: payment.orderId },
+
+      if (paymentUpdate.count !== 1) {
+        throw new BadRequestException("Payment is already finalized");
+      }
+
+      const orderUpdate = await tx.order.updateMany({
+        where: {
+          id: payment.orderId,
+          userId,
+          status: "PENDING",
+        },
         data: { status: nextOrderStatus },
+      });
+
+      if (orderUpdate.count !== 1) {
+        throw new BadRequestException("Order is no longer awaiting payment");
+      }
+
+      if (nextPaymentStatus !== "SUCCESS") {
+        await this.restoreOrderStock(tx, payment.orderId);
+      }
+
+      const updatedPayment = await tx.payment.findUniqueOrThrow({
+        where: { id: payment.id },
+      });
+      const updatedOrder = await tx.order.findUniqueOrThrow({
+        where: { id: payment.orderId },
       });
 
       const notificationType =
@@ -142,6 +177,44 @@ export class PaymentService {
       payment: result.updatedPayment,
       order: result.updatedOrder,
     };
+  }
+
+  private async cancelPendingOrderAndRestoreStock(
+    userId: number,
+    orderId: number,
+  ) {
+    await this.prisma.$transaction(async (tx) => {
+      const order = await tx.order.findFirst({
+        where: { id: orderId, userId, status: "PENDING", payment: null },
+        select: { id: true },
+      });
+
+      if (!order) return;
+
+      await tx.order.update({
+        where: { id: order.id },
+        data: { status: "CANCELLED" },
+      });
+      await this.restoreOrderStock(tx, order.id);
+    });
+  }
+
+  private async restoreOrderStock(
+    tx: Prisma.TransactionClient,
+    orderId: number,
+  ) {
+    const items = await tx.orderItem.findMany({
+      where: { orderId },
+      select: { productId: true, quantity: true },
+      orderBy: { productId: "asc" },
+    });
+
+    for (const item of items) {
+      await tx.product.update({
+        where: { id: item.productId },
+        data: { stock: { increment: item.quantity } },
+      });
+    }
   }
 
   private mapOrderStatus(paymentStatus: PaymentStatus): OrderStatus {
