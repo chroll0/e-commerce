@@ -9,7 +9,7 @@
   --muted: #9ea3b0; /* Icons, labels */
 
   --destructive: #e53935; /* Flash sale red (premium tone) */
-  --highlight: #065ff0; /* Blue action color */
+  --highlight: #4d8cf7; /* Blue action color */
   --yellow: #facc15; /* Optional rating stars */
 
   --card: #ffffff; /* Product cards, nav, dropdowns */
@@ -30,7 +30,7 @@ html.dark {
   --muted: #7e8187;
 
   --destructive: #ff5757; /* Slightly neon red */
-  --highlight: #065ff0; /* Neon-ish blue */
+  --highlight: #0a3790; /* Neon-ish blue */
   --yellow: #fde047;
 
   --card: #181a1f; /* Card background */

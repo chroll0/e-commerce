@@ -266,7 +266,7 @@ export default function ProductDetails({ product }: Props) {
         {/* CTA */}
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button
-            variant="primary"
+            variant="highlight"
             size="lg"
             leftIcon={<ShoppingCartIcon className="h-5 w-5" />}
             disabled={data.isOutOfStock}
