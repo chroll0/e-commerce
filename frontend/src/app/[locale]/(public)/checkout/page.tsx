@@ -1,12 +1,14 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
+import { AxiosError } from "axios";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 import { AuthGuard, Breadcrumbs, Button, Input } from "@/components";
 import { orderApi } from "@/lib/orderApi";
 import { paymentApi, PaymentOutcome } from "@/lib/paymentApi";
+import { getStatusPresentation } from "@/lib/orderStatus";
 import { useNotificationStore } from "@/state/useNotificationStore";
 import { useCartStore } from "@/state/useCartStore";
 
@@ -23,6 +25,14 @@ type CreatedPayment = {
   provider: string;
   transactionId?: string | null;
 };
+
+function getApiErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof AxiosError) {
+    return error.response?.data?.message || fallback;
+  }
+
+  return fallback;
+}
 
 export default function CheckoutPage() {
   const t = useTranslations("checkout");
@@ -93,18 +103,12 @@ export default function CheckoutPage() {
           createdOrder.id,
         )) as CreatedPayment;
         setPayment(createdPayment);
-      } catch (error: any) {
+      } catch (error: unknown) {
         setPaymentError(true);
-        notify(
-          "error",
-          error?.response?.data?.message || t("errors.paymentCreation"),
-        );
+        notify("error", getApiErrorMessage(error, t("errors.paymentCreation")));
       }
-    } catch (error: any) {
-      notify(
-        "error",
-        error?.response?.data?.message || t("errors.createOrder"),
-      );
+    } catch (error: unknown) {
+      notify("error", getApiErrorMessage(error, t("errors.createOrder")));
     } finally {
       setIsCreatingOrder(false);
     }
@@ -139,11 +143,8 @@ export default function CheckoutPage() {
           t("notifications.paymentCancelled", { orderId: updatedOrder.id }),
         );
       }
-    } catch (error: any) {
-      notify(
-        "error",
-        error?.response?.data?.message || t("errors.simulatePayment"),
-      );
+    } catch (error: unknown) {
+      notify("error", getApiErrorMessage(error, t("errors.simulatePayment")));
     } finally {
       setIsSimulating(false);
     }
@@ -317,13 +318,13 @@ export default function CheckoutPage() {
                 </p>
                 <p className="text-sm text-secondary">
                   {t(
-                    `result.orderStatus.${order.status.toLowerCase()}` as "result.orderStatus.pending",
+                    `result.orderStatus.${getStatusPresentation(order.status).key}` as "result.orderStatus.pending",
                     { defaultValue: order.status },
                   )}
                 </p>
                 <p className="text-sm text-secondary">
                   {t(
-                    `result.paymentStatus.${payment.status.toLowerCase()}` as "result.paymentStatus.pending",
+                    `result.paymentStatus.${getStatusPresentation(payment.status, "payment").key}` as "result.paymentStatus.pending",
                     { defaultValue: payment.status },
                   )}
                 </p>

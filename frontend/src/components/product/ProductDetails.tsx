@@ -80,6 +80,7 @@ export default function ProductDetails({ product }: Props) {
         image: data.image ?? null,
         price: data.price,
         quantity,
+        availableStock: data.stock,
       });
     } finally {
       setIsAddingToCart(false);

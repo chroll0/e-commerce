@@ -65,6 +65,7 @@ export default function ProductCard({ product }: Props) {
       image: data.image ?? null,
       price: data.price,
       quantity: 1,
+      availableStock: data.stock,
     });
   };
 

@@ -9,6 +9,7 @@ export type CartItem = {
   image: string | null;
   price: number;
   quantity: number;
+  availableStock?: number;
   backendId?: number;
 };
 
@@ -60,6 +61,7 @@ const createCartStore = (
       if (idx >= 0) {
         items[idx] = {
           ...items[idx],
+          availableStock: incoming.availableStock ?? items[idx].availableStock,
           quantity: items[idx].quantity + qty,
         };
       } else {

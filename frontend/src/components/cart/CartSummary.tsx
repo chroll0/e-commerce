@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components";
 import { useCartStore } from "@/state/useCartStore";
 import { useCartActions } from "@/state/useCartActions";
+import { useNotificationStore } from "@/state/useNotificationStore";
 import { ShieldCheckIcon, TruckIcon, CreditCardIcon } from "lucide-react";
 
 export default function CartSummary() {
@@ -14,6 +15,7 @@ export default function CartSummary() {
 
   const items = useCartStore((s) => s.items);
   const { clear } = useCartActions();
+  const notify = useNotificationStore((state) => state.push);
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -26,6 +28,11 @@ export default function CartSummary() {
   const tax = subtotal * 0.1;
   const discount = 0;
   const total = subtotal + shipping + tax - discount;
+  const hasStockWarning = items.some(
+    (item) =>
+      item.availableStock !== undefined &&
+      (item.availableStock <= 0 || item.quantity > item.availableStock),
+  );
 
   return (
     <div className="sticky top-4 h-fit rounded-2xl border border-border bg-card p-6 shadow-sm">
@@ -92,10 +99,18 @@ export default function CartSummary() {
 
       {/* ACTIONS */}
       <div className="mt-6 space-y-3">
+        {hasStockWarning && (
+          <div className="rounded-xl border border-primary/30 bg-primary/5 p-3 text-sm text-primary">
+            {t("stockWarning")}
+          </div>
+        )}
         <Button
           size="lg"
           fullWidth
-          onClick={() => router.push(`/${locale}/checkout`)}
+          onClick={() => {
+            if (hasStockWarning) notify("info", t("stockWarning"));
+            router.push(`/${locale}/checkout`);
+          }}
         >
           {t("checkout")}
         </Button>

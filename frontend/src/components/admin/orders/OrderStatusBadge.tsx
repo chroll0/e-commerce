@@ -1,30 +1,25 @@
 import classNames from "classnames";
+import { useTranslations } from "next-intl";
+import { getStatusPresentation, StatusKind } from "@/lib/orderStatus";
 
 type Props = {
   status: string;
-  kind?: "order" | "payment";
+  kind?: StatusKind;
 };
 
 const OrderStatusBadge = ({ status, kind = "order" }: Props) => {
-  const normalized = status.toUpperCase();
-  const classes =
-    normalized === "PAID" || normalized === "SUCCESS"
-      ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-700"
-      : normalized === "PENDING"
-        ? "border-amber-500/20 bg-amber-500/10 text-amber-700"
-        : normalized === "SHIPPED"
-          ? "border-sky-500/20 bg-sky-500/10 text-sky-700"
-          : "border-destructive/20 bg-destructive/10 text-destructive";
+  const t = useTranslations("admin.orders.statuses");
+  const presentation = getStatusPresentation(status, kind);
 
   return (
     <span
       className={classNames(
         "inline-flex whitespace-nowrap rounded-full border px-2 py-0.5 text-xs font-medium",
-        classes,
+        presentation.classes,
       )}
       title={`${kind} status: ${status}`}
     >
-      {status.replaceAll("_", " ")}
+      {t(presentation.key)}
     </span>
   );
 };
