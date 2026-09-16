@@ -190,17 +190,23 @@ export default function Hero() {
         {hasMultipleSlides && (
           <div className="absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 gap-2 md:bottom-5">
             {slides.map((_, i) => (
-              <button
+              <Button
                 key={i}
+                type="button"
+                variant="text"
+                iconOnly
+                size="xs"
                 onClick={() => scrollTo(i)}
                 aria-label={`Go to slide ${i + 1}`}
                 aria-current={i === selectedIndex}
-                className={`h-2 rounded-full transition-all duration-300 ${
+                className={`h-2 rounded-full p-0 transition-all duration-300 ${
                   i === selectedIndex
                     ? "w-6 bg-primary"
                     : "w-2 bg-primary/50 hover:bg-primary/70"
                 }`}
-              />
+              >
+                <span aria-hidden="true" />
+              </Button>
             ))}
           </div>
         )}

@@ -4,8 +4,7 @@ import { useEffect } from "react";
 import { useNotificationStore } from "@/state/useNotificationStore";
 
 const typeStyles = {
-  success:
-    "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+  success: "border-primary/30 bg-primary/10 text-primary",
   error: "border-destructive/40 bg-destructive/10 text-destructive",
   info: "border-primary/30 bg-primary/10 text-primary",
 } as const;

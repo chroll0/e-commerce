@@ -4,12 +4,12 @@
   --background: #f5f6f8; /* Very soft gray (page background) */
   --foreground: #111111; /* Strong readable black */
 
-  --primary: #111111; /* Primary text / main buttons */
+  --primary: #1a2432; /* Brand navy / primary text and buttons */
   --secondary: #6d6d6d; /* Muted UI text */
   --muted: #9ea3b0; /* Icons, labels */
 
   --destructive: #e53935; /* Flash sale red (premium tone) */
-  --highlight: #4d8cf7; /* Blue action color */
+  --highlight: #1a2432; /* Brand blue action color */
   --yellow: #facc15; /* Optional rating stars */
 
   --card: #ffffff; /* Product cards, nav, dropdowns */
@@ -30,7 +30,7 @@ html.dark {
   --muted: #7e8187;
 
   --destructive: #ff5757; /* Slightly neon red */
-  --highlight: #0a3790; /* Neon-ish blue */
+  --highlight: #181a1f; /* Brand blue action color */
   --yellow: #fde047;
 
   --card: #181a1f; /* Card background */

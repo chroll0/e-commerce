@@ -8,6 +8,7 @@ import { Package } from "lucide-react";
 import { Category } from "@/types";
 import { getCategoriesClient } from "@/lib/categoriesApi";
 import { CategoryScrollerSkeleton } from "@/components";
+import { Button } from "@/components";
 
 export default function CategoryScroller() {
   const locale = useLocale();
@@ -57,10 +58,13 @@ export default function CategoryScroller() {
     <section>
       <div className="my-10 flex gap-4 overflow-x-auto rounded-xl border border-border bg-card-soft p-3 no-scrollbar">
         {categories.map((cat) => (
-          <button
+          <Button
             key={cat.id}
+            type="button"
+            variant="text"
+            size="sm"
             onClick={() => handleClick(cat.slug)}
-            className="flex min-w-20 flex-col items-center transition hover:opacity-80 cursor-pointer"
+            className="flex min-w-20 flex-col items-center p-0 hover:opacity-80"
           >
             <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-border bg-card-soft">
               {cat.image ? (
@@ -79,7 +83,7 @@ export default function CategoryScroller() {
             <p className="mt-2 text-xs text-primary w-24 text-center">
               {cat.name}
             </p>
-          </button>
+          </Button>
         ))}
       </div>
     </section>

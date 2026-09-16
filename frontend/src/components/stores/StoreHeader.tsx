@@ -55,7 +55,7 @@ export default function StoreHeader({ store, t }: StoreHeaderProps) {
           <h1 className="text-3xl font-bold text-primary">{store.name}</h1>
 
           <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-            <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-400" />
+            <Star className="h-3.5 w-3.5 text-primary fill-primary" />
             <span>{(store.rating ?? 0).toFixed(1)}</span>
             <span>•</span>
             <span>

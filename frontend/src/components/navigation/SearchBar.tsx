@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
-import { Input } from "@/components";
+import { Button, Input } from "@/components";
 import { Locale } from "@/types";
 import { useTranslations } from "next-intl";
 import { getProducts } from "@/lib/productsApi";
@@ -116,17 +116,20 @@ const SearchBar = ({ value, onChange, locale, placeholder }: Props) => {
             results.map((product) => {
               const title = getTitle(product);
               return (
-                <button
+                <Button
                   key={product.id}
                   type="button"
-                  className="w-full text-left p-2 hover:bg-muted/40 cursor-pointer text-sm"
+                  variant="text"
+                  size="sm"
+                  fullWidth
+                  className="justify-start rounded-none p-2 text-left text-sm hover:bg-muted/40"
                   onClick={() => {
                     onChange(title);
                     setOpen(false);
                   }}
                 >
                   {title}
-                </button>
+                </Button>
               );
             })}
         </div>

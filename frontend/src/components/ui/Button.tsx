@@ -47,7 +47,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       "font-medium rounded transition-all duration-200 inline-flex items-center justify-center gap-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 capitalize disabled:opacity-50 disabled:cursor-not-allowed";
 
     const variantStyles = {
-      highlight: "bg-highlight text-foreground hover:opacity-90",
+      highlight: "bg-highlight text-white hover:opacity-90",
       primary: "bg-primary text-background hover:opacity-90",
       secondary: "bg-card-soft text-foreground hover:bg-muted",
       tertiary: "bg-primary/20 text-foreground hover:bg-muted",

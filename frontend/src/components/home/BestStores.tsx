@@ -68,7 +68,7 @@ export default function BestStores() {
 
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 fill-amber-400 text-amber-500" />
+                    <Star className="h-4 w-4 fill-primary text-primary" />
                     <span>{(store.rating ?? 0).toFixed(1)}</span>
                   </div>
 

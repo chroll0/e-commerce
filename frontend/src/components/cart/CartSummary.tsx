@@ -63,7 +63,7 @@ export default function CartSummary() {
         </div>
 
         {discount > 0 && (
-          <div className="flex justify-between text-sm text-green-600">
+          <div className="flex justify-between text-sm text-primary">
             <span>{t("discount")}</span>
             <span>-${discount.toFixed(2)}</span>
           </div>

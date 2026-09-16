@@ -3,6 +3,7 @@
 import React, { InputHTMLAttributes, ReactNode, useId, useState } from "react";
 import { EyeClosed, EyeIcon } from "lucide-react";
 import classNames from "classnames";
+import Button from "./Button";
 
 type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
   label?: string;
@@ -39,10 +40,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const errorId = `${inputId}-error`;
 
     const borderState = error
-      ? "border-red-500"
+      ? "border-destructive"
       : success
-        ? "border-green-500"
-        : "border-border focus-within:border-blue-500";
+        ? "border-primary"
+        : "border-border focus-within:border-primary";
 
     const widthStyles = fullWidth ? "w-full" : "";
 
@@ -99,14 +100,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
 
           {passwordToggle && (
-            <button
+            <Button
               type="button"
+              variant="text"
+              iconOnly
+              size="xs"
               onClick={() => setShowPassword((v) => !v)}
               className="text-secondary hover:text-foreground"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <EyeClosed size={18} /> : <EyeIcon size={18} />}
-            </button>
+            </Button>
           )}
 
           {!passwordToggle && rightIcon && (

@@ -123,25 +123,31 @@ export default function ProductDetails({ product }: Props) {
 
             {hasMultipleImages && (
               <>
-                <button
+                <Button
+                  variant="outline"
+                  iconOnly
+                  size="sm"
                   type="button"
                   aria-label={tCard("previousImage")}
                   onClick={handlePreviousImage}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-background/70 text-primary backdrop-blur-sm transition hover:bg-background"
+                  className="absolute left-3 top-1/2 h-9 w-9 -translate-y-1/2 rounded-full bg-card backdrop-blur-sm hover:bg-background"
                 >
                   <ChevronLeft className="h-5 w-5" />
-                </button>
+                </Button>
 
-                <button
+                <Button
+                  variant="outline"
+                  iconOnly
+                  size="sm"
                   type="button"
                   aria-label={tCard("nextImage")}
                   onClick={handleNextImage}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-background/70 text-primary backdrop-blur-sm transition hover:bg-background"
+                  className="absolute right-3 top-1/2 h-9 w-9 -translate-y-1/2 rounded-full bg-card backdrop-blur-sm hover:bg-background"
                 >
                   <ChevronRight className="h-5 w-5" />
-                </button>
+                </Button>
 
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-2.5 py-1 text-xs font-medium text-primary backdrop-blur-sm">
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full px-2.5 py-1 text-xs font-medium text-card backdrop-blur-sm">
                   {selectedImageIndex + 1} / {images.length}
                 </div>
               </>
@@ -153,13 +159,15 @@ export default function ProductDetails({ product }: Props) {
         {hasMultipleImages && (
           <div className="flex gap-2 overflow-x-auto pb-1">
             {images.map((image, index) => (
-              <button
+              <Button
                 key={`${image}-${index}`}
+                variant="outline"
+                size="xs"
                 type="button"
                 aria-label={`${data.title} ${index + 1}`}
                 onClick={() => setSelectedImageIndex(index)}
                 className={[
-                  "relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border transition",
+                  "relative h-16 w-16 shrink-0 overflow-hidden rounded-lg p-0 transition",
                   index === selectedImageIndex
                     ? "border-highlight"
                     : "border-border hover:border-primary/50",
@@ -172,7 +180,7 @@ export default function ProductDetails({ product }: Props) {
                   sizes="64px"
                   className="object-cover"
                 />
-              </button>
+              </Button>
             ))}
           </div>
         )}
@@ -209,7 +217,7 @@ export default function ProductDetails({ product }: Props) {
               {tCard("outOfStock")}
             </div>
           ) : data.isLowStock ? (
-            <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/10 px-3 py-2 text-sm font-medium text-yellow-600">
+            <div className="rounded-lg border border-primary/20 bg-primary/10 px-3 py-2 text-sm font-medium text-primary">
               {tCard("lowStock")}
             </div>
           ) : (
