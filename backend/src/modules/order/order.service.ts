@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { PrismaService } from "../../prisma/prisma.service";
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus, Prisma } from "@prisma/client";
 import { NotificationService } from "../notification/notification.service";
 import { safeUserSelect } from "../user/user.select";
 
@@ -20,16 +20,55 @@ export class OrderService {
     return this.prisma.$transaction(async (tx) => {
       const cartItems = await tx.cartItem.findMany({
         where: { userId },
-        include: { product: true },
+        select: { productId: true, quantity: true },
       });
 
       if (cartItems.length === 0) {
         throw new BadRequestException("Your cart is empty");
       }
 
-      const total = cartItems.reduce((sum, item) => {
-        return sum + item.product.price * item.quantity;
-      }, 0);
+      const reservedItems = [];
+
+      // Reserve products in a stable order to reduce deadlock risk for multi-item orders.
+      for (const item of [...cartItems].sort(
+        (first, second) => first.productId - second.productId,
+      )) {
+        const reservation = await tx.product.updateMany({
+          where: {
+            id: item.productId,
+            stock: { gte: item.quantity },
+          },
+          data: { stock: { decrement: item.quantity } },
+        });
+
+        if (reservation.count !== 1) {
+          throw new BadRequestException({
+            code: "INSUFFICIENT_STOCK",
+            message: `Insufficient stock for product ${item.productId}`,
+            productId: item.productId,
+          });
+        }
+
+        const product = await tx.product.findUnique({
+          where: { id: item.productId },
+          select: { price: true },
+        });
+
+        if (!product) {
+          throw new NotFoundException("Product not found");
+        }
+
+        reservedItems.push({
+          productId: item.productId,
+          quantity: item.quantity,
+          price: product.price,
+        });
+      }
+
+      const total = reservedItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      );
 
       const order = await tx.order.create({
         data: {
@@ -41,11 +80,7 @@ export class OrderService {
           phone: dto.phone,
           zip: dto.zip,
           items: {
-            create: cartItems.map((item) => ({
-              productId: item.productId,
-              quantity: item.quantity,
-              price: item.product.price,
-            })),
+            create: reservedItems,
           },
         },
         include: { items: true },
@@ -113,17 +148,79 @@ export class OrderService {
     return this.prisma.$transaction(async (tx) => {
       const existingOrder = await tx.order.findUnique({
         where: { id: orderId },
-        select: { id: true, userId: true, status: true },
+        select: {
+          id: true,
+          userId: true,
+          status: true,
+          payment: { select: { status: true } },
+        },
       });
 
       if (!existingOrder) {
         throw new NotFoundException("Order not found");
       }
 
+      const isAllowedTransition =
+        status === existingOrder.status ||
+        (existingOrder.status === "PENDING" &&
+          ["PAID", "PAYMENT_FAILED", "CANCELLED"].includes(status)) ||
+        (existingOrder.status === "PAID" && status === "SHIPPED") ||
+        (["PENDING", "PAYMENT_FAILED", "PAID"].includes(existingOrder.status) &&
+          status === "CANCELLED");
+
+      if (!isAllowedTransition) {
+        throw new BadRequestException("Invalid order status transition");
+      }
+
+      if (
+        status === "PAID" &&
+        (!existingOrder.payment ||
+          !["PENDING", "SUCCESS"].includes(existingOrder.payment.status))
+      ) {
+        throw new BadRequestException("Order payment is not successful");
+      }
+
+      if (status === "SHIPPED" && existingOrder.status !== "PAID") {
+        throw new BadRequestException("Only paid orders can be shipped");
+      }
+
+      if (
+        status === "PAYMENT_FAILED" &&
+        (!existingOrder.payment ||
+          !["PENDING", "FAILED"].includes(existingOrder.payment.status))
+      ) {
+        throw new BadRequestException("Order payment cannot be marked failed");
+      }
+
       const order = await tx.order.update({
         where: { id: orderId },
         data: { status },
       });
+
+      if (existingOrder.payment?.status === "PENDING") {
+        const paymentStatus =
+          status === "PAID"
+            ? "SUCCESS"
+            : status === "PAYMENT_FAILED"
+              ? "FAILED"
+              : status === "CANCELLED"
+                ? "CANCELLED"
+                : null;
+
+        if (paymentStatus) {
+          await tx.payment.updateMany({
+            where: { orderId, status: "PENDING" },
+            data: { status: paymentStatus },
+          });
+        }
+      }
+
+      if (
+        existingOrder.status === "PENDING" &&
+        (status === "PAYMENT_FAILED" || status === "CANCELLED")
+      ) {
+        await this.restoreOrderStock(tx, orderId);
+      }
 
       if (existingOrder.status !== status) {
         const type =
@@ -156,5 +253,23 @@ export class OrderService {
       },
       orderBy: { createdAt: "desc" },
     });
+  }
+
+  private async restoreOrderStock(
+    tx: Prisma.TransactionClient,
+    orderId: number,
+  ) {
+    const items = await tx.orderItem.findMany({
+      where: { orderId },
+      select: { productId: true, quantity: true },
+      orderBy: { productId: "asc" },
+    });
+
+    for (const item of items) {
+      await tx.product.update({
+        where: { id: item.productId },
+        data: { stock: { increment: item.quantity } },
+      });
+    }
   }
 }
