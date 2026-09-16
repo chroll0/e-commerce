@@ -31,7 +31,7 @@ export function useProductData(product?: ProductApi): ProductCardData | null {
     const progress =
       stock > 0 ? Math.min(100, Math.round((sold / stock) * 100)) : 0;
 
-    const isOutOfStock = stock === 0;
+    const isOutOfStock = stock <= 0;
     const isLowStock = stock > 0 && stock <= 5;
 
     return {

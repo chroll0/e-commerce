@@ -8,9 +8,12 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   ChevronLeft,
   ChevronRight,
+  Minus,
   Package2Icon,
+  Plus,
   ShoppingCartIcon,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useCartActions } from "@/state/useCartActions";
 import { useEffect, useMemo, useState } from "react";
 
@@ -22,8 +25,10 @@ export default function ProductDetails({ product }: Props) {
   const t = useTranslations("productDetails");
   const tCard = useTranslations("productCard");
   const locale = useLocale();
+  const router = useRouter();
   const data = useProductData(product);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   const { add } = useCartActions();
 
@@ -74,11 +79,16 @@ export default function ProductDetails({ product }: Props) {
         slug: data.slug ?? String(product.id),
         image: data.image ?? null,
         price: data.price,
-        quantity: 1,
+        quantity,
       });
     } finally {
       setIsAddingToCart(false);
     }
+  };
+
+  const handleBuyNow = async () => {
+    await handleAddToCart();
+    router.push(`/${locale}/checkout`);
   };
 
   return (
@@ -150,7 +160,7 @@ export default function ProductDetails({ product }: Props) {
                 className={[
                   "relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border transition",
                   index === selectedImageIndex
-                    ? "border-destructive"
+                    ? "border-highlight"
                     : "border-border hover:border-primary/50",
                 ].join(" ")}
               >
@@ -208,6 +218,51 @@ export default function ProductDetails({ product }: Props) {
           )}
         </div>
 
+        {!data.isOutOfStock && (
+          <div
+            className="mt-6 flex items-center gap-3"
+            aria-label={t("quantity")}
+          >
+            <span className="text-sm font-medium text-secondary">
+              {t("quantity")}
+            </span>
+            <div className="flex items-center rounded-lg bg-card">
+              <Button
+                type="button"
+                variant="outline"
+                iconOnly
+                size="sm"
+                aria-label={t("decreaseQuantity")}
+                disabled={quantity <= 1}
+                onClick={() =>
+                  setQuantity((current) => Math.max(1, current - 1))
+                }
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              <span className="py-1 px-4 text-sm font-semibold text-primary border-y border-border rounded-sm">
+                {quantity}
+              </span>
+              <Button
+                type="button"
+                variant="outline"
+                iconOnly
+                size="sm"
+                aria-label={t("increaseQuantity")}
+                disabled={quantity >= data.stock}
+                onClick={() =>
+                  setQuantity((current) => Math.min(data.stock, current + 1))
+                }
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+            <span className="text-xs text-secondary">
+              {data.stock} {t("available")}
+            </span>
+          </div>
+        )}
+
         {/* CTA */}
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button
@@ -221,7 +276,12 @@ export default function ProductDetails({ product }: Props) {
             {t("addToCart")}
           </Button>
 
-          <Button variant="outline" size="lg">
+          <Button
+            variant="outline"
+            size="lg"
+            disabled={data.isOutOfStock || isAddingToCart}
+            onClick={handleBuyNow}
+          >
             {t("buyNow")}
           </Button>
         </div>

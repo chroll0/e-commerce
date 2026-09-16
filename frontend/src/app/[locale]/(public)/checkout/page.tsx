@@ -38,12 +38,14 @@ export default function CheckoutPage() {
   const [city, setCity] = useState("");
   const [phone, setPhone] = useState("");
   const [zip, setZip] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const [isSimulating, setIsSimulating] = useState(false);
 
   const [order, setOrder] = useState<CreatedOrder | null>(null);
   const [payment, setPayment] = useState<CreatedPayment | null>(null);
+  const [paymentError, setPaymentError] = useState(false);
 
   const subtotal = useMemo(
     () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
@@ -52,6 +54,14 @@ export default function CheckoutPage() {
 
   const handleCreateOrder = async (e: FormEvent) => {
     e.preventDefault();
+
+    const nextErrors: Record<string, string> = {};
+    if (!address.trim()) nextErrors.address = t("errors.addressRequired");
+    if (!city.trim()) nextErrors.city = t("errors.cityRequired");
+    if (!phone.trim()) nextErrors.phone = t("errors.phoneRequired");
+    setFieldErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) return;
 
     if (!cartItems.length) {
       notify("error", t("errors.emptyCart"));
@@ -78,10 +88,18 @@ export default function CheckoutPage() {
         t("notifications.orderCreated", { orderId: createdOrder.id }),
       );
 
-      const createdPayment = (await paymentApi.create(
-        createdOrder.id,
-      )) as CreatedPayment;
-      setPayment(createdPayment);
+      try {
+        const createdPayment = (await paymentApi.create(
+          createdOrder.id,
+        )) as CreatedPayment;
+        setPayment(createdPayment);
+      } catch (error: any) {
+        setPaymentError(true);
+        notify(
+          "error",
+          error?.response?.data?.message || t("errors.paymentCreation"),
+        );
+      }
     } catch (error: any) {
       notify(
         "error",
@@ -135,6 +153,7 @@ export default function CheckoutPage() {
     order && payment && payment.status === "PENDING",
   );
   const showResult = Boolean(order && payment && payment.status !== "PENDING");
+  const showPaymentError = Boolean(order && !payment && paymentError);
 
   return (
     <AuthGuard>
@@ -158,6 +177,15 @@ export default function CheckoutPage() {
                   label={t("form.address")}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
+                  onBlur={() =>
+                    setFieldErrors((current) => ({
+                      ...current,
+                      address: address.trim()
+                        ? ""
+                        : t("errors.addressRequired"),
+                    }))
+                  }
+                  error={fieldErrors.address || undefined}
                   required
                   fullWidth
                 />
@@ -167,6 +195,13 @@ export default function CheckoutPage() {
                     label={t("form.city")}
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
+                    onBlur={() =>
+                      setFieldErrors((current) => ({
+                        ...current,
+                        city: city.trim() ? "" : t("errors.cityRequired"),
+                      }))
+                    }
+                    error={fieldErrors.city || undefined}
                     required
                     fullWidth
                   />
@@ -175,6 +210,13 @@ export default function CheckoutPage() {
                     label={t("form.phone")}
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
+                    onBlur={() =>
+                      setFieldErrors((current) => ({
+                        ...current,
+                        phone: phone.trim() ? "" : t("errors.phoneRequired"),
+                      }))
+                    }
+                    error={fieldErrors.phone || undefined}
                     required
                     fullWidth
                   />
@@ -201,8 +243,11 @@ export default function CheckoutPage() {
 
             {showPaymentActions && (
               <div className="mt-6 space-y-4">
-                <div className="rounded-xl border border-border bg-card-soft p-4 text-sm text-secondary">
-                  {t("payment.pendingHint")}
+                <div className="rounded-xl border border-highlight/30 bg-highlight/5 p-4 text-sm text-primary">
+                  <p className="font-semibold">{t("payment.pendingTitle")}</p>
+                  <p className="mt-1 text-secondary">
+                    {t("payment.pendingHint")}
+                  </p>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
@@ -236,6 +281,32 @@ export default function CheckoutPage() {
               </div>
             )}
 
+            {showPaymentError && order && (
+              <div className="mt-6 space-y-4 rounded-xl border border-primary/30 bg-primary/5 p-5">
+                <div>
+                  <h2 className="text-lg font-semibold text-primary">
+                    {t("payment.errorTitle")}
+                  </h2>
+                  <p className="mt-1 text-sm text-secondary">
+                    {t("payment.errorDescription", { orderId: order.id })}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <Button
+                    onClick={() => router.push(`/${locale}/account/orders`)}
+                  >
+                    {t("actions.goToOrders")}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => router.push(`/${locale}/products`)}
+                  >
+                    {t("actions.continueShopping")}
+                  </Button>
+                </div>
+              </div>
+            )}
+
             {showResult && order && payment && (
               <div className="mt-6 space-y-4 rounded-xl border border-border bg-card-soft p-5">
                 <h2 className="text-lg font-semibold text-primary">
@@ -245,10 +316,16 @@ export default function CheckoutPage() {
                   {t("result.orderId", { orderId: order.id })}
                 </p>
                 <p className="text-sm text-secondary">
-                  {t("result.orderStatus", { status: order.status })}
+                  {t(
+                    `result.orderStatus.${order.status.toLowerCase()}` as "result.orderStatus.pending",
+                    { defaultValue: order.status },
+                  )}
                 </p>
                 <p className="text-sm text-secondary">
-                  {t("result.paymentStatus", { status: payment.status })}
+                  {t(
+                    `result.paymentStatus.${payment.status.toLowerCase()}` as "result.paymentStatus.pending",
+                    { defaultValue: payment.status },
+                  )}
                 </p>
 
                 <div className="flex flex-wrap gap-3">
@@ -279,7 +356,9 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-secondary">{t("summary.total")}</span>
-                <span className="font-semibold">₾{subtotal.toFixed(2)}</span>
+                <span className="font-semibold">
+                  ₾{(order?.total ?? subtotal).toFixed(2)}
+                </span>
               </div>
             </div>
           </aside>

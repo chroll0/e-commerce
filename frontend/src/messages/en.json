@@ -307,13 +307,27 @@
       "total": "Total"
     },
     "payment": {
-      "pendingHint": "Order created. Pick a test payment result."
+      "pendingTitle": "Test payment pending",
+      "pendingHint": "Order created. Pick a test payment result.",
+      "errorTitle": "Payment setup needs attention",
+      "errorDescription": "Order #{orderId} was created, but the test payment could not be prepared. Check My Orders for its current status."
     },
     "result": {
       "title": "Order Confirmation",
       "orderId": "Order # {orderId}",
-      "orderStatus": "Order status: {status}",
-      "paymentStatus": "Payment status: {status}"
+      "orderStatus": {
+        "pending": "Order status: Awaiting payment",
+        "paid": "Order status: Paid",
+        "payment_failed": "Order status: Payment failed",
+        "cancelled": "Order status: Cancelled",
+        "shipped": "Order status: Shipped"
+      },
+      "paymentStatus": {
+        "pending": "Payment status: Pending",
+        "success": "Payment status: Successful",
+        "failed": "Payment status: Failed",
+        "cancelled": "Payment status: Cancelled"
+      }
     },
     "notifications": {
       "orderCreated": "Order placed successfully. Order # {orderId}",
@@ -323,7 +337,11 @@
     },
     "errors": {
       "emptyCart": "Your cart is empty.",
+      "addressRequired": "Enter your delivery address.",
+      "cityRequired": "Enter your city.",
+      "phoneRequired": "Enter your phone number.",
       "createOrder": "Failed to create order.",
+      "paymentCreation": "The order was created, but payment setup failed.",
       "simulatePayment": "Failed to process test payment."
     }
   },
@@ -1134,6 +1152,10 @@
   "productDetails": {
     "addToCart": "Add To Cart",
     "buyNow": "Buy Now",
+    "quantity": "Quantity",
+    "available": "available",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
     "inStock": "in stock",
     "sold": "Sold",
     "stock": "Stock",

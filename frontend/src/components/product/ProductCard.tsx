@@ -140,10 +140,11 @@ export default function ProductCard({ product }: Props) {
         <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 opacity-100 translate-y-0 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
           <Button
             size="sm"
+            fullWidth
             disabled={data.isOutOfStock}
             onClick={handleAddToCart}
           >
-            {t("addToCart")}
+            {data.isOutOfStock ? t("outOfStock") : t("addToCart")}
           </Button>
         </div>
 
@@ -172,6 +173,12 @@ export default function ProductCard({ product }: Props) {
             </span>
           )}
         </div>
+
+        {data.isLowStock && (
+          <p className="mt-2 text-xs font-medium text-primary">
+            {t("lowStock")}
+          </p>
+        )}
       </div>
     </div>
   );
