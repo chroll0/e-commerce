@@ -65,6 +65,7 @@ export default function ProductCard({ product }: Props) {
       image: data.image ?? null,
       price: data.price,
       quantity: 1,
+      availableStock: data.stock,
     });
   };
 
@@ -99,7 +100,7 @@ export default function ProductCard({ product }: Props) {
               size="sm"
               aria-label={t("previousImage")}
               onClick={handlePreviousImage}
-              className="absolute left-1.5 top-1/2 -translate-y-1/2 rounded-full bg-background/70 opacity-0 backdrop-blur-sm transition group-hover:opacity-100 hover:bg-background"
+              className="absolute left-1.5 top-1/2 -translate-y-1/2 rounded-full bg-card opacity-0 backdrop-blur-sm transition group-hover:opacity-100 hover:bg-card/90"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -110,19 +111,19 @@ export default function ProductCard({ product }: Props) {
               size="sm"
               aria-label={t("nextImage")}
               onClick={handleNextImage}
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-background/70 opacity-0 backdrop-blur-sm transition group-hover:opacity-100 hover:bg-background"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-card opacity-0 backdrop-blur-sm transition group-hover:opacity-100 hover:bg-card/90"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
 
-            <div className="absolute top-2 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-medium text-primary backdrop-blur-sm">
+            <div className="absolute top-2 left-1/2 -translate-x-1/2 rounded-full px-2 py-0.5 text-[10px] font-medium text-highlight backdrop-blur-sm">
               {imageIndex + 1} / {images.length}
             </div>
           </>
         )}
 
         {/* VIEW */}
-        <div className="absolute top-2 left-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition">
+        <div className="absolute top-1.5 left-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition">
           <Button
             variant="text"
             iconOnly
@@ -132,18 +133,20 @@ export default function ProductCard({ product }: Props) {
               handleNavigation();
             }}
           >
-            <EyeIcon className="h-4 w-4" />
+            <EyeIcon className="h-4 w-4 text-highlight" />
           </Button>
         </div>
 
         {/* ADD TO CART */}
         <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 opacity-100 translate-y-0 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
           <Button
+            variant="highlight"
             size="sm"
+            fullWidth
             disabled={data.isOutOfStock}
             onClick={handleAddToCart}
           >
-            {t("addToCart")}
+            {data.isOutOfStock ? t("outOfStock") : t("addToCart")}
           </Button>
         </div>
 
@@ -172,6 +175,12 @@ export default function ProductCard({ product }: Props) {
             </span>
           )}
         </div>
+
+        {data.isLowStock && (
+          <p className="mt-2 text-xs font-medium text-primary">
+            {t("lowStock")}
+          </p>
+        )}
       </div>
     </div>
   );

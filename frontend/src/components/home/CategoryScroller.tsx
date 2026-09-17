@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -57,9 +58,9 @@ export default function CategoryScroller() {
     <section>
       <div className="my-10 flex gap-4 overflow-x-auto rounded-xl border border-border bg-card-soft p-3 no-scrollbar">
         {categories.map((cat) => (
-          <button
+          <Link
             key={cat.id}
-            onClick={() => handleClick(cat.slug)}
+            href={`/${locale}/category/${cat.slug}`}
             className="flex min-w-20 flex-col items-center transition hover:opacity-80 cursor-pointer"
           >
             <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-border bg-card-soft">
@@ -79,7 +80,7 @@ export default function CategoryScroller() {
             <p className="mt-2 text-xs text-primary w-24 text-center">
               {cat.name}
             </p>
-          </button>
+          </Link>
         ))}
       </div>
     </section>

@@ -60,8 +60,8 @@ export default function StoreCard({ store }: Props) {
           <div className="flex items-center justify-center gap-4 text-sm">
             {/* RATING */}
             {store.rating && store.rating > 0 && (
-              <div className="flex items-center gap-1 text-amber-500">
-                <Star className="h-4 w-4 fill-amber-400 text-amber-500" />
+              <div className="flex items-center gap-1 text-primary">
+                <Star className="h-4 w-4 fill-primary text-primary" />
                 <span className="font-medium">{store.rating.toFixed(1)}</span>
               </div>
             )}

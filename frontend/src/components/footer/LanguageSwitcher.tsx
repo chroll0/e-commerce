@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { api } from "@/lib/axios";
+import { Button } from "@/components";
 
 const locales = [
   { code: "en", label: "EN", flag: "/flags/gb.svg" },
@@ -35,9 +36,12 @@ export default function LanguageSwitcher() {
     targetLocale: string,
   ) => {
     try {
-      const res = await api.get(`/categories/slug/${encodeURIComponent(currentSlug)}`, {
-        params: { locale: targetLocale },
-      });
+      const res = await api.get(
+        `/categories/slug/${encodeURIComponent(currentSlug)}`,
+        {
+          params: { locale: targetLocale },
+        },
+      );
 
       return res.data?.slug ? String(res.data.slug) : currentSlug;
     } catch {
@@ -67,21 +71,19 @@ export default function LanguageSwitcher() {
           const path = buildPath(code);
 
           return (
-            <button
+            <Button
               key={code}
               type="button"
+              variant={isActive ? "secondary" : "text"}
+              size="xs"
               onClick={() => handleSwitch(code, path)}
-              className={`flex items-center gap-2 px-2 py-1 rounded-full transition ${
-                isActive
-                  ? "bg-muted text-primary font-semibold"
-                  : "text-muted hover:text-primary"
-              }`}
+              className="rounded-full px-2 py-1"
             >
               <div className="w-5 h-5 relative">
                 <Image src={flag} alt={label} fill className="object-contain" />
               </div>
               <span className="text-xs">{label}</span>
-            </button>
+            </Button>
           );
         })}
       </div>

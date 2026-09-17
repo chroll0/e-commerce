@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 
 import { AccountHeader, Button } from "@/components";
 import { api } from "@/lib/axios";
+import { getStatusPresentation } from "@/lib/orderStatus";
 import { useNotificationStore } from "@/state/useNotificationStore";
 
 type OrderItem = {
@@ -95,36 +96,12 @@ export default function OrdersPage() {
     [orders, selectedOrderId],
   );
 
-  const formatStatus = (status: string) => {
-    const normalized = status.toLowerCase();
-    const labels: Record<string, string> = {
-      pending: t("statuses.pending"),
-      paid: t("statuses.paid"),
-      payment_failed: t("statuses.paymentFailed"),
-      shipped: t("statuses.shipped"),
-      cancelled: t("statuses.cancelled"),
+  const getOrderStatus = (status: string) => {
+    const presentation = getStatusPresentation(status);
+    return {
+      ...presentation,
+      label: t(`statuses.${presentation.key}`),
     };
-
-    return labels[normalized] ?? status;
-  };
-
-  const getStatusStyles = (status: string) => {
-    const normalized = status.toLowerCase();
-
-    switch (normalized) {
-      case "paid":
-        return "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300";
-      case "pending":
-        return "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300";
-      case "payment_failed":
-        return "border-red-500/30 bg-red-500/10 text-red-700 dark:text-red-300";
-      case "shipped":
-        return "border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-300";
-      case "cancelled":
-        return "border-slate-500/30 bg-slate-500/10 text-slate-700 dark:text-slate-300";
-      default:
-        return "border-border bg-card-soft text-secondary";
-    }
   };
 
   const formatDate = (date: string) =>
@@ -188,7 +165,7 @@ export default function OrdersPage() {
             <div>
               <h1>Order #${selectedOrder.id}</h1>
             </div>
-            <span class="badge">${formatStatus(selectedOrder.status)}</span>
+            <span class="badge">${getOrderStatus(selectedOrder.status).label}</span>
           </div>
 
           <div class="meta">
@@ -274,9 +251,9 @@ export default function OrdersPage() {
                   </div>
 
                   <span
-                    className={`inline-flex w-fit rounded-full border px-3 py-1 text-xs font-medium ${getStatusStyles(order.status)}`}
+                    className={`inline-flex w-fit rounded-full border px-3 py-1 text-xs font-medium ${getOrderStatus(order.status).classes}`}
                   >
-                    {formatStatus(order.status)}
+                    {getOrderStatus(order.status).label}
                   </span>
                 </div>
 
@@ -303,9 +280,9 @@ export default function OrdersPage() {
                 </div>
 
                 <span
-                  className={`rounded-full border px-2.5 py-1 text-xs font-medium ${getStatusStyles(selectedOrder.status)}`}
+                  className={`rounded-full border px-2.5 py-1 text-xs font-medium ${getOrderStatus(selectedOrder.status).classes}`}
                 >
-                  {formatStatus(selectedOrder.status)}
+                  {getOrderStatus(selectedOrder.status).label}
                 </span>
               </div>
 

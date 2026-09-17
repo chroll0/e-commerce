@@ -38,10 +38,10 @@ const Card: FC<CardProps> = ({
   return (
     <div
       className={classNames(
-        "bg-white rounded-lg shadow-md overflow-hidden flex flex-col",
+        "bg-card text-foreground rounded-lg shadow-md overflow-hidden flex flex-col",
         sizeStyles[size],
         widthStyles,
-        className
+        className,
       )}
     >
       {imageSrc && (
@@ -58,9 +58,9 @@ const Card: FC<CardProps> = ({
 
       <div className="flex-1 flex flex-col gap-1">
         {title && <h3 className="text-lg font-semibold">{title}</h3>}
-        {subtitle && <p className="text-gray-500 text-sm">{subtitle}</p>}
+        {subtitle && <p className="text-secondary text-sm">{subtitle}</p>}
         {description && (
-          <p className="text-gray-700 text-base">{description}</p>
+          <p className="text-secondary text-base">{description}</p>
         )}
       </div>
 

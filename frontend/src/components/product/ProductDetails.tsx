@@ -8,9 +8,12 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   ChevronLeft,
   ChevronRight,
+  Minus,
   Package2Icon,
+  Plus,
   ShoppingCartIcon,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useCartActions } from "@/state/useCartActions";
 import { useEffect, useMemo, useState } from "react";
 
@@ -22,8 +25,10 @@ export default function ProductDetails({ product }: Props) {
   const t = useTranslations("productDetails");
   const tCard = useTranslations("productCard");
   const locale = useLocale();
+  const router = useRouter();
   const data = useProductData(product);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   const { add } = useCartActions();
 
@@ -74,11 +79,17 @@ export default function ProductDetails({ product }: Props) {
         slug: data.slug ?? String(product.id),
         image: data.image ?? null,
         price: data.price,
-        quantity: 1,
+        quantity,
+        availableStock: data.stock,
       });
     } finally {
       setIsAddingToCart(false);
     }
+  };
+
+  const handleBuyNow = async () => {
+    await handleAddToCart();
+    router.push(`/${locale}/checkout`);
   };
 
   return (
@@ -112,25 +123,31 @@ export default function ProductDetails({ product }: Props) {
 
             {hasMultipleImages && (
               <>
-                <button
+                <Button
+                  variant="outline"
+                  iconOnly
+                  size="sm"
                   type="button"
                   aria-label={tCard("previousImage")}
                   onClick={handlePreviousImage}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-background/70 text-primary backdrop-blur-sm transition hover:bg-background"
+                  className="absolute left-3 top-1/2 h-9 w-9 -translate-y-1/2 rounded-full bg-card backdrop-blur-sm hover:bg-background"
                 >
                   <ChevronLeft className="h-5 w-5" />
-                </button>
+                </Button>
 
-                <button
+                <Button
+                  variant="outline"
+                  iconOnly
+                  size="sm"
                   type="button"
                   aria-label={tCard("nextImage")}
                   onClick={handleNextImage}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-background/70 text-primary backdrop-blur-sm transition hover:bg-background"
+                  className="absolute right-3 top-1/2 h-9 w-9 -translate-y-1/2 rounded-full bg-card backdrop-blur-sm hover:bg-background"
                 >
                   <ChevronRight className="h-5 w-5" />
-                </button>
+                </Button>
 
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-background/70 px-2.5 py-1 text-xs font-medium text-primary backdrop-blur-sm">
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full px-2.5 py-1 text-xs font-medium text-card backdrop-blur-sm">
                   {selectedImageIndex + 1} / {images.length}
                 </div>
               </>
@@ -142,15 +159,17 @@ export default function ProductDetails({ product }: Props) {
         {hasMultipleImages && (
           <div className="flex gap-2 overflow-x-auto pb-1">
             {images.map((image, index) => (
-              <button
+              <Button
                 key={`${image}-${index}`}
+                variant="outline"
+                size="xs"
                 type="button"
                 aria-label={`${data.title} ${index + 1}`}
                 onClick={() => setSelectedImageIndex(index)}
                 className={[
-                  "relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border transition",
+                  "relative h-16 w-16 shrink-0 overflow-hidden rounded-lg p-0 transition",
                   index === selectedImageIndex
-                    ? "border-destructive"
+                    ? "border-highlight"
                     : "border-border hover:border-primary/50",
                 ].join(" ")}
               >
@@ -161,7 +180,7 @@ export default function ProductDetails({ product }: Props) {
                   sizes="64px"
                   className="object-cover"
                 />
-              </button>
+              </Button>
             ))}
           </div>
         )}
@@ -198,7 +217,7 @@ export default function ProductDetails({ product }: Props) {
               {tCard("outOfStock")}
             </div>
           ) : data.isLowStock ? (
-            <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/10 px-3 py-2 text-sm font-medium text-yellow-600">
+            <div className="rounded-lg border border-primary/20 bg-primary/10 px-3 py-2 text-sm font-medium text-primary">
               {tCard("lowStock")}
             </div>
           ) : (
@@ -208,10 +227,55 @@ export default function ProductDetails({ product }: Props) {
           )}
         </div>
 
+        {!data.isOutOfStock && (
+          <div
+            className="mt-6 flex items-center gap-3"
+            aria-label={t("quantity")}
+          >
+            <span className="text-sm font-medium text-secondary">
+              {t("quantity")}
+            </span>
+            <div className="flex items-center rounded-lg bg-card">
+              <Button
+                type="button"
+                variant="outline"
+                iconOnly
+                size="sm"
+                aria-label={t("decreaseQuantity")}
+                disabled={quantity <= 1}
+                onClick={() =>
+                  setQuantity((current) => Math.max(1, current - 1))
+                }
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              <span className="py-1 px-4 text-sm font-semibold text-primary border-y border-border rounded-sm">
+                {quantity}
+              </span>
+              <Button
+                type="button"
+                variant="outline"
+                iconOnly
+                size="sm"
+                aria-label={t("increaseQuantity")}
+                disabled={quantity >= data.stock}
+                onClick={() =>
+                  setQuantity((current) => Math.min(data.stock, current + 1))
+                }
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+            <span className="text-xs text-secondary">
+              {data.stock} {t("available")}
+            </span>
+          </div>
+        )}
+
         {/* CTA */}
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button
-            variant="primary"
+            variant="highlight"
             size="lg"
             leftIcon={<ShoppingCartIcon className="h-5 w-5" />}
             disabled={data.isOutOfStock}
@@ -221,7 +285,12 @@ export default function ProductDetails({ product }: Props) {
             {t("addToCart")}
           </Button>
 
-          <Button variant="outline" size="lg">
+          <Button
+            variant="outline"
+            size="lg"
+            disabled={data.isOutOfStock || isAddingToCart}
+            onClick={handleBuyNow}
+          >
             {t("buyNow")}
           </Button>
         </div>
