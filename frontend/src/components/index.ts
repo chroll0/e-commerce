@@ -34,6 +34,7 @@ export { default as CategorySubcategories } from "./category/CategorySubcategori
 
 // Home page components
 export { default as Hero } from "./home/Hero";
+export { default as LabeledProductSection } from "./home/LabeledProductSection";
 export { default as CategoryScroller } from "./home/CategoryScroller";
 export { default as ProductFilter } from "./home/ProductFilter";
 export { default as FeaturedProducts } from "./home/FeaturedProducts";
@@ -110,6 +111,9 @@ export { buildIndentedOptions, slugify } from "./admin/categories/formOptions";
 export { default as StoreForm } from "./admin/stores/StoreForm";
 export { default as StoresTable } from "./admin/stores/StoresTable";
 
+// Label management components
+export { default as LabelsTable } from "./admin/labels/LabelsTable";
+
 // Product management components
 export { default as ProductContentFields } from "./admin/products/ProductContentFields";
 export { default as ProductForm } from "./admin/products/ProductForm";
@@ -118,6 +122,7 @@ export { default as ProductPricingFields } from "./admin/products/ProductPricing
 export { default as ProductRow } from "./admin/products/ProductRow";
 export { default as ProductsTable } from "./admin/products/ProductsTable";
 export { default as ProductsFilters } from "./admin/products/ProductsFilters";
+export { default as ProductLabelsPanel } from "./admin/products/ProductLabelsPanel";
 
 // Admin shared state components
 export { default as AdminPagination } from "./admin/common/AdminPagination";

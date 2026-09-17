@@ -35,6 +35,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
       { key: "storesAdd", href: "/admin/stores/new" },
     ],
   },
+  { key: "labels", href: "/admin/labels" },
   {
     key: "orders",
     children: [

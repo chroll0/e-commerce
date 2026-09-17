@@ -71,6 +71,9 @@ export default function ProductCard({ product }: Props) {
 
   if (!data) return null;
 
+  const normalizedLocale = locale.split("-")[0];
+  const visibleLabels = (product.labels ?? []).slice(0, 2);
+
   return (
     <div
       className="group cursor-pointer overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_var(--color-shadow)]"
@@ -88,6 +91,20 @@ export default function ProductCard({ product }: Props) {
         ) : (
           <div className="flex h-full items-center justify-center text-xs text-muted">
             {t("noImage")}
+          </div>
+        )}
+
+        {/* LABEL BADGES */}
+        {visibleLabels.length > 0 && (
+          <div className="absolute top-2 left-2 flex flex-col gap-1">
+            {visibleLabels.map((label) => (
+              <span
+                key={label.id}
+                className="rounded-md bg-highlight px-2 py-1 text-[11px] font-semibold text-white"
+              >
+                {normalizedLocale === "ka" ? label.nameKa : label.nameEn}
+              </span>
+            ))}
           </div>
         )}
 

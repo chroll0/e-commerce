@@ -39,6 +39,13 @@ export type ProductCategoryOption = {
   image?: string | null;
 };
 
+export type ProductLabelApi = {
+  id: number;
+  slug: string;
+  nameEn: string;
+  nameKa: string;
+};
+
 export type ProductApi = {
   id: number;
   name: string;
@@ -57,6 +64,7 @@ export type ProductApi = {
   images: string[];
   primaryImage: string | null;
   translations: ProductTranslation[];
+  labels?: ProductLabelApi[];
 };
 
 export type ProductLabels = {

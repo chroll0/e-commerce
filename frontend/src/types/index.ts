@@ -15,6 +15,7 @@ export type {
   ProductApi,
   ProductProps,
   ProductCategoryOption,
+  ProductLabelApi,
 } from "@/types/product";
 
 export type { StoreApi, StoreProps, StoreOption } from "@/types/store";

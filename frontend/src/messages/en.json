@@ -419,6 +419,7 @@
       "stores": "Stores",
       "storesAll": "Manage All",
       "storesAdd": "Add new",
+      "labels": "Labels",
       "users": "Users",
       "orders": "Orders",
       "ordersAll": "All Orders",
@@ -573,6 +574,14 @@
         "created": "Product created successfully.",
         "updated": "Product updated successfully.",
         "deleted": "Product deleted successfully."
+      },
+      "labelsPanel": {
+        "title": "Labels",
+        "empty": "No labels available yet. Create one in Labels management.",
+        "save": "Save labels",
+        "saving": "Saving...",
+        "saved": "Labels saved.",
+        "error": "Failed to save labels."
       }
     },
 
@@ -645,6 +654,39 @@
         "created": "Store created successfully.",
         "updated": "Store updated successfully.",
         "deleted": "Store deleted successfully."
+      }
+    },
+
+    "labels": {
+      "title": "Label Management",
+      "description": "Create and manage product labels used for tagging and filtering.",
+      "fields": {
+        "nameEn": "Name (EN)",
+        "nameKa": "Name (KA)",
+        "slug": "Slug"
+      },
+      "actions": {
+        "create": "Create label",
+        "creating": "Creating...",
+        "cancel": "Cancel",
+        "delete": "Delete"
+      },
+      "table": {
+        "name": "Name",
+        "slug": "Slug",
+        "actions": "Actions",
+        "loading": "Loading...",
+        "empty": "No labels yet. Create your first label."
+      },
+      "modal": {
+        "deleteTitle": "Delete label",
+        "deleteDescription": "Are you sure you want to delete {name}? This action cannot be undone."
+      },
+      "messages": {
+        "loadError": "Failed to load labels. Try again.",
+        "createError": "Failed to create label. Please try again.",
+        "deleteError": "Failed to delete label.",
+        "required": "Name (EN), Name (KA) and Slug are required."
       }
     },
 
