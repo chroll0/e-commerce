@@ -96,10 +96,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         <Comp
           ref={ref as any}
           className={classes}
-          disabled={disabled || loading}
+          aria-disabled={disabled || loading || undefined}
           {...props}
         >
-          {content}
+          {children}
         </Comp>
       );
     }
