@@ -53,6 +53,7 @@ export class ProductController {
     @Query("categorySlug") categorySlug?: string,
     @Query("locale") locale?: string,
     @Query("limit") limit?: string,
+    @Query("label") label?: string,
   ) {
     return this.productService.findAll({
       search,
@@ -60,6 +61,7 @@ export class ProductController {
       categorySlug,
       locale: parseLocale(locale),
       limit: parseLimit(limit),
+      label,
     });
   }
 

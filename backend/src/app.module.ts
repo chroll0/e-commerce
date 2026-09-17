@@ -5,6 +5,7 @@ import { UserModule } from "./modules/user/user.module";
 import { CategoryModule } from "./modules/category/category.module";
 import { ProductModule } from "./modules/product/product.module";
 import { AdminModule } from "./modules/admin/admin.module";
+import { LabelModule } from "./modules/label/label.module";
 import { CloudinaryModule } from "./modules/cloudinary/cloudinary.module";
 import { StoreModule } from "./modules/store/store.module";
 import { CartModule } from "./modules/cart/cart.module";
@@ -23,6 +24,7 @@ import { EmailModule } from "./common/email/email.module";
     CategoryModule,
     ProductModule,
     AdminModule,
+    LabelModule,
     StoreModule,
     CartModule,
     ContactModule,

@@ -1,11 +1,17 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
+  Param,
+  ParseIntPipe,
+  Patch,
   Query,
   UseGuards,
 } from "@nestjs/common";
 import { AdminService } from "./admin.service";
+import { ProductService } from "../product/product.service";
+import { AssignLabelsDto } from "../label/dto/assign-labels.dto";
 import { Locale } from "../../common/types/locale.types";
 import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
 import { RolesGuard } from "../../common/guards/roles.guard";
@@ -22,7 +28,10 @@ function parseLocale(locale?: string): Locale {
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+  constructor(
+    private readonly adminService: AdminService,
+    private readonly productService: ProductService,
+  ) {}
 
   @Get("dashboard")
   getDashboard(@Query("locale") locale?: string) {
@@ -32,5 +41,13 @@ export class AdminController {
   @Get("stats")
   getStats() {
     return this.adminService.getStats();
+  }
+
+  @Patch("products/:id/labels")
+  setProductLabels(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() dto: AssignLabelsDto,
+  ) {
+    return this.productService.setLabels(id, dto.labelIds);
   }
 }
