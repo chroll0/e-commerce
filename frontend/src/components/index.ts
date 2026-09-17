@@ -113,6 +113,8 @@ export { default as StoresTable } from "./admin/stores/StoresTable";
 
 // Label management components
 export { default as LabelsTable } from "./admin/labels/LabelsTable";
+export { default as LabelForm } from "./admin/labels/LabelForm";
+export { default as LabelsFilters } from "./admin/labels/LabelsFilters";
 
 // Product management components
 export { default as ProductContentFields } from "./admin/products/ProductContentFields";

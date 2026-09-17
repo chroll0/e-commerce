@@ -1,31 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useEffect, useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import {
   AdminPageHeader,
-  Button,
   ConfirmModal,
-  Input,
+  LabelsFilters,
   LabelsTable,
-  slugify,
 } from "@/components";
-import { createLabel, deleteLabel, getLabels } from "@/lib/labelsApi";
-import type { ProductLabelApi } from "@/types";
+import { deleteLabel, getLabels } from "@/lib/labelsApi";
+import type { Locale, ProductLabelApi } from "@/types";
 
 export default function AdminLabelsPage() {
+  const locale = useLocale() as Locale;
   const t = useTranslations("admin.labels");
 
   const [labels, setLabels] = useState<ProductLabelApi[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const [nameEn, setNameEn] = useState("");
-  const [nameKa, setNameKa] = useState("");
-  const [slug, setSlug] = useState("");
-  const [slugTouched, setSlugTouched] = useState(false);
-  const [creating, setCreating] = useState(false);
-  const [createError, setCreateError] = useState("");
+  const [search, setSearch] = useState("");
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -51,41 +45,17 @@ export default function AdminLabelsPage() {
     load();
   }, []);
 
-  useEffect(() => {
-    if (!slugTouched) setSlug(slugify(nameEn));
-  }, [nameEn, slugTouched]);
+  const filteredLabels = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return labels;
 
-  const resetForm = () => {
-    setNameEn("");
-    setNameKa("");
-    setSlug("");
-    setSlugTouched(false);
-  };
-
-  const handleCreate = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!nameEn.trim() || !nameKa.trim() || !slug.trim()) {
-      setCreateError(t("messages.required"));
-      return;
-    }
-
-    try {
-      setCreating(true);
-      setCreateError("");
-      await createLabel({
-        nameEn: nameEn.trim(),
-        nameKa: nameKa.trim(),
-        slug: slug.trim(),
-      });
-      resetForm();
-      await load();
-    } catch (e: any) {
-      setCreateError(e?.response?.data?.message || t("messages.createError"));
-    } finally {
-      setCreating(false);
-    }
-  };
+    return labels.filter(
+      (label) =>
+        label.nameEn.toLowerCase().includes(q) ||
+        label.nameKa.toLowerCase().includes(q) ||
+        label.slug.toLowerCase().includes(q),
+    );
+  }, [labels, search]);
 
   const onRequestDelete = (payload: { id: number; name: string }) => {
     setTarget(payload);
@@ -118,7 +88,12 @@ export default function AdminLabelsPage() {
 
   return (
     <>
-      <AdminPageHeader title={t("title")} description={t("description")} />
+      <AdminPageHeader
+        title={t("title")}
+        description={t("description")}
+        addHref={`/${locale}/admin/labels/new`}
+        addLabel={t("actions.add")}
+      />
 
       {error && (
         <div className="mt-4 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
@@ -126,50 +101,16 @@ export default function AdminLabelsPage() {
         </div>
       )}
 
-      <form
-        onSubmit={handleCreate}
-        className="mt-6 grid grid-cols-1 gap-4 rounded-2xl border border-border p-6 md:grid-cols-3"
-      >
-        <Input
-          label={t("fields.nameEn")}
-          value={nameEn}
-          onChange={(e) => setNameEn(e.target.value)}
-          fullWidth
-        />
-
-        <Input
-          label={t("fields.nameKa")}
-          value={nameKa}
-          onChange={(e) => setNameKa(e.target.value)}
-          fullWidth
-        />
-
-        <Input
-          label={t("fields.slug")}
-          value={slug}
-          onChange={(e) => {
-            setSlugTouched(true);
-            setSlug(e.target.value);
-          }}
-          fullWidth
-        />
-
-        {createError && (
-          <div className="md:col-span-3 text-sm text-destructive">
-            {createError}
-          </div>
-        )}
-
-        <div className="md:col-span-3 flex justify-end">
-          <Button type="submit" variant="primary" disabled={creating}>
-            {creating ? t("actions.creating") : t("actions.create")}
-          </Button>
-        </div>
-      </form>
+      <LabelsFilters
+        search={search}
+        onSearchChange={setSearch}
+        searchLabel={t("filters.searchLabel")}
+      />
 
       <LabelsTable
+        locale={locale}
         loading={loading}
-        labels={labels}
+        labels={filteredLabels}
         onRequestDelete={onRequestDelete}
         labelsText={{
           name: t("table.name"),

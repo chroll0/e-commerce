@@ -17,6 +17,17 @@ export async function createLabel(payload: CreateLabelPayload) {
   return res.data as ProductLabelApi;
 }
 
+export type UpdateLabelPayload = {
+  slug?: string;
+  nameEn?: string;
+  nameKa?: string;
+};
+
+export async function updateLabel(id: number, payload: UpdateLabelPayload) {
+  const res = await api.patch(`/admin/labels/${id}`, payload);
+  return res.data as ProductLabelApi;
+}
+
 export async function deleteLabel(id: number) {
   await api.delete(`/admin/labels/${id}`);
 }

@@ -1,9 +1,11 @@
 import { FC } from "react";
+import Link from "next/link";
 import { Button } from "@/components";
-import { Tag, Trash2 } from "lucide-react";
+import { Pencil, Tag, Trash2 } from "lucide-react";
 import type { ProductLabelApi } from "@/types";
 
 type LabelsTableProps = {
+  locale: string;
   loading: boolean;
   labels: ProductLabelApi[];
   onRequestDelete: (payload: { id: number; name: string }) => void;
@@ -18,6 +20,7 @@ type LabelsTableProps = {
 };
 
 const LabelsTable: FC<LabelsTableProps> = ({
+  locale,
   loading,
   labels,
   onRequestDelete,
@@ -61,6 +64,12 @@ const LabelsTable: FC<LabelsTableProps> = ({
                   </div>
 
                   <div className="col-span-2 flex items-center justify-end gap-2">
+                    <Button asChild variant="secondary" size="xs">
+                      <Link href={`/${locale}/admin/labels/${label.slug}/edit`}>
+                        <Pencil className="h-4 w-4" />
+                      </Link>
+                    </Button>
+
                     <Button
                       variant="tertiary"
                       size="xs"

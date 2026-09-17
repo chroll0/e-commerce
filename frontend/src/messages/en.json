@@ -666,10 +666,14 @@
         "slug": "Slug"
       },
       "actions": {
+        "add": "Add label",
         "create": "Create label",
         "creating": "Creating...",
         "cancel": "Cancel",
         "delete": "Delete"
+      },
+      "filters": {
+        "searchLabel": "Search by name or slug"
       },
       "table": {
         "name": "Name",
@@ -678,13 +682,24 @@
         "loading": "Loading...",
         "empty": "No labels yet. Create your first label."
       },
+      "form": {
+        "createTitle": "Create Label",
+        "createDescription": "Add a new label to tag and filter products.",
+        "editTitle": "Edit Label",
+        "editDescription": "Update the label's name and slug.",
+        "submitCreate": "Create label",
+        "submitEdit": "Save changes",
+        "saving": "Saving..."
+      },
       "modal": {
         "deleteTitle": "Delete label",
         "deleteDescription": "Are you sure you want to delete {name}? This action cannot be undone."
       },
       "messages": {
         "loadError": "Failed to load labels. Try again.",
+        "loadOneError": "Failed to load label.",
         "createError": "Failed to create label. Please try again.",
+        "updateError": "Failed to save. Try again.",
         "deleteError": "Failed to delete label.",
         "required": "Name (EN), Name (KA) and Slug are required."
       }
