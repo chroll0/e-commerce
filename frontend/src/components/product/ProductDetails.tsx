@@ -267,7 +267,8 @@ export default function ProductDetails({ product }: Props) {
               </Button>
             </div>
             <span className="text-xs text-secondary">
-              {data.stock} {t("available")}
+              {/* {data.stock} */}
+              {t("available")}
             </span>
           </div>
         )}

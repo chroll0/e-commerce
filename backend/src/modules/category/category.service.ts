@@ -194,7 +194,7 @@ export class CategoryService {
       where: { id },
       data: {
         ...(dto.slug ? { slug: dto.slug } : {}),
-        ...(dto.image ? { image: dto.image } : {}),
+        ...(dto.image !== undefined ? { image: dto.image } : {}),
         parent: dto.parentId ? { connect: { id: dto.parentId } } : undefined,
         ...(translationOps && { translations: translationOps }),
       },

@@ -24,7 +24,7 @@ export class UpdateCategoryDto {
 
   @IsOptional()
   @IsString()
-  image?: string;
+  image?: string | null;
 
   @IsOptional()
   @IsNumber()
