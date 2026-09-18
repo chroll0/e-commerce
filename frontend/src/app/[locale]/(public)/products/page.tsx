@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Breadcrumbs,
-  FeaturedProducts,
-  ProductSearchFilters,
-} from "@/components";
+import { BestStores, Breadcrumbs, ProductSearchFilters } from "@/components";
 import { useLocale, useTranslations } from "next-intl";
 
 const page = () => {
@@ -20,8 +16,10 @@ const page = () => {
         ]}
       />
 
+      <BestStores />
+      <div className="my-6"></div>
       <ProductSearchFilters />
-      <FeaturedProducts />
+      {/* <FeaturedProducts /> */}
     </main>
   );
 };
