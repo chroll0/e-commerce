@@ -11,9 +11,11 @@ import type {
   ProductCategoryOption,
   CategoryApi,
   StoreOption,
+  ProductLabelApi,
 } from "@/types";
-import { ProductForm } from "@/components";
+import { ProductForm, ProductLabelsPanel } from "@/components";
 import { buildProductLabels } from "@/lib/productLabels";
+import { getLabels } from "@/lib/labelsApi";
 
 export default function AdminEditProductPage() {
   const router = useRouter();
@@ -31,6 +33,9 @@ export default function AdminEditProductPage() {
   const [stores, setStores] = useState<StoreOption[]>([]);
   const [loadingCats, setLoadingCats] = useState(false);
   const [loadingStores, setLoadingStores] = useState(false);
+
+  const [allLabels, setAllLabels] = useState<ProductLabelApi[]>([]);
+  const [productLabelIds, setProductLabelIds] = useState<number[]>([]);
 
   const [initialValues, setInitialValues] = useState<ProductFormValues>({
     titleEn: "",
@@ -82,14 +87,19 @@ export default function AdminEditProductPage() {
         primaryImage: product.primaryImage ?? "",
       });
 
-      // 2) categories and stores for dropdowns
+      setProductLabelIds((product.labels ?? []).map((l) => l.id));
+
+      // 2) categories, stores and labels for dropdowns
       setLoadingCats(true);
       setLoadingStores(true);
 
-      const [catRes, storeRes] = await Promise.all([
+      const [catRes, storeRes, labelsData] = await Promise.all([
         api.get(`/categories?locale=${locale}`),
         api.get(`/stores`),
+        getLabels(),
       ]);
+
+      setAllLabels(labelsData);
 
       const categoriesData = (catRes.data ?? []) as CategoryApi[];
       setCategories(
@@ -198,6 +208,22 @@ export default function AdminEditProductPage() {
         onSubmit={handleSubmit}
         labels={buildProductLabels(t)}
       />
+
+      {id && (
+        <ProductLabelsPanel
+          productId={id}
+          allLabels={allLabels}
+          initialLabelIds={productLabelIds}
+          labelsText={{
+            title: t("labelsPanel.title"),
+            empty: t("labelsPanel.empty"),
+            save: t("labelsPanel.save"),
+            saving: t("labelsPanel.saving"),
+            saved: t("labelsPanel.saved"),
+            error: t("labelsPanel.error"),
+          }}
+        />
+      )}
     </div>
   );
 }

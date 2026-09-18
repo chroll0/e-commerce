@@ -179,8 +179,28 @@ model Product {
   orderItems  OrderItem[]
   cartItems   CartItem[]
 
+  labels      ProductOnLabel[]
+
   @@index([categoryId])
   @@index([storeId])
+}
+
+model ProductLabel {
+  id       Int              @id @default(autoincrement())
+  slug     String           @unique
+  nameEn   String
+  nameKa   String
+  products ProductOnLabel[]
+}
+
+model ProductOnLabel {
+  productId Int
+  labelId   Int
+  product   Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  label     ProductLabel @relation(fields: [labelId], references: [id], onDelete: Cascade)
+
+  @@id([productId, labelId])
+  @@index([labelId])
 }
 
 model ProductTranslation {

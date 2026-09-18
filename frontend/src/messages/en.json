@@ -419,6 +419,9 @@
       "stores": "Stores",
       "storesAll": "Manage All",
       "storesAdd": "Add new",
+      "labels": "Labels",
+      "labelsAll": "Manage All",
+      "labelsAdd": "Add new",
       "users": "Users",
       "orders": "Orders",
       "ordersAll": "All Orders",
@@ -573,6 +576,14 @@
         "created": "Product created successfully.",
         "updated": "Product updated successfully.",
         "deleted": "Product deleted successfully."
+      },
+      "labelsPanel": {
+        "title": "Labels",
+        "empty": "No labels available yet. Create one in Labels management.",
+        "save": "Save labels",
+        "saving": "Saving...",
+        "saved": "Labels saved.",
+        "error": "Failed to save labels."
       }
     },
 
@@ -645,6 +656,54 @@
         "created": "Store created successfully.",
         "updated": "Store updated successfully.",
         "deleted": "Store deleted successfully."
+      }
+    },
+
+    "labels": {
+      "title": "Label Management",
+      "description": "Create and manage product labels used for tagging and filtering.",
+      "fields": {
+        "nameEn": "Name (EN)",
+        "nameKa": "Name (KA)",
+        "slug": "Slug"
+      },
+      "actions": {
+        "add": "Add label",
+        "create": "Create label",
+        "creating": "Creating...",
+        "cancel": "Cancel",
+        "delete": "Delete"
+      },
+      "filters": {
+        "searchLabel": "Search by name or slug"
+      },
+      "table": {
+        "name": "Name",
+        "slug": "Slug",
+        "actions": "Actions",
+        "loading": "Loading...",
+        "empty": "No labels yet. Create your first label."
+      },
+      "form": {
+        "createTitle": "Create Label",
+        "createDescription": "Add a new label to tag and filter products.",
+        "editTitle": "Edit Label",
+        "editDescription": "Update the label's name and slug.",
+        "submitCreate": "Create label",
+        "submitEdit": "Save changes",
+        "saving": "Saving..."
+      },
+      "modal": {
+        "deleteTitle": "Delete label",
+        "deleteDescription": "Are you sure you want to delete {name}? This action cannot be undone."
+      },
+      "messages": {
+        "loadError": "Failed to load labels. Try again.",
+        "loadOneError": "Failed to load label.",
+        "createError": "Failed to create label. Please try again.",
+        "updateError": "Failed to save. Try again.",
+        "deleteError": "Failed to delete label.",
+        "required": "Name (EN), Name (KA) and Slug are required."
       }
     },
 
@@ -1138,9 +1197,9 @@
     "lowStock": "Low Stock",
     "outOfStock": "Out of Stock",
     "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
     "previousImage": "Previous image",
     "nextImage": "Next image",
-
     "storePage": {
       "notFound": "Store Not Found",
       "notFoundDescription": "The store you're looking for doesn't exist.",
@@ -1149,7 +1208,6 @@
       "storeProducts": "Brand Products",
       "empty": "No products available in this store yet."
     },
-
     "searchFilters": {
       "notFound": "Product Not Found",
       "clearFilters": "Clear",

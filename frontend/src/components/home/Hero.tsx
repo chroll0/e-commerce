@@ -188,25 +188,20 @@ export default function Hero() {
 
         {/* DOTS */}
         {hasMultipleSlides && (
-          <div className="absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 gap-2 md:bottom-5">
+          <div className="absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 md:bottom-5">
             {slides.map((_, i) => (
-              <Button
+              <button
                 key={i}
                 type="button"
-                variant="text"
-                iconOnly
-                size="xs"
                 onClick={() => scrollTo(i)}
                 aria-label={`Go to slide ${i + 1}`}
                 aria-current={i === selectedIndex}
-                className={`h-2 rounded-full p-0 transition-all duration-300 ${
+                className={`block h-2 rounded-full p-0 transition-all duration-300 ${
                   i === selectedIndex
                     ? "w-6 bg-primary"
                     : "w-2 bg-primary/50 hover:bg-primary/70"
                 }`}
-              >
-                <span aria-hidden="true" />
-              </Button>
+              />
             ))}
           </div>
         )}
@@ -219,7 +214,7 @@ export default function Hero() {
               size="xs"
               variant="outline"
               aria-label="Previous slide"
-              className="absolute left-3 top-1/2 z-30 -translate-y-1/2 rounded-full opacity-100 transition-opacity duration-200 md:left-4 md:opacity-0 md:group-hover:opacity-100"
+              className="hidden! md:flex! absolute left-3 top-1/2 z-30 -translate-y-1/2 rounded-full transition-opacity duration-200 md:left-4 md:opacity-0 md:group-hover:opacity-100"
             >
               <ChevronLeft />
             </Button>
@@ -229,7 +224,7 @@ export default function Hero() {
               size="xs"
               variant="outline"
               aria-label="Next slide"
-              className="absolute right-3 top-1/2 z-30 -translate-y-1/2 rounded-full opacity-100 transition-opacity duration-200 md:right-4 md:opacity-0 md:group-hover:opacity-100"
+              className="hidden! md:flex! absolute right-3 top-1/2 z-30 -translate-y-1/2 rounded-full transition-opacity duration-200 md:right-4 md:opacity-0 md:group-hover:opacity-100"
             >
               <ChevronRight />
             </Button>

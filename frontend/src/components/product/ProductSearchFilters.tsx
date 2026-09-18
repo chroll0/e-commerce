@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useProducts } from "@/hooks";
-import type { CategoryOption, ProductApi, Locale } from "@/types";
+import type {
+  CategoryOption,
+  ProductApi,
+  ProductLabelApi,
+  Locale,
+} from "@/types";
+import { getLabels } from "@/lib/labelsApi";
 
 import {
   Button,
@@ -35,6 +41,19 @@ export default function ProductSearchFilters({
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [categoryId, setCategoryId] = useState(initialCategoryId ?? "");
 
+  const [labelOptions, setLabelOptions] = useState<ProductLabelApi[]>([]);
+  const [labelSlug, setLabelSlug] = useState(searchParams.get("label") ?? "");
+
+  useEffect(() => {
+    getLabels()
+      .then(setLabelOptions)
+      .catch(() => setLabelOptions([]));
+  }, []);
+
+  useEffect(() => {
+    setLabelSlug(searchParams.get("label") ?? "");
+  }, [searchParams]);
+
   useEffect(() => {
     if (initialCategoryId !== undefined) {
       setCategoryId(initialCategoryId);
@@ -46,6 +65,7 @@ export default function ProductSearchFilters({
     limit: 20,
     search: searchQuery,
     categoryId: categoryId || undefined,
+    label: labelSlug || undefined,
   });
 
   const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -55,6 +75,7 @@ export default function ProductSearchFilters({
   const handleClearFilters = () => {
     setSearchQuery("");
     setCategoryId(keepCategoryOnClear ? (initialCategoryId ?? "") : "");
+    handleLabelChange("");
   };
 
   const handleCategoryIdChange = (nextCategoryId: string) => {
@@ -70,6 +91,20 @@ export default function ProductSearchFilters({
     router.push(
       `/${locale}/category/${category.slug}${query ? `?${query}` : ""}`,
     );
+  };
+
+  const handleLabelChange = (nextSlug: string) => {
+    setLabelSlug(nextSlug);
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (nextSlug) {
+      params.set("label", nextSlug);
+    } else {
+      params.delete("label");
+    }
+
+    const query = params.toString();
+    router.push(`?${query}`, { scroll: false });
   };
 
   return (
@@ -118,6 +153,27 @@ export default function ProductSearchFilters({
           </Button>
         </div>
       </div>
+
+      {/* Label pills */}
+      {labelOptions.length > 0 && (
+        <div className="mb-8 flex flex-wrap gap-2">
+          {labelOptions.map((label) => {
+            const active = labelSlug === label.slug;
+            const name = locale === "ka" ? label.nameKa : label.nameEn;
+            return (
+              <Button
+                key={label.id}
+                type="button"
+                size="xs"
+                variant={active ? "primary" : "secondary"}
+                onClick={() => handleLabelChange(active ? "" : label.slug)}
+              >
+                {name}
+              </Button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Results */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">

@@ -9,6 +9,7 @@ type Params = {
   search?: string;
   categoryId?: string | number;
   categorySlug?: string;
+  label?: string;
 };
 
 export function useProducts({
@@ -18,6 +19,7 @@ export function useProducts({
   search,
   categoryId,
   categorySlug,
+  label,
 }: Params) {
   const [products, setProducts] = useState<ProductApi[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,6 +37,7 @@ export function useProducts({
           search,
           categoryId,
           categorySlug,
+          label,
         });
 
         if (cancelled) return;
@@ -58,7 +61,7 @@ export function useProducts({
     return () => {
       cancelled = true;
     };
-  }, [locale, limit, onlyDiscounted, search, categoryId, categorySlug]);
+  }, [locale, limit, onlyDiscounted, search, categoryId, categorySlug, label]);
 
   return { products, loading };
 }

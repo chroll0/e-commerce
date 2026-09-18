@@ -2,6 +2,7 @@ import {
   BestStores,
   CategoryScroller,
   FeaturedProducts,
+  LabeledProductSection,
   ProductFilter,
   Hero,
 } from "@/components";
@@ -17,6 +18,10 @@ export default function Home() {
 
       {/* PRODUCT FILTER */}
       <ProductFilter />
+
+      {/* LABELED SECTIONS */}
+      <LabeledProductSection labelSlug="sale" />
+      <LabeledProductSection labelSlug="gift" />
 
       {/* FEATURES / TODAY'S PICKS */}
       <FeaturedProducts />

@@ -78,11 +78,20 @@ export class ProductService {
     categoryId?: number;
     locale?: Locale;
     limit?: number;
+    label?: string;
   }) {
-    const { search, categorySlug, categoryId, locale = "en", limit } = params;
+    const {
+      search,
+      categorySlug,
+      categoryId,
+      locale = "en",
+      limit,
+      label,
+    } = params;
 
     const cleanSearch = search?.trim();
     const cleanSlug = categorySlug?.trim();
+    const cleanLabel = label?.trim();
 
     const products = await this.prisma.product.findMany({
       where: {
@@ -139,11 +148,15 @@ export class ProductService {
                 },
               }
             : {},
+          cleanLabel
+            ? { labels: { some: { label: { slug: cleanLabel } } } }
+            : {},
         ],
       },
       include: {
         translations: true,
         category: { include: { translations: true } },
+        labels: { include: { label: true } },
       },
       orderBy: { createdAt: "desc" },
       ...(limit ? { take: limit } : {}),
@@ -170,12 +183,13 @@ export class ProductService {
         categoryId: p.categoryId,
         name: t?.title ?? "",
         description: t?.description ?? "",
+        labels: this.mapLabels(p.labels),
       };
     });
   }
 
   async findBySlug(slug: string, locale?: Locale) {
-    return this.prisma.product.findUnique({
+    const product = await this.prisma.product.findUnique({
       where: { slug },
       include: {
         translations: locale ? { where: { locale } } : true,
@@ -184,8 +198,12 @@ export class ProductService {
             translations: locale ? { where: { locale } } : true,
           },
         },
+        labels: { include: { label: true } },
       },
     });
+
+    if (!product) return product;
+    return { ...product, labels: this.mapLabels(product.labels) };
   }
 
   async findOne(id: number, locale?: Locale) {
@@ -198,12 +216,47 @@ export class ProductService {
             translations: locale ? { where: { locale } } : true,
           },
         },
+        labels: { include: { label: true } },
       },
     });
 
     if (!product)
       throw new NotFoundException(`Product with id ${id} not found`);
-    return product;
+    return { ...product, labels: this.mapLabels(product.labels) };
+  }
+
+  async setLabels(productId: number, labelIds: number[]) {
+    await this.ensureExists(productId);
+
+    const uniqueIds = Array.from(new Set(labelIds));
+
+    if (uniqueIds.length) {
+      const found = await this.prisma.productLabel.findMany({
+        where: { id: { in: uniqueIds } },
+        select: { id: true },
+      });
+      if (found.length !== uniqueIds.length) {
+        throw new BadRequestException("One or more labelIds do not exist");
+      }
+    }
+
+    await this.prisma.productOnLabel.deleteMany({ where: { productId } });
+
+    if (uniqueIds.length) {
+      await this.prisma.productOnLabel.createMany({
+        data: uniqueIds.map((labelId) => ({ productId, labelId })),
+      });
+    }
+
+    return this.findOne(productId);
+  }
+
+  private mapLabels(
+    labels: {
+      label: { id: number; slug: string; nameEn: string; nameKa: string };
+    }[],
+  ) {
+    return labels.map((l) => l.label);
   }
 
   async update(id: number, dto: UpdateProductDto) {
