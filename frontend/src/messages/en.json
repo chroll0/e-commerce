@@ -1197,9 +1197,9 @@
     "lowStock": "Low Stock",
     "outOfStock": "Out of Stock",
     "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
     "previousImage": "Previous image",
     "nextImage": "Next image",
-
     "storePage": {
       "notFound": "Store Not Found",
       "notFoundDescription": "The store you're looking for doesn't exist.",
@@ -1208,7 +1208,6 @@
       "storeProducts": "Brand Products",
       "empty": "No products available in this store yet."
     },
-
     "searchFilters": {
       "notFound": "Product Not Found",
       "clearFilters": "Clear",
