@@ -56,7 +56,7 @@ export default function CategoryScroller() {
 
   return (
     <section>
-      <div className="my-10 flex gap-4 overflow-x-auto rounded-xl border border-border bg-card-soft p-3 no-scrollbar">
+      <div className="my-8 flex gap-4 overflow-x-auto rounded-xl border border-border bg-card-soft p-3 no-scrollbar">
         {categories.map((cat) => (
           <Link
             key={cat.id}

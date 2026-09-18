@@ -1,10 +1,9 @@
 import {
   BestStores,
   CategoryScroller,
-  FeaturedProducts,
   LabeledProductSection,
-  ProductFilter,
   Hero,
+  SaleProducts,
 } from "@/components";
 
 export default function Home() {
@@ -16,15 +15,14 @@ export default function Home() {
       {/* CATEGORY SCROLLER */}
       <CategoryScroller />
 
-      {/* PRODUCT FILTER */}
-      <ProductFilter />
+      {/* LIMITED TIME OFFER TREATS */}
+      <LabeledProductSection labelSlug="treat-yourself" />
 
-      {/* LABELED SECTIONS */}
-      <LabeledProductSection labelSlug="sale" />
-      <LabeledProductSection labelSlug="gift" />
+      {/* SALE PRODUCTS */}
+      <SaleProducts />
 
-      {/* FEATURES / TODAY'S PICKS */}
-      <FeaturedProducts />
+      {/* LIMITED TIME OFFER SCHOOL */}
+      <LabeledProductSection labelSlug="school" />
 
       {/* BEST STORES */}
       <BestStores />
