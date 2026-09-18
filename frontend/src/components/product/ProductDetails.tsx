@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Button } from "@/components";
 import type { ProductApi } from "@/types";
-import { useProductData } from "@/hooks";
+import { useProductData, useProductCartAction } from "@/hooks";
 import { useLocale, useTranslations } from "next-intl";
 import {
   ChevronLeft,
@@ -13,8 +13,7 @@ import {
   Plus,
   ShoppingCartIcon,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useCartActions } from "@/state/useCartActions";
+import { MAX_CART_QUANTITY } from "@/state/useCartActions";
 import { useEffect, useMemo, useState } from "react";
 
 type Props = {
@@ -25,12 +24,13 @@ export default function ProductDetails({ product }: Props) {
   const t = useTranslations("productDetails");
   const tCard = useTranslations("productCard");
   const locale = useLocale();
-  const router = useRouter();
   const data = useProductData(product);
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
-  const { add } = useCartActions();
+  const { addToCart, buyNow, isAddingToCart } = useProductCartAction(
+    product,
+    data,
+  );
 
   const images = useMemo(() => product.images ?? [], [product.images]);
   const initialIndex = useMemo(() => {
@@ -41,6 +41,12 @@ export default function ProductDetails({ product }: Props) {
   }, [images, product.primaryImage]);
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(initialIndex);
+  const maxQuantity = data ? Math.min(data.stock, MAX_CART_QUANTITY) : 0;
+  // Clamp defensively in case stock/limit changes without remounting.
+  const safeQuantity = Math.min(
+    Math.max(1, quantity),
+    Math.max(1, maxQuantity),
+  );
 
   useEffect(() => {
     setSelectedImageIndex(initialIndex);
@@ -69,27 +75,11 @@ export default function ProductDetails({ product }: Props) {
     product.translations?.[0];
 
   const handleAddToCart = async () => {
-    if (!product?.id) return;
-
-    setIsAddingToCart(true);
-    try {
-      await add({
-        productId: product.id,
-        name: data.title,
-        slug: data.slug ?? String(product.id),
-        image: data.image ?? null,
-        price: data.price,
-        quantity,
-        availableStock: data.stock,
-      });
-    } finally {
-      setIsAddingToCart(false);
-    }
+    await addToCart(safeQuantity);
   };
 
   const handleBuyNow = async () => {
-    await handleAddToCart();
-    router.push(`/${locale}/checkout`);
+    await buyNow(safeQuantity);
   };
 
   return (
@@ -242,7 +232,7 @@ export default function ProductDetails({ product }: Props) {
                 iconOnly
                 size="sm"
                 aria-label={t("decreaseQuantity")}
-                disabled={quantity <= 1}
+                disabled={safeQuantity <= 1}
                 onClick={() =>
                   setQuantity((current) => Math.max(1, current - 1))
                 }
@@ -250,7 +240,7 @@ export default function ProductDetails({ product }: Props) {
                 <Minus className="h-4 w-4" />
               </Button>
               <span className="py-1 px-4 text-sm font-semibold text-primary border-y border-border rounded-sm">
-                {quantity}
+                {safeQuantity}
               </span>
               <Button
                 type="button"
@@ -258,9 +248,9 @@ export default function ProductDetails({ product }: Props) {
                 iconOnly
                 size="sm"
                 aria-label={t("increaseQuantity")}
-                disabled={quantity >= data.stock}
+                disabled={safeQuantity >= maxQuantity}
                 onClick={() =>
-                  setQuantity((current) => Math.min(data.stock, current + 1))
+                  setQuantity((current) => Math.min(maxQuantity, current + 1))
                 }
               >
                 <Plus className="h-4 w-4" />

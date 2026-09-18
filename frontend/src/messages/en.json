@@ -1200,6 +1200,11 @@
     "buyNow": "Buy Now",
     "previousImage": "Previous image",
     "nextImage": "Next image",
+    "errors": {
+      "OUT_OF_STOCK": "This product is out of stock.",
+      "INSUFFICIENT_STOCK": "Not enough stock available for the requested quantity.",
+      "MAX_CART_QUANTITY_REACHED": "You've reached the maximum quantity allowed per product in your cart."
+    },
     "storePage": {
       "notFound": "Store Not Found",
       "notFoundDescription": "The store you're looking for doesn't exist.",
