@@ -304,7 +304,13 @@
     "summary": {
       "title": "Order Summary",
       "items": "Items",
-      "total": "Total"
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "free": "Free",
+      "includingShipping": "Including shipping",
+      "secureTitle": "Secure Checkout",
+      "secureDescription": "Your payment information is safe and encrypted."
     },
     "payment": {
       "pendingTitle": "Test payment pending",
