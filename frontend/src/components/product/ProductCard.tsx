@@ -3,14 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 
 import { Button } from "@/components";
 import type { ProductApi } from "@/types";
-import { useProductData } from "@/hooks";
-import { useCartActions } from "@/state/useCartActions";
+import { useProductData, useProductCartAction } from "@/hooks";
 
 type Props = {
   product: ProductApi;
@@ -19,10 +17,12 @@ type Props = {
 export default function ProductCard({ product }: Props) {
   const t = useTranslations("productCard");
   const locale = useLocale();
-  const router = useRouter();
 
   const data = useProductData(product);
-  const { add } = useCartActions();
+  const { addToCart, buyNow, isAddingToCart } = useProductCartAction(
+    product,
+    data,
+  );
 
   const images = useMemo(() => product.images ?? [], [product.images]);
   const initialIndex = useMemo(() => {
@@ -32,7 +32,6 @@ export default function ProductCard({ product }: Props) {
   }, [images, product.primaryImage]);
 
   const [imageIndex, setImageIndex] = useState(initialIndex);
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   if (!data) return null;
 
@@ -54,43 +53,12 @@ export default function ProductCard({ product }: Props) {
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!product?.id || !data) return;
-
-    setIsAddingToCart(true);
-    try {
-      await add({
-        productId: product.id,
-        name: data.title,
-        slug: data.slug ?? String(product.id),
-        image: data.image ?? null,
-        price: data.price,
-        quantity: 1,
-        availableStock: data.stock,
-      });
-    } finally {
-      setIsAddingToCart(false);
-    }
+    await addToCart(1);
   };
 
   const handleBuyNow = async (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!product?.id || !data) return;
-
-    setIsAddingToCart(true);
-    try {
-      await add({
-        productId: product.id,
-        name: data.title,
-        slug: data.slug ?? String(product.id),
-        image: data.image ?? null,
-        price: data.price,
-        quantity: 1,
-        availableStock: data.stock,
-      });
-      router.push(`/${locale}/checkout`);
-    } finally {
-      setIsAddingToCart(false);
-    }
+    await buyNow(1);
   };
 
   return (

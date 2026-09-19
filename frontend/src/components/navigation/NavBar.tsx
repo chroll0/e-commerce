@@ -19,7 +19,7 @@ const NavBar = () => {
 
   const links = [
     { href: "/", label: t("nav.home") },
-    { href: "/stores", label: t("nav.stores") },
+    { href: "/brands", label: t("nav.brands") },
     { href: "/products", label: t("nav.products") },
     { href: "/sales", label: t("nav.sales") },
     { href: "/about", label: t("nav.about") },

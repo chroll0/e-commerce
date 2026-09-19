@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useProducts } from "@/hooks";
 import { ProductCard, ProductCardSkeleton } from "@/components";
 
-export default function ProductFilter() {
+export default function SaleProducts() {
   const t = useTranslations("home");
   const locale = useLocale();
 
@@ -21,7 +21,9 @@ export default function ProductFilter() {
     <section className="border-b border-border pb-8">
       {/* HEADER */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-primary">{t("bigSales")}</h2>
+        <h2 className="mt-4 text-xl font-semibold text-primary">
+          {t("bigSales")}
+        </h2>
       </div>
 
       {/* GRID */}

@@ -117,7 +117,7 @@ export default function AllStoresPage() {
       <Breadcrumbs
         items={[
           { label: "eShop", href: `/${locale}` },
-          { label: navT("stores"), href: `/${locale}/stores` },
+          { label: navT("brands"), href: `/${locale}/brands` },
         ]}
       />
 

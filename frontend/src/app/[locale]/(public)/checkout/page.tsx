@@ -346,20 +346,109 @@ export default function CheckoutPage() {
             )}
           </section>
 
-          <aside className="rounded-2xl border border-border bg-card p-6 h-fit">
-            <h2 className="text-lg font-semibold text-primary">
-              {t("summary.title")}
-            </h2>
-            <div className="mt-4 space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-secondary">{t("summary.items")}</span>
-                <span>{cartItems.length}</span>
+          <aside className="h-fit lg:sticky lg:top-24">
+            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+              {/* Header */}
+              <div className="border-b border-border p-5">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-primary">
+                    {t("summary.title")}
+                  </h2>
+                  <span className="rounded-full bg-card-soft px-2.5 py-1 text-xs font-medium text-secondary">
+                    {cartItems.length}
+                  </span>
+                </div>
               </div>
-              <div className="flex justify-between">
-                <span className="text-secondary">{t("summary.total")}</span>
-                <span className="font-semibold">
-                  ₾{(order?.total ?? subtotal).toFixed(2)}
-                </span>
+
+              {/* Products */}
+              <div className="max-h-[360px] overflow-y-auto p-5">
+                <div className="space-y-4">
+                  {cartItems.map((item) => (
+                    <div key={item.productId} className="flex gap-3">
+                      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-border bg-card-soft">
+                        {item.image ? (
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-xs text-secondary">
+                            —
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium text-primary">
+                          {item.name}
+                        </p>
+                        <div className="mt-1 flex items-center justify-between gap-2">
+                          <span className="text-xs text-secondary">
+                            {item.quantity} × ₾{item.price.toFixed(2)}
+                          </span>
+                          <span className="text-sm font-semibold text-primary">
+                            ₾{(item.price * item.quantity).toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Totals */}
+              <div className="border-t border-border bg-card-soft/40 p-5">
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-secondary">
+                      {t("summary.subtotal")}
+                    </span>
+                    <span className="font-medium text-primary">
+                      ₾{subtotal.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-secondary">
+                      {t("summary.shipping")}
+                    </span>
+                    <span className="font-medium text-primary">
+                      {t("summary.free")}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="my-4 h-px bg-border" />
+
+                <div className="flex items-end justify-between gap-4">
+                  <div>
+                    <p className="text-sm text-secondary">
+                      {t("summary.total")}
+                    </p>
+                    <p className="mt-1 text-xs text-secondary">
+                      {t("summary.includingShipping")}
+                    </p>
+                  </div>
+                  <span className="text-2xl font-bold tracking-tight text-primary">
+                    ₾{(order?.total ?? subtotal).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Trust / info */}
+            <div className="mt-4 rounded-2xl border border-border bg-card p-4">
+              <div className="flex gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background-blue text-white">
+                  ✓
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-primary">
+                    {t("summary.secureTitle")}
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-secondary">
+                    {t("summary.secureDescription")}
+                  </p>
+                </div>
               </div>
             </div>
           </aside>

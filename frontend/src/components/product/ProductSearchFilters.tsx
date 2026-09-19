@@ -110,7 +110,7 @@ export default function ProductSearchFilters({
   return (
     <section className="border-b border-border pb-8">
       {/* Filters Header */}
-      <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         {/* Search */}
         <form onSubmit={handleSearchSubmit} className="w-full">
           <div className="flex flex-1 flex-col items-end gap-2 sm:flex-row">
@@ -155,7 +155,7 @@ export default function ProductSearchFilters({
       </div>
 
       {/* Label pills */}
-      {labelOptions.length > 0 && (
+      {/* {labelOptions.length > 0 && (
         <div className="mb-8 flex flex-wrap gap-2">
           {labelOptions.map((label) => {
             const active = labelSlug === label.slug;
@@ -173,7 +173,7 @@ export default function ProductSearchFilters({
             );
           })}
         </div>
-      )}
+      )} */}
 
       {/* Results */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">

@@ -15,6 +15,7 @@
   --card: #ffffff; /* Product cards, nav, dropdowns */
   --card-soft: #f0f1f3; /* Gray sections (categories strip) */
 
+  --background-blue: #1a2432; /* Deep charcoal background for dark mode */
   --border: #e3e4e8; /* Clean light border */
   --border-strong: #d2d3d7; /* Stronger for inputs/search bar */
 
@@ -36,6 +37,7 @@ html.dark {
   --card: #181a1f; /* Card background */
   --card-soft: #22252b; /* Gray block sections */
 
+  --background-blue: #073aa0; /* Deep charcoal background for dark mode */
   --border: #2c2f36;
   --border-strong: #343840;
 
@@ -58,6 +60,7 @@ html.dark {
   --color-card: var(--card);
   --color-card-soft: var(--card-soft);
 
+  --color-background-blue: var(--background-blue);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
 
