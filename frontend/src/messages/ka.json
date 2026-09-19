@@ -304,7 +304,13 @@
     "summary": {
       "title": "შეკვეთის შეჯამება",
       "items": "ნივთები",
-      "total": "ჯამი"
+      "total": "სულ",
+      "subtotal": "შუალედური ჯამი",
+      "shipping": "მიწოდება",
+      "free": "უფასო",
+      "includingShipping": "მიწოდების ჩათვლით",
+      "secureTitle": "უსაფრთხო გადახდა",
+      "secureDescription": "თქვენი გადახდის ინფორმაცია დაცული და დაშიფრულია."
     },
     "payment": {
       "pendingTitle": "სატესტო გადახდა მოლოდინშია",
