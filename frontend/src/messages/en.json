@@ -1,7 +1,7 @@
 {
   "nav": {
     "home": "Home",
-    "stores": "Stores",
+    "brands": "Brands",
     "products": "Products",
     "sales": "Sales",
     "about": "About",
@@ -366,12 +366,12 @@
   "sales": {
     "nav": "Sales",
     "title": "Sales & Offers",
-    "description": "Clean, handpicked deals from the best stores on eShop.",
+    "description": "Clean, handpicked deals from the best brands on eShop.",
     "heroBadge": "Quick deals",
     "heroSideTitle": "Limited time offers",
     "heroSideDescription": "Check them out now",
     "offerLabel": "Limited offer",
-    "viewStore": "View store",
+    "viewStore": "View brand",
     "ads": [
       {
         "storeName": "Outdoor Hub",
@@ -422,9 +422,9 @@
       "categories": "Categories",
       "categoriesAll": "Manage All",
       "categoriesAdd": "Add new",
-      "stores": "Stores",
-      "storesAll": "Manage All",
-      "storesAdd": "Add new",
+      "stores": "Brands",
+      "storesAll": "Manage All Brands",
+      "storesAdd": "Add new Brand",
       "labels": "Labels",
       "labelsAll": "Manage All",
       "labelsAdd": "Add new",
@@ -595,32 +595,32 @@
 
     "stores": {
       "title": "Stores Management",
-      "description": "Add, edit, and manage your store listings.",
+      "description": "Add, edit, and manage your brand listings.",
       "actions": {
-        "add": "Add store",
+        "add": "Add brand",
         "edit": "Edit",
         "delete": "Delete",
         "cancel": "Cancel",
         "save": "Save",
         "saving": "Saving...",
-        "create": "Create store"
+        "create": "Create brand"
       },
       "table": {
         "name": "Name",
         "slug": "Slug",
         "products": "Products",
         "actions": "Actions",
-        "empty": "No stores yet. Create your first store.",
-        "add": "Create your first store.",
+        "empty": "No brands yet. Create your first brand.",
+        "add": "Create your first brand.",
         "loading": "Loading..."
       },
       "form": {
-        "createTitle": "Create Store",
-        "createDescription": "Add a new store to assign products to.",
-        "editTitle": "Edit Store",
-        "editDescription": "Update store information.",
+        "createTitle": "Create Brand",
+        "createDescription": "Add a new brand to assign products to.",
+        "editTitle": "Edit Brand",
+        "editDescription": "Update brand information.",
         "fields": {
-          "name": "Store name",
+          "name": "Brand name",
           "slug": "Slug",
           "logo": "Logo URL",
           "banner": "Banner URL",
@@ -629,7 +629,7 @@
         "uploading": "Uploading..."
       },
       "validation": {
-        "nameRequired": "Store name is required",
+        "nameRequired": "Brand name is required",
         "slugRequired": "Slug is required"
       },
       "fields": {
@@ -646,22 +646,22 @@
         "uploadFailed": "Upload failed. Please try again."
       },
       "modal": {
-        "deleteTitle": "Delete store",
+        "deleteTitle": "Delete brand",
         "deleteDescription": "Are you sure you want to delete {name}? This action cannot be undone.",
         "confirmDelete": "Delete"
       },
       "errors": {
-        "nameRequired": "Store name is required",
-        "create": "Failed to create store. Please try again.",
+        "nameRequired": "Brand name is required",
+        "create": "Failed to create brand. Please try again.",
         "updateError": "Failed to save. Try again.",
-        "deleteError": "Failed to delete store."
+        "deleteError": "Failed to delete brand."
       },
       "messages": {
-        "loadError": "Failed to load stores. Try again.",
-        "loadOneError": "Failed to load store.",
-        "created": "Store created successfully.",
-        "updated": "Store updated successfully.",
-        "deleted": "Store deleted successfully."
+        "loadError": "Failed to load brands. Try again.",
+        "loadOneError": "Failed to load brand.",
+        "created": "Brand created successfully.",
+        "updated": "Brand updated successfully.",
+        "deleted": "Brand deleted successfully."
       }
     },
 
@@ -1081,11 +1081,11 @@
       }
     },
     "stores": {
-      "title": "Best Selling Stores",
-      "viewStore": "View Store",
+      "title": "Best Selling Brands",
+      "viewStore": "View Brand",
       "sales": "sales",
-      "noStores": "No stores available",
-      "loadError": "Failed to load stores"
+      "noStores": "No brands available",
+      "loadError": "Failed to load brands. Try again."
     }
   },
 
@@ -1212,12 +1212,12 @@
       "MAX_CART_QUANTITY_REACHED": "You've reached the maximum quantity allowed per product in your cart."
     },
     "storePage": {
-      "notFound": "Store Not Found",
-      "notFoundDescription": "The store you're looking for doesn't exist.",
+      "notFound": "Brand Not Found",
+      "notFoundDescription": "The brand you're looking for doesn't exist.",
       "sales": "sales",
       "products": "products",
       "storeProducts": "Brand Products",
-      "empty": "No products available in this store yet."
+      "empty": "No products available in this brand yet."
     },
     "searchFilters": {
       "notFound": "Product Not Found",
@@ -1243,13 +1243,13 @@
   },
 
   "stores": {
-    "pageTitle": "All Stores",
-    "pageDescription": "Discover the best stores and brands on our platform",
-    "searchPlaceholder": "Search stores...",
+    "pageTitle": "All Brands",
+    "pageDescription": "Discover the best and most popular brands on our platform",
+    "searchPlaceholder": "Search brands...",
     "search": "Search",
     "sales": "sales",
     "products": "products",
-    "storesCount": "{count} stores found",
+    "storesCount": "{count} brands found",
     "sortLabel": "Sort by",
     "sort": {
       "all": "All",
@@ -1257,12 +1257,12 @@
       "rating": "Highest Rated",
       "newest": "Newest"
     },
-    "noStoresTitle": "No stores found",
-    "noStoresDescription": "Try adjusting your search or filters",
+    "noStoresTitle": "No brands found",
+    "noStoresDescription": "Try adjusting your search or filters for brands",
     "clearFilters": "Clear",
-    "loadMore": "Load More Stores",
+    "loadMore": "Load More Brands",
     "loading": "Loading...",
-    "allStoresLoaded": "You've seen all stores"
+    "allStoresLoaded": "You've seen all brands"
   },
 
   "privacy": {

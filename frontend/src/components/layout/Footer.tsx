@@ -42,8 +42,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/stores" locale={locale}>
-                  {t("nav.stores")}
+                <Link href="/brands" locale={locale}>
+                  {t("nav.brands")}
                 </Link>
               </li>
               <li>
