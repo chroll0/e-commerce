@@ -136,6 +136,7 @@ const SelectField: FC<Props> = ({
                 {opt.label}
               </div>
             ))}
+            <div className="py-1" />
           </div>
         )}
 
