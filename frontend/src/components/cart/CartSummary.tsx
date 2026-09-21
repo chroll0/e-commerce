@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations, useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components";
@@ -37,14 +37,7 @@ export default function CartSummary({
   );
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-
-  const shipping = items.length ? 9.99 : 0;
-  const tax = subtotal * 0.1;
-  const discount = 0;
-
-  const calculatedTotal = subtotal + shipping + tax - discount;
-
-  const total = totalOverride !== undefined ? totalOverride : calculatedTotal;
+  const total = totalOverride !== undefined ? totalOverride : subtotal;
 
   const hasStockWarning = items.some(
     (item) =>
@@ -65,36 +58,23 @@ export default function CartSummary({
         </p>
       </div>
 
-      {/* BREAKDOWN */}
-      <div className="space-y-3">
-        <div className="flex justify-between text-sm">
+      {/* SUMMARY */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between text-sm">
           <span className="text-secondary">{t("subtotal")}</span>
 
           <span className="font-medium">₾{subtotal.toFixed(2)}</span>
         </div>
 
-        <div className="flex justify-between text-sm">
+        <div className="flex items-center justify-between text-sm">
           <span className="text-secondary">{t("shipping")}</span>
 
-          <span className="font-medium">₾{shipping.toFixed(2)}</span>
+          <span className="font-medium text-primary">{t("free")}</span>
         </div>
-
-        <div className="flex justify-between text-sm">
-          <span className="text-secondary">{t("tax")}</span>
-
-          <span className="font-medium">₾{tax.toFixed(2)}</span>
-        </div>
-
-        {discount > 0 && (
-          <div className="flex justify-between text-sm text-primary">
-            <span>{t("discount")}</span>
-            <span>-${discount.toFixed(2)}</span>
-          </div>
-        )}
       </div>
 
       {/* TOTAL */}
-      <div className="mt-5 flex justify-between border-t border-border pt-5">
+      <div className="mt-5 flex items-center justify-between border-t border-border pt-5">
         <span className="text-base font-semibold">{t("total")}</span>
 
         <span className="text-2xl font-bold text-primary">
@@ -105,17 +85,17 @@ export default function CartSummary({
       {/* TRUST */}
       <div className="mt-5 space-y-2 rounded-xl border border-border bg-card-soft p-4">
         <div className="flex items-center gap-2 text-sm">
-          <ShieldCheckIcon className="h-4 w-4" />
+          <ShieldCheckIcon className="h-4 w-4 shrink-0" />
           <span>{t("secureCheckout")}</span>
         </div>
 
         <div className="flex items-center gap-2 text-sm">
-          <CreditCardIcon className="h-4 w-4" />
+          <CreditCardIcon className="h-4 w-4 shrink-0" />
           <span>{t("encryptedPayments")}</span>
         </div>
 
         <div className="flex items-center gap-2 text-sm">
-          <TruckIcon className="h-4 w-4" />
+          <TruckIcon className="h-4 w-4 shrink-0" />
           <span>{t("fastDelivery")}</span>
         </div>
       </div>
@@ -135,6 +115,7 @@ export default function CartSummary({
             onClick={() => {
               if (hasStockWarning) {
                 notify("info", t("stockWarning"));
+                return;
               }
 
               router.push(`/${locale}/checkout`);

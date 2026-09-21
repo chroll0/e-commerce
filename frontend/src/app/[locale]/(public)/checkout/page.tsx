@@ -216,7 +216,6 @@ export default function CheckoutPage() {
           {/* CHECKOUT CONTENT */}
           <section className="rounded-2xl border border-border bg-card p-6 lg:col-span-2">
             <h1 className="text-2xl font-bold text-primary">{t("title")}</h1>
-
             <p className="mt-1 text-sm text-secondary">{t("subtitle")}</p>
 
             {/* ORDER FORM */}
