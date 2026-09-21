@@ -35,22 +35,18 @@ const CategorySelect: FC<Props> = ({
       try {
         setLoading(true);
 
-        const res = await api.get("/categories");
+        const res = await api.get("/categories", {
+          params: { locale },
+        });
+
         const data = (res.data ?? []) as CategoryApi[];
 
-        const normalized: CategoryOption[] = data.map((c) => {
-          const name =
-            c.translations?.find((t) => t.locale === locale)?.name ??
-            c.translations?.[0]?.name ??
-            c.slug;
-
-          return {
-            id: c.id,
-            parentId: c.parentId ?? null,
-            name,
-            slug: c.slug,
-          };
-        });
+        const normalized: CategoryOption[] = data.map((c) => ({
+          id: c.id,
+          parentId: c.parentId ?? null,
+          name: c.name,
+          slug: c.slug,
+        }));
 
         setCats(normalized);
       } finally {

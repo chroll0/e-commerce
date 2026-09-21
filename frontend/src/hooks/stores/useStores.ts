@@ -14,7 +14,7 @@ export function useStores(limit = 4) {
         const data = await getBestStores(limit);
         setStores(data || []);
       } catch (err) {
-        setError("Failed to load stores");
+        setError("Failed to load brands");
       } finally {
         setLoading(false);
       }

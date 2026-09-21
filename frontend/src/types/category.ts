@@ -20,7 +20,7 @@ export type CategoryApi = {
   id: number;
   slug: string;
   parentId: number | null;
-
+  name: string;
   translations: {
     locale: string;
     name: string;

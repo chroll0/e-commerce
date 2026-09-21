@@ -88,7 +88,7 @@ const StoresTable: FC<StoresTableProps> = ({
 
                   <div className="col-span-3 flex items-center justify-end gap-2">
                     <Button asChild variant="secondary" size="xs">
-                      <Link href={`/${locale}/admin/stores/${store.slug}/edit`}>
+                      <Link href={`/${locale}/admin/brands/${store.slug}/edit`}>
                         <Pencil className="h-4 w-4" />
                       </Link>
                     </Button>

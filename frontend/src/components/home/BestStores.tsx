@@ -39,7 +39,7 @@ export default function BestStores() {
           {stores.map((store) => (
             <Link
               key={store.id}
-              href={`/stores/${store.slug}`}
+              href={`/brands/${store.slug}`}
               className="
                 group flex flex-col rounded-2xl border border-border bg-card p-4
                 transition-all duration-300

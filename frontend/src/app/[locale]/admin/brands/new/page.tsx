@@ -40,7 +40,7 @@ export default function AdminCreateStorePage() {
         banner: values.banner.trim() || undefined,
       });
 
-      router.push(`/${locale}/admin/stores`);
+      router.push(`/${locale}/admin/brands`);
     } catch (err: any) {
       const msg = err?.response?.data?.message || t("errors.create");
       setErrors({ form: msg });
@@ -54,7 +54,7 @@ export default function AdminCreateStorePage() {
       mode="create"
       initialValues={initialValues}
       submitting={submitting}
-      onCancel={() => router.push(`/${locale}/admin/stores`)}
+      onCancel={() => router.push(`/${locale}/admin/brands`)}
       onSubmit={handleSubmit}
       title={t("form.createTitle")}
       description={t("form.createDescription")}

@@ -14,7 +14,7 @@ export default function StoreCard({ store }: Props) {
   const t = useTranslations("stores");
 
   return (
-    <Link href={`/stores/${store.slug}`}>
+    <Link href={`/brands/${store.slug}`}>
       <div className="group relative overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
         {/* BANNER */}
         <div className="relative h-32 overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">

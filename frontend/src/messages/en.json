@@ -423,8 +423,8 @@
       "categoriesAll": "Manage All",
       "categoriesAdd": "Add new",
       "stores": "Brands",
-      "storesAll": "Manage All Brands",
-      "storesAdd": "Add new Brand",
+      "storesAll": "Manage All",
+      "storesAdd": "Add new",
       "labels": "Labels",
       "labelsAll": "Manage All",
       "labelsAdd": "Add new",
@@ -594,7 +594,7 @@
     },
 
     "stores": {
-      "title": "Stores Management",
+      "title": "Brands Management",
       "description": "Add, edit, and manage your brand listings.",
       "actions": {
         "add": "Add brand",
@@ -1475,6 +1475,7 @@
     "tax": "Tax",
     "total": "Total",
     "totalItems": "Items",
+    "free": "Free",
     "checkout": "Pay Now",
     "clearCart": "Clear Cart",
     "remove": "Remove",
