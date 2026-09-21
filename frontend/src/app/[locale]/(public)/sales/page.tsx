@@ -40,7 +40,7 @@ function SaleAdCard({
   t: (key: string) => string;
 }) {
   const storeName = store?.name ?? ad.storeName;
-  const href = `/${locale}/stores/${store?.slug ?? ad.storeSlug}`;
+  const href = `/${locale}/brands/${store?.slug ?? ad.storeSlug}`;
 
   return (
     <Link

@@ -112,7 +112,7 @@ export default function AdminEditStorePage() {
 
       await api.patch(`/stores/${id}`, payload);
 
-      router.push(`/${locale}/admin/stores`);
+      router.push(`/${locale}/admin/brands`);
     } catch (e: any) {
       setError(e?.response?.data?.message || t("messages.updateError"));
     } finally {
@@ -131,10 +131,9 @@ export default function AdminEditStorePage() {
 
     try {
       setDeleting(true);
-
       await api.delete(`/stores/${id}`);
 
-      router.push(`/${locale}/admin/stores`);
+      router.push(`/${locale}/admin/brands`);
     } catch (e: any) {
       setError(e?.response?.data?.message || t("messages.deleteError"));
     } finally {
@@ -167,7 +166,7 @@ export default function AdminEditStorePage() {
         mode="edit"
         initialValues={initialValues}
         submitting={saving}
-        onCancel={() => router.push(`/${locale}/admin/stores`)}
+        onCancel={() => router.push(`/${locale}/admin/brands`)}
         onSubmit={handleSubmit}
         onDelete={() => setDeleteOpen(true)}
         title={t("form.editTitle")}

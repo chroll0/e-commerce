@@ -136,7 +136,7 @@ const ProductMetaFields: FC<Props> = ({
       <div className="w-full relative">
         <div className="absolute right-0 top-1 z-10">
           <Link
-            href={`/${locale}/admin/stores/new`}
+            href={`/${locale}/admin/brands/new`}
             className="inline-flex items-center gap-2 text-xs font-medium text-highlight hover:underline"
             aria-label="Add store"
             title="Add store"

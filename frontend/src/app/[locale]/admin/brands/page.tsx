@@ -75,7 +75,7 @@ export default function AdminStoresPage() {
       <AdminPageHeader
         title={t("title")}
         description={t("description")}
-        addHref={`/${locale}/admin/stores/new`}
+        addHref={`/${locale}/admin/brands/new`}
         addLabel={t("actions.add")}
       />
 

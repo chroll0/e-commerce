@@ -94,7 +94,7 @@ export default function StorePage() {
         <Breadcrumbs
           items={[
             { label: "eShop", href: `/${locale}` },
-            { label: navT("stores"), href: `/${locale}/stores` },
+            { label: navT("stores"), href: `/${locale}/brands` },
             { label: slug },
           ]}
         />
@@ -126,7 +126,7 @@ export default function StorePage() {
       <Breadcrumbs
         items={[
           { label: "eShop", href: `/${locale}` },
-          { label: navT("stores"), href: `/${locale}/stores` },
+          { label: navT("stores"), href: `/${locale}/brands` },
           { label: storeHeader.name },
         ]}
       />
