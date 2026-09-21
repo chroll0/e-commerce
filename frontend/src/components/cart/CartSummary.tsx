@@ -2,20 +2,34 @@
 
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
+
 import { Button } from "@/components";
 import { useCartStore } from "@/state/useCartStore";
 import { useCartActions } from "@/state/useCartActions";
 import { useNotificationStore } from "@/state/useNotificationStore";
+
 import { ShieldCheckIcon, TruckIcon, CreditCardIcon } from "lucide-react";
 
-export default function CartSummary() {
+type CartSummaryProps = {
+  mode?: "cart" | "checkout";
+  items?: ReturnType<typeof useCartStore.getState>["items"];
+  totalOverride?: number;
+};
+
+export default function CartSummary({
+  mode = "cart",
+  items: itemsOverride,
+  totalOverride,
+}: CartSummaryProps) {
   const t = useTranslations("cart");
   const locale = useLocale();
   const router = useRouter();
 
-  const items = useCartStore((s) => s.items);
+  const cartItems = useCartStore((s) => s.items);
   const { clear } = useCartActions();
   const notify = useNotificationStore((state) => state.push);
+
+  const items = itemsOverride ?? cartItems;
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -27,12 +41,18 @@ export default function CartSummary() {
   const shipping = items.length ? 9.99 : 0;
   const tax = subtotal * 0.1;
   const discount = 0;
-  const total = subtotal + shipping + tax - discount;
+
+  const calculatedTotal = subtotal + shipping + tax - discount;
+
+  const total = totalOverride !== undefined ? totalOverride : calculatedTotal;
+
   const hasStockWarning = items.some(
     (item) =>
       item.availableStock !== undefined &&
       (item.availableStock <= 0 || item.quantity > item.availableStock),
   );
+
+  const isCheckout = mode === "checkout";
 
   return (
     <div className="sticky top-4 h-fit rounded-2xl border border-border bg-card p-6 shadow-sm">
@@ -49,16 +69,19 @@ export default function CartSummary() {
       <div className="space-y-3">
         <div className="flex justify-between text-sm">
           <span className="text-secondary">{t("subtotal")}</span>
+
           <span className="font-medium">₾{subtotal.toFixed(2)}</span>
         </div>
 
         <div className="flex justify-between text-sm">
           <span className="text-secondary">{t("shipping")}</span>
+
           <span className="font-medium">₾{shipping.toFixed(2)}</span>
         </div>
 
         <div className="flex justify-between text-sm">
           <span className="text-secondary">{t("tax")}</span>
+
           <span className="font-medium">₾{tax.toFixed(2)}</span>
         </div>
 
@@ -71,7 +94,7 @@ export default function CartSummary() {
       </div>
 
       {/* TOTAL */}
-      <div className="mt-5 border-t border-border pt-5 flex justify-between">
+      <div className="mt-5 flex justify-between border-t border-border pt-5">
         <span className="text-base font-semibold">{t("total")}</span>
 
         <span className="text-2xl font-bold text-primary">
@@ -80,7 +103,7 @@ export default function CartSummary() {
       </div>
 
       {/* TRUST */}
-      <div className="mt-5 rounded-xl border border-border bg-card-soft p-4 space-y-2">
+      <div className="mt-5 space-y-2 rounded-xl border border-border bg-card-soft p-4">
         <div className="flex items-center gap-2 text-sm">
           <ShieldCheckIcon className="h-4 w-4" />
           <span>{t("secureCheckout")}</span>
@@ -97,36 +120,42 @@ export default function CartSummary() {
         </div>
       </div>
 
-      {/* ACTIONS */}
-      <div className="mt-6 space-y-3">
-        {hasStockWarning && (
-          <div className="rounded-xl border border-primary/30 bg-primary/5 p-3 text-sm text-primary">
-            {t("stockWarning")}
-          </div>
-        )}
-        <Button
-          size="lg"
-          fullWidth
-          onClick={() => {
-            if (hasStockWarning) notify("info", t("stockWarning"));
-            router.push(`/${locale}/checkout`);
-          }}
-        >
-          {t("checkout")}
-        </Button>
+      {/* CART ACTIONS */}
+      {!isCheckout && (
+        <div className="mt-6 space-y-3">
+          {hasStockWarning && (
+            <div className="rounded-xl border border-primary/30 bg-primary/5 p-3 text-sm text-primary">
+              {t("stockWarning")}
+            </div>
+          )}
 
-        <Button
-          variant="outline"
-          fullWidth
-          onClick={() => router.push(`/${locale}/products`)}
-        >
-          {t("continueShopping")}
-        </Button>
+          <Button
+            size="lg"
+            fullWidth
+            onClick={() => {
+              if (hasStockWarning) {
+                notify("info", t("stockWarning"));
+              }
 
-        <Button variant="text" fullWidth onClick={clear}>
-          {t("clearCart")}
-        </Button>
-      </div>
+              router.push(`/${locale}/checkout`);
+            }}
+          >
+            {t("checkout")}
+          </Button>
+
+          <Button
+            variant="outline"
+            fullWidth
+            onClick={() => router.push(`/${locale}/products`)}
+          >
+            {t("continueShopping")}
+          </Button>
+
+          <Button variant="text" fullWidth onClick={clear}>
+            {t("clearCart")}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

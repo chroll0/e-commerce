@@ -1,14 +1,22 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useState } from "react";
 import { AxiosError } from "axios";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
-import { AuthGuard, Breadcrumbs, Button, Input } from "@/components";
+import {
+  AuthGuard,
+  Breadcrumbs,
+  Button,
+  CartSummary,
+  Input,
+} from "@/components";
+
 import { orderApi } from "@/lib/orderApi";
 import { paymentApi, PaymentOutcome } from "@/lib/paymentApi";
 import { getStatusPresentation } from "@/lib/orderStatus";
+
 import { useNotificationStore } from "@/state/useNotificationStore";
 import { useCartStore } from "@/state/useCartStore";
 
@@ -37,12 +45,15 @@ function getApiErrorMessage(error: unknown, fallback: string) {
 export default function CheckoutPage() {
   const t = useTranslations("checkout");
   const navT = useTranslations("nav");
+
   const locale = useLocale();
   const router = useRouter();
 
   const cartItems = useCartStore((s) => s.items);
   const clearCart = useCartStore((s) => s.clearCart);
+
   const notify = useNotificationStore((s) => s.push);
+  const [checkoutItems, setCheckoutItems] = useState(cartItems);
 
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -57,30 +68,40 @@ export default function CheckoutPage() {
   const [payment, setPayment] = useState<CreatedPayment | null>(null);
   const [paymentError, setPaymentError] = useState(false);
 
-  const subtotal = useMemo(
-    () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
-    [cartItems],
-  );
-
   const handleCreateOrder = async (e: FormEvent) => {
     e.preventDefault();
 
     const nextErrors: Record<string, string> = {};
-    if (!address.trim()) nextErrors.address = t("errors.addressRequired");
-    if (!city.trim()) nextErrors.city = t("errors.cityRequired");
-    if (!phone.trim()) nextErrors.phone = t("errors.phoneRequired");
+
+    if (!address.trim()) {
+      nextErrors.address = t("errors.addressRequired");
+    }
+
+    if (!city.trim()) {
+      nextErrors.city = t("errors.cityRequired");
+    }
+
+    if (!phone.trim()) {
+      nextErrors.phone = t("errors.phoneRequired");
+    }
+
     setFieldErrors(nextErrors);
 
-    if (Object.keys(nextErrors).length > 0) return;
+    if (Object.keys(nextErrors).length > 0) {
+      return;
+    }
 
     if (!cartItems.length) {
       notify("error", t("errors.emptyCart"));
       return;
     }
 
-    if (isCreatingOrder) return;
+    if (isCreatingOrder) {
+      return;
+    }
 
     setIsCreatingOrder(true);
+    setPaymentError(false);
 
     try {
       const createdOrder = (await orderApi.create({
@@ -90,21 +111,26 @@ export default function CheckoutPage() {
         zip: zip || undefined,
       })) as CreatedOrder;
 
+      setCheckoutItems(cartItems);
       setOrder(createdOrder);
       clearCart();
 
       notify(
         "success",
-        t("notifications.orderCreated", { orderId: createdOrder.id }),
+        t("notifications.orderCreated", {
+          orderId: createdOrder.id,
+        }),
       );
 
       try {
         const createdPayment = (await paymentApi.create(
           createdOrder.id,
         )) as CreatedPayment;
+
         setPayment(createdPayment);
       } catch (error: unknown) {
         setPaymentError(true);
+
         notify("error", getApiErrorMessage(error, t("errors.paymentCreation")));
       }
     } catch (error: unknown) {
@@ -115,12 +141,15 @@ export default function CheckoutPage() {
   };
 
   const handleSimulatePayment = async (outcome: PaymentOutcome) => {
-    if (!payment || isSimulating) return;
+    if (!payment || isSimulating) {
+      return;
+    }
 
     setIsSimulating(true);
 
     try {
       const res = await paymentApi.simulate(payment.id, outcome);
+
       const updatedPayment = res?.payment as CreatedPayment;
       const updatedOrder = res?.order as CreatedOrder;
 
@@ -130,17 +159,23 @@ export default function CheckoutPage() {
       if (outcome === "SUCCESS") {
         notify(
           "success",
-          t("notifications.paymentSuccess", { orderId: updatedOrder.id }),
+          t("notifications.paymentSuccess", {
+            orderId: updatedOrder.id,
+          }),
         );
       } else if (outcome === "FAILED") {
         notify(
           "error",
-          t("notifications.paymentFailed", { orderId: updatedOrder.id }),
+          t("notifications.paymentFailed", {
+            orderId: updatedOrder.id,
+          }),
         );
       } else {
         notify(
           "info",
-          t("notifications.paymentCancelled", { orderId: updatedOrder.id }),
+          t("notifications.paymentCancelled", {
+            orderId: updatedOrder.id,
+          }),
         );
       }
     } catch (error: unknown) {
@@ -153,25 +188,38 @@ export default function CheckoutPage() {
   const showPaymentActions = Boolean(
     order && payment && payment.status === "PENDING",
   );
+
   const showResult = Boolean(order && payment && payment.status !== "PENDING");
+
   const showPaymentError = Boolean(order && !payment && paymentError);
 
   return (
     <AuthGuard>
-      <main className="mx-auto mt-10 w-full max-w-7xl px-4 space-y-8">
+      <main className="mx-auto mt-10 w-full max-w-7xl space-y-8 px-4">
         <Breadcrumbs
           items={[
-            { label: "eShop", href: `/${locale}` },
-            { label: navT("cart"), href: `/${locale}/cart` },
-            { label: t("title") },
+            {
+              label: "eShop",
+              href: `/${locale}`,
+            },
+            {
+              label: navT("cart"),
+              href: `/${locale}/cart`,
+            },
+            {
+              label: t("title"),
+            },
           ]}
         />
 
         <div className="grid gap-8 lg:grid-cols-3">
+          {/* CHECKOUT CONTENT */}
           <section className="rounded-2xl border border-border bg-card p-6 lg:col-span-2">
             <h1 className="text-2xl font-bold text-primary">{t("title")}</h1>
+
             <p className="mt-1 text-sm text-secondary">{t("subtitle")}</p>
 
+            {/* ORDER FORM */}
             {!order && (
               <form className="mt-6 space-y-4" onSubmit={handleCreateOrder}>
                 <Input
@@ -242,10 +290,12 @@ export default function CheckoutPage() {
               </form>
             )}
 
+            {/* PAYMENT ACTIONS */}
             {showPaymentActions && (
               <div className="mt-6 space-y-4">
                 <div className="rounded-xl border border-highlight/30 bg-highlight/5 p-4 text-sm text-primary">
                   <p className="font-semibold">{t("payment.pendingTitle")}</p>
+
                   <p className="mt-1 text-secondary">
                     {t("payment.pendingHint")}
                   </p>
@@ -260,6 +310,7 @@ export default function CheckoutPage() {
                   >
                     {t("actions.simulateSuccess")}
                   </Button>
+
                   <Button
                     variant="outline"
                     fullWidth
@@ -269,6 +320,7 @@ export default function CheckoutPage() {
                   >
                     {t("actions.simulateFailed")}
                   </Button>
+
                   <Button
                     variant="secondary"
                     fullWidth
@@ -282,22 +334,28 @@ export default function CheckoutPage() {
               </div>
             )}
 
+            {/* PAYMENT CREATION ERROR */}
             {showPaymentError && order && (
               <div className="mt-6 space-y-4 rounded-xl border border-primary/30 bg-primary/5 p-5">
                 <div>
                   <h2 className="text-lg font-semibold text-primary">
                     {t("payment.errorTitle")}
                   </h2>
+
                   <p className="mt-1 text-sm text-secondary">
-                    {t("payment.errorDescription", { orderId: order.id })}
+                    {t("payment.errorDescription", {
+                      orderId: order.id,
+                    })}
                   </p>
                 </div>
+
                 <div className="flex flex-wrap gap-3">
                   <Button
                     onClick={() => router.push(`/${locale}/account/orders`)}
                   >
                     {t("actions.goToOrders")}
                   </Button>
+
                   <Button
                     variant="outline"
                     onClick={() => router.push(`/${locale}/products`)}
@@ -308,24 +366,38 @@ export default function CheckoutPage() {
               </div>
             )}
 
+            {/* PAYMENT RESULT */}
             {showResult && order && payment && (
               <div className="mt-6 space-y-4 rounded-xl border border-border bg-card-soft p-5">
                 <h2 className="text-lg font-semibold text-primary">
                   {t("result.title")}
                 </h2>
+
                 <p className="text-sm text-secondary">
-                  {t("result.orderId", { orderId: order.id })}
+                  {t("result.orderId", {
+                    orderId: order.id,
+                  })}
                 </p>
+
                 <p className="text-sm text-secondary">
                   {t(
-                    `result.orderStatus.${getStatusPresentation(order.status).key}` as "result.orderStatus.pending",
-                    { defaultValue: order.status },
+                    `result.orderStatus.${
+                      getStatusPresentation(order.status).key
+                    }` as "result.orderStatus.pending",
+                    {
+                      defaultValue: order.status,
+                    },
                   )}
                 </p>
+
                 <p className="text-sm text-secondary">
                   {t(
-                    `result.paymentStatus.${getStatusPresentation(payment.status, "payment").key}` as "result.paymentStatus.pending",
-                    { defaultValue: payment.status },
+                    `result.paymentStatus.${
+                      getStatusPresentation(payment.status, "payment").key
+                    }` as "result.paymentStatus.pending",
+                    {
+                      defaultValue: payment.status,
+                    },
                   )}
                 </p>
 
@@ -335,6 +407,7 @@ export default function CheckoutPage() {
                   >
                     {t("actions.goToOrders")}
                   </Button>
+
                   <Button
                     variant="outline"
                     onClick={() => router.push(`/${locale}/products`)}
@@ -346,112 +419,12 @@ export default function CheckoutPage() {
             )}
           </section>
 
-          <aside className="h-fit lg:sticky lg:top-24">
-            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-              {/* Header */}
-              <div className="border-b border-border p-5">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-primary">
-                    {t("summary.title")}
-                  </h2>
-                  <span className="rounded-full bg-card-soft px-2.5 py-1 text-xs font-medium text-secondary">
-                    {cartItems.length}
-                  </span>
-                </div>
-              </div>
-
-              {/* Products */}
-              <div className="max-h-[360px] overflow-y-auto p-5">
-                <div className="space-y-4">
-                  {cartItems.map((item) => (
-                    <div key={item.productId} className="flex gap-3">
-                      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-border bg-card-soft">
-                        {item.image ? (
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center text-xs text-secondary">
-                            —
-                          </div>
-                        )}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium text-primary">
-                          {item.name}
-                        </p>
-                        <div className="mt-1 flex items-center justify-between gap-2">
-                          <span className="text-xs text-secondary">
-                            {item.quantity} × ₾{item.price.toFixed(2)}
-                          </span>
-                          <span className="text-sm font-semibold text-primary">
-                            ₾{(item.price * item.quantity).toFixed(2)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Totals */}
-              <div className="border-t border-border bg-card-soft/40 p-5">
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-secondary">
-                      {t("summary.subtotal")}
-                    </span>
-                    <span className="font-medium text-primary">
-                      ₾{subtotal.toFixed(2)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-secondary">
-                      {t("summary.shipping")}
-                    </span>
-                    <span className="font-medium text-primary">
-                      {t("summary.free")}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="my-4 h-px bg-border" />
-
-                <div className="flex items-end justify-between gap-4">
-                  <div>
-                    <p className="text-sm text-secondary">
-                      {t("summary.total")}
-                    </p>
-                    <p className="mt-1 text-xs text-secondary">
-                      {t("summary.includingShipping")}
-                    </p>
-                  </div>
-                  <span className="text-2xl font-bold tracking-tight text-primary">
-                    ₾{(order?.total ?? subtotal).toFixed(2)}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Trust / info */}
-            <div className="mt-4 rounded-2xl border border-border bg-card p-4">
-              <div className="flex gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background-blue text-white">
-                  ✓
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-primary">
-                    {t("summary.secureTitle")}
-                  </p>
-                  <p className="mt-1 text-xs leading-5 text-secondary">
-                    {t("summary.secureDescription")}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </aside>
+          {/* ORDER SUMMARY */}
+          <CartSummary
+            mode="checkout"
+            items={checkoutItems}
+            totalOverride={order?.total}
+          />
         </div>
       </main>
     </AuthGuard>
