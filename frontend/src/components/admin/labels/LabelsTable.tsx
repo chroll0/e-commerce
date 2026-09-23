@@ -1,7 +1,11 @@
 import { FC } from "react";
+
 import Link from "next/link";
+
 import { Button } from "@/components";
+
 import { Pencil, Tag, Trash2 } from "lucide-react";
+
 import type { ProductLabelApi } from "@/types";
 
 type LabelsTableProps = {
@@ -11,6 +15,7 @@ type LabelsTableProps = {
   onRequestDelete: (payload: { id: number; name: string }) => void;
   labelsText: {
     name: string;
+    products: string;
     slug: string;
     actions: string;
     loading: string;
@@ -30,11 +35,15 @@ const LabelsTable: FC<LabelsTableProps> = ({
     <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card">
       <div className="min-w-[560px]">
         <div className="grid grid-cols-12 items-center gap-2 border-b border-border px-4 py-3 text-xs font-medium text-muted-foreground">
-          <div className="col-span-6 flex items-center px-1 gap-2">
+          <div className="col-span-6 flex items-center gap-2 px-1">
             <Tag className="h-4.5 w-4.5" />
             <span>{labelsText.name}</span>
           </div>
-          <div className="col-span-4">{labelsText.slug}</div>
+
+          <div className="col-span-2 text-center">{labelsText.products}</div>
+
+          <div className="col-span-2">{labelsText.slug}</div>
+
           <div className="col-span-2 text-right">{labelsText.actions}</div>
         </div>
 
@@ -55,11 +64,15 @@ const LabelsTable: FC<LabelsTableProps> = ({
                 <div className="grid grid-cols-12 gap-2 px-4 py-2 transition hover:bg-muted/40">
                   <div className="col-span-6 flex min-w-0 items-center gap-2">
                     <span className="truncate text-sm font-medium text-foreground">
-                      {label.nameEn} / {label.nameKa}
+                      {locale === "ka" ? label.nameKa : label.nameEn}
                     </span>
                   </div>
 
-                  <div className="col-span-4 flex items-center truncate text-sm text-muted-foreground">
+                  <div className="col-span-2 flex items-center justify-center text-sm text-muted-foreground">
+                    {label.productCount}
+                  </div>
+
+                  <div className="col-span-2 flex items-center truncate text-sm text-muted-foreground">
                     {label.slug}
                   </div>
 
@@ -75,7 +88,10 @@ const LabelsTable: FC<LabelsTableProps> = ({
                       size="xs"
                       className="text-destructive"
                       onClick={() =>
-                        onRequestDelete({ id: label.id, name: label.nameEn })
+                        onRequestDelete({
+                          id: label.id,
+                          name: locale === "ka" ? label.nameKa : label.nameEn,
+                        })
                       }
                     >
                       <Trash2 className="h-4 w-4" />

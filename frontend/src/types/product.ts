@@ -44,6 +44,7 @@ export type ProductLabelApi = {
   slug: string;
   nameEn: string;
   nameKa: string;
+  productCount: number;
 };
 
 export type ProductApi = {

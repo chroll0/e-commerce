@@ -686,6 +686,9 @@
       "table": {
         "name": "Name",
         "slug": "Slug",
+        "products": "Products",
+        "label": "Label",
+        "allLabels": "All",
         "actions": "Actions",
         "loading": "Loading...",
         "empty": "No labels yet. Create your first label."

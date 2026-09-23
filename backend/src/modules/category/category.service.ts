@@ -51,19 +51,22 @@ export class CategoryService {
   async findAll(locale?: Locale) {
     const categories = await this.prisma.category.findMany({
       include: {
-        translations: {
-          where: locale ? { locale } : undefined,
+        translations: true,
+        _count: {
+          select: {
+            products: true,
+          },
         },
-        _count: { select: { products: true } },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     return categories.map((cat) => {
       const t =
-        cat.translations?.[0] ??
-        cat.translations.find((tr) => tr.locale === locale) ??
-        cat.translations[0];
+        cat.translations?.find((tr) => tr.locale === locale) ??
+        cat.translations?.[0];
 
       return this.mapCategory(cat, t);
     });
@@ -258,11 +261,12 @@ export class CategoryService {
   private mapCategory(cat: any, t?: any) {
     return {
       id: cat.id,
-      slug: t?.slug ?? cat.slug,
+      slug: cat.slug,
       image: cat.image,
       parentId: cat.parentId,
       productCount: cat._count?.products ?? 0,
       name: t?.name ?? "",
+      translations: cat.translations ?? [],
     };
   }
 
