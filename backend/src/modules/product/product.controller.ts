@@ -54,6 +54,7 @@ export class ProductController {
     @Query("locale") locale?: string,
     @Query("limit") limit?: string,
     @Query("label") label?: string,
+    @Query("labelId") labelId?: string,
   ) {
     return this.productService.findAll({
       search,
@@ -62,6 +63,7 @@ export class ProductController {
       locale: parseLocale(locale),
       limit: parseLimit(limit),
       label,
+      labelId: labelId ? Number(labelId) : undefined,
     });
   }
 

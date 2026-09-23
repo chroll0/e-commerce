@@ -7,7 +7,7 @@ export type GetProductsParams = {
   categorySlug?: string;
   locale?: string;
   limit?: number;
-  label?: string;
+  labelId?: string | number;
 };
 
 export async function getProducts(params: GetProductsParams) {
@@ -18,6 +18,11 @@ export async function getProducts(params: GetProductsParams) {
       ? undefined
       : Number(params.categoryId);
 
+  const labelId =
+    params.labelId == null || String(params.labelId).trim() === ""
+      ? undefined
+      : Number(params.labelId);
+
   const res = await api.get("/products", {
     params: {
       search: search || undefined,
@@ -25,7 +30,7 @@ export async function getProducts(params: GetProductsParams) {
       categorySlug: params.categorySlug || undefined,
       locale: params.locale || undefined,
       limit: params.limit || undefined,
-      label: params.label || undefined,
+      labelId,
     },
   });
 

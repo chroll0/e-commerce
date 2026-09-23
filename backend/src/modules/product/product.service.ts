@@ -79,6 +79,7 @@ export class ProductService {
     locale?: Locale;
     limit?: number;
     label?: string;
+    labelId?: number;
   }) {
     const {
       search,
@@ -87,6 +88,7 @@ export class ProductService {
       locale = "en",
       limit,
       label,
+      labelId,
     } = params;
 
     const cleanSearch = search?.trim();
@@ -148,15 +150,25 @@ export class ProductService {
                 },
               }
             : {},
-          cleanLabel
+          labelId != null
             ? {
                 labels: {
                   some: {
-                    labelId: Number(cleanLabel),
+                    labelId,
                   },
                 },
               }
-            : {},
+            : cleanLabel
+              ? {
+                  labels: {
+                    some: {
+                      label: {
+                        slug: cleanLabel,
+                      },
+                    },
+                  },
+                }
+              : {},
         ],
       },
       include: {

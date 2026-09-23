@@ -32,7 +32,7 @@ const AdminProductsPage = () => {
       const data = await getProducts({
         search,
         categoryId,
-        label: labelId,
+        labelId,
         locale: String(locale),
       });
       setProducts(data);
