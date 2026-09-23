@@ -100,7 +100,7 @@ const CategoriesTable: FC<TableProps> = ({
                           <div className="h-8 w-8" />
                         )}
 
-                        <span className="truncate text-sm font-medium text-foreground">
+                        <span className="capitalize truncate text-sm font-medium text-foreground">
                           {node.name}
                         </span>
 

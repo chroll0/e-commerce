@@ -47,7 +47,7 @@ export default function AdminCategoriesPage() {
     load();
   }, [locale]);
 
-  const tree = useMemo(() => buildTree(items), [items]);
+  const tree = useMemo(() => buildTree(items, locale), [items, locale]);
   const rows = useMemo(() => flattenTree(tree, expanded), [tree, expanded]);
 
   const toggle = (id: number) => {
