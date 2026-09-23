@@ -35,6 +35,18 @@ function parseLimit(limit?: string): number | undefined {
   return Math.floor(parsed);
 }
 
+function parseLabelId(labelId?: string): number | undefined {
+  if (!labelId) return undefined;
+
+  const parsed = Number(labelId);
+
+  if (!Number.isInteger(parsed) || parsed < 1) {
+    throw new BadRequestException("labelId must be a positive integer");
+  }
+
+  return parsed;
+}
+
 @Controller("products")
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
@@ -62,8 +74,8 @@ export class ProductController {
       categorySlug,
       locale: parseLocale(locale),
       limit: parseLimit(limit),
+      labelId: parseLabelId(labelId),
       label,
-      labelId: labelId ? Number(labelId) : undefined,
     });
   }
 
