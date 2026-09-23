@@ -73,7 +73,7 @@ const CategoriesTable: FC<TableProps> = ({
                       <div className="mx-4 h-px bg-border-strong/70" />
                     )}
 
-                    <div className="grid grid-cols-12 gap-2 px-4 py-1 transition hover:bg-muted/40">
+                    <div className="grid grid-cols-12 gap-2 px-4 py-2 transition hover:bg-muted/40">
                       <div className="col-span-5 flex min-w-0 items-center gap-2">
                         <TreeLines
                           depth={depth}

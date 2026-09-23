@@ -118,7 +118,7 @@ const SelectField: FC<Props> = ({
               {placeholderLabel}
             </div>
 
-            <div className="h-px bg-border" />
+            <div className="h-px bg-border mb-1" />
 
             {options.map((opt) => (
               <div
@@ -136,7 +136,7 @@ const SelectField: FC<Props> = ({
                 {opt.label}
               </div>
             ))}
-            <div className="py-1" />
+            <div className="py-0.5" />
           </div>
         )}
 

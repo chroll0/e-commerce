@@ -28,6 +28,7 @@ export { default as CategorySelect } from "./navigation/CategorySelect";
 export { default as ThemeToggle } from "./navigation/ThemeToggle";
 export { default as SearchBar } from "./navigation/SearchBar";
 export { default as Breadcrumbs } from "./navigation/Breadcrumbs";
+export { default as LabelSelect } from "./navigation/LabelSelect";
 
 // Category page components
 export { default as CategorySubcategories } from "./category/CategorySubcategories";

@@ -149,7 +149,13 @@ export class ProductService {
               }
             : {},
           cleanLabel
-            ? { labels: { some: { label: { slug: cleanLabel } } } }
+            ? {
+                labels: {
+                  some: {
+                    labelId: Number(cleanLabel),
+                  },
+                },
+              }
             : {},
         ],
       },

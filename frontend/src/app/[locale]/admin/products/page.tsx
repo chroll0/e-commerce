@@ -21,6 +21,7 @@ const AdminProductsPage = () => {
 
   const [search, setSearch] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [labelId, setLabelId] = useState("");
 
   const [deleteTarget, setDeleteTarget] = useState<ProductApi | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -31,6 +32,7 @@ const AdminProductsPage = () => {
       const data = await getProducts({
         search,
         categoryId,
+        label: labelId,
         locale: String(locale),
       });
       setProducts(data);
@@ -41,7 +43,7 @@ const AdminProductsPage = () => {
 
   useEffect(() => {
     load();
-  }, [search, categoryId]);
+  }, [search, categoryId, labelId]);
 
   return (
     <>
@@ -55,6 +57,8 @@ const AdminProductsPage = () => {
       <ProductsFilters
         search={search}
         onSearchChange={setSearch}
+        labelId={labelId}
+        onLabelChange={setLabelId}
         categoryId={categoryId}
         onCategoryChange={setCategoryId}
       />
