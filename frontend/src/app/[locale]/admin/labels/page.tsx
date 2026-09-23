@@ -116,6 +116,7 @@ export default function AdminLabelsPage() {
           name: t("table.name"),
           slug: t("table.slug"),
           actions: t("table.actions"),
+          products: t("table.products"),
           loading: t("table.loading"),
           empty: t("table.empty"),
           delete: t("actions.delete"),
