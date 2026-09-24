@@ -506,9 +506,10 @@
       "table": {
         "title": "Title",
         "slug": "Slug",
-        "price": "Price",
+        "price": "Price (₾)",
         "stock": "Stock",
         "category": "Category",
+        "label": "Label",
         "actions": "Actions",
         "empty": "No products yet.",
         "add": "Create your first product.",
