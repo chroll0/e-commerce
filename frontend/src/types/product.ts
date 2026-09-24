@@ -28,6 +28,7 @@ export type ProductFormValues = {
 
   images: string[];
   primaryImage: string;
+  labelIds: number[];
 };
 
 export type ProductCategoryOption = {
@@ -125,12 +126,13 @@ export type ProductProps = {
   submitting?: boolean;
   errors?: Record<string, string>;
 
+  labels: ProductLabels;
+  availableLabels: ProductLabelApi[];
+
   onCancel: () => void;
   onSubmit: (
     values: ProductFormValues,
     cleanImages: string[],
     primaryImage: string | null,
   ) => void;
-
-  labels: ProductLabels;
 };

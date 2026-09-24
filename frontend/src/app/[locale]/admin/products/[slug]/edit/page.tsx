@@ -13,30 +13,25 @@ import type {
   StoreOption,
   ProductLabelApi,
 } from "@/types";
-import { ProductForm, ProductLabelsPanel } from "@/components";
+
+import { ProductForm } from "@/components";
 import { buildProductLabels } from "@/lib/productLabels";
-import { getLabels } from "@/lib/labelsApi";
+import { getLabels, setProductLabels } from "@/lib/labelsApi";
 
 export default function AdminEditProductPage() {
   const router = useRouter();
   const locale = useLocale() as Locale;
   const { slug } = useParams<{ slug: string }>();
   const t = useTranslations("admin.products");
-
   const [id, setId] = useState<number | null>(null);
-
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-
   const [categories, setCategories] = useState<ProductCategoryOption[]>([]);
   const [stores, setStores] = useState<StoreOption[]>([]);
   const [loadingCats, setLoadingCats] = useState(false);
   const [loadingStores, setLoadingStores] = useState(false);
-
   const [allLabels, setAllLabels] = useState<ProductLabelApi[]>([]);
-  const [productLabelIds, setProductLabelIds] = useState<number[]>([]);
-
   const [initialValues, setInitialValues] = useState<ProductFormValues>({
     titleEn: "",
     descEn: "",
@@ -52,6 +47,7 @@ export default function AdminEditProductPage() {
     isFeatured: false,
     images: [""],
     primaryImage: "",
+    labelIds: [],
   });
 
   const load = async () => {
@@ -59,12 +55,10 @@ export default function AdminEditProductPage() {
       setLoading(true);
       setError("");
 
-      // 1) product by slug
+      // 1) Product by slug
       const productRes = await api.get(`/products/slug/${slug}`);
       const product = productRes.data as ProductApi;
-
       setId(product.id);
-
       const en = product.translations.find((x) => x.locale === "en");
       const ka = product.translations.find((x) => x.locale === "ka");
 
@@ -73,23 +67,20 @@ export default function AdminEditProductPage() {
         descEn: en?.description ?? "",
         titleKa: ka?.title ?? "",
         descKa: ka?.description ?? "",
-
         slug: product.slug ?? "",
         price: String(product.price ?? ""),
         oldPrice: product.oldPrice != null ? String(product.oldPrice) : "",
         discount: product.discount != null ? String(product.discount) : "",
-
         stock: String(product.stock ?? "0"),
         categoryId: String(product.categoryId ?? ""),
         storeId: String(product.storeId ?? ""),
         isFeatured: !!product.isFeatured,
         images: product.images?.length ? product.images : [""],
         primaryImage: product.primaryImage ?? "",
+        labelIds: (product.labels ?? []).map((label) => label.id),
       });
 
-      setProductLabelIds((product.labels ?? []).map((l) => l.id));
-
-      // 2) categories, stores and labels for dropdowns
+      // 2) Categories, stores and labels
       setLoadingCats(true);
       setLoadingStores(true);
 
@@ -102,20 +93,24 @@ export default function AdminEditProductPage() {
       setAllLabels(labelsData);
 
       const categoriesData = (catRes.data ?? []) as CategoryApi[];
+
       setCategories(
-        categoriesData.map((c) => ({
-          id: c.id,
-          parentId: c.parentId ?? null,
-          slug: c.slug,
-          translations: (c.translations ?? []).map((t) => ({
-            locale: t.locale as "en" | "ka",
-            name: t.name,
+        categoriesData.map((category) => ({
+          id: category.id,
+          parentId: category.parentId ?? null,
+          slug: category.slug,
+
+          translations: (category.translations ?? []).map((translation) => ({
+            locale: translation.locale as "en" | "ka",
+            name: translation.name,
           })),
-          name: c.translations?.[0]?.name ?? c.slug,
+
+          name: category.translations?.[0]?.name ?? category.slug,
         })),
       );
 
       const storeData = (storeRes.data ?? []) as StoreOption[];
+
       setStores(storeData);
     } catch (e: any) {
       setError(e?.response?.data?.message || t("errors.loadEdit"));
@@ -167,7 +162,12 @@ export default function AdminEditProductPage() {
         ],
       };
 
+      // Save product data
       await api.patch(`/products/${id}`, payload);
+
+      // Save product labels
+      await setProductLabels(id, v.labelIds);
+
       router.push(`/${locale}/admin/products`);
     } catch (e: any) {
       setError(e?.response?.data?.message || t("errors.saveEdit"));
@@ -207,23 +207,8 @@ export default function AdminEditProductPage() {
         onCancel={() => router.push(`/${locale}/admin/products`)}
         onSubmit={handleSubmit}
         labels={buildProductLabels(t)}
+        availableLabels={allLabels}
       />
-
-      {id && (
-        <ProductLabelsPanel
-          productId={id}
-          allLabels={allLabels}
-          initialLabelIds={productLabelIds}
-          labelsText={{
-            title: t("labelsPanel.title"),
-            empty: t("labelsPanel.empty"),
-            save: t("labelsPanel.save"),
-            saving: t("labelsPanel.saving"),
-            saved: t("labelsPanel.saved"),
-            error: t("labelsPanel.error"),
-          }}
-        />
-      )}
     </div>
   );
 }

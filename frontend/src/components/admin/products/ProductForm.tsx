@@ -11,6 +11,7 @@ import {
   FormInput,
   ImageUpload,
   ProductContentFields,
+  ProductLabelsField,
   ProductMetaFields,
   ProductPricingFields,
 } from "@/components";
@@ -33,6 +34,7 @@ const ProductForm: FC<ProductProps> = ({
   onCancel,
   onSubmit,
   labels,
+  availableLabels,
 }) => {
   const t = useTranslations("admin.products");
   const schema = useMemo(() => makeProductSchema(t), [t]);
@@ -52,6 +54,7 @@ const ProductForm: FC<ProductProps> = ({
       ...initialValues,
       images: initialValues.images ?? [],
       primaryImage: initialValues.primaryImage ?? "",
+      labelIds: initialValues.labelIds ?? [],
     },
     mode: "onChange",
     reValidateMode: "onChange",
@@ -64,6 +67,7 @@ const ProductForm: FC<ProductProps> = ({
       ...initialValues,
       images: initialValues.images ?? [],
       primaryImage: initialValues.primaryImage ?? "",
+      labelIds: initialValues.labelIds ?? [],
     });
     setSlugTouched(mode === "edit");
   }, [initialValues, mode, reset]);
@@ -152,6 +156,12 @@ const ProductForm: FC<ProductProps> = ({
           }}
         />
 
+        <ProductLabelsField
+          control={control}
+          allLabels={availableLabels}
+          title={t("form.fields.labels")}
+          empty={t("form.fields.noLabels")}
+        />
         <ImageUpload
           value={images}
           onChange={(next: string[]) =>

@@ -32,6 +32,7 @@ export const makeProductSchema = (t: TFn) =>
       .required(t("errors.price"))
       .test("price", t("errors.price"), (v) => {
         const n = Number(v);
+
         return !!v && !Number.isNaN(n) && n > 0;
       }),
 
@@ -40,7 +41,9 @@ export const makeProductSchema = (t: TFn) =>
       .default("")
       .test("oldPrice", t("errors.oldPrice"), (v) => {
         if (!v) return true;
+
         const n = Number(v);
+
         return !Number.isNaN(n) && n > 0;
       }),
 
@@ -49,7 +52,9 @@ export const makeProductSchema = (t: TFn) =>
       .default("")
       .test("discount", t("errors.discount"), (v) => {
         if (!v) return true;
+
         const n = Number(v);
+
         return !Number.isNaN(n) && n >= 0 && n <= 100;
       }),
 
@@ -58,12 +63,19 @@ export const makeProductSchema = (t: TFn) =>
       .required(t("errors.stock"))
       .test("stock", t("errors.stock"), (v) => {
         const n = Number(v);
+
         return v !== "" && !Number.isNaN(n) && n >= 0;
       }),
 
     categoryId: yup.string().required(t("errors.category")),
     storeId: yup.string().default(""),
     isFeatured: yup.boolean().default(false),
+
+    labelIds: yup
+      .array()
+      .of(yup.number().integer().positive().defined())
+      .default([])
+      .defined(),
 
     images: yup
       .array()
