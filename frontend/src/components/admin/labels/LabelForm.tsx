@@ -73,7 +73,7 @@ const LabelForm: FC<Props> = ({
     if (!slugTouched) {
       setValue("slug", slugify(nameEn ?? ""), {
         shouldDirty: true,
-        shouldValidate: true,
+        shouldValidate: false,
       });
     }
   }, [nameEn, slugTouched, setValue]);
