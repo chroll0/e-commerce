@@ -40,8 +40,9 @@ const ProductsTable: FC<Props> = ({ loading, products, onDelete }) => {
       <div className="min-w-[820px]">
         <div className="grid grid-cols-12 gap-2 border-b border-border px-4 py-3 text-xs font-medium text-muted-foreground">
           <div className="col-span-4">{t("title")}</div>
-          <div className="col-span-3">{t("category")}</div>
-          <div className="col-span-2">{t("price")}</div>
+          <div className="col-span-2">{t("category")}</div>
+          <div className="col-span-2">{t("label")}</div>
+          <div className="col-span-1">{t("price")}</div>
           <div className="col-span-1">{t("stock")}</div>
           <div className="col-span-2 text-right">{t("actions")}</div>
         </div>

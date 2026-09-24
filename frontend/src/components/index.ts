@@ -125,7 +125,7 @@ export { default as ProductPricingFields } from "./admin/products/ProductPricing
 export { default as ProductRow } from "./admin/products/ProductRow";
 export { default as ProductsTable } from "./admin/products/ProductsTable";
 export { default as ProductsFilters } from "./admin/products/ProductsFilters";
-export { default as ProductLabelsPanel } from "./admin/products/ProductLabelsPanel";
+export { default as ProductLabelsField } from "./admin/products/ProductLabelsField";
 
 // Admin shared state components
 export { default as AdminPagination } from "./admin/common/AdminPagination";

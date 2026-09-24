@@ -2,10 +2,10 @@
 
 import { api } from "@/lib/axios";
 import { Tag } from "lucide-react";
+import { SelectField } from "@/components";
 import { FC, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import type { ProductLabelApi, SelectOption } from "@/types";
-import { SelectField } from "@/components";
 
 type Props = {
   value: string;

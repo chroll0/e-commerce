@@ -1,7 +1,13 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
+
 import { AdminPageHeader, Button, Input, slugify } from "@/components";
+import { makeLabelSchema } from "@/hooks";
 
 export type LabelFormValues = {
   nameEn: string;
@@ -37,27 +43,46 @@ const LabelForm: FC<Props> = ({
   onSubmit,
   labels,
 }) => {
-  const [nameEn, setNameEn] = useState(initialValues.nameEn);
-  const [nameKa, setNameKa] = useState(initialValues.nameKa);
-  const [slug, setSlug] = useState(initialValues.slug);
+  const t = useTranslations("admin.labels");
+  const schema = useMemo(() => makeLabelSchema(t), [t]);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<LabelFormValues>({
+    resolver: yupResolver(schema),
+    defaultValues: initialValues,
+    mode: "onChange",
+    reValidateMode: "onChange",
+  });
+
   const [slugTouched, setSlugTouched] = useState(mode === "edit");
 
-  useEffect(() => {
-    setNameEn(initialValues.nameEn);
-    setNameKa(initialValues.nameKa);
-    setSlug(initialValues.slug);
-  }, [initialValues]);
+  const nameEn = watch("nameEn");
 
   useEffect(() => {
-    if (!slugTouched) setSlug(slugify(nameEn));
-  }, [nameEn, slugTouched]);
+    reset(initialValues);
+    setSlugTouched(mode === "edit");
+  }, [initialValues, mode, reset]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (!slugTouched) {
+      setValue("slug", slugify(nameEn ?? ""), {
+        shouldDirty: true,
+        shouldValidate: false,
+      });
+    }
+  }, [nameEn, slugTouched, setValue]);
+
+  const handleFormSubmit = (values: LabelFormValues) => {
     onSubmit({
-      nameEn: nameEn.trim(),
-      nameKa: nameKa.trim(),
-      slug: slug.trim(),
+      nameEn: values.nameEn.trim(),
+      nameKa: values.nameKa.trim(),
+      slug: values.slug.trim(),
     });
   };
 
@@ -66,38 +91,40 @@ const LabelForm: FC<Props> = ({
       <AdminPageHeader title={labels.title} description={labels.description} />
 
       <form
-        onSubmit={handleSubmit}
-        className="mt-6 grid grid-cols-1 gap-4 rounded-2xl border border-border p-6 md:grid-cols-3"
+        onSubmit={handleSubmit(handleFormSubmit)}
+        noValidate
+        className="mt-6 space-y-6 rounded-2xl border border-border p-6"
       >
-        <Input
-          label={labels.nameEn}
-          value={nameEn}
-          onChange={(e) => setNameEn(e.target.value)}
-          fullWidth
-        />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <Input
+            label={labels.nameEn}
+            {...register("nameEn")}
+            fullWidth
+            error={errors.nameEn?.message}
+          />
 
-        <Input
-          label={labels.nameKa}
-          value={nameKa}
-          onChange={(e) => setNameKa(e.target.value)}
-          fullWidth
-        />
+          <Input
+            label={labels.nameKa}
+            {...register("nameKa")}
+            fullWidth
+            error={errors.nameKa?.message}
+          />
 
-        <Input
-          label={labels.slug}
-          value={slug}
-          onChange={(e) => {
-            setSlugTouched(true);
-            setSlug(e.target.value);
-          }}
-          fullWidth
-        />
+          <Input
+            label={labels.slug}
+            {...register("slug", {
+              onChange: () => {
+                setSlugTouched(true);
+              },
+            })}
+            fullWidth
+            error={errors.slug?.message}
+          />
+        </div>
 
-        {error && (
-          <div className="md:col-span-3 text-sm text-destructive">{error}</div>
-        )}
+        {error && <div className="text-sm text-destructive">{error}</div>}
 
-        <div className="md:col-span-3 flex justify-end gap-2">
+        <div className="flex justify-end gap-2 border-t border-border pt-4">
           <Button
             type="button"
             variant="secondary"

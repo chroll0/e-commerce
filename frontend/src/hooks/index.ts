@@ -10,6 +10,7 @@ export { useTheme } from "@/hooks/useTheme";
 
 export {
   makeCategorySchema,
-  makeProductSchema,
   makeStoreSchema,
+  makeLabelSchema,
+  makeProductSchema,
 } from "@/hooks/validation";

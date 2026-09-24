@@ -28,10 +28,16 @@ const ProductRow: FC<Props> = ({ product, onDelete }) => {
     product.category?.translations?.[0]?.name ??
     "—";
 
+  const labelName = product.labels?.length
+    ? product.labels
+        .map((label) => (locale === "ka" ? label.nameKa : label.nameEn))
+        .join(", ")
+    : "—";
+
   const image = product.primaryImage ?? product.images?.[0];
 
   return (
-    <div className="grid grid-cols-12 items-center gap-2 border-b border-border px-4 py-3 last:border-b-0 hover:bg-muted/30 transition">
+    <div className="grid grid-cols-12 items-center gap-2 border-b border-border px-4 py-3 last:border-b-0 hover:bg-muted/30 transition capitalize">
       {/* PRODUCT */}
       <div className="col-span-4 flex min-w-0 items-center gap-3">
         {/* IMAGE */}
@@ -60,12 +66,17 @@ const ProductRow: FC<Props> = ({ product, onDelete }) => {
       </div>
 
       {/* CATEGORY */}
-      <div className="col-span-3 truncate text-sm text-muted-foreground">
+      <div className="col-span-2 truncate text-sm text-muted-foreground">
         {categoryName}
       </div>
 
+      {/* LABEL */}
+      <div className="col-span-2 truncate text-sm text-muted-foreground">
+        {labelName}
+      </div>
+
       {/* PRICE */}
-      <div className="col-span-2 text-sm text-foreground">{product.price}</div>
+      <div className="col-span-1 text-sm text-foreground">{product.price}</div>
 
       {/* STOCK */}
       <div className="col-span-1 text-sm text-muted-foreground">

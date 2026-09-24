@@ -506,9 +506,10 @@
       "table": {
         "title": "Title",
         "slug": "Slug",
-        "price": "Price",
+        "price": "Price (₾)",
         "stock": "Stock",
         "category": "Category",
+        "label": "Label",
         "actions": "Actions",
         "empty": "No products yet.",
         "add": "Create your first product.",
@@ -534,6 +535,10 @@
           "selectCategory": "Select",
           "selectedStore": "Store",
           "selectStore": "Select",
+          "labels": "Labels",
+          "selectLabels": "Select the required label or <createNew>create a new one</createNew>",
+          "createNew": "Create new",
+          "noLabels": "No labels available.",
           "featured": "Featured",
           "featuredHint": "Show this product in Featured sections.",
           "imagesTitle": "Images",
@@ -711,8 +716,12 @@
         "loadOneError": "Failed to load label.",
         "createError": "Failed to create label. Please try again.",
         "updateError": "Failed to save. Try again.",
-        "deleteError": "Failed to delete label.",
-        "required": "Name (EN), Name (KA) and Slug are required."
+        "deleteError": "Failed to delete label."
+      },
+      "validation": {
+        "nameEnRequired": "Name (EN) is required",
+        "nameKaRequired": "Name (KA) is required",
+        "slugRequired": "Slug is required"
       }
     },
 
