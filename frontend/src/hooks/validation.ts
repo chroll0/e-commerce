@@ -19,6 +19,13 @@ export const makeStoreSchema = (t: TFn) =>
     banner: yup.string().trim().default(""),
   });
 
+export const makeLabelSchema = (t: TFn) =>
+  yup.object({
+    nameEn: yup.string().trim().required(t("validation.nameEnRequired")),
+    nameKa: yup.string().trim().required(t("validation.nameKaRequired")),
+    slug: yup.string().trim().required(t("validation.slugRequired")),
+  });
+
 export const makeProductSchema = (t: TFn) =>
   yup.object({
     titleEn: yup.string().trim().required(t("errors.titleEn")),

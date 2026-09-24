@@ -716,8 +716,12 @@
         "loadOneError": "Failed to load label.",
         "createError": "Failed to create label. Please try again.",
         "updateError": "Failed to save. Try again.",
-        "deleteError": "Failed to delete label.",
-        "required": "Name (EN), Name (KA) and Slug are required."
+        "deleteError": "Failed to delete label."
+      },
+      "validation": {
+        "nameEnRequired": "Name (EN) is required",
+        "nameKaRequired": "Name (KA) is required",
+        "slugRequired": "Slug is required"
       }
     },
 
