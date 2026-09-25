@@ -1250,10 +1250,10 @@
     "pageDescription": "აღმოაჩინეთ საუკეთესო ბრენდები",
     "searchPlaceholder": "ბრენდის ძიება...",
     "search": "ძიება",
-    "sales": "გაყიდვები",
-    "products": "პროდუქტები",
+    "sales": "გაყიდვა",
+    "products": "პროდუქტი",
     "viewStore": "ბრენდის ნახვა",
-    "storesCount": "{count} ბრენდი ნაპოვნია",
+    "storesCount": "ნაპოვნია {count} ბრენდი",
     "sortLabel": "დალაგება",
     "sort": {
       "all": "ყველა",

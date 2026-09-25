@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
+import { calculateStoreRating } from "./store-rating.util";
 
 @Injectable()
 export class OrderInventoryService {
@@ -44,6 +45,26 @@ export class OrderInventoryService {
         where: { id: storeId },
         data: { sales: { increment: quantity } },
       });
+      await this.recalculateStoreRating(tx, storeId);
     }
+  }
+
+  async recalculateStoreRating(tx: Prisma.TransactionClient, storeId: number) {
+    const store = await tx.store.findUnique({
+      where: { id: storeId },
+      select: {
+        sales: true,
+        _count: { select: { products: true } },
+      },
+    });
+
+    if (!store) return;
+
+    const rating = calculateStoreRating(store._count.products, store.sales);
+
+    await tx.store.update({
+      where: { id: storeId },
+      data: { rating },
+    });
   }
 }
