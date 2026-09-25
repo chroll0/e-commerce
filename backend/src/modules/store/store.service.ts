@@ -102,6 +102,11 @@ export class StoreService {
           include: {
             translations: true,
             category: { include: { translations: true } },
+            labels: {
+              include: {
+                label: true,
+              },
+            },
           },
         },
         _count: {
@@ -114,7 +119,13 @@ export class StoreService {
       throw new NotFoundException(`Store with slug ${slug} not found`);
     }
 
-    return store;
+    return {
+      ...store,
+      products: store.products.map((product) => ({
+        ...product,
+        labels: product.labels.map((item) => item.label),
+      })),
+    };
   }
 
   async findBestStores(limit: number = 10) {
