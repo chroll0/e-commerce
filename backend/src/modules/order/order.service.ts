@@ -5,15 +5,17 @@ import {
 } from "@nestjs/common";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { PrismaService } from "../../prisma/prisma.service";
-import { OrderStatus, Prisma } from "@prisma/client";
+import { OrderStatus } from "@prisma/client";
 import { NotificationService } from "../notification/notification.service";
 import { safeUserSelect } from "../user/user.select";
+import { OrderInventoryService } from "../inventory/order-inventory.service";
 
 @Injectable()
 export class OrderService {
   constructor(
     private prisma: PrismaService,
     private readonly notificationService: NotificationService,
+    private readonly orderInventoryService: OrderInventoryService,
   ) {}
 
   async createOrder(userId: number, dto: CreateOrderDto) {
@@ -219,7 +221,11 @@ export class OrderService {
         existingOrder.status === "PENDING" &&
         (status === "PAYMENT_FAILED" || status === "CANCELLED")
       ) {
-        await this.restoreOrderStock(tx, orderId);
+        await this.orderInventoryService.restoreOrderStock(tx, orderId);
+      }
+
+      if (existingOrder.status === "PENDING" && status === "PAID") {
+        await this.orderInventoryService.registerStoreSales(tx, orderId);
       }
 
       if (existingOrder.status !== status) {
@@ -253,23 +259,5 @@ export class OrderService {
       },
       orderBy: { createdAt: "desc" },
     });
-  }
-
-  private async restoreOrderStock(
-    tx: Prisma.TransactionClient,
-    orderId: number,
-  ) {
-    const items = await tx.orderItem.findMany({
-      where: { orderId },
-      select: { productId: true, quantity: true },
-      orderBy: { productId: "asc" },
-    });
-
-    for (const item of items) {
-      await tx.product.update({
-        where: { id: item.productId },
-        data: { stock: { increment: item.quantity } },
-      });
-    }
   }
 }
