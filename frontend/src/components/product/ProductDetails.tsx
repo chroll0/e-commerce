@@ -70,6 +70,8 @@ export default function ProductDetails({ product }: Props) {
   if (!data) return null;
 
   const normalizedLocale = locale.split("-")[0];
+  const visibleLabels = (product.labels ?? []).slice(0, 3);
+
   const translation =
     product.translations?.find((t) => t.locale === normalizedLocale) ??
     product.translations?.[0];
@@ -105,8 +107,21 @@ export default function ProductDetails({ product }: Props) {
               </div>
             )}
 
+            {visibleLabels.length > 0 && (
+              <div className="absolute left-4 top-4 z-10 flex flex-col gap-1.5">
+                {visibleLabels.map((label) => (
+                  <span
+                    key={label.id}
+                    className="rounded-md bg-highlight px-3 py-1 text-md font-semibold text-white shadow-sm tracking-wide"
+                  >
+                    {normalizedLocale === "ka" ? label.nameKa : label.nameEn}
+                  </span>
+                ))}
+              </div>
+            )}
+
             {data.discount && data.discount > 0 && (
-              <div className="absolute top-4 right-4 rounded-lg bg-destructive px-3 py-1 text-sm font-medium text-white shadow-lg">
+              <div className="absolute top-4 right-4 rounded-md bg-destructive px-2.5 py-1 text-md font-semibold text-white tracking-wide">
                 -{data.discount}%
               </div>
             )}
@@ -219,13 +234,14 @@ export default function ProductDetails({ product }: Props) {
 
         {!data.isOutOfStock && (
           <div
-            className="mt-6 flex items-center gap-3"
+            className="mt-6 flex flex-wrap items-center gap-3"
             aria-label={t("quantity")}
           >
             <span className="text-sm font-medium text-secondary">
               {t("quantity")}
             </span>
-            <div className="flex items-center rounded-lg bg-card">
+
+            <div className="inline-flex items-center overflow-hidden rounded-xl border border-border bg-card shadow-sm">
               <Button
                 type="button"
                 variant="outline"
@@ -236,12 +252,15 @@ export default function ProductDetails({ product }: Props) {
                 onClick={() =>
                   setQuantity((current) => Math.max(1, current - 1))
                 }
+                className="rounded-none border-0"
               >
                 <Minus className="h-4 w-4" />
               </Button>
-              <span className="py-1 px-4 text-sm font-semibold text-primary border-y border-border rounded-sm">
+
+              <span className="flex h-9 min-w-12 items-center justify-center border-x border-border px-3 text-sm font-semibold text-primary">
                 {safeQuantity}
               </span>
+
               <Button
                 type="button"
                 variant="outline"
@@ -252,26 +271,26 @@ export default function ProductDetails({ product }: Props) {
                 onClick={() =>
                   setQuantity((current) => Math.min(maxQuantity, current + 1))
                 }
+                className="rounded-none border-0"
               >
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
-            <span className="text-xs text-secondary">
-              {/* {data.stock} */}
-              {t("available")}
-            </span>
+
+            <span className="text-xs text-secondary">{t("available")}</span>
           </div>
         )}
 
-        {/* CTA */}
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-[1.4fr_1fr]">
           <Button
             variant="highlight"
             size="lg"
+            fullWidth
             leftIcon={<ShoppingCartIcon className="h-5 w-5" />}
             disabled={data.isOutOfStock}
             loading={isAddingToCart}
             onClick={handleAddToCart}
+            className="h-12"
           >
             {t("addToCart")}
           </Button>
@@ -279,8 +298,10 @@ export default function ProductDetails({ product }: Props) {
           <Button
             variant="outline"
             size="lg"
+            fullWidth
             disabled={data.isOutOfStock || isAddingToCart}
             onClick={handleBuyNow}
+            className="h-12"
           >
             {t("buyNow")}
           </Button>
