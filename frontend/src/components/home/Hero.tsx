@@ -129,7 +129,7 @@ export default function Hero() {
                   aria-hidden={!isActive}
                   className="relative min-w-0 flex-[0_0_100%]"
                 >
-                  <div className="relative flex min-h-[480px] flex-col justify-end md:min-h-[420px] md:flex-row md:items-center md:justify-between md:px-16">
+                  <div className="relative flex min-h-[480px] flex-col justify-end md:min-h-[420px] md:flex-row md:items-center md:justify-between md:px-20">
                     {/* BACKGROUND IMAGE - mobile only */}
                     <div className="absolute inset-0 md:hidden">
                       <Image
