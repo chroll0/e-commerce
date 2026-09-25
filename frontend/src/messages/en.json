@@ -1261,6 +1261,7 @@
     "search": "Search",
     "sales": "sales",
     "products": "products",
+    "viewStore": "View Store",
     "storesCount": "{count} brands found",
     "sortLabel": "Sort by",
     "sort": {
