@@ -164,7 +164,9 @@
     "orders": {
       "title": "My Orders",
       "description": "View and manage your orders.",
-      "empty": "You don’t have any orders yet.",
+      "empty": "No orders found.",
+      "emptyDescription": "You haven’t purchased anything yet — browse our products.",
+      "browseProducts": "Browse products",
       "loading": "Loading your orders...",
       "loadError": "We could not load your orders right now.",
       "orderId": "Order ID",
@@ -1261,6 +1263,7 @@
     "search": "Search",
     "sales": "sales",
     "products": "products",
+    "viewStore": "View Store",
     "storesCount": "{count} brands found",
     "sortLabel": "Sort by",
     "sort": {

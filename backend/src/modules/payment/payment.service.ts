@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { OrderStatus, PaymentStatus, Prisma } from "@prisma/client";
+import { OrderStatus, PaymentStatus } from "@prisma/client";
 import { PrismaService } from "../../prisma/prisma.service";
 import { SimulatePaymentDto } from "./dto/simulate-payment.dto";
 import {
@@ -12,6 +12,7 @@ import {
   PaymentProvider,
 } from "./providers/payment-provider.interface";
 import { NotificationService } from "../notification/notification.service";
+import { OrderInventoryService } from "../inventory/order-inventory.service";
 import { safeUserSelect } from "../user/user.select";
 
 @Injectable()
@@ -20,6 +21,7 @@ export class PaymentService {
     private prisma: PrismaService,
     @Inject(PAYMENT_PROVIDER) private paymentProvider: PaymentProvider,
     private readonly notificationService: NotificationService,
+    private readonly orderInventoryService: OrderInventoryService,
   ) {}
 
   async createPayment(userId: number, orderId: number) {
@@ -140,8 +142,13 @@ export class PaymentService {
         throw new BadRequestException("Order is no longer awaiting payment");
       }
 
-      if (nextPaymentStatus !== "SUCCESS") {
-        await this.restoreOrderStock(tx, payment.orderId);
+      if (nextPaymentStatus === "SUCCESS") {
+        await this.orderInventoryService.registerStoreSales(
+          tx,
+          payment.orderId,
+        );
+      } else {
+        await this.orderInventoryService.restoreOrderStock(tx, payment.orderId);
       }
 
       const updatedPayment = await tx.payment.findUniqueOrThrow({
@@ -195,26 +202,8 @@ export class PaymentService {
         where: { id: order.id },
         data: { status: "CANCELLED" },
       });
-      await this.restoreOrderStock(tx, order.id);
+      await this.orderInventoryService.restoreOrderStock(tx, order.id);
     });
-  }
-
-  private async restoreOrderStock(
-    tx: Prisma.TransactionClient,
-    orderId: number,
-  ) {
-    const items = await tx.orderItem.findMany({
-      where: { orderId },
-      select: { productId: true, quantity: true },
-      orderBy: { productId: "asc" },
-    });
-
-    for (const item of items) {
-      await tx.product.update({
-        where: { id: item.productId },
-        data: { stock: { increment: item.quantity } },
-      });
-    }
   }
 
   private mapOrderStatus(paymentStatus: PaymentStatus): OrderStatus {

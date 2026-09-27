@@ -40,7 +40,7 @@ export default function ProductCard({ product }: Props) {
   const normalizedLocale = locale.split("-")[0];
   const visibleLabels = (product.labels ?? []).slice(0, 2);
   const href = `/${locale}/products/${data.slug}`;
-  console.log("PRODUCT LABELS", product.slug, product.labels);
+
   const handlePrevImage = (e: React.MouseEvent) => {
     e.preventDefault();
     setImageIndex((i) => (i === 0 ? images.length - 1 : i - 1));

@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { ImageIcon, PackageOpen } from "lucide-react";
 
 import { AccountHeader, Button } from "@/components";
 import { api } from "@/lib/axios";
@@ -32,6 +35,49 @@ type UserOrder = {
   items: OrderItem[];
 };
 
+const escapeHtml = (value: string) =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+function OrdersSkeleton() {
+  return (
+    <div className="mt-8 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+      <div className="space-y-4">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div
+            key={i}
+            className="animate-pulse rounded-2xl border border-border bg-card p-5"
+          >
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <div className="h-3 w-12 rounded bg-muted" />
+                <div className="h-4 w-28 rounded bg-muted" />
+              </div>
+              <div className="h-6 w-20 rounded-full bg-muted" />
+            </div>
+            <div className="mt-4 flex items-center justify-between">
+              <div className="h-3 w-16 rounded bg-muted" />
+              <div className="h-4 w-14 rounded bg-muted" />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="animate-pulse rounded-2xl border border-border bg-card p-5">
+        <div className="h-5 w-24 rounded bg-muted" />
+        <div className="mt-6 space-y-4">
+          <div className="h-3 w-full rounded bg-muted" />
+          <div className="h-3 w-2/3 rounded bg-muted" />
+          <div className="h-16 w-full rounded bg-muted" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function OrdersPage() {
   const t = useTranslations("account.orders");
   const locale = useLocale();
@@ -44,6 +90,7 @@ export default function OrdersPage() {
     orderIdParam ? Number(orderIdParam) : null,
   );
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     if (orderIdParam) {
@@ -57,6 +104,7 @@ export default function OrdersPage() {
     const fetchOrders = async () => {
       try {
         setLoading(true);
+        setLoadError(false);
         const { data } = await api.get("/orders");
         if (!isMounted) return;
 
@@ -71,10 +119,13 @@ export default function OrdersPage() {
           return data?.[0]?.id ?? null;
         });
       } catch (error: unknown) {
+        if (!isMounted) return;
+
         const message =
           (error as { response?: { data?: { message?: string } } })?.response
             ?.data?.message || t("loadError");
 
+        setLoadError(true);
         notify("error", message);
       } finally {
         if (isMounted) {
@@ -136,7 +187,7 @@ export default function OrdersPage() {
       .map(
         (item) => `
           <tr>
-            <td>${getProductTitle(item.product)}</td>
+            <td>${escapeHtml(getProductTitle(item.product))}</td>
             <td>${item.quantity}</td>
             <td>₾${Number(item.price).toFixed(2)}</td>
             <td>₾${Number(item.price * item.quantity).toFixed(2)}</td>
@@ -165,13 +216,13 @@ export default function OrdersPage() {
             <div>
               <h1>Order #${selectedOrder.id}</h1>
             </div>
-            <span class="badge">${getOrderStatus(selectedOrder.status).label}</span>
+            <span class="badge">${escapeHtml(getOrderStatus(selectedOrder.status).label)}</span>
           </div>
 
           <div class="meta">
-            <p><strong>Date:</strong> ${formatDate(selectedOrder.createdAt)}</p>
-            <p><strong>Address:</strong> ${selectedOrder.address}, ${selectedOrder.city}</p>
-            <p><strong>Phone:</strong> ${selectedOrder.phone}</p>
+            <p><strong>Date:</strong> ${escapeHtml(formatDate(selectedOrder.createdAt))}</p>
+            <p><strong>Address:</strong> ${escapeHtml(selectedOrder.address)}, ${escapeHtml(selectedOrder.city)}</p>
+            <p><strong>Phone:</strong> ${escapeHtml(selectedOrder.phone)}</p>
           </div>
 
           <table>
@@ -219,12 +270,21 @@ export default function OrdersPage() {
       />
 
       {loading ? (
-        <div className="mt-8 rounded-2xl border border-border bg-card p-6 text-sm text-secondary">
-          {t("loading")}
+        <OrdersSkeleton />
+      ) : loadError ? (
+        <div className="mt-8 rounded-2xl border border-destructive/30 bg-destructive/5 p-10 text-center text-destructive">
+          {t("loadError")}
         </div>
       ) : orders.length === 0 ? (
-        <div className="mt-8 rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+        <div className="mt-8 flex flex-col items-center gap-4 rounded-2xl border border-dashed border-border bg-card p-10 text-center">
+          <PackageOpen className="h-10 w-10 text-muted-foreground" />
           <p className="text-lg font-medium text-primary">{t("empty")}</p>
+          <p className="max-w-sm text-sm text-secondary">
+            {t("emptyDescription")}
+          </p>
+          <Button asChild size="sm">
+            <Link href={`/${locale}/products`}>{t("browseProducts")}</Link>
+          </Button>
         </div>
       ) : (
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
@@ -315,18 +375,36 @@ export default function OrdersPage() {
                     {selectedOrder.items.map((item) => (
                       <div
                         key={item.id}
-                        className="flex items-center justify-between gap-3 rounded-xl border border-border bg-card-soft p-3"
+                        className="flex items-center gap-3 rounded-xl border border-border bg-card-soft p-3"
                       >
-                        <div>
-                          <p className="font-medium text-primary">
+                        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-border bg-card">
+                          {item.product.images?.[0] ? (
+                            <Image
+                              src={item.product.images[0]}
+                              alt={getProductTitle(item.product)}
+                              fill
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                              <ImageIcon className="h-5 w-5" />
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                          <Link
+                            href={`/${locale}/products/${item.product.slug}`}
+                            className="block truncate font-medium text-primary hover:underline"
+                          >
                             {getProductTitle(item.product)}
-                          </p>
+                          </Link>
                           <p className="text-xs text-secondary">
                             {t("quantity")}: {item.quantity}
                           </p>
                         </div>
 
-                        <div className="text-right">
+                        <div className="shrink-0 text-right">
                           <p className="font-medium text-primary">
                             ₾{Number(item.price).toFixed(2)}
                           </p>
