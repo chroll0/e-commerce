@@ -65,6 +65,7 @@ export default function ProductSearchFilters({
     limit: 20,
     search: searchQuery,
     categoryId: categoryId || undefined,
+    includeDescendants: true,
     label: labelSlug || undefined,
   });
 

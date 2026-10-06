@@ -72,10 +72,27 @@ export class ProductService {
     return requestedPrimaryImage;
   }
 
+  private async getCategoryTreeIds(rootId: number): Promise<number[]> {
+    const ids = new Set<number>([rootId]);
+    let frontier = [rootId];
+
+    while (frontier.length > 0) {
+      const children = await this.prisma.category.findMany({
+        where: { parentId: { in: frontier } },
+        select: { id: true },
+      });
+      frontier = children.map((c) => c.id).filter((id) => !ids.has(id));
+      frontier.forEach((id) => ids.add(id));
+    }
+
+    return [...ids];
+  }
+
   async findAll(params: {
     search?: string;
     categorySlug?: string;
     categoryId?: number;
+    includeDescendants?: boolean;
     locale?: Locale;
     limit?: number;
     label?: string;
@@ -85,6 +102,7 @@ export class ProductService {
       search,
       categorySlug,
       categoryId,
+      includeDescendants,
       locale = "en",
       limit,
       label,
@@ -94,6 +112,11 @@ export class ProductService {
     const cleanSearch = search?.trim();
     const cleanSlug = categorySlug?.trim();
     const cleanLabel = label?.trim();
+
+    const categoryIds =
+      categoryId != null && includeDescendants
+        ? await this.getCategoryTreeIds(Number(categoryId))
+        : null;
 
     const products = await this.prisma.product.findMany({
       where: {
@@ -132,7 +155,11 @@ export class ProductService {
               }
             : {},
 
-          categoryId != null ? { categoryId: Number(categoryId) } : {},
+          categoryIds
+            ? { categoryId: { in: categoryIds } }
+            : categoryId != null
+              ? { categoryId: Number(categoryId) }
+              : {},
           cleanSlug
             ? {
                 category: {

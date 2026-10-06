@@ -9,6 +9,7 @@ type Params = {
   search?: string;
   categoryId?: string | number;
   categorySlug?: string;
+  includeDescendants?: boolean;
   label?: string;
 };
 
@@ -19,6 +20,7 @@ export function useProducts({
   search,
   categoryId,
   categorySlug,
+  includeDescendants,
   label,
 }: Params) {
   const [products, setProducts] = useState<ProductApi[]>([]);
@@ -37,6 +39,7 @@ export function useProducts({
           search,
           categoryId,
           categorySlug,
+          includeDescendants,
           label,
         });
 
@@ -61,7 +64,7 @@ export function useProducts({
     return () => {
       cancelled = true;
     };
-  }, [locale, limit, onlyDiscounted, search, categoryId, categorySlug, label]);
+  }, [locale, limit, onlyDiscounted, search, categoryId, categorySlug, includeDescendants, label]);
 
   return { products, loading };
 }
