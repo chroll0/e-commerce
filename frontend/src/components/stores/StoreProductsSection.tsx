@@ -13,6 +13,7 @@ type StoreProductsSectionProps = {
   onFilterChange: (filters: { search: string; categoryId: string }) => void;
   onClearFilters: () => void;
   loading?: boolean;
+  storeSlug?: string;
 };
 
 export default function StoreProductsSection({
@@ -24,6 +25,7 @@ export default function StoreProductsSection({
   onFilterChange,
   onClearFilters,
   loading,
+  storeSlug,
 }: StoreProductsSectionProps) {
   return (
     <section className="border-b border-border pb-8">
@@ -40,6 +42,7 @@ export default function StoreProductsSection({
         products={products}
         filterT={filterT}
         loading={loading}
+        storeSlug={storeSlug}
       />
     </section>
   );

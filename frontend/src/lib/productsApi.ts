@@ -5,6 +5,7 @@ export type GetProductsParams = {
   search?: string;
   categoryId?: string | number;
   categorySlug?: string;
+  includeDescendants?: boolean;
   locale?: string;
   limit?: number;
   label?: string;
@@ -29,6 +30,7 @@ export async function getProducts(params: GetProductsParams) {
       search: search || undefined,
       categoryId,
       categorySlug: params.categorySlug || undefined,
+      includeDescendants: params.includeDescendants || undefined,
       locale: params.locale || undefined,
       limit: params.limit || undefined,
       label: params.label || undefined,

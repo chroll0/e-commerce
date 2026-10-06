@@ -138,7 +138,7 @@ export default function RegisterPage() {
           {t("haveAccount")}{" "}
           <Link
             href={`/${locale}/auth/login`}
-            className="text-highlight hover:underline"
+            className="font-semibold hover:underline"
           >
             {t("signIn")}
           </Link>

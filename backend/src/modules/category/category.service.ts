@@ -114,9 +114,30 @@ export class CategoryService {
       orderBy: { createdAt: "asc" },
     });
 
+    const ancestors: ReturnType<CategoryService['mapCategory']>[] = [];
+    const visited = new Set<number>([category.id]);
+    let parentId = category.parentId;
+
+    while (parentId != null && !visited.has(parentId)) {
+      visited.add(parentId);
+      const parent = await this.prisma.category.findUnique({
+        where: { id: parentId },
+        include: {
+          translations: {
+            where: locale ? { locale } : undefined,
+          },
+        },
+      });
+      if (!parent) break;
+
+      ancestors.unshift(this.mapCategory(parent, parent.translations?.[0]));
+      parentId = parent.parentId;
+    }
+
     return {
       ...this.mapCategory(category, t),
       translations: category.translations,
+      ancestors,
       children: children.map((child) => {
         const childT =
           child.translations?.[0] ??

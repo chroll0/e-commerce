@@ -31,7 +31,7 @@ const AuthIcons = () => {
     <div className="flex items-center gap-4">
       {!user && (
         <div className="flex items-center gap-2">
-          <Button asChild variant="secondary" size="sm">
+          {/* <Button asChild variant="secondary" size="sm">
             <Link href={`/${locale}/auth/login`}>{t("auth.login")}</Link>
           </Button>
 
@@ -39,6 +39,10 @@ const AuthIcons = () => {
             <Link href={`/${locale}/auth/register`}>
               {t("auth.registration")}
             </Link>
+          </Button> */}
+
+          <Button asChild variant="primary" size="sm">
+            <Link href={`/${locale}/auth/login`}>{t("auth.signIn")}</Link>
           </Button>
         </div>
       )}

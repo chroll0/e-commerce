@@ -162,7 +162,7 @@ export default function LoginPage() {
           {t("noAccount")}{" "}
           <Link
             href={`/${locale}/auth/register`}
-            className="text-highlight hover:underline"
+            className="font-semibold hover:underline"
           >
             {t("signUp")}
           </Link>

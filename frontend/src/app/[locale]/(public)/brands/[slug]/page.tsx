@@ -140,6 +140,7 @@ export default function StorePage() {
         activeSearch={filters.search}
         activeCategoryId={filters.categoryId}
         loading={filtersLoading}
+        storeSlug={storeHeader.slug}
         onFilterChange={handleFilterChange}
         onClearFilters={handleClearFilters}
       />

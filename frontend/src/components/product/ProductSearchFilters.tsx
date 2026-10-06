@@ -25,6 +25,7 @@ type ProductSearchFiltersProps = {
   keepCategoryOnClear?: boolean;
   initialSearch?: string;
   syncCategoryWithRoute?: boolean;
+  contextCategorySlug?: string;
 };
 
 export default function ProductSearchFilters({
@@ -32,6 +33,7 @@ export default function ProductSearchFilters({
   keepCategoryOnClear = false,
   initialSearch = "",
   syncCategoryWithRoute = false,
+  contextCategorySlug,
 }: ProductSearchFiltersProps) {
   const locale = useLocale() as Locale;
   const t = useTranslations("productCard.searchFilters");
@@ -65,6 +67,7 @@ export default function ProductSearchFilters({
     limit: 20,
     search: searchQuery,
     categoryId: categoryId || undefined,
+    includeDescendants: true,
     label: labelSlug || undefined,
   });
 
@@ -183,7 +186,15 @@ export default function ProductSearchFilters({
           ))
         ) : products.length > 0 ? (
           products.map((product: ProductApi) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              context={
+                contextCategorySlug
+                  ? { type: "category", slug: contextCategorySlug }
+                  : undefined
+              }
+            />
           ))
         ) : (
           <div className="col-span-full rounded-2xl border border-border bg-card p-10 text-center text-muted-foreground">

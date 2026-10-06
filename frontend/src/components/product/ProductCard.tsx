@@ -10,11 +10,17 @@ import { Button } from "@/components";
 import type { ProductApi } from "@/types";
 import { useProductData, useProductCartAction } from "@/hooks";
 
-type Props = {
-  product: ProductApi;
+export type ProductCardContext = {
+  type: "category" | "brand";
+  slug: string;
 };
 
-export default function ProductCard({ product }: Props) {
+type Props = {
+  product: ProductApi;
+  context?: ProductCardContext;
+};
+
+export default function ProductCard({ product, context }: Props) {
   const t = useTranslations("productCard");
   const locale = useLocale();
 
@@ -39,7 +45,9 @@ export default function ProductCard({ product }: Props) {
   const hasMultipleImages = images.length > 1;
   const normalizedLocale = locale.split("-")[0];
   const visibleLabels = (product.labels ?? []).slice(0, 2);
-  const href = `/${locale}/products/${data.slug}`;
+  const href = `/${locale}/products/${data.slug}${
+    context ? `?${context.type}=${encodeURIComponent(context.slug)}` : ""
+  }`;
 
   const handlePrevImage = (e: React.MouseEvent) => {
     e.preventDefault();
