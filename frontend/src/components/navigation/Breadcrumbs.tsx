@@ -6,6 +6,7 @@ import { ChevronRight } from "lucide-react";
 type BreadcrumbItem = {
   label: string;
   href?: string;
+  skeleton?: boolean;
 };
 
 type BreadcrumbsProps = {
@@ -30,7 +31,12 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
               {index > 0 && (
                 <ChevronRight className="h-4 w-4 text-muted-foreground" />
               )}
-              {item.href && !isLast ? (
+              {item.skeleton ? (
+                <span
+                  aria-hidden="true"
+                  className="inline-block h-4 w-24 animate-pulse rounded bg-muted"
+                />
+              ) : item.href && !isLast ? (
                 <Link
                   href={item.href}
                   className="transition-colors hover:text-primary"

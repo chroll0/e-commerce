@@ -13,6 +13,7 @@ export type Category = {
   slug: string;
   image?: string | null;
   parentId: number | null;
+  ancestors?: Category[];
   children?: Category[];
 };
 

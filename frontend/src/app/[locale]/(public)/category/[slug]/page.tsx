@@ -19,6 +19,7 @@ export default async function Page({ params }: Props) {
   const categoryId = category?.id ? String(category.id) : "";
   const categoryName = category?.name ?? slug;
   const children = category?.children ?? [];
+  const ancestors = category?.ancestors ?? [];
 
   return (
     <main className="w-full max-w-7xl px-4 mt-10 mx-auto">
@@ -26,6 +27,10 @@ export default async function Page({ params }: Props) {
         items={[
           { label: "eShop", href: `/${locale}` },
           { label: "Category" },
+          ...ancestors.map((a) => ({
+            label: a.name,
+            href: `/${locale}/category/${a.slug}`,
+          })),
           { label: categoryName },
         ]}
       />
@@ -46,6 +51,7 @@ export default async function Page({ params }: Props) {
         initialCategoryId={categoryId}
         keepCategoryOnClear
         syncCategoryWithRoute
+        contextCategorySlug={slug}
       />
     </main>
   );

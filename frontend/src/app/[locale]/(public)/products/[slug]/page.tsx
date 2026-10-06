@@ -1,10 +1,13 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { AlertCircleIcon, PackageSearchIcon } from "lucide-react";
 
 import { useProduct, useProductData } from "@/hooks";
+import { getCategoryBySlug } from "@/lib/categoriesApi";
+import { getStoreBySlug } from "@/lib/storesApi";
 import {
   Breadcrumbs,
   ProductDetails,
@@ -20,13 +23,80 @@ export default function Page() {
   const { product, loading, error } = useProduct(slug, locale);
   const data = useProductData(product ?? undefined);
 
+  const searchParams = useSearchParams();
+  const categorySlug = searchParams.get("category");
+  const brandSlug = searchParams.get("brand");
+  // items === null means the context was resolved but is unavailable
+  const [trail, setTrail] = useState<{
+    key: string;
+    items: { label: string; href?: string }[] | null;
+  } | null>(null);
+
+  const contextKey = categorySlug
+    ? `category:${categorySlug}:${locale}`
+    : brandSlug
+      ? `brand:${brandSlug}:${locale}`
+      : null;
+
+  useEffect(() => {
+    if (!contextKey) return;
+    let cancelled = false;
+
+    const load = async () => {
+      try {
+        if (categorySlug) {
+          const category = await getCategoryBySlug(categorySlug, locale);
+          if (cancelled) return;
+          if (!category) {
+            setTrail({ key: contextKey, items: null });
+            return;
+          }
+          setTrail({
+            key: contextKey,
+            items: [
+              { label: "Category" },
+              ...[...(category.ancestors ?? []), category].map((c) => ({
+                label: c.name,
+                href: `/${locale}/category/${c.slug}`,
+              })),
+            ],
+          });
+        } else if (brandSlug) {
+          const store = await getStoreBySlug(brandSlug, { locale });
+          if (cancelled) return;
+          setTrail({
+            key: contextKey,
+            items: [
+              { label: navT("brands"), href: `/${locale}/brands` },
+              { label: store.name, href: `/${locale}/brands/${store.slug}` },
+            ],
+          });
+        }
+      } catch {
+        if (!cancelled) setTrail({ key: contextKey, items: null });
+      }
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [contextKey, categorySlug, brandSlug, locale, navT]);
+
+  const contextResolved = !contextKey || trail?.key === contextKey;
+  const contextItems = contextResolved
+    ? contextKey
+      ? (trail?.items ?? [])
+      : []
+    : [{ label: "", skeleton: true }, { label: "", skeleton: true }];
+
   return (
     <section className="mx-auto mt-10 w-full max-w-7xl px-4">
       {/* BREADCRUMBS */}
       <Breadcrumbs
         items={[
           { label: "eShop", href: `/${locale}` },
-          { label: navT("products"), href: `/${locale}/products` },
+          ...contextItems,
           { label: product?.translations?.[0]?.title ?? slug },
         ]}
       />

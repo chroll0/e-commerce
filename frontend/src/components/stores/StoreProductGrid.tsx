@@ -6,7 +6,9 @@ export default function StoreProductGrid({
   products,
   filterT,
   loading,
+  storeSlug,
 }: {
+  storeSlug?: string;
   products?: StoreApi["products"];
   filterT: TranslationFn;
   loading?: boolean;
@@ -39,7 +41,11 @@ export default function StoreProductGrid({
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
       {hasProducts ? (
         products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            context={storeSlug ? { type: "brand", slug: storeSlug } : undefined}
+          />
         ))
       ) : (
         <div className="col-span-full rounded-2xl border border-border bg-card p-10 text-center text-muted-foreground">
